@@ -6,7 +6,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
-    <title>全内容管理系统登录</title>
+    <title>内容管理系统登录</title>
     <link href="/plugins/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
     <script src="/plugins/jquery/2.2.4/jquery.min.js"></script>
     <style type="text/css">
