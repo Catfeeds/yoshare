@@ -12,14 +12,18 @@
 */
 
 Route::get('/', 'HomeController@index');
-Route::get('admin/login', 'HomeController@login');
-Route::get('admin/logout', 'Auth\LoginController@logout');
-Route::post('admin/login', 'Auth\LoginController@login');
-Route::get('auth/captcha', 'Auth\LoginController@captcha');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('login', 'AdminController@login');
+    Route::get('logout', 'Auth\LoginController@logout');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::get('captcha', 'Auth\LoginController@captcha');
+});
 
-    Route::get('admin', 'HomeController@admin');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+
+    Route::get('/', 'AdminController@index');
 
     /**
      * 栏目管理
@@ -61,8 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
      * 推送管理
      */
     Route::get('push/log', 'PushController@log');
-    Route::get('push/log/table', 'PushController@logTable');
-    Route::get('push/received', 'PushController@received');
+    Route::get('push/log/table', 'PushController@table');
     Route::resource('push', 'PushController');
 
     /**
@@ -146,6 +149,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('models/{id}/save','ModelController@save');
     Route::resource('/models', 'ModelController');
     Route::get('models/{id}/delete', 'ModelController@destroy');
+
+    /**
+     * 模板设置
+     */
+    Route::resource('/templates', 'TemplateController');
 });
 
 Route::get('contents/{slug}.html', 'ContentController@slug');

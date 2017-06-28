@@ -24,7 +24,7 @@ class MemberController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('members.index');
+        return view('admin.members.index');
     }
 
     public function create()
@@ -34,7 +34,7 @@ class MemberController extends Controller
             return redirect()->back();
         }
 
-        return view('members.create');
+        return view('admin.members.create');
     }
 
     public function store(MemberRequest $request)
@@ -69,7 +69,7 @@ class MemberController extends Controller
             $member->save();
 
             \Session::flash('flash_success', '添加成功');
-            return redirect('/members');
+            return redirect('/admin/members');
         } catch (Exception $e) {
             return false;
         }
@@ -87,10 +87,10 @@ class MemberController extends Controller
 
         if ($member == null) {
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/members');
+            return redirect('/admin/members');
         }
 
-        return view('members.edit', compact('member'));
+        return view('admin.members.edit', compact('member'));
     }
 
     public function update($id, MemberRequest $request)
@@ -113,12 +113,12 @@ class MemberController extends Controller
         $member->update($input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/members');
+        return redirect('/admin/members');
     }
 
     public function message($member_id)
     {
-        return view('members.message', compact('member_id'));
+        return view('admin.members.message', compact('member_id'));
     }
 
     public function table()

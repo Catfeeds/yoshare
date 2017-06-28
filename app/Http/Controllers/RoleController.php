@@ -23,13 +23,13 @@ class RoleController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('roles.index');
+        return view('admin.roles.index');
     }
 
     public function create()
     {
-        $perms = Permission::orderBy('id')->get();
-        return view('roles.create')->with('perms', $perms);
+        $permissions = Permission::orderBy('id')->get();
+        return view('admin.roles.create', compact('permissions'));
     }
 
     public function store(RoleRequest $request)
@@ -47,7 +47,7 @@ class RoleController extends Controller
         }
 
         \Session::flash('flash_success', '添加成功');
-        return redirect('/roles');
+        return redirect('/admin/roles');
     }
 
     public function destroy($id)
@@ -70,15 +70,15 @@ class RoleController extends Controller
         $role = Role::with('perms')->find($id);
         if (empty($role)) {
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/roles');
+            return redirect('/admin/roles');
         }
 
         $permissions = Permission::orderBy('id')->get();
-        $permissionRoles = PermissionRole::where('role_id', $id)
+        $perms = PermissionRole::where('role_id', $id)
                 ->pluck('permission_id')
                 ->toArray();
 
-        return view('roles.edit', compact('role', 'permissions', 'permissionRoles'));
+        return view('admin.roles.edit', compact('role', 'permissions', 'perms'));
     }
 
     public function update($id, Request $request)
@@ -99,7 +99,7 @@ class RoleController extends Controller
                 ]);
             }
         \Session::flash('flash_success', '修改成功');
-        return redirect('/roles');
+        return redirect('/admin/roles');
     }
 
     public function table()

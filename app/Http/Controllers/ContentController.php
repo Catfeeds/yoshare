@@ -24,7 +24,7 @@ class ContentController extends Controller
         $page = request('page') ?: 1;
         $fields = json_decode(json_encode(config('site.model.1.fields')));
 
-        return view('contents.index', compact('page', 'fields'));
+        return view('admin.contents.index', compact('page', 'fields'));
     }
 
     public function create($category_id)
@@ -59,7 +59,7 @@ class ContentController extends Controller
         ];
         $tabs = json_decode(json_encode($tabs));
 
-        return view('contents.create', compact('page', 'category_id', 'list_keywords', 'tabs'));
+        return view('admin.contents.create', compact('page', 'category_id', 'list_keywords', 'tabs'));
     }
 
     public function store(ContentRequest $request)
@@ -68,11 +68,8 @@ class ContentController extends Controller
 
         $content = Content::stores($input);
 
-        \Log::debug('contents store id: ' . $content->id);
-        \Log::debug('ip: ' . get_client_ip());
-
         \Session::flash('flash_success', '添加成功');
-        return redirect('/contents?category_id=' . $content->category_id);
+        return redirect('/admin/contents?category_id=' . $content->category_id);
     }
 
     public function destroy($id)
@@ -103,7 +100,7 @@ class ContentController extends Controller
         $content = Content::find($id);
         if ($content == null) {
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/contents');
+            return redirect('/admin/contents');
         }
         $category_id = $content->category_id;
 
@@ -141,7 +138,7 @@ class ContentController extends Controller
         ];
         $tabs = json_decode(json_encode($tabs));
 
-        return view('contents.edit', compact('page', 'category_id', 'content', 'selected_keywords', 'list_keywords', 'tabs'));
+        return view('admin.contents.edit', compact('page', 'category_id', 'content', 'selected_keywords', 'list_keywords', 'tabs'));
     }
 
     public function update($id, ContentRequest $request)
@@ -151,7 +148,7 @@ class ContentController extends Controller
         $content = Content::updates($id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/contents?category_id=' . $content->category_id . '&page=' . $input['page']);
+        return redirect('/admin/contents?category_id=' . $content->category_id . '&page=' . $input['page']);
     }
 
     public function save($id)
@@ -173,7 +170,7 @@ class ContentController extends Controller
         }
 
         $template = $content->category->template;
-        return view("templates.contents.$template", compact('content'));
+        return view("admin.templates.contents.$template", compact('content'));
     }
 
     public function lists($category_id)
@@ -182,7 +179,7 @@ class ContentController extends Controller
         if (empty($category)) {
             abort(404);
         }
-        return view("templates.contents.list", compact('category'));
+        return view("admin.templates.contents.list", compact('category'));
     }
 
     public function slug($slug)
@@ -194,12 +191,12 @@ class ContentController extends Controller
         }
 
         $template = $content->category->template;
-        return view("templates.contents.$template", compact('content'));
+        return view("admin.templates.contents.$template", compact('content'));
     }
 
     public function comment($content_id)
     {
-        return view('contents.comment', compact('content_id'));
+        return view('admin.contents.comment', compact('content_id'));
     }
 
     public function state($state)

@@ -22,13 +22,16 @@ class ModelRequest extends Request
     public function rules()
     {
         return [
-            'name'=> 'required',
+            'name' => 'required',
+            'alias' => 'required',
         ];
     }
+
     public function messages()
     {
         return [
-            'name.required' => '请输入栏目名称',
+            'name.required' => '请输入名称',
+            'alias.required' => '请输入别名',
         ];
     }
 }

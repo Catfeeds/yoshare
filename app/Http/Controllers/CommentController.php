@@ -20,7 +20,7 @@ class CommentController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('comments.index');
+        return view('admin.comments.index');
     }
 
     public function update($id)

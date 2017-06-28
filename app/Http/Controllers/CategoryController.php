@@ -26,12 +26,12 @@ class CategoryController extends Controller
         //获取当前栏目ID
         $category_id = Request::get('category_id') ?: 0;
 
-        return view('categories.index', compact('category_id'));
+        return view('admin.categories.index', compact('category_id'));
     }
 
     public function create($category_id)
     {
-        return view('categories.create', compact('category_id'));
+        return view('admin.categories.create', compact('category_id'));
     }
 
     public function store(CategoryRequest $request)
@@ -51,7 +51,7 @@ class CategoryController extends Controller
 
         Category::create($input);
 
-        $url = '/categories?category_id=' . $category_id;
+        $url = '/admin/categories?category_id=' . $category_id;
         \Session::flash('flash_success', '添加成功');
         return redirect($url);
     }
@@ -63,10 +63,10 @@ class CategoryController extends Controller
         if (empty($category)) {
             \Session::flash('flash_warning', '无此记录');
 
-            return redirect('/categories');
+            return redirect('/admin/categories');
         }
 
-        return view('categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category'));
     }
 
 
@@ -87,7 +87,7 @@ class CategoryController extends Controller
         $category_id = $category->parent_id > 0 ? $category->parent_id : $category->id;
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/categories?category_id=' . $category_id);
+        return redirect('/admin/categories?category_id=' . $category_id);
     }
 
     public function save($id)
@@ -139,7 +139,7 @@ class CategoryController extends Controller
         if (empty($category)) {
             abort(404);
         }
-        return view("templates.categories.list", compact('category'));
+        return view("admin.templates.categories.list", compact('category'));
     }
 
     public function table($category_id)

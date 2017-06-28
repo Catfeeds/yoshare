@@ -17,7 +17,6 @@ return [
                 '2' => '',
                 '3' => '',
                 '4' => '',
-                '5' => '【AMS】验证码@，有效期3分钟。使用验证码即可登录AMS南昌客户端，如非本人操作，请忽略本短信。',
             ],
         ],
     ],
@@ -39,6 +38,7 @@ return [
 
     'model' => [
         '1' => [
+            'id' => 1,
             'name' => 'news',
             'alias' => '新闻',
             'fields' => [
@@ -303,7 +303,7 @@ return [
                 [
                     'name' => 'images',
                     'alias' => '图集',
-                    'type' => 'images',
+                    'type' => 'text',
                     'length' => 0,
                     'system' => true,
                     'table' => [

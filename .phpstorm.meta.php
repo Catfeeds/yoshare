@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2017-04-20.
+    * Generated on 2017-06-21.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -42,7 +42,6 @@ namespace PHPSTORM_META {
             'flash' instanceof \Laracasts\Flash\FlashNotifier,
             'api.router' instanceof \Dingo\Api\Routing\Router,
             'Dingo\Api\Routing\ResourceRegistrar' instanceof \Dingo\Api\Routing\ResourceRegistrar,
-            'api.url' instanceof \Dingo\Api\Routing\UrlGenerator,
             'api.limiting' instanceof \Dingo\Api\Http\RateLimit\Handler,
             'api.http.validator' instanceof \Dingo\Api\Http\RequestValidator,
             'Dingo\Api\Http\Validation\Domain' instanceof \Dingo\Api\Http\Validation\Domain,
@@ -211,7 +210,6 @@ namespace PHPSTORM_META {
             'flash' instanceof \Laracasts\Flash\FlashNotifier,
             'api.router' instanceof \Dingo\Api\Routing\Router,
             'Dingo\Api\Routing\ResourceRegistrar' instanceof \Dingo\Api\Routing\ResourceRegistrar,
-            'api.url' instanceof \Dingo\Api\Routing\UrlGenerator,
             'api.limiting' instanceof \Dingo\Api\Http\RateLimit\Handler,
             'api.http.validator' instanceof \Dingo\Api\Http\RequestValidator,
             'Dingo\Api\Http\Validation\Domain' instanceof \Dingo\Api\Http\Validation\Domain,
@@ -380,7 +378,6 @@ namespace PHPSTORM_META {
             'flash' instanceof \Laracasts\Flash\FlashNotifier,
             'api.router' instanceof \Dingo\Api\Routing\Router,
             'Dingo\Api\Routing\ResourceRegistrar' instanceof \Dingo\Api\Routing\ResourceRegistrar,
-            'api.url' instanceof \Dingo\Api\Routing\UrlGenerator,
             'api.limiting' instanceof \Dingo\Api\Http\RateLimit\Handler,
             'api.http.validator' instanceof \Dingo\Api\Http\RequestValidator,
             'Dingo\Api\Http\Validation\Domain' instanceof \Dingo\Api\Http\Validation\Domain,
@@ -549,7 +546,6 @@ namespace PHPSTORM_META {
             'flash' instanceof \Laracasts\Flash\FlashNotifier,
             'api.router' instanceof \Dingo\Api\Routing\Router,
             'Dingo\Api\Routing\ResourceRegistrar' instanceof \Dingo\Api\Routing\ResourceRegistrar,
-            'api.url' instanceof \Dingo\Api\Routing\UrlGenerator,
             'api.limiting' instanceof \Dingo\Api\Http\RateLimit\Handler,
             'api.http.validator' instanceof \Dingo\Api\Http\RequestValidator,
             'Dingo\Api\Http\Validation\Domain' instanceof \Dingo\Api\Http\Validation\Domain,

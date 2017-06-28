@@ -25,10 +25,10 @@ class PushController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('push.log');
+        return view('admin.logs.push');
     }
 
-    public function logTable()
+    public function table()
     {
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
@@ -78,10 +78,5 @@ class PushController extends Controller
         $ds->rows = $logs;
 
         return Response::json($ds);
-    }
-
-    public function received()
-    {
-
     }
 }

@@ -24,7 +24,7 @@ class DictionaryController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('dictionaries.show');
+        return view('admin.dictionaries.show');
     }
 
     public function edit($id)
@@ -34,12 +34,12 @@ class DictionaryController extends Controller
         if ($dictionary == null) {
 
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/dictionaries');
+            return redirect('/admin/dictionaries');
         }
 
         $user = User::find($id);
 
-        return view('dictionaries.edit', compact('dictionary','user'));
+        return view('admin.dictionaries.edit', compact('dictionary','user'));
     }
 
     public function update($id, Request $request)
@@ -54,7 +54,7 @@ class DictionaryController extends Controller
         $dictionaries->update(Request::all());
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/dictionaries');
+        return redirect('/admin/dictionaries');
     }
 
     public function destroy($id)
@@ -70,7 +70,7 @@ class DictionaryController extends Controller
 
     public function create()
     {
-        return view('dictionaries.create');
+        return view('admin.dictionaries.create');
     }
 
     public function store(DictionaryRequest $request)
@@ -79,7 +79,7 @@ class DictionaryController extends Controller
         $input['site_id'] = Auth::user()->site_id;
         Dictionary::create($input);
         \Session::flash('flash_success', '添加成功');
-        return redirect('/dictionaries');
+        return redirect('/admin/dictionaries');
     }
 
     public function table()

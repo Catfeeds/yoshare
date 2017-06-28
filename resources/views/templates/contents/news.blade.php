@@ -6,9 +6,7 @@
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
     <meta name="description" content="">
-    <link rel="stylesheet" href="{{ get_static_url('/css/swiper.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ get_static_url('/css/local-life-common.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ get_static_url('/css/content.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ get_static_url('/css/templates/content.css') }}" type="text/css">
     <script src="{{ get_static_url('/plugins/jquery/2.2.4/jquery.min.js') }}"></script>
     <script src="{{ get_static_url('/js/swiper.jquery.min.js') }}"></script>
     <script>

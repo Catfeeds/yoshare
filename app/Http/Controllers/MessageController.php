@@ -20,7 +20,7 @@ class MessageController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('messages.index');
+        return view('admin.messages.index');
     }
 
     public function update($id)

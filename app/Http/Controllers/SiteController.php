@@ -22,7 +22,7 @@ class SiteController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('sites.index');
+        return view('admin.sites.index');
     }
 
     public function edit($id)
@@ -32,10 +32,10 @@ class SiteController extends Controller
         if ($site == null) {
 
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/sites');
+            return redirect('/admin/sites');
         }
 
-        return view('sites.edit', compact('site'));
+        return view('admin.sites.edit', compact('site'));
     }
 
     public function update($id, SiteRequest $request)
@@ -52,7 +52,7 @@ class SiteController extends Controller
         $sites->update($input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/sites');
+        return redirect('/admin/sites');
     }
 
     public function destroy($id)
@@ -68,7 +68,7 @@ class SiteController extends Controller
 
     public function create()
     {
-        return view('sites.create');
+        return view('admin.sites.create');
     }
 
     public function store(SiteRequest $request)
@@ -77,7 +77,7 @@ class SiteController extends Controller
         $input['username'] = Auth::user()->name;
         Site::create($input);
         \Session::flash('flash_success', '添加成功');
-        return redirect('/sites');
+        return redirect('/admin/sites');
     }
 
     public function table()

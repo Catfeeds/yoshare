@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DataSource;
 use App\Http\Requests\ModelRequest;
-use App\Models\Category;
 use App\Models\Model;
 use App\Models\Content;
-use DB;
 use Gate;
 use Request;
 use Response;
@@ -24,71 +22,54 @@ class ModelController extends Controller
             $this->middleware('deny403');
         }
 
-        //获取当前栏目ID
+        //获取当前模型ID
         $model_id = Request::get('model') ?: 0;
 
-        return view('models.index', compact('model_id'));
+        return view('admin.models.index', compact('model_id'));
     }
 
-    public function create($category_id)
+    public function create()
     {
-        return view('models.create', compact('category_id'));
+        return view('admin.models.create');
     }
 
     public function store(ModelRequest $request)
     {
-        $input = Request::all();
-        $category_id = $input['category_id'];
+        $input = $request->all();
 
-        $sort = Model::select(DB::raw('max(sort) as max'))
-            ->where('parent_id', '=', $category_id)
-            ->first()->max;
+        $ret = Model::insert($input);
+        if (!$ret) {
+            redirect()->back()->withInput();
+        }
 
-        $sort += 1;
-
-        $input['sort'] = $sort;
-        $input['parent_id'] = $category_id;
-        $input['site_id'] = \Auth::user()->site_id;
-
-        Model::create($input);
-
-        $url = '/models?category_id=' . $category_id;
-        \Session::flash('flash_success', '添加成功');
-        return redirect($url);
+        return redirect('/admin/models');
     }
 
     public function edit($id)
     {
-        $category = Model::find($id);
+        $model = json_decode(json_encode(config('site.model.1')));
 
-        if (empty($category)) {
+        if (empty($model)) {
             \Session::flash('flash_warning', '无此记录');
 
-            return redirect('/models');
+            return redirect('/admin/models');
         }
 
-        return view('models.edit', compact('category'));
+        return view('admin.models.edit', compact('model'));
     }
 
 
     public function update($id, ModelRequest $request)
     {
-        $category = Model::find($id);
+        $input = $request->all();
 
-        if ($category == null) {
-            \Session::flash('flash_warning', '无此记录');
-            return redirect()->to($this->getRedirectUrl())
-                ->withInput($request->input());
+        $ret = Model::modify($id, $input);
+        if (!$ret) {
+            redirect()->back()->withInput();
         }
 
-        $input = Request::all();
-
-        $category->update($input);
-
-        $category_id = $category->parent_id > 0 ? $category->parent_id : $category->id;
-
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/models?category_id=' . $category_id);
+        return redirect('/admin/models');
     }
 
     public function save($id)
@@ -140,7 +121,7 @@ class ModelController extends Controller
         if (empty($category)) {
             abort(404);
         }
-        return view("templates.models.list", compact('category'));
+        return view("admin.templates.models.list", compact('category'));
     }
 
     public function table($category_id)

@@ -23,12 +23,12 @@ class AppController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('apps.index');
+        return view('admin.apps.index');
     }
 
     public function create()
     {
-        return view('apps.create');
+        return view('admin.apps.create');
     }
 
     public function store(AppRequest $request)
@@ -37,7 +37,7 @@ class AppController extends Controller
         $input['username'] = Auth::user()->name;
         App::create($input);
         \Session::flash('flash_success', '添加成功');
-        return redirect('/apps');
+        return redirect('/admin/apps');
     }
 
     public function edit($id)
@@ -45,10 +45,10 @@ class AppController extends Controller
         $apps = App::find($id);
         if ($apps == null) {
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/apps');
+            return redirect('/admin/apps');
         }
 
-        return view('apps.edit', compact('apps'));
+        return view('admin.apps.edit', compact('apps'));
     }
 
     public function update($id, AppRequest $request)
@@ -65,7 +65,7 @@ class AppController extends Controller
         $apps->update($input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/apps');
+        return redirect('/admin/apps');
     }
 
     public function destroy($id)

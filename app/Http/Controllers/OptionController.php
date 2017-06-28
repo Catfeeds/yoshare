@@ -21,7 +21,7 @@ class OptionController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('options.index');
+        return view('admin.options.index');
     }
 
     public function update($id)

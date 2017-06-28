@@ -26,14 +26,14 @@ class UserController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('users.index');
+        return view('admin.users.index');
     }
 
     public function create()
     {
         $roles = Role::all();
         $sites = Site::getNames();
-        return view('users.create', compact('sites', 'roles'));
+        return view('admin.users.create', compact('sites', 'roles'));
     }
 
     public function store(UserRequest $request)
@@ -56,7 +56,7 @@ class UserController extends Controller
             }
         }
         \Session::flash('flash_success', '添加成功');
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     public function destroy($id)
@@ -78,7 +78,7 @@ class UserController extends Controller
         $user = User::find($id);
         if ($user == null) {
             \Session::flash('flash_warning', '无此记录');
-            return redirect('/users');
+            return redirect('/admin/users');
         }
 
         $roles = Role::all();
@@ -88,7 +88,7 @@ class UserController extends Controller
 
         $sites = Site::getNames();
 
-        return view('users.edit', compact('user', 'sites', 'roles', 'roleUsers'));
+        return view('admin.users.edit', compact('user', 'sites', 'roles', 'roleUsers'));
     }
 
     public function update($id, Request $request)
@@ -121,7 +121,7 @@ class UserController extends Controller
         }
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     function category($id){
@@ -175,7 +175,7 @@ class UserController extends Controller
 
     public function changePasswordForm()
     {
-        return view('auth.passwords.change');
+        return view('admin.auth.passwords.change');
     }
 
     public function changePassword()
