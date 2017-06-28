@@ -28,6 +28,13 @@ class Content extends Model
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
+    const STATES = [
+        0 => '已删除',
+        1 => '未发布',
+        2 => '已撤回',
+        9 => '已发布',
+    ];
+
     const TAG_RECOMMEND = '推荐';
     const TAG_TOP = '置顶';
     const TAG_SIDE = '轮播图';
@@ -84,20 +91,7 @@ class Content extends Model
 
     public function stateName()
     {
-        switch ($this->state) {
-            case static::STATE_NORMAL:
-                return '未发布';
-                break;
-            case static::STATE_PUBLISHED:
-                return '已发布';
-                break;
-            case static::STATE_CANCELED:
-                return '已撤回';
-                break;
-            case static::STATE_DELETED:
-                return '已删除';
-                break;
-        }
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
     public function site()
@@ -143,6 +137,11 @@ class Content extends Model
     public function images()
     {
         return $this->items()->where('type', ContentItem::TYPE_IMAGE)->orderBy('sort')->get();
+    }
+
+    public function files()
+    {
+        return $this->items()->where('type', ContentItem::TYPE_FILE)->orderBy('sort')->get();
     }
 
     public function comments()

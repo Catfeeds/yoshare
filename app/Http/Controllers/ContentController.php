@@ -21,10 +21,10 @@ class ContentController extends Controller
         if (Gate::denies('@content')) {
             $this->middleware('deny403');
         }
-        $page = request('page') ?: 1;
+
         $fields = json_decode(json_encode(config('site.model.1.fields')));
 
-        return view('admin.contents.index', compact('page', 'fields'));
+        return view('admin.contents.index', compact('fields'));
     }
 
     public function create($category_id)
@@ -34,32 +34,22 @@ class ContentController extends Controller
             return redirect()->back();
         }
 
-        $list_keywords = Keyword::orderBy('times', 'desc')->pluck('name', 'name')->toArray();
+        $category = Category::find($category_id);
 
-        $fields = config('site.model.1.fields');
-        $fields = json_decode(json_encode($fields));
-        $fields = array_sort($fields, function ($field) {
+        //获取模型配置
+        $model_id = $category->model_id;
+        $model = json_decode(json_encode(config("site.model.$model_id")));
+        $model->fields = array_sort($model->fields, function ($field) {
             return $field->editor->index;
         });
-        $tabs = [
-            [
-                'name' => 'info',
-                'alias' => '基本信息',
-                'fields' => array_values(array_filter($fields, function ($field) {
-                    return $field->editor->show && $field->editor->tab == 'info';
-                }))
-            ],
-            [
-                'name' => 'content',
-                'alias' => '正文',
-                'fields' => array_values(array_filter($fields, function ($field) {
-                    return $field->editor->show && $field->editor->tab == 'content';
-                }))
-            ]
-        ];
-        $tabs = json_decode(json_encode($tabs));
 
-        return view('admin.contents.create', compact('page', 'category_id', 'list_keywords', 'tabs'));
+        foreach ($model->tabs as $tab) {
+            $tab->fields = array_values(array_filter($model->fields, function ($field) use ($tab) {
+                return $field->editor->show && $field->editor->tab == $tab->name;
+            }));
+        }
+
+        return view('admin.contents.create', compact('page', 'category_id', 'model'));
     }
 
     public function store(ContentRequest $request)
@@ -95,50 +85,31 @@ class ContentController extends Controller
             return redirect()->back();
         }
 
-        $page = request('page');
-
         $content = Content::find($id);
         if ($content == null) {
             \Session::flash('flash_warning', '无此记录');
             return redirect('/admin/contents');
         }
+
         $category_id = $content->category_id;
 
         //图集地址
-        $content->images = implode(',', $content->items()->orderBy('sort')->pluck('url')->toArray());
+        $content->images = implode(',', $content->images()->pluck('url')->toArray());
 
-        $selected_keywords = explode(' ', $content->keywords);
-        $list_keywords = Keyword::orderBy('times', 'desc')->pluck('name', 'name')->toArray();
-        if (empty($list_keywords) && !empty($list_keywords)) {
-            foreach ($selected_keywords as $keyword) {
-                $list_keywords[$keyword] = $keyword;
-            }
-        }
-
-        $fields = config('site.model.1.fields');
-        $fields = json_decode(json_encode($fields));
-        $fields = array_sort($fields, function ($field) {
+        //获取模型配置
+        $model_id = $content->category->model_id;
+        $model = json_decode(json_encode(config("site.model.$model_id")));
+        $model->fields = array_sort($model->fields, function ($field) {
             return $field->editor->index;
         });
-        $tabs = [
-            [
-                'name' => 'info',
-                'alias' => '基本信息',
-                'fields' => array_values(array_filter($fields, function ($field) {
-                    return $field->editor->show && $field->editor->tab == 'info';
-                }))
-            ],
-            [
-                'name' => 'content',
-                'alias' => '正文',
-                'fields' => array_values(array_filter($fields, function ($field) {
-                    return $field->editor->show && $field->editor->tab == 'content';
-                }))
-            ]
-        ];
-        $tabs = json_decode(json_encode($tabs));
 
-        return view('admin.contents.edit', compact('page', 'category_id', 'content', 'selected_keywords', 'list_keywords', 'tabs'));
+        foreach ($model->tabs as $tab) {
+            $tab->fields = array_values(array_filter($model->fields, function ($field) use ($tab) {
+                return $field->editor->show && $field->editor->tab == $tab->name;
+            }));
+        }
+
+        return view('admin.contents.edit', compact('category_id', 'content', 'model'));
     }
 
     public function update($id, ContentRequest $request)

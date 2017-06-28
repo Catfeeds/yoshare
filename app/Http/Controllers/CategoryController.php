@@ -6,6 +6,7 @@ use App\DataSource;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Models\Content;
+use App\Models\Model;
 use DB;
 use Gate;
 use Request;
@@ -31,7 +32,11 @@ class CategoryController extends Controller
 
     public function create($category_id)
     {
-        return view('admin.categories.create', compact('category_id'));
+        $models = Model::where('state', Model::STATE_ENABLE)
+            ->pluck('alias', 'id')
+            ->toArray();
+
+        return view('admin.categories.create', compact('category_id', 'models'));
     }
 
     public function store(CategoryRequest $request)
@@ -65,8 +70,11 @@ class CategoryController extends Controller
 
             return redirect('/admin/categories');
         }
+        $models = Model::where('state', Model::STATE_ENABLE)
+            ->pluck('alias', 'id')
+            ->toArray();
 
-        return view('admin.categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category', 'models'));
     }
 
 
@@ -154,7 +162,7 @@ class CategoryController extends Controller
                 'id' => $category->id,
                 'code' => $category->code,
                 'name' => $category->name,
-                'template' => $category->template,
+                'model_alias' => $category->model->alias,
                 'likes' => $category->likes,
                 'parent_id' => $category->parent_id,
                 'slug' => $category->slug,

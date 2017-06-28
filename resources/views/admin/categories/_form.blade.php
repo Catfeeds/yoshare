@@ -31,9 +31,9 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('template', '模板:', ['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('model_id', '模型:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">
-                {!! Form::text('template', null, ['class' => 'form-control']) !!}
+                {!! Form::select('model_id', $models, null, ['class' => 'form-control']) !!}
             </div>
             {!! Form::label('sort', '序号:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">
@@ -41,7 +41,7 @@
             </div>
             {!! Form::label('state', '状态:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">
-                {!! Form::select('state',['禁用','启用'], isset($category) ? $category->state : 1 ,['class' => 'form-control col-sm-2']) !!}
+                {!! Form::select('state', \App\Models\Category::STATES, null, ['class' => 'form-control col-sm-2']) !!}
             </div>
         </div>
 

@@ -23,17 +23,14 @@ class CategoryRequest extends Request
     {
         return [
             'name'=> 'required',
-            'template'=> 'required',
-            'number' => 'sometimes|required|numeric',
+            'model_id'=> 'required',
         ];
     }
     public function messages()
     {
         return [
             'name.required' => '请输入栏目名称',
-            'template.required' => '请输入模板名称',
-            'number.required' => '请填写商品信息中的单位',
-            'number.numeric' => '单位必须是数值',
+            'model_id.required' => '请选择模型',
         ];
     }
 }

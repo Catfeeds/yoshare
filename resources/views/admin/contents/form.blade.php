@@ -1,12 +1,12 @@
 <ul id="tabs" class="nav nav-tabs">
-    @foreach($tabs as $tab)
+    @foreach($model->tabs as $tab)
         <li class="{{ $loop->first ? 'active' : '' }}">
-            <a href="#{{ 'tab_' . $tab->name }}" data-toggle="tab">{{ $tab->alias }}</a>
+            <a href="#{{ 'tab_' . $tab->name }}" data-toggle="tab">{{ $tab->title }}</a>
         </li>
     @endforeach
 </ul>
 <div class="tab-content">
-    @foreach($tabs as $tab)
+    @foreach($model->tabs as $tab)
         <div id="{{ 'tab_' . $tab->name }}" class="tab-pane fade in {{ $loop->first ? 'active' : '' }} padding-t-15">
             <?php $position = 0; ?>
             @foreach($tab->fields as $key => $field)
@@ -25,7 +25,7 @@
                                     });
                                 </script>
                             @elseif($field->editor->type == 'datetime')
-                                {!! Form::label($field->name, $field->alias . ':', ['class' => 'control-label col-sm-1']) !!}
+                                {!! Form::label($field->name, $field->title . ':', ['class' => 'control-label col-sm-1']) !!}
                                 <div class="col-sm-{{ $field->editor->columns }}">
                                     <div class='input-group date'>
                                         {!! Form::text($field->name, null, ['class' => 'form-control']) !!}
@@ -33,12 +33,12 @@
                                     </div>
                                 </div>
                             @elseif($field->editor->type == 'select')
-                                {!! Form::label($field->name, $field->alias . ':', ['class' => 'control-label col-sm-1']) !!}
+                                {!! Form::label($field->name, $field->title . ':', ['class' => 'control-label col-sm-1']) !!}
                                 <div class="col-sm-{{ $field->editor->columns }}">
                                     {!! Form::select($field->name, $field->editor->options, null, ['class' => 'form-control']) !!}
                                 </div>
                             @elseif($field->editor->type == 'textarea')
-                                {!! Form::label($field->name, $field->alias . ':', ['class' => 'control-label col-sm-1']) !!}
+                                {!! Form::label($field->name, $field->title . ':', ['class' => 'control-label col-sm-1']) !!}
                                 <div class="col-sm-{{ $field->editor->columns }}">
                                     {!! Form::textarea('summary', null, ['class' => 'form-control', 'rows' => $field->editor->rows]) !!}
                                 </div>
@@ -47,7 +47,7 @@
                                     {!! Form::hidden($field->name, null, ['class' => 'form-control', 'id' => $field->name]) !!}
                                 </div>
                             @else
-                                {!! Form::label($field->name, $field->alias . ':', ['class' => 'control-label col-sm-1']) !!}
+                                {!! Form::label($field->name, $field->title . ':', ['class' => 'control-label col-sm-1']) !!}
                                 <div class="col-sm-{{ $field->editor->columns }}">
                                     {!! Form::text($field->name, null, ['class' => 'form-control']) !!}
                                 </div>
@@ -224,7 +224,7 @@
     @endforeach
 </div>
 <div class="box-footer">
-    <button type="button" class="btn btn-default" onclick="location.href='/admin/contents?category_id={{$category_id}}&page={{ isset($page)?$page:1 }}';"> 取　消</button>
+    <button type="button" class="btn btn-default" onclick="location.href='/admin/contents?category_id={{$category_id}}}}';"> 取　消</button>
     <button type="submit" class="btn btn-info pull-right" id="submit">保　存</button>
 </div>
 

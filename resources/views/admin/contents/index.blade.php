@@ -44,7 +44,7 @@
             $('#tree').treeview({
                 data: data,
                 searchResultColor: 'white',
-                levels: 1,
+                levels: 2,
                 onNodeSelected: function (event, data) {
                     category_id = data.id;
                     $('#table').bootstrapTable('selectPage', 1);

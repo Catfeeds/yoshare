@@ -8,9 +8,18 @@ use Schema;
 
 class Model extends \Illuminate\Database\Eloquent\Model
 {
+    const STATE_DISABLE = 0;
+    const STATE_ENABLE = 1;
+
+    const STATES = [
+        0 => '已禁用',
+        1 => '已启用',
+    ];
+
     protected $fillable = [
         'name',
-        'alias',
+        'title',
+        'state',
     ];
 
     public function fields()

@@ -4,7 +4,7 @@
         <th data-field="state" data-checkbox="true"></th>
         @foreach($fields as $field)
             @if($field->table->show)
-                <th data-field="{{ $field->name }}" data-align="{{ $field->table->align ? : 'left' }}" data-width="{{ $field->table->width ? : 60 }}" data-formatter="{{ $field->table->formatter }}" data-editable="{{ $field->table->editable }}">{{ $field->alias }}</th>
+                <th data-field="{{ $field->name }}" data-align="{{ $field->table->align ? : 'left' }}" data-width="{{ $field->table->width ? : 60 }}" data-formatter="{{ $field->table->formatter }}" data-editable="{{ $field->table->editable }}">{{ $field->title }}</th>
             @endif
         @endforeach
         <th data-field="action" data-align="center" data-width="110" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
@@ -22,7 +22,6 @@
         method: 'get',
         url: '/admin/contents/table',
         pagination: true,
-        pageNumber: {{ isset($page) ? $page : 1 }},
         pageSize: 30,
         pageList: [30, 50, 100, 200],
         sidePagination: 'server',
@@ -175,8 +174,7 @@
 
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            var page = $('#table').bootstrapTable('getOptions').pageNumber;
-            window.location.href = '/admin/contents/' + row.id + '/edit?page=' + page;
+            window.location.href = '/admin/contents/' + row.id + '/edit';
         },
 
         'click .push': function (e, value, row, index) {

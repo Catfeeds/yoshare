@@ -4,12 +4,16 @@ namespace App\Models;
 
 use App\Node;
 use Auth;
-use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Category extends \Illuminate\Database\Eloquent\Model
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
+
+    const STATES = [
+        1 => '已启用',
+        0 => '已禁用',
+    ];
 
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
@@ -18,10 +22,11 @@ class Category extends Model
         'site_id',
         'code',
         'name',
+        'parent_id',
+        'model_id',
         'title',
         'subtitle',
         'likes',
-        'parent_id',
         'slug',
         'link_type',
         'link',
@@ -30,22 +35,9 @@ class Category extends Model
         'author',
         'description',
         'content',
-        'template',
         'state',
         'sort',
     ];
-
-    public function stateName()
-    {
-        switch ($this->state) {
-            case static::STATE_DISABLED:
-                return '已禁用';
-                break;
-            case static::STATE_ENABLED:
-                return '已启用';
-                break;
-        }
-    }
 
     public function parent()
     {
@@ -55,6 +47,11 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    public function model()
+    {
+        return $this->belongsTo(Model::class, 'model_id');
     }
 
     public function contents()
@@ -76,6 +73,11 @@ class Category extends Model
             $category_ids = Auth::user()->categories->pluck('id')->toArray();
             $query->where('site_id', Auth::user()->site_id)->whereIn('id', $category_ids);
         }
+    }
+
+    public function stateName()
+    {
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state ] : '';
     }
 
     public static function getSiteTree()
