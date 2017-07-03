@@ -33,7 +33,7 @@ class CategoryController extends Controller
     public function create($category_id)
     {
         $models = Model::where('state', Model::STATE_ENABLE)
-            ->pluck('alias', 'id')
+            ->pluck('title', 'id')
             ->toArray();
 
         return view('admin.categories.create', compact('category_id', 'models'));
@@ -71,7 +71,7 @@ class CategoryController extends Controller
             return redirect('/admin/categories');
         }
         $models = Model::where('state', Model::STATE_ENABLE)
-            ->pluck('alias', 'id')
+            ->pluck('title', 'id')
             ->toArray();
 
         return view('admin.categories.edit', compact('category', 'models'));
@@ -162,7 +162,7 @@ class CategoryController extends Controller
                 'id' => $category->id,
                 'code' => $category->code,
                 'name' => $category->name,
-                'model_alias' => $category->model->alias,
+                'model_title' => $category->model->title,
                 'likes' => $category->likes,
                 'parent_id' => $category->parent_id,
                 'slug' => $category->slug,
