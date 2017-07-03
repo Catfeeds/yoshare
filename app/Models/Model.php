@@ -8,6 +8,8 @@ use Schema;
 
 class Model extends \Illuminate\Database\Eloquent\Model
 {
+    const FIELD_USER = '1';
+
     const STATE_DISABLE = 0;
     const STATE_ENABLE = 1;
 

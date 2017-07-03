@@ -4,7 +4,11 @@
         <th data-field="state" data-checkbox="true"></th>
         @foreach($fields as $field)
             @if($field->table->show)
-                <th data-field="{{ $field->name }}" data-align="{{ $field->table->align ? : 'left' }}" data-width="{{ $field->table->width ? : 60 }}" data-formatter="{{ $field->table->formatter }}" data-editable="{{ $field->table->editable }}">{{ $field->title }}</th>
+                <th data-field="{{ $field->table->name }}"
+                    data-align="{{ $field->table->align ? : 'left' }}"
+                    data-width="{{ $field->table->width ? : 60 }}"
+                    data-formatter="{{ $field->table->formatter }}"
+                    data-editable="{{ $field->table->editable }}">{{ $field->title }}</th>
             @endif
         @endforeach
         <th data-field="action" data-align="center" data-width="110" data-formatter="actionFormatter" data-events="actionEvents">操作</th>

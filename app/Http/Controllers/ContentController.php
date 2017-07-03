@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContentRequest;
 use App\Models\Category;
 use App\Models\Content;
-use App\Models\Keyword;
+use App\Models\Model;
 use Gate;
 use Request;
 use Response;
@@ -23,6 +23,9 @@ class ContentController extends Controller
         }
 
         $fields = json_decode(json_encode(config('site.model.1.fields')));
+        foreach ($fields as $field) {
+            $field->table->name = isset($field->table->name) ? $field->table->name : $field->name;
+        }
 
         return view('admin.contents.index', compact('fields'));
     }
