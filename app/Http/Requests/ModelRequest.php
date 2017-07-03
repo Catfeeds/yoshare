@@ -23,15 +23,15 @@ class ModelRequest extends Request
     {
         return [
             'name' => 'required',
-            'alias' => 'required',
+            'title' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => '请输入名称',
-            'alias.required' => '请输入别名',
+            'name.required' => '请输入英文名称',
+            'title.required' => '请输入中文名称',
         ];
     }
 }

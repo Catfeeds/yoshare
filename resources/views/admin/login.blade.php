@@ -6,7 +6,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
-    <title>内容管理系统登录</title>
+    <title>{{ env('APP_NAME') }}</title>
     <link href="/plugins/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
     <script src="/plugins/jquery/2.2.4/jquery.min.js"></script>
     <link href="/css/admin/login.css" rel="stylesheet">

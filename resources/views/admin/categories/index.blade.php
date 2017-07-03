@@ -43,7 +43,7 @@
                                 <tr>
                                     <th data-field="id" data-align="center" data-width="45">ID</th>
                                     <th data-field="name">栏目名称</th>
-                                    <th data-field="model_name" data-align="center" data-width="90">模型</th>
+                                    <th data-field="model_title" data-align="center" data-width="90">模型</th>
                                     <th data-field="slug" data-align="center" data-width="90">网址缩略名</th>
                                     <th data-field="sort" data-align="center"  data-width="60" data-editable="true">序号</th>
                                     <th data-field="state_name" data-align="center" data-width="90" data-formatter="stateFormatter">状态</th>

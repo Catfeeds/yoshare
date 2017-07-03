@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>CMS</b></span>
+        <span class="logo-mini"><b>云牧</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>内容</b>管理系统</span>
+        <span class="logo-lg"><b>云牧</b>在线专家管理系统</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
