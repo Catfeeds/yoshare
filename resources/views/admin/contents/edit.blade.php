@@ -30,9 +30,9 @@
                             {!! Form::close() !!}
 
                         </div>
-                    </div><!-- /.box -->
-                </div><!--/.col (right) -->
-            </div>   <!-- /.row -->
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 @endsection

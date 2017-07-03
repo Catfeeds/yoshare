@@ -21,12 +21,12 @@ function getQueryString(name) {
     return null;
 }
 
-function toastrs(message) {
+function toastrs(style, message) {
     toastr.options = {
         'closeButton': true,
         'positionClass': 'toast-bottom-right',
     };
-    toastr['warning'](message);
+    toastr[style](message);
     return false;
 }
 

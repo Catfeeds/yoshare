@@ -1,86 +1,20 @@
 <div class="cb-toolbar">操作:</div>
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
-    <button class="btn btn-primary btn-xs margin-r-5" id="create" onclick="create()">新增</button>
-    <button class="btn btn-success btn-xs margin-r-5 action"
-            value="{{ \App\Models\Content::STATE_PUBLISHED }}">发布
-    </button>
-    <button class="btn btn-warning btn-xs margin-r-5 action"
-            value="{{ \App\Models\Content::STATE_CANCELED }}">撤回
-    </button>
-    <button class="btn btn-info btn-xs margin-r-5" id="copy" onclick="modalCopy()" data-toggle="modal"
-            data-target="#modalCopy">推荐
-    </button>
-    <button class="btn btn-danger btn-xs margin-r-5" id="delete"
-            value="{{ \App\Models\Content::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal"
-            data-target="#modal">删除
-    </button>
-    <button class="btn btn-default btn-xs margin-r-5" id="sort" onclick="enableSort()">排序</button>
+    <button class="btn btn-primary btn-xs margin-r-5" id="btn_create" onclick="create()">新增</button>
+    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \App\Models\Content::STATE_PUBLISHED }}">发布</button>
+    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \App\Models\Content::STATE_CANCELED }}">撤回</button>
+    <button class="btn btn-info btn-xs margin-r-5" data-toggle="modal" onclick="copy()">推荐</button>
+    <button class="btn btn-danger btn-xs margin-r-5" id="btn_delete" value="{{ \App\Models\Content::STATE_DELETED }}" onclick="remove()" data-toggle="modal" data-target="#modal">删除</button>
+    <button class="btn btn-default btn-xs margin-r-5" id="btn_sort">排序</button>
 </div>
 <div class="btn-group margin-bottom pull-right">
-    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" id="" value="">全部</button>
-    <button type="button" class="btn btn-primary btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Content::STATE_NORMAL }}">未发布
-    </button>
-    <button type="button" class="btn btn-success btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Content::STATE_PUBLISHED }}">已发布
-    </button>
-    <button type="button" class="btn btn-warning btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Content::STATE_CANCELED }}">已撤回
-    </button>
-    <button type="button" class="btn btn-danger btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Content::STATE_DELETED }}">已删除
-    </button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" onclick="openOrClose('forms')">查询
-    </button>
-</div>
-
-<div class="form-horizontal form-group-sm" id="forms" style="display: none;">
-    <div class="btn-group margin-bottom col-md-6" style="padding: 0;">
-        <div class="col-md-3" style="padding: 0">
-            {!! Form::label('id', 'ID:', ['class' => 'control-label cb-toolbar']) !!}
-            <div class="col-sm-8" style="padding: 0;">
-                {!! Form::text('id', null, ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div class="col-md-5" style="padding: 0">
-            {!! Form::label('title', '标题:', ['class' => 'control-label cb-toolbar']) !!}
-            <div class="col-sm-9" style="padding: 0;">
-                {!! Form::text('title', null, ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div class="col-md-4" style="padding: 0">
-            {!! Form::label('username', '操作员:', ['class' => 'control-label cb-toolbar']) !!}
-            <div class="col-sm-7" style="padding: 0;">
-                {!! Form::text('username', null, ['class' => 'form-control']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="btn-group margin-bottom col-md-6 pull-right" style="padding: 0">
-        <div class="col-md-11" style="width: 88%;padding: 0;">
-            <div class="col-md-6" style="padding: 0">
-                {!! Form::label('start_date', '时间:', ['class' => 'control-label cb-toolbar']) !!}
-                <div class='input-group col-md-9 date'>
-                    {!! Form::text('start_date', null, ['class' => 'form-control date']) !!}
-                    <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-                </div>
-            </div>
-            <div class="col-md-6" style="padding: 0">
-                {!! Form::label('start_date', '至', ['class' => 'control-label cb-toolbar']) !!}
-                <div class='input-group col-md-9 date'>
-                    {!! Form::text('end_date', null, ['class' => 'form-control date']) !!}
-                    <span class="input-group-addon">
-                 <span class="glyphicon glyphicon-calendar"></span>
-             </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-1 text-center" style="width: 12%;padding: 0">
-            <button type="button" class="btn btn-info btn-sm" id="contents_query">查 询</button>
-        </div>
-    </div>
+    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \App\Models\Content::STATE_NORMAL }}">未发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\Content::STATE_PUBLISHED }}">已发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \App\Models\Content::STATE_CANCELED }}">已撤回</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\Content::STATE_DELETED }}">已删除</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5" data-toggle="modal" data-target="#modal_query"><span class="fa fa-search"></span></button>
 </div>
 
 <script>
@@ -89,7 +23,7 @@
     }
 
     var remove_open = false;
-    $("#modal_remove").delegate(this, "click", function () {
+    $("#modal_remove").click(function () {
         if (remove_open == true) {
             return false;
         }
@@ -113,7 +47,7 @@
         });
     });
 
-    function modalRemove() {
+    function remove() {
         remove_open = false;
         var rows = $('#table').bootstrapTable('getSelections');
         if (rows.length > 0) {
@@ -126,7 +60,7 @@
     }
 
     /* 操作 */
-    $('.action').click(function () {
+    $('.state').click(function () {
         var state = $(this).val();
         var rows = $('#table').bootstrapTable('getSelections');
 
@@ -149,52 +83,32 @@
 
     /* 筛选 */
     $('.filter').click(function () {
-        var object = $('#forms input').serializeObject();
-        object['state'] = $(this).val();
-        object['_token'] = '{{ csrf_token() }}';
-        $('#state').val(object['state']);
+        var value = $(this).val();
+        $('#state').val(value);
         $('#table').bootstrapTable('selectPage', 1);
-        $('#table').bootstrapTable('refresh', {query: object});
+
+        //改变按钮样式
+        $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.filter').addClass('btn-default');
+        $(this).removeClass('btn-default');
+        $(this).addClass($(this).data('active'));
     });
 
-    function enableSort() {
-        if ($('#sort').hasClass('active')) {
-            $('#sort').removeClass('active');
-            $('#sort').text('排序');
+    /* 启动排序 */
+    $('#btn_sort').click(function () {
+        if ($('#btn_sort').hasClass('active')) {
+            $('#btn_sort').removeClass('active');
+            $('#btn_sort').text('排序');
             $('#table tbody').sortable('disable');
             $('#table tbody').enableSelection();
-            toastrs('<b>已禁用排序功能</b>')
+            toastrs('info', '<b>已禁用排序功能</b>')
         }
         else {
-            $('#sort').addClass('active');
-            $('#sort').text('排序(已启用)');
+            $('#btn_sort').addClass('active');
+            $('#btn_sort').text('排序(已启用)');
             $('#table tbody').sortable('enable');
             $('#table tbody').disableSelection();
-            toastrs('<b>已启用排序功能</b>')
+            toastrs('info', '<b>已启用排序功能</b>')
         }
-    }
-
-    function openOrClose(id_name_str) {
-        var id_name = '#' + id_name_str;
-        if ($(id_name).css('display') == 'block') {
-            $(id_name).slideUp(350);
-        } else {
-            $(id_name).slideDown(350);
-        }
-    }
-
-    function toastrs(message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-bottom-right',
-        };
-        toastr['info'](message);
-    }
-
-    $('.date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm',
-        locale: "zh-CN",
-        toolbarPlacement: 'bottom',
-        showClear: true,
     });
 </script>

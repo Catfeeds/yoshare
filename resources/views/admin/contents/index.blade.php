@@ -27,6 +27,7 @@
                             @include('admin.layouts.flash')
                             @include('admin.contents.toolbar')
                             @include('admin.contents.copy')
+                            @include('admin.contents.query')
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
                             @include('admin.layouts.push')
                             @include('admin.contents.table')
@@ -34,20 +35,20 @@
                     </div>
                 </div>
             </div>
-        </section><!-- /.content -->
+        </section>
     </div>
-    <!-- /.content-wrapper -->
+
     <script>
         var index = 0;
 
+        /* 获取栏目树 */
         $.getJSON('/admin/contents/categories', function (data) {
             $('#tree').treeview({
                 data: data,
                 searchResultColor: 'white',
-                levels: 2,
+                levels: 4,
                 onNodeSelected: function (event, data) {
                     category_id = data.id;
-                    $('#table').bootstrapTable('selectPage', 1);
                     $('#table').bootstrapTable('refresh');
                 }
             });
@@ -60,10 +61,6 @@
                     $('#tree').treeview('selectNode', [index, {silent: false}]);
                 }
             }
-        });
-
-        $('#contents_query').click(function () {
-            $('#table').bootstrapTable('selectPage', 1);
         });
     </script>
 @endsection

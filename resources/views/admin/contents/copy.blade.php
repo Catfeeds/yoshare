@@ -10,7 +10,7 @@
                     <div class="no-padding pull-left col-sm-4">
                         <div class="box box-info">
                             <div class="box-body">
-                                <div id="trees"></div>
+                                <div id="tree_copy"></div>
                             </div>
                         </div>
                     </div>
@@ -27,36 +27,20 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="modal_copys">确认</button>
+                <button type="button" class="btn btn-primary" id="btn_copy">确认</button>
             </div>
         </div>
     </div>
 </div>
 <script>
+
+    $('#modal_copy').on('show.bs.modal', function () {
+    });
+
     var push_open = false;
     var category_ids = [];
-    var url = '/admin/contents/categories';
-    function getCategory() {
-        $.getJSON(url, function (data) {
-            $('#trees').treeview({
-                data: data,
-                onNodeSelected: function (event, data) {
-                    if (push_open == true || $.inArray(data.id, category_ids) > -1) {
-                        return false;
-                    }
-                    category_ids.push(data.id);
-                    category_ids = $.unique(category_ids);
-                    var html = '<tr id="category' + data.id + '">' +
-                        '<td>' + data.text + '<span class="close">' +
-                        '<span class="glyphicon glyphicon-remove pull-right" style="font-size: 14px;" onclick="removeCategory(' + data.id + ')"></span>' +
-                        '</span></td></tr>';
-                    $('#add_copy_cata').append(html);
-                },
-            });
-        });
-    }
 
-    $("#modal_copys").delegate(this, "click", function () {
+    $('#btn_copy').click(function () {
         if (category_ids.length == 0) {
             return false;
         }
@@ -78,14 +62,27 @@
     });
 
     /* 复制 */
-    function modalCopy() {
+    function copy() {
         var rows = $('#table').bootstrapTable('getSelections');
         if (rows.length > 0) {
-//            $('#copy').data('target', '#modalCopy');
-            $('#copy').attr('data-target', '#modal_copy');
-            getCategory();
-        } else {
-            $('#copy').removeAttr('data-target');
+            $('#modal_copy').modal('show');
+            $.getJSON('/admin/contents/categories', function (data) {
+                $('#tree_copy').treeview({
+                    data: data,
+                    onNodeSelected: function (event, data) {
+                        if (push_open == true || $.inArray(data.id, category_ids) > -1) {
+                            return false;
+                        }
+                        category_ids.push(data.id);
+                        category_ids = $.unique(category_ids);
+                        var html = '<tr id="category' + data.id + '">' +
+                            '<td>' + data.text + '<span class="close">' +
+                            '<span class="glyphicon glyphicon-remove pull-right" style="font-size: 14px;" onclick="removeCategory(' + data.id + ')"></span>' +
+                            '</span></td></tr>';
+                        $('#add_copy_cata').append(html);
+                    },
+                });
+            });
         }
     }
 

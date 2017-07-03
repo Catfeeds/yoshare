@@ -91,7 +91,7 @@
             if (category_id == 0) {
                 return false;
             }
-            var object = $('#forms input').serializeObject();
+            var object = $('#form_query input,#form_query select').serializeObject();
             object['state'] = $('#state').val();
             object['offset'] = params.offset;
             object['limit'] = params.limit;
