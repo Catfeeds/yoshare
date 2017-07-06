@@ -46,7 +46,7 @@
     <label for="image_file" class="control-label col-sm-2">上传头像:</label>
     <div class=" col-sm-10">
         <input id="image_file" name="image_file" type="file" data-preview-file-type="text"
-               data-upload-url="/files/upload">
+               data-upload-url="/admin/files/upload?type=image">
     </div>
 </div>
 

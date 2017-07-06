@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label for="{{ $field->name . '_file' }}" class="control-label col-sm-1">上传图片:</label>
                             <div class="col-sm-11">
-                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/files/upload?type=image">
+                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/admin/files/upload?type=image">
                             </div>
                         </div>
                         <script>
@@ -104,7 +104,7 @@
                         <div class="form-group">
                             <label for="image_file" class="control-label col-sm-1">上传图集:</label>
                             <div class=" col-sm-11">
-                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}[]" type="file" class="file file-loading" data-upload-url="/files/upload?type=image" multiple>
+                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}[]" type="file" class="file file-loading" data-upload-url="/admin/files/upload?type=image" multiple>
                             </div>
                         </div>
                         <script>
@@ -155,7 +155,7 @@
                         <div class="form-group">
                             <label for="{{ $field->name . '_file' }}" class="control-label col-sm-1">上传视频:</label>
                             <div class="col-sm-11">
-                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/files/upload?type=video">
+                                <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/admin/files/upload?type=video">
                             </div>
                         </div>
                         <script>
@@ -188,7 +188,7 @@
                             <div class="form-group">
                                 <label for="{{ $field->name . '_file' }}" class="control-label col-sm-1">上传音频:</label>
                                 <div class="col-sm-11">
-                                    <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/files/upload?type=audio">
+                                    <input id="{{ $field->name . '_file' }}" name="{{ $field->name . '_file' }}" type="file" class="file" data-upload-url="/admin/files/upload?type=audio">
                                 </div>
                             </div>
                             <script>

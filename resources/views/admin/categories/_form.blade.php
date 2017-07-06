@@ -74,7 +74,7 @@
             <label for="cover_file" class="control-label col-sm-1">上传封面:</label>
             <div class="col-sm-11">
                 <input id="cover_file" name="cover_file" type="file" data-preview-file-type="text"
-                       data-upload-url="/files/upload">
+                       data-upload-url="/admin/files/upload?type=image">
             </div>
         </div>
 
@@ -88,7 +88,7 @@
             <label for="image_file" class="control-label col-sm-1">上传图片:</label>
             <div class="col-sm-11">
                 <input id="image_file" name="image_file" type="file" data-preview-file-type="text"
-                       data-upload-url="/files/upload">
+                       data-upload-url="/admin/files/upload?type=image">
             </div>
         </div>
 

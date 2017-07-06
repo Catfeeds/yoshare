@@ -29,7 +29,7 @@
             <label for="logo_file" class="control-label col-sm-2">上传logo:</label>
             <div class="col-sm-10">
                 <input id="logo_file" name="image_file" type="file" class="file" data-preview-file-type="text"
-                       data-upload-url="/files/upload">
+                       data-upload-url="/admin/files/upload?type=image">
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
             <label for="other_file" class="control-label col-sm-2">上传程序:</label>
             <div class="col-sm-10">
                 <input id="android_other_file" name="other_file" type="file" class="file"
-                       data-upload-url="/files/upload" data-show-preview="false">
+                       data-upload-url="/admin/files/upload?type=other" data-show-preview="false">
             </div>
         </div>
     </div>
