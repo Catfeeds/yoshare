@@ -10,7 +10,6 @@ use Exception;
 use Gate;
 use Request;
 use Response;
-use UcClient;
 
 class MemberController extends Controller
 {
@@ -52,11 +51,11 @@ class MemberController extends Controller
         }
 
         try {
-            $ret = UcClient::userRegister($member_name, $password, $nick_name . '@asia-cloud.com', '', '', $ip);
+            $salt = str_rand();
 
             $member = Member::create([
-                'id' => $ret['uid'],
                 'name' => $member_name,
+                'password' => md5(md5($password) . $salt),
                 'nick_name' => $nick_name,
                 'mobile' => $member_name,
                 'avatar_url' => $input['avatar_url'],
@@ -104,10 +103,10 @@ class MemberController extends Controller
         }
 
         $input = Request::all();
-        $new_password = $input['new_password'];
         if (!empty($input['new_password'])) {
             //重置密码
-            UcClient::userEdit($member->name, null, $new_password, null, 1);
+            $new_password = $input['new_password'];
+            $input['password'] = md5(md5($new_password) . $member->salt);
         }
 
         $member->update($input);
