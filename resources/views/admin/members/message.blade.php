@@ -26,7 +26,7 @@
         pagination: true,
         pageNumber: 1,
         pageSize: 15,
-        pageList: [10, 25, 50, 100],
+        pageList: [20, 50, 100, 500],
         sidePagination: 'server',
         clickToSelect: true,
         striped: true,

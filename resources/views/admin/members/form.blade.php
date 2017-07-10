@@ -1,52 +1,54 @@
-<div class="form-group">
-    {!! Form::label('name', '会员名:',['class' => 'control-label col-sm-2']) !!}
-    <div class="col-sm-10">
-        @if(isset($member))
-            <h5>{!! $member->name !!}</h5>
-            {!! Form::hidden('name', null, ['class' => 'form-control']) !!}
-        @else
-            {!! Form::text('name', null, ['class' => 'form-control']) !!}
-        @endif
-    </div>
-</div>
+<ul id="tabs" class="nav nav-tabs">
+    <li class="active">
+        <a href="#info" data-toggle="tab">基本信息</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="info" class="tab-pane fade in active padding-t-15">
+        <div class="form-group">
+            {!! Form::label('name', '会员名:',['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                @if(isset($member))
+                    <h5>{!! $member->name !!}</h5>
+                    {!! Form::hidden('name', null, ['class' => 'form-control']) !!}
+                @else
+                    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+        </div>
 
-<div class="form-group">
-    {!! Form::label($password, '密码:',['class' => 'control-label col-sm-2']) !!}
-    <div class="col-sm-10">
-        {!! Form::password($password, null, ['class' => 'form-control' ,'placeholder'=>$placeholder]) !!}
-    </div>
-</div>
+        <div class="form-group">
+            {!! Form::label('nick_name', '昵称:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                {!! Form::text('nick_name', null, ['class' => 'form-control']) !!}
+            </div>
+            {!! Form::label($password, '密码:',['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                {!! Form::password($password, ['class' => 'form-control' ,'placeholder'=>$placeholder]) !!}
+            </div>
+        </div>
 
-<div class="form-group">
-    {!! Form::label('nick_name', '昵称:', ['class' => 'control-label col-sm-2']) !!}
-    <div class="col-sm-10">
-        {!! Form::text('nick_name', null, ['class' => 'form-control']) !!}
-    </div>
-</div>
+        <div class="form-group">
+            {!! Form::label('type', '会员类型:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                {!! Form::select('type', \App\Models\Member::TYPES, null, ['class' => 'form-control']) !!}
+            </div>
+        </div>
 
-<div class="form-group">
-    <label class="col-sm-2 control-label">会员类型</label>
-    <div class="col-sm-10">
-        <label><input class="default" type="radio" name="type" value="{{ \App\Models\Member::TYPE_NORMAL }}"
-                    {{ !isset($member) || isset($member) && $member->type == \App\Models\Member::TYPE_NORMAL ? 'checked': '' }}>普通会员&nbsp;&nbsp;
-        </label>
-        <label><input type="radio" name="type" value="{{ \App\Models\Member::TYPE_TEACHER }}"
-                    {{ isset($member) && $member->type == \App\Models\Member::TYPE_TEACHER ? 'checked': '' }} >讲师</label>
-    </div>
-</div>
+        <div class="form-group" style="display: none;">
+            {!! Form::label('avatar_url', '头像地址:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-11">
+                {!! Form::text('avatar_url', null, ['class' => 'form-control']) !!}
+            </div>
+        </div>
 
-<div class="form-group" style="display: none;">
-    {!! Form::label('avatar_url', '头像地址:', ['class' => 'control-label col-sm-2']) !!}
-    <div class="col-sm-10">
-        {!! Form::text('avatar_url', null, ['class' => 'form-control']) !!}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="image_file" class="control-label col-sm-2">上传头像:</label>
-    <div class=" col-sm-10">
-        <input id="image_file" name="image_file" type="file" data-preview-file-type="text"
-               data-upload-url="/admin/files/upload?type=image">
+        <div class="form-group">
+            <label for="image_file" class="control-label col-sm-1">上传头像:</label>
+            <div class=" col-sm-11">
+                <input id="image_file" name="image_file" type="file" data-preview-file-type="text"
+                       data-upload-url="/files/upload?type=image">
+            </div>
+        </div>
     </div>
 </div>
 
@@ -70,7 +72,7 @@
         initialPreview: images,
         initialPreviewAsData: false,
         initialPreviewConfig: [{key: 1}],
-        deleteUrl: '/admin/files/delete?_token={{csrf_token()}}',
+        deleteUrl: '/files/delete?_token={{csrf_token()}}',
         maxFileSize: 10240,
         maxFileCount: 1,
         resizeImage: true,

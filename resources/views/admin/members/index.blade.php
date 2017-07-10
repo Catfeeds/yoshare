@@ -1,5 +1,4 @@
 @extends('admin.layouts.master')
-
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
@@ -19,21 +18,21 @@
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.members.toolbar')
-                            @include('admin.layouts.modal', ['id' => 'modal_message'])
+                            @include('admin.members.query')
+                            @include('admin.layouts.modal', ['id' => 'modal_message', 'title' => '查看消息'])
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-width="50" data-align="center">ID</th>
                                     <th data-field="nick_name" data-width="100" data-align="center">昵称</th>
+                                    <th data-field="points" data-width="60" data-align="center">积分</th>
                                     <th data-field="mobile" data-align="center" data-width="100">手机号</th>
                                     <th data-field="ip" data-width="100" data-align="center">IP</th>
-                                    <th data-field="state_name" data-width="60" data-align="center"
-                                        data-formatter="stateFormatter">状态
-                                    </th>
+                                    <th data-field="source" data-width="60" data-align="center">注册来源</th>
+                                    <th data-field="type_name" data-align="center" data-width="60">会员类型</th>
+                                    <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
                                     <th data-field="created_at" data-width="120" data-align="center">注册时间</th>
-                                    <th data-field="action" data-width="100" data-align="center"
-                                        data-formatter="actionFormatter" data-events="actionEvents"> 操作
-                                    </th>
+                                    <th data-field="action" data-width="100" data-align="center" data-formatter="actionFormatter" data-events="actionEvents"> 操作</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -55,12 +54,12 @@
             pagination: true,
             pageNumber: 1,
             pageSize: 20,
-            pageList: [10, 25, 50, 100],
+            pageList: [20, 50, 100, 500],
             sidePagination: 'server',
             clickToSelect: true,
             striped: true,
             queryParams: function (params) {
-                var object = $('#forms input').serializeObject();
+                var object = $('#form_query input,#form_query select').serializeObject();
                 object['state'] = $('#state').val();
                 object['_token'] = '{{ csrf_token() }}';
                 object['offset'] = params.offset;
@@ -100,7 +99,7 @@
                 data: {'_token': '{{ csrf_token() }}'},
                 url: '/admin/members/state/' + row_id,
                 success: function (data) {
-                    window.location.href = '/admin/members';
+                    window.location.reload();
                 }
             });
         });
@@ -125,10 +124,6 @@
                 $('#modal_remove').data('id', row.id);
             },
             'click .message': function (e, value, row, index) {
-                $('#modal_title').text('查看消息');
-                $('#window_msg').hide();
-                $('.common').prop('id', 'modal_message');
-
                 var url = '/admin/members/messages/' + row.id;
                 $.ajax({
                     url: url,

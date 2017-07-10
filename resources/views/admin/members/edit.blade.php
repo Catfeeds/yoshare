@@ -20,7 +20,6 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-body">
-                            @include('admin.layouts.flash')
                             @include('admin.errors.list')
 
                             {!! Form::model($member,['method' => 'PATCH', 'class' => 'form-horizontal','action' => ['MemberController@update', $member->id]]) !!}

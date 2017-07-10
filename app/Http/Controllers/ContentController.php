@@ -122,7 +122,7 @@ class ContentController extends Controller
         $content = Content::updates($id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/contents?category_id=' . $content->category_id . '&page=' . $input['page']);
+        return redirect('/admin/contents?category_id=' . $content->category_id);
     }
 
     public function save($id)
