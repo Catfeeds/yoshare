@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Member extends Model
+class Member extends \Illuminate\Database\Eloquent\Model
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 
     const TYPE_NORMAL = 1;
-    const TYPE_TEACHER = 2;
+    const TYPE_EXPERT = 2;
 
-    const ID_ADMIN = 1;
+    const TYPES = [
+        1 => '普通会员',
+        2 => '专家',
+    ];
 
     protected $fillable = [
         'name',
@@ -47,14 +48,7 @@ class Member extends Model
 
     public function typeName()
     {
-        switch ($this->type) {
-            case static::TYPE_NORMAL:
-                return '普通会员';
-                break;
-            case static::TYPE_TEACHER:
-                return '讲师';
-                break;
-        }
+        return array_key_exists($this->type, static::TYPES) ? static::TYPES[$this->type] : '';
     }
 
     public function scopeFilter($query, $filters)
