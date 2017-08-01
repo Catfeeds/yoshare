@@ -15,8 +15,8 @@
                     @can('@category')
                         <li><a href="/admin/categories"><i class="fa fa-columns"></i> 栏目管理</a></li>
                     @endcan
-                    @can('@content')
-                        <li><a href="/admin/contents"><i class="fa fa-file-o"></i> 内容管理</a></li>
+                    @can('@article')
+                        <li><a href="/admin/articles"><i class="fa fa-file-o"></i> 文章管理</a></li>
                     @endcan
                     @can('@comment')
                         <li><a href="/admin/comments"><i class="fa fa-comment"></i> 评论管理</a></li>
@@ -78,8 +78,8 @@
                     @can('@app')
                         <li><a href="/admin/apps"><i class="fa fa-android"></i> 应用管理</a></li>
                     @endcan
-                    @can('@model')
-                        <li><a href="/admin/models"><i class="fa fa-book"></i> 模型管理</a></li>
+                    @can('@module')
+                        <li><a href="/admin/modules"><i class="fa fa-book"></i> 模块管理</a></li>
                     @endcan
                     @can('@role')
                         <li><a href="/admin/roles"><i class="fa fa-users"></i> 角色管理</a></li>

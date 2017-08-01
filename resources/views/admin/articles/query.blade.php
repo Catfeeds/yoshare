@@ -11,6 +11,7 @@
                         <div class="box box-info">
                             <form id="form_query" class="form-horizontal">
                                 <div class="box-body">
+                                    <input type="hidden" name="category_id" value="{{ \App\Models\Category::ID_FAQ }}">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">ID:</label>
                                         <div class="col-sm-4">
@@ -18,7 +19,7 @@
                                         </div>
                                         <label class="col-sm-2 control-label">操作员:</label>
                                         <div class="col-sm-4">
-                                            {!! Form::text('username', null, ['class' => 'form-control']) !!}
+                                            {!! Form::text('user_name', null, ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">

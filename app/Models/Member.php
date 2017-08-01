@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Member extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Member extends Model
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
@@ -11,8 +13,8 @@ class Member extends \Illuminate\Database\Eloquent\Model
     const TYPE_EXPERT = 2;
 
     const TYPES = [
-        1 => '普通会员',
-        2 => '专家',
+        1 => '牧场人员',
+        2 => '技术人员',
     ];
 
     protected $fillable = [
@@ -61,4 +63,9 @@ class Member extends \Illuminate\Database\Eloquent\Model
                 ->where('created_at', '<=', $filters['end_date']) : '';
         });
     }
+
+    public function pastures(){
+        return $this->belongsToMany(Pasture::class);
+    }
+
 }

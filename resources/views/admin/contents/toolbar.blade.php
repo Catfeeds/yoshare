@@ -19,7 +19,7 @@
 
 <script>
     function create() {
-        window.location.href = '/admin/contents/create/' + category_id;
+        window.location.href = '/admin/contents/create/' + '{{ $category_id }}';
     }
 
     var remove_open = false;

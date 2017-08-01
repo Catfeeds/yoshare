@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\DataSource;
+use App\Models\DataSource;
 use App\Models\Comment;
+use App\Models\User;
 use Gate;
 use Request;
 use Response;
@@ -96,16 +97,14 @@ class CommentController extends Controller
         $comments->transform(function ($comment) {
             return [
                 'id' => $comment->id,
-                'content_id' => $comment->content_id,
-                'title' => $comment->content_title,
-                'content' => $comment->content,
+                'refer_id' => $comment->refer_id,
+                'summary' => $comment->summary,
                 'nick_name' => empty($comment->member) ?: $comment->member->nick_name,
                 'member_name' => empty($comment->member) ?: $comment->member->name,
                 'ip' => $comment->ip,
                 'likes' => $comment->likes,
                 'state' => $comment->state,
                 'state_name' => $comment->stateName(),
-                'username' => $comment->username,
                 'created_at' => empty($comment->created_at) ?: $comment->created_at->toDateTimeString(),
                 'updated_at' => empty($comment->updated_at) ?: $comment->updated_at->toDateTimeString(),
             ];

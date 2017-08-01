@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class ModelRequest extends Request
+class ArticleRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,6 @@ class ModelRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
             'title' => 'required',
         ];
     }
@@ -30,8 +29,7 @@ class ModelRequest extends Request
     public function messages()
     {
         return [
-            'name.required' => '请输入英文名称',
-            'title.required' => '请输入中文名称',
+            'title.required' => '请填写标题',
         ];
     }
 }

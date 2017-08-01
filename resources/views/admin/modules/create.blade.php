@@ -4,12 +4,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                编辑模型
+                新增模块
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/models">模型管理</a></li>
-                <li class="active">编辑</li>
+                <li><a href="/modules">模块管理</a></li>
+                <li class="active">新增</li>
             </ol>
         </section>
         <section class="content">
@@ -21,9 +21,9 @@
                         <div class="box-body">
                             @include('admin.errors.list')
 
-                            {!! Form::model($model, ['method' => 'PATCH', 'action' => ['ModelController@update', $model->id],'class' => 'form-horizontal']) !!}
+                            {!! Form::open(['url' => '/admin/modules', 'class' => 'form-horizontal']) !!}
 
-                            @include('admin.models._form')
+                            @include('admin.modules._form')
 
                             {!! Form::close() !!}
 

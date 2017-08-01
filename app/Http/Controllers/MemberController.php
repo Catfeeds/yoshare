@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\DataSource;
 use App\Http\Requests\MemberRequest;
+use App\Models\DataSource;
 use App\Models\Member;
-use Carbon\Carbon;
 use Exception;
 use Gate;
 use Request;
@@ -127,8 +126,6 @@ class MemberController extends Controller
             'nick_name' => Request::has('nick_name') ? trim(Request::get('nick_name')) : '',
             'mobile' => Request::has('mobile') ? trim(Request::get('mobile')) : '',
             'state' => Request::has('state') ? Request::get('state') : '',
-            'start_date' => Request::has('start_date') ? trim(Request::get('start_date')) : '',
-            'end_date' => Request::has('end_date') ? trim(Request::get('end_date')) : Carbon::now()->toDateTimeString(),
         ];
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;

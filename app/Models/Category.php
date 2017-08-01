@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Node;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
-class Category extends \Illuminate\Database\Eloquent\Model
+class Category extends Model
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
@@ -17,6 +17,8 @@ class Category extends \Illuminate\Database\Eloquent\Model
 
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
+
+    const ID_FAQ = 4;
 
     protected $fillable = [
         'site_id',
@@ -51,7 +53,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
 
     public function model()
     {
-        return $this->belongsTo(Model::class, 'model_id');
+        return $this->belongsTo(Module::class, 'model_id');
     }
 
     public function contents()

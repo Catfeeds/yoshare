@@ -21,11 +21,8 @@
                         <div class="box-body">
 
                             @include('admin.errors.list')
-                            @include('admin.layouts.flash')
 
-                            {!! Form::open(['url' => '/admin/contents', 'class' => 'form-horizontal']) !!}
-
-                            <input type="hidden" name="category_id" value="{{ $category_id }}">
+                            {!! Form::open(['url' => $path, 'class' => 'form-horizontal']) !!}
 
                             @include('admin.contents.form')
 

@@ -33,7 +33,7 @@
 
                             <table id="table"
                                    data-toggle="table"
-                                   data-url="/models/table/{{ $model_id }}"
+                                   data-url="/admin/modules/table/{{ $module_id }}"
                                    data-pagination="false"
                                    data-search="true"
                                    data-show-refresh="true"
@@ -63,13 +63,13 @@
     <!-- /.content-wrapper -->
     <script>
 
-        $.getJSON('/admin/models/tree', function (data) {
+        $.getJSON('/admin/modules/tree', function (data) {
             $('#tree').treeview({
                 data: data,
                 searchResultColor: 'white',
                 levels: 3,
                 onNodeSelected: function (event, data) {
-                    location.href = '/admin/models?model_id=' + data.id;
+                    location.href = '/admin/modules?module_id=' + data.id;
                 }
             });
         });
@@ -77,7 +77,7 @@
         $('#table').bootstrapTable({
             onEditableSave: function (field, row, old, $el) {
                 $.ajax({
-                    url: "/admin/models/" + row.id + '/save',
+                    url: "/admin/modules/" + row.id + '/save',
                     data: {'_token': '{{ csrf_token() }}', 'sort': row.sort},
                     success: function (data, status) {
                     },
@@ -89,11 +89,11 @@
         });
 
         $(".create").click(function () {
-            window.location.href = '/admin/models/create';
+            window.location.href = '/admin/modules/create';
         });
 
         $(".edit").click(function () {
-            window.location.href = '/admin/models/1/edit';
+            window.location.href = '/admin/modules/1/edit';
         });
 
         $('#table').on('all.bs.table', function (e, name, args) {
@@ -112,17 +112,17 @@
         $("#modal_remove").click(function () {
             var row_id = $(this).data('id');
             $.ajax({
-                url: 'admin/models/' + row_id + '/delete',
+                url: 'admin/modules/' + row_id + '/delete',
                 data: {'_token': '{{ csrf_token() }}'},
                 success: function (data) {
-                    window.location.href = '/admin/models';
+                    window.location.href = '/admin/modules';
                 }
             });
         });
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
-                window.location.href = '/admin/models/' + row.id + '/edit';
+                window.location.href = '/admin/modules/' + row.id + '/edit';
             },
             'click .remove': function (e, value, row, index) {
                 $('#modal_remove').data('id', row.id);

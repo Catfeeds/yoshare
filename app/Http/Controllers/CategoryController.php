@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DataSource;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Models\Content;
-use App\Models\Model;
+use App\Models\DataSource;
 use DB;
 use Gate;
 use Request;

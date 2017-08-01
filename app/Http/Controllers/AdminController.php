@@ -10,7 +10,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        return redirect('/admin/contents');
+        return redirect('/admin/articles');
     }
 
     public function login()

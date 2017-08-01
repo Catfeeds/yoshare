@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContentRequest;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Content;
-use App\Models\Model;
+use App\Models\Member;
+use App\Models\Pasture;
+use Auth;
 use Gate;
 use Request;
 use Response;
@@ -14,55 +17,6 @@ class ContentController extends Controller
 {
     public function __construct()
     {
-    }
-
-    public function index()
-    {
-        if (Gate::denies('@content')) {
-            $this->middleware('deny403');
-        }
-
-        $fields = json_decode(json_encode(config('site.model.1.fields')));
-        foreach ($fields as $field) {
-            $field->table->name = isset($field->table->name) ? $field->table->name : $field->name;
-        }
-
-        return view('admin.contents.index', compact('fields'));
-    }
-
-    public function create($category_id)
-    {
-        if (Gate::denies('@content-create')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return redirect()->back();
-        }
-
-        $category = Category::find($category_id);
-
-        //获取模型配置
-        $model_id = $category->model_id;
-        $model = json_decode(json_encode(config("site.model.$model_id")));
-        $model->fields = array_sort($model->fields, function ($field) {
-            return $field->editor->index;
-        });
-
-        foreach ($model->tabs as $tab) {
-            $tab->fields = array_values(array_filter($model->fields, function ($field) use ($tab) {
-                return $field->editor->show && $field->editor->tab == $tab->name;
-            }));
-        }
-
-        return view('admin.contents.create', compact('page', 'category_id', 'model'));
-    }
-
-    public function store(ContentRequest $request)
-    {
-        $input = $request->all();
-
-        $content = Content::stores($input);
-
-        \Session::flash('flash_success', '添加成功');
-        return redirect('/admin/contents?category_id=' . $content->category_id);
     }
 
     public function destroy($id)
@@ -79,50 +33,6 @@ class ContentController extends Controller
         $content->save();
 
         \Session::flash('flash_success', '删除成功');
-    }
-
-    public function edit($id)
-    {
-        if (Gate::denies('@content-edit')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return redirect()->back();
-        }
-
-        $content = Content::find($id);
-        if ($content == null) {
-            \Session::flash('flash_warning', '无此记录');
-            return redirect('/admin/contents');
-        }
-
-        $category_id = $content->category_id;
-
-        //图集地址
-        $content->images = implode(',', $content->images()->pluck('url')->toArray());
-
-        //获取模型配置
-        $model_id = $content->category->model_id;
-        $model = json_decode(json_encode(config("site.model.$model_id")));
-        $model->fields = array_sort($model->fields, function ($field) {
-            return $field->editor->index;
-        });
-
-        foreach ($model->tabs as $tab) {
-            $tab->fields = array_values(array_filter($model->fields, function ($field) use ($tab) {
-                return $field->editor->show && $field->editor->tab == $tab->name;
-            }));
-        }
-
-        return view('admin.contents.edit', compact('category_id', 'content', 'model'));
-    }
-
-    public function update($id, ContentRequest $request)
-    {
-        $input = $request->all();
-
-        $content = Content::updates($id, $input);
-
-        \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/contents?category_id=' . $content->category_id);
     }
 
     public function save($id)
@@ -173,11 +83,6 @@ class ContentController extends Controller
         return view('admin.contents.comment', compact('content_id'));
     }
 
-    public function state($state)
-    {
-        Content::state($state, '@content');
-    }
-
     public function copy()
     {
         Content::copy();
@@ -195,7 +100,7 @@ class ContentController extends Controller
 
     public function top($id)
     {
-        if (Gate::denies('@content-top')) {
+        if (Gate::denies('@article-top')) {
             \Session::flash('flash_warning', '无此操作权限');
             return;
         }
@@ -205,7 +110,7 @@ class ContentController extends Controller
 
     public function push()
     {
-        if (Gate::denies('@content-push')) {
+        if (Gate::denies('@article-push')) {
             \Session::flash('flash_warning', '无此操作权限');
             return Response::json([
                 'status_code' => 401,
@@ -217,29 +122,9 @@ class ContentController extends Controller
         return Content::jpush($input);
     }
 
-    public function tag($id)
-    {
-        if (Gate::denies('@content-tag')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return;
-        }
-
-        Content::tag($id, Content::TAG_SIDE);
-    }
-
-    public function recommend($id)
-    {
-        if (Gate::denies('@content-tag')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return;
-        }
-
-        Content::tag($id, Content::TAG_RECOMMEND);
-    }
-
     public function sort()
     {
-        if (Gate::denies('@content-sort')) {
+        if (Gate::denies('@article-sort')) {
             \Session::flash('flash_warning', '无此操作权限');
             return Response::json([
                 'status_code' => 401,

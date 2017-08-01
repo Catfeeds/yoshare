@@ -10,9 +10,9 @@
             <div class="col-sm-5">
                 {!! Form::text('name', null, ['class' => 'form-control']) !!}
             </div>
-            {!! Form::label('alias', '别名:', ['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('title', '标题:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
-                {!! Form::text('alias', null, ['class' => 'form-control']) !!}
+                {!! Form::text('title', null, ['class' => 'form-control']) !!}
             </div>
         </div>
     </div>

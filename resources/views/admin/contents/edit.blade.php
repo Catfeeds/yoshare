@@ -21,9 +21,8 @@
                         <div class="box-body">
 
                             @include('admin.errors.list')
-                            @include('admin.layouts.flash')
 
-                            {!! Form::model($content,['id' => 'form', 'method' => 'PATCH', 'action' => ['ContentController@update', $content->id],'class' => 'form-horizontal']) !!}
+                            {!! Form::model($content,['id' => 'form', 'method' => 'PUT', 'url' => $path . '/' . $content->id, 'class' => 'form-horizontal']) !!}
 
                             @include('admin.contents.form')
 

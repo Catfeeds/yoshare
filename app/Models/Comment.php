@@ -13,20 +13,30 @@ class Comment extends Model
 
     protected $fillable = [
         'site_id',
-        'content_id',
-        'content_title',
-        'content',
+        'refer_id',
+        'refer_type',
+        'summary',
         'likes',
         'member_id',
         'ip',
-        'username',
+        'user_id',
         'state',
         'username',
     ];
 
+    public function refer()
+    {
+        return $this->morphTo();
+    }
+
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function stateName()
@@ -52,7 +62,7 @@ class Comment extends Model
     public function scopeFilter($query, $id)
     {
         $query->where(function ($query) use ($id) {
-            !empty($id) ? $query->where('content_id', $id) : '';
+            !empty($id) ? $query->where('refer_id', $id) : '';
         });
     }
 }

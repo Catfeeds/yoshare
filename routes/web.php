@@ -36,21 +36,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
     /**
-     * 内容管理
+     * 文章管理
      */
-    Route::get('contents/categories/', 'ContentController@categories');
-    Route::get('contents/table', 'ContentController@table');
-    Route::get('contents/create/{category_id}', 'ContentController@create');
-    Route::post('contents/state/{state}', 'ContentController@state');
-    Route::post('contents/copy', 'ContentController@copy');
-    Route::get('contents/sort','ContentController@sort');
-    Route::post('contents/push', 'ContentController@push');
-    Route::post('contents/tag/{id}','ContentController@tag');
-    Route::post('contents/recommend/{id}','ContentController@recommend');
-    Route::post('contents/top/{id}','ContentController@top');
-    Route::get('contents/comments/{content_id}','ContentController@comment');
-    Route::get('contents/{id}/save','ContentController@save');
-    Route::resource('contents', 'ContentController');
+    Route::get('articles/table', 'ArticleController@table');
+    Route::post('articles/state', 'ArticleController@state');
+    Route::get('articles/sort', 'ArticleController@sort');
+    Route::resource('/articles', 'ArticleController');
 
     /**
      * 评论管理
@@ -141,14 +132,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('sites/{id}/delete', 'SiteController@destroy');
 
     /**
-     * 模型管理
+     * 模块管理
      */
-    Route::get('models/tree/', 'ModelController@tree');
-    Route::get('models/table/{category_id}', 'ModelController@table');
-    Route::get('models/create/{category_id}', 'ModelController@create');
-    Route::get('models/{id}/save','ModelController@save');
-    Route::resource('/models', 'ModelController');
-    Route::get('models/{id}/delete', 'ModelController@destroy');
+    Route::get('modules/tree/', 'ModuleController@tree');
+    Route::get('modules/table/{category_id}', 'ModuleController@table');
+    Route::get('modules/create/{category_id}', 'ModuleController@create');
+    Route::get('modules/{id}/save','ModuleController@save');
+    Route::resource('/modules', 'ModuleController');
+    Route::get('modules/{id}/delete', 'ModuleController@destroy');
 
     /**
      * 模板设置

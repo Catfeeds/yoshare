@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\DataSource;
 use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
-use Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JPush\Client as JPush;
@@ -24,7 +22,6 @@ class Content extends Model
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
-    const STATE_FREE = 2;
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
@@ -35,9 +32,7 @@ class Content extends Model
         9 => '已发布',
     ];
 
-    const TAG_RECOMMEND = '推荐';
     const TAG_TOP = '置顶';
-    const TAG_SIDE = '轮播图';
 
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
@@ -129,24 +124,9 @@ class Content extends Model
             ->first();
     }
 
-    public function items()
-    {
-        return $this->hasMany(ContentItem::class);
-    }
-
-    public function images()
-    {
-        return $this->items()->where('type', ContentItem::TYPE_IMAGE)->orderBy('sort')->get();
-    }
-
-    public function files()
-    {
-        return $this->items()->where('type', ContentItem::TYPE_FILE)->orderBy('sort')->get();
-    }
-
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->morphMany(Comment::class, 'refer');
     }
 
     public function scopeOwns($query)
@@ -196,90 +176,23 @@ class Content extends Model
     }
 
     /**
-     * 获取table的json数据
-     */
-    public static function table()
-    {
-        $filters = Request::all();
-        $category_id = $filters['category_id'];
-
-        $offset = Request::get('offset') ? Request::get('offset') : 0;
-        $limit = Request::get('limit') ? Request::get('limit') : 20;
-
-        $ds = new DataSource();
-        $contents = Content::with('user')
-            ->owns()
-            ->filter($filters)
-            ->where('category_id', $category_id)
-            ->orderBy('is_top', 'desc')
-            ->orderBy('sort', 'desc')
-            ->skip($offset)
-            ->limit($limit)
-            ->get();
-
-        $ds->total = Content::owns()
-            ->filter($filters)
-            ->where('category_id', $category_id)
-            ->count();
-
-        $contents->transform(function ($content) {
-            return [
-                'id' => $content->id,
-                'title' => $content->title,
-                'author' => $content->author,
-                'tags' => $content->tags,
-                'keywords' => $content->keywords,
-                'comments' => $content->comments,
-                'favorites' => $content->favorites,
-                'clicks' => $content->clicks,
-                'views' => $content->views,
-                'is_top' => $content->is_top,
-                'state' => $content->state,
-                'state_name' => $content->stateName(),
-                'sort' => $content->sort,
-                'user_name' => $content->user->name,
-                'published_at' => empty($content->published_at) ? '' : $content->published_at->toDateTimeString(),
-                'created_at' => empty($content->created_at) ? '' : $content->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => empty($content->updated_at) ? '' : $content->updated_at->format('Y-m-d H:i:s'),
-                'deleted_at' => empty($content->deleted_at) ? '' : $content->deleted_at,
-            ];
-        });
-
-        $ds->rows = $contents;
-        return Response::json($ds);
-    }
-
-    /**
      * 保存数据
      */
-    public static function stores($input)
+    public static function stores($model, $input)
     {
         $input['site_id'] = Auth::user()->site_id;
-        $input['state'] = Content::STATE_NORMAL;
         $input['user_id'] = Auth::user()->id;
 
+        $content = call_user_func([$model->class, 'stores'], $input);
 
-        //序号 取发布时间/当前时间
-        if (empty($input['published_at'])) {
-            $input['sort'] = strtotime(Carbon::now());
-        } else {
-            $input['sort'] = strtotime($input['published_at']);
-        }
-        $content = Content::create($input);
+        //保存图片集和视频集
+        if (!empty($content)) {
+            if (isset($input['images'])) {
+                Image::sync($content, $input['images']);
 
-        $image_urls = $input['images'];
-
-        if (!empty($image_urls)) {
-            $image_urls = explode(',', trim($image_urls));
-
-            foreach ($image_urls as $key => $image_url) {
-                $content->items()->create([
-                    'type' => ContentItem::TYPE_IMAGE,
-                    'title' => isset($input['image_titles']) && isset($input['image_titles'][$key]) ? $input['image_titles'][$key] : '',
-                    'description' => isset($input['image_contents']) && isset($input['image_contents'][$key]) ? $input['image_contents'][$key] : '',
-                    'sort' => $key,
-                    'url' => $image_url,
-                ]);
+            }
+            if (isset($input['videos'])) {
+                Video::sync($content, $input['videos']);
             }
         }
 
@@ -289,36 +202,20 @@ class Content extends Model
     /**
      * 更新数据
      */
-    public static function updates($id, $input)
+    public static function updates($model, $id, $input)
     {
-        $content = Content::find($id);
-        $input['user_id'] = Auth::user()->id;
+        $content = call_user_func_array([$model->class, 'updates'], [$id, $input]);
 
-        if (!empty($input['published_at'])) {
-            if (empty($content->published_at) || $input['published_at'] != $content->published_at->format('Y-m-d H:i:s')) {
-                $input['sort'] = strtotime($input['published_at']);
+        //保存图片集和视频集
+        if (!empty($content)) {
+            if (isset($input['images'])) {
+                Image::sync($content, $input['images']);
+
+            }
+            if (isset($input['videos'])) {
+                Video::sync($content, $input['videos']);
             }
         }
-
-        $image_urls = $input['images'];
-
-        //删除明细并新增
-        $content->items()->delete();
-        if (!empty($image_urls)) {
-            $image_urls = explode(',', trim($image_urls));
-
-            foreach ($image_urls as $key => $image_url) {
-                $content->items()->create([
-                    'type' => ContentItem::TYPE_IMAGE,
-                    'title' => isset($input['image_titles']) && isset($input['image_titles'][$key]) ? $input['image_titles'][$key] : '',
-                    'description' => isset($input['image_contents']) && isset($input['image_contents'][$key]) ? $input['image_contents'][$key] : '',
-                    'sort' => $key,
-                    'url' => $image_url,
-                ]);
-            }
-        }
-
-        $content->update($input);
 
         return $content;
     }
@@ -326,58 +223,10 @@ class Content extends Model
     /**
      * 批量修改状态
      */
-    public static function state($state, $permission_prefix)
+    public static function state($model, $input)
     {
-        $ids = Request::get('ids');
-
-        switch ($state) {
-            case Content::STATE_PUBLISHED:
-                if (Gate::denies($permission_prefix . '-publish')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '发布';
-                break;
-            case Content::STATE_CANCELED:
-                if (Gate::denies($permission_prefix . '-cancel')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '撤回';
-                break;
-            case Content::STATE_DELETED:
-                if (Gate::denies($permission_prefix . '-delete')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '删除';
-                break;
-            default:
-                \Session::flash('flash_warning', '操作错误!');
-                return;
-        }
-
-        $contents = Content::withTrashed()
-            ->whereIn('id', $ids)
-            ->get();
-        foreach ($contents as $content) {
-            if ($state == Content::STATE_DELETED) {
-                $content->delete();
-            } else {
-                if ($state == Content::STATE_PUBLISHED && empty($content->published_at)) {
-                    $content->published_at = Carbon::now();
-                }
-                if ($content->trashed()) {
-                    $content->restore();
-                }
-                $content->state = $state;
-                $content->save();
-            }
-        }
-
-        \Session::flash('flash_success', $state_name . '成功!');
+        call_user_func([$model->class, 'state'], $input);
     }
-
 
     /**
      * 复制到指定栏目
@@ -562,7 +411,7 @@ class Content extends Model
             \Log::debug('推送结果:' . json_encode($result));
 
             $data['send_no'] = $result['body']['sendno'];
-            $data['msg_id'] =$result['body']['msg_id'];
+            $data['msg_id'] = $result['body']['msg_id'];
 
             return Response::json([
                 'status_code' => 200,
@@ -624,59 +473,6 @@ class Content extends Model
         }
 
         return true;
-    }
-
-    /**
-     * 排序
-     */
-    public static function sort()
-    {
-        $select_id = request('select_id');
-        $place_id = request('place_id');
-        $move_down = request('move_down');
-
-        $select = Content::find($select_id);
-        $place = Content::find($place_id);
-
-        if (empty($select) || empty($place)) {
-            return Response::json([
-                'status_code' => 404,
-                'message' => 'ID不存在',
-            ]);
-        }
-
-        try {
-            if ($move_down) {
-                //下移
-                $select->sort = $place->sort - 1;
-                //减小最近100条记录的排序值
-                DB::table('contents')->where('category_id', $select->category_id)
-                    ->where('sort', '<', $place->sort)
-                    ->orderBy('sort', 'desc')
-                    ->limit(100)
-                    ->decrement('sort');
-            } else {
-                //上移
-                $select->sort = $place->sort + 1;
-                //增大最近100条记录的排序值
-                DB::table('contents')->where('category_id', $select->category_id)
-                    ->where('sort', '>', $place->sort)
-                    ->orderBy('sort', 'asc')
-                    ->limit(100)
-                    ->increment('sort');
-            }
-        } catch (Exception $e) {
-            return Response::json([
-                'status_code' => 500,
-                'message' => $e->getMessage(),
-            ]);
-        }
-        $select->save();
-
-        return Response::json([
-            'status_code' => 200,
-            'message' => 'success',
-        ]);
     }
 
     /**
