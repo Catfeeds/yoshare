@@ -30,16 +30,17 @@ function toastrs(style, message) {
     return false;
 }
 
-function getNodeId(id, data) {
+var nodeIndex = 0;
+function getNodeIndex(id, data) {
     for (var i = 0; i < data.length; i++) {
         if (data[i].id == id) {
             return i;
         }
-        index++;
+        nodeIndex++;
         if (data[i].nodes != null && data[i].nodes.length > 0) {
-            var ret = getNodeId(id, data[i].nodes);
+            var ret = getNodeIndex(id, data[i].nodes);
             if (ret >= 0) {
-                return ret;
+                return nodeIndex;
             }
         }
     }

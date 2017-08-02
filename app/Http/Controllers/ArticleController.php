@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
-use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use Gate;
+use Request;
 
 /**
  * 复制需要修改
@@ -19,8 +19,8 @@ use Gate;
  */
 class ArticleController extends Controller
 {
-    protected $path = '/admin/articles';
-    protected $view = 'admin.articles';
+    protected $base_url = '/admin/articles';
+    protected $view_path = 'admin.articles';
     protected $model;
 
     public function __construct()
@@ -34,7 +34,7 @@ class ArticleController extends Controller
             $this->middleware('deny403');
         }
 
-        return view($this->view . '.index', ['model' => $this->model, 'path' => $this->path]);
+        return view($this->view_path . '.index', ['model' => $this->model, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -44,7 +44,10 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.contents.create', ['model' => $this->model, 'path' => $this->path]);
+        //用于取消时跳转
+        $back_url = $this->base_url . '?category_id=' . Request::get('category_id');
+
+        return view('admin.contents.create', ['model' => $this->model, 'base_url' => $this->base_url, 'back_url' => $back_url]);
     }
 
     public function edit($id)
@@ -56,28 +59,30 @@ class ArticleController extends Controller
 
         $content = call_user_func([$this->model->class, 'find'], $id);
 
-        return view('admin.contents.edit', ['model' => $this->model, 'path' => $this->path, 'content' => $content]);
+        //用于取消时跳转
+        $back_url = $this->base_url . '?category_id=' . $content->category_id;
+
+        return view('admin.contents.edit', ['model' => $this->model, 'content' => $content, 'base_url' => $this->base_url, 'back_url' => $back_url]);
     }
 
     public function store(ArticleRequest $request)
     {
         $input = $request->all();
-        $input['category_id'] = Category::ID_FAQ;
 
-        Content::stores($this->model, $input);
+        $content = Content::stores($this->model, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->path);
+        return redirect($this->base_url . '?category_id=' . $content->category_id);
     }
 
     public function update($id, ArticleRequest $request)
     {
         $input = $request->all();
 
-        Content::updates($this->model, $id, $input);
+        $content = Content::updates($this->model, $id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->path);
+        return redirect($this->base_url . '?category_id=' . $content->category_id);
     }
 
     public function sort()

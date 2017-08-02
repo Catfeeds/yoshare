@@ -1,3 +1,6 @@
+@foreach($_GET as $k => $v)
+    <input type="hidden" id="{{ $k }}" name="{{ $k }}" value="{{ $v }}">
+@endforeach
 <ul id="tabs" class="nav nav-tabs">
     @foreach($model->groups as $group)
         @if (count($group->fields) > 0)
@@ -295,7 +298,7 @@
     @endforeach
 </div>
 <div class="box-footer">
-    <button type="button" class="btn btn-default" onclick="location.href='{{ $path }}';"> 取　消</button>
+    <button type="button" class="btn btn-default" onclick="location.href='{{ isset($back_url) ? $back_url : $base_url }}';"> 取　消</button>
     <button type="submit" class="btn btn-info pull-right" id="submit">保　存</button>
 </div>
 

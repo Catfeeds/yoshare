@@ -8,8 +8,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/contents">内容管理</a></li>
-                <li class="active">编辑</li>
+                <li class="active">编辑{{ $model->title }}</li>
             </ol>
         </section>
         <section class="content">
@@ -22,7 +21,7 @@
 
                             @include('admin.errors.list')
 
-                            {!! Form::model($content,['id' => 'form', 'method' => 'PUT', 'url' => $path . '/' . $content->id, 'class' => 'form-horizontal']) !!}
+                            {!! Form::model($content,['id' => 'form', 'method' => 'PUT', 'url' => $base_url . '/' . $content->id, 'class' => 'form-horizontal']) !!}
 
                             @include('admin.contents.form')
 

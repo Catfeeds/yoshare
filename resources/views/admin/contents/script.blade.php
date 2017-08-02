@@ -6,11 +6,6 @@
         showClear: true,
     });
 
-    /* 新增 */
-    function create() {
-        window.location.href = '{{ $path }}' + '/create/';
-    }
-
     /* 查询 */
     $('#btn_query').click(function () {
         $('#table').bootstrapTable('selectPage', 1);
@@ -32,7 +27,7 @@
         }
 
         $.ajax({
-            url: '{{ $path }}' + '/state',
+            url: '{{ $base_url }}' + '/state',
             type: 'POST',
             data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
             success: function () {
@@ -66,7 +61,7 @@
 
         if (ids.length > 0) {
             $.ajax({
-                url: '{{ $path }}' + '/state',
+                url: '{{ $base_url }}' + '/state',
                 type: 'POST',
                 data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
                 success: function () {
@@ -97,7 +92,7 @@
 
     $('#table').bootstrapTable({
         method: 'get',
-        url: '{{ $path }}' + '/table',
+        url: '{{ $base_url }}' + '/table',
         pagination: true,
         pageSize: 25,
         pageList: [25, 50, 100, 200],
@@ -134,7 +129,7 @@
                     }
 
                     $.ajax({
-                        url: '{{ $path }}' + '/sort',
+                        url: '{{ $base_url }}' + '/sort',
                         type: 'get',
                         async: true,
                         data: {select_id: select_id, place_id: place_id, move_down: move_down},

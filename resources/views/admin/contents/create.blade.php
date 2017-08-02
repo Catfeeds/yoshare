@@ -8,8 +8,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/contents">内容管理</a></li>
-                <li class="active">新增</li>
+                <li class="active">新增{{ $model->title }}</li>
             </ol>
         </section>
         <section class="content">
@@ -19,10 +18,9 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-body">
-
                             @include('admin.errors.list')
 
-                            {!! Form::open(['url' => $path, 'class' => 'form-horizontal']) !!}
+                            {!! Form::open(['url' => $base_url, 'class' => 'form-horizontal']) !!}
 
                             @include('admin.contents.form')
 

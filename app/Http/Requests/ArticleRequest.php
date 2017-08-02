@@ -23,6 +23,7 @@ class ArticleRequest extends Request
     {
         return [
             'title' => 'required',
+            'category_id' => 'exists:categories,id',
         ];
     }
 
@@ -30,6 +31,7 @@ class ArticleRequest extends Request
     {
         return [
             'title.required' => '请填写标题',
+            'category_id.exists' => '请选择栏目',
         ];
     }
 }
