@@ -134,8 +134,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 模块管理
      */
-    Route::get('modules/tree/', 'ModuleController@tree');
-    Route::get('modules/table/{category_id}', 'ModuleController@table');
+    Route::get('modules/table', 'ModuleController@table');
+    Route::get('modules/fields', 'ModuleController@fields');
     Route::get('modules/create/{category_id}', 'ModuleController@create');
     Route::get('modules/{id}/save','ModuleController@save');
     Route::resource('/modules', 'ModuleController');

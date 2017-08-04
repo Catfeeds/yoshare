@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleRequest;
+use App\Models\DataSource;
 use App\Models\Module;
 use App\Models\Content;
 use Gate;
@@ -46,7 +47,7 @@ class ModuleController extends Controller
 
     public function edit($id)
     {
-        $module = json_decode(json_encode(config("module.$id")));
+        $module = Module::find($id);
 
         if (empty($module)) {
             \Session::flash('flash_warning', '无此记录');
@@ -109,9 +110,26 @@ class ModuleController extends Controller
         \Session::flash('flash_success', '删除成功');
     }
 
-    public function tree()
+    public function table()
     {
-        return Response::json(Module::tree());
+        return Module::table();
+    }
+
+    public function fields()
+    {
+        $module = Module::find(1);
+
+        $module->fields->transform(function ($field) {
+            $attributes = $field->getAttributes();
+            $attributes['type_name'] = $field->typeName();
+            $attributes['editor_type_name'] = $field->editorTypeName();
+            $attributes['column_align_name'] = $field->columnAlignName();
+            return $attributes;
+        });
+        $ds = new DataSource();
+        $ds->data = $module->fields;
+
+        return Response::json($ds);
     }
 
     public function lists($category_id)

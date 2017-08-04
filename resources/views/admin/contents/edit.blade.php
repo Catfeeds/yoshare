@@ -4,11 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                编辑{{ $model->title }}
+                编辑{{ $module->title }}
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">编辑{{ $model->title }}</li>
+                <li class="active">编辑{{ $module->title }}</li>
             </ol>
         </section>
         <section class="content">

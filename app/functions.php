@@ -214,3 +214,58 @@ function get_client_ip()
 {
     return isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : Request::getClientIp();
 }
+
+/**
+ * 数组转对象
+ *
+ * @param $array
+ * @return StdClass
+ */
+function array_to_object($array)
+{
+    if (is_array($array)) {
+        $obj = new StdClass();
+        foreach ($array as $key => $val) {
+            $obj->$key = $val;
+        }
+    } else {
+        $obj = $array;
+    }
+    return $obj;
+}
+
+/**
+ * 对象转数组
+ *
+ * @param $object
+ * @return mixed
+ */
+function object_to_array($object)
+{
+    if (is_object($object)) {
+        foreach ($object as $key => $value) {
+            $array[$key] = $value;
+        }
+    } else {
+        $array = $object;
+    }
+    return $array;
+}
+
+/**
+ * 字符串数组转选项
+ *
+ * @param $array
+ * @return array
+ */
+function array_to_option($array)
+{
+    if (is_array($array)) {
+        foreach ($array as $key => $val) {
+            $array[$val] = $val;
+            unset($array[$key]);
+        }
+    }
+
+    return $array;
+}

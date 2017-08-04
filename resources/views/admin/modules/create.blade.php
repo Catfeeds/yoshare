@@ -14,23 +14,21 @@
         </section>
         <section class="content">
             <div class="row">
-                <!-- right column -->
                 <div class="col-md-12">
-                    <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.errors.list')
 
                             {!! Form::open(['url' => '/admin/modules', 'class' => 'form-horizontal']) !!}
 
-                            @include('admin.modules._form')
+                            @include('admin.modules.form')
 
                             {!! Form::close() !!}
 
                         </div>
-                    </div><!-- /.box -->
-                </div><!--/.col (right) -->
-            </div>   <!-- /.row -->
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 @endsection

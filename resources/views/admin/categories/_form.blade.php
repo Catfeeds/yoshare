@@ -33,7 +33,7 @@
         <div class="form-group">
             {!! Form::label('model_id', '模型:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">
-                {!! Form::select('model_id', $models, null, ['class' => 'form-control']) !!}
+                {!! Form::select('model_id', $modules, null, ['class' => 'form-control']) !!}
             </div>
             {!! Form::label('sort', '序号:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">

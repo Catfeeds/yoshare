@@ -51,9 +51,9 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id', 'id');
     }
 
-    public function model()
+    public function module()
     {
-        return $this->belongsTo(Module::class, 'model_id');
+        return $this->belongsTo(Module::class, 'module_id');
     }
 
     public function contents()

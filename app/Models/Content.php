@@ -178,12 +178,12 @@ class Content extends Model
     /**
      * 保存数据
      */
-    public static function stores($model, $input)
+    public static function stores($module, $input)
     {
         $input['site_id'] = Auth::user()->site_id;
         $input['user_id'] = Auth::user()->id;
 
-        $content = call_user_func([$model->class, 'stores'], $input);
+        $content = call_user_func([$module->model_class, 'stores'], $input);
 
         //保存图片集和视频集
         if (!empty($content)) {
@@ -202,9 +202,9 @@ class Content extends Model
     /**
      * 更新数据
      */
-    public static function updates($model, $id, $input)
+    public static function updates($module, $id, $input)
     {
-        $content = call_user_func_array([$model->class, 'updates'], [$id, $input]);
+        $content = call_user_func_array([$module->model_class, 'updates'], [$id, $input]);
 
         //保存图片集和视频集
         if (!empty($content)) {
@@ -225,7 +225,7 @@ class Content extends Model
      */
     public static function state($model, $input)
     {
-        call_user_func([$model->class, 'state'], $input);
+        call_user_func([$model->model_class, 'state'], $input);
     }
 
     /**

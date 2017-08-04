@@ -21,11 +21,11 @@ class ArticleController extends Controller
 {
     protected $base_url = '/admin/articles';
     protected $view_path = 'admin.articles';
-    protected $model;
+    protected $module;
 
     public function __construct()
     {
-        $this->model = Module::generate(Module::ID_ARTICLE);
+        $this->module = Module::generate(Module::ID_ARTICLE);
     }
 
     public function index()
@@ -34,7 +34,7 @@ class ArticleController extends Controller
             $this->middleware('deny403');
         }
 
-        return view($this->view_path . '.index', ['model' => $this->model, 'base_url' => $this->base_url]);
+        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -47,7 +47,7 @@ class ArticleController extends Controller
         //用于取消时跳转
         $back_url = $this->base_url . '?category_id=' . Request::get('category_id');
 
-        return view('admin.contents.create', ['model' => $this->model, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url, 'back_url' => $back_url]);
     }
 
     public function edit($id)
@@ -57,19 +57,19 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
-        $content = call_user_func([$this->model->class, 'find'], $id);
+        $content = call_user_func([$this->module->model_class, 'find'], $id);
 
         //用于取消时跳转
         $back_url = $this->base_url . '?category_id=' . $content->category_id;
 
-        return view('admin.contents.edit', ['model' => $this->model, 'content' => $content, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $content, 'base_url' => $this->base_url, 'back_url' => $back_url]);
     }
 
     public function store(ArticleRequest $request)
     {
         $input = $request->all();
 
-        $content = Content::stores($this->model, $input);
+        $content = Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url . '?category_id=' . $content->category_id);
@@ -79,7 +79,7 @@ class ArticleController extends Controller
     {
         $input = $request->all();
 
-        $content = Content::updates($this->model, $id, $input);
+        $content = Content::updates($this->module, $id, $input);
 
         \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url . '?category_id=' . $content->category_id);

@@ -45,7 +45,7 @@
                                     <th data-field="name">栏目名称</th>
                                     <th data-field="model_title" data-align="center" data-width="90">模型</th>
                                     <th data-field="slug" data-align="center" data-width="90">网址缩略名</th>
-                                    <th data-field="sort" data-align="center"  data-width="60" data-editable="true">序号</th>
+                                    <th data-field="sort" data-align="center" data-width="60" data-editable="true">序号</th>
                                     <th data-field="state_name" data-align="center" data-width="90" data-formatter="stateFormatter">状态</th>
                                     <th data-field="action" data-align="center" data-width="70" data-formatter="actionFormatter" data-events="actionEvents"> 操作
                                     </th>
@@ -60,8 +60,6 @@
     </div>
     <!-- /.content-wrapper -->
     <script>
-        var index = 0;
-
         $.getJSON('/admin/categories/tree', function (data) {
             $('#tree').treeview({
                 data: data,
@@ -71,13 +69,11 @@
                     location.href = '/admin/categories?category_id=' + data.id;
                 }
             });
-            if (getQueryString('category_id') == null) {
-                $('#tree').treeview('selectNode', [0, {silent: true}]);
+            if (getNodeIndex(getQueryString('category_id'), data) >= 0) {
+                $('#tree').treeview('selectNode', [nodeIndex, {silent: true}]);
             }
             else {
-                if (getNodeId(getQueryString('category_id'), data) >= 0) {
-                    $('#tree').treeview('selectNode', [index, {silent: true}]);
-                }
+                $('#tree').treeview('selectNode', [0, {silent: true}]);
             }
         });
 

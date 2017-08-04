@@ -35,7 +35,7 @@ class Article extends BaseModule
         'title',
         'summary',
         'image_url',
-        'html',
+        'content',
         'member_id',
         'user_id',
         'sort',
