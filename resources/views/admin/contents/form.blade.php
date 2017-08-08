@@ -43,7 +43,7 @@
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_SELECT_SINGLE)
                                     {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
-                                        {!! Form::select($editor->name, array_to_option($editor->options), null, ['class' => 'form-control', $editor->readonly ? 'readonly' : '']) !!}
+                                        {!! Form::select($editor->name, string_to_option($editor->options), null, ['class' => 'form-control', $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_SELECT_MULTI)
                                     {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
@@ -131,7 +131,7 @@
                                 var {{ $editor->name }}_preview = [];
                                 var {{ $editor->name }}_config = [];
                                 @if(isset($content))
-                                @foreach($content->images()->orderBy('sort')->get() as $image)
+                                @foreach($content->images() as $image)
                                 {{ $editor->name }}_preview.push('<img height="240" src="{{ $image->url }}" class="kv-preview-data file-preview-image">');
                                 {{ $editor->name }}_config.push({key: '{{ $image->id }}', image_url: '{{ $image->url }}'});
                                 @endforeach
@@ -218,7 +218,7 @@
                                 var {{ $editor->name }}_preview = [];
                                 var {{ $editor->name }}_config = [];
                                 @if(isset($content))
-                                @foreach($content->videos()->orderBy('sort')->get() as $video)
+                                @foreach($content->videos() as $video)
                                 {{ $editor->name }}_preview.push('<video height="300" controls="controls" src="{{ $video->url }}"></video>');
                                 {{ $editor->name }}_config.push({key: '{{ $video->id }}', video_url: '{{ $video->url }}'});
                                 @endforeach

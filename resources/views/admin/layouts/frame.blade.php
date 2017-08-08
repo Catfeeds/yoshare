@@ -53,6 +53,10 @@
     <link href="/plugins/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <script src="/plugins/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
 
+    <!--Bootstrap-Switch-->
+    <link href="/plugins/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+    <script src="/plugins/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
+
     <!--X-editable-->
     <link href="/plugins/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
     <script src="/plugins/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
@@ -92,6 +96,15 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script type="text/javascript">
     $('div.alert').not('.alert-danger').delay(3000).slideUp(300);
+
+    $('input:checkbox').each(function() {
+        $(this).attr('data-size', 'small');
+        $(this).attr('data-on-color', 'success');
+        $(this).attr('data-off-color', 'warning');
+        $(this).attr('data-on-text', '是');
+        $(this).attr('data-off-text', '否');
+        $(this).bootstrapSwitch();
+    });
 </script>
 
 <!-- AdminLTE App -->

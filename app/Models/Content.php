@@ -188,11 +188,16 @@ class Content extends Model
         //保存图片集和视频集
         if (!empty($content)) {
             if (isset($input['images'])) {
-                Image::sync($content, $input['images']);
+                File::sync(File::TYPE_IMAGE, $content, $input['images']);
 
             }
+
+            if (isset($input['audios'])) {
+                File::sync(File::TYPE_AUDIO, $content, $input['audios']);
+            }
+
             if (isset($input['videos'])) {
-                Video::sync($content, $input['videos']);
+                File::sync(File::TYPE_VIDEO, $content, $input['videos']);
             }
         }
 
@@ -209,11 +214,16 @@ class Content extends Model
         //保存图片集和视频集
         if (!empty($content)) {
             if (isset($input['images'])) {
-                Image::sync($content, $input['images']);
+                File::sync(File::TYPE_IMAGE, $content, $input['images']);
 
             }
+
+            if (isset($input['audios'])) {
+                File::sync(File::TYPE_AUDIO, $content, $input['audios']);
+            }
+
             if (isset($input['videos'])) {
-                Video::sync($content, $input['videos']);
+                File::sync(File::TYPE_VIDEO, $content, $input['videos']);
             }
         }
 

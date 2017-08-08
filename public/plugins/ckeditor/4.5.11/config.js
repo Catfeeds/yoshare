@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
-    config.filebrowserImageBrowseUrl = '/plugins//ckfinder/3.4.1/ckfinder.html?type=Images';
+    config.filebrowserImageBrowseUrl = '/plugins/ckfinder/3.4.1/ckfinder.html?type=Images';
     config.allowedContent = true;
     config.extraPlugins = 'uploadimage,image2,html5video,copyformatting';
     config.height = 800;

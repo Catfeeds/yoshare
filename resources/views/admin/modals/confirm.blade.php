@@ -8,7 +8,7 @@
             <div class="modal-body" id="msg">{{$message}}</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="modal_remove">确认</button>
+                <button type="button" class="btn btn-primary" id="btn_confirm">确认</button>
             </div>
         </div>
     </div>

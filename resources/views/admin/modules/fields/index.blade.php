@@ -4,12 +4,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                新增模块
+                字段管理
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/modules">模块管理</a></li>
-                <li class="active">新增</li>
+                <li><a href="/admin/modules"> 模型管理</a></li>
+                <li class="active">模型管理</li>
             </ol>
         </section>
         <section class="content">
@@ -17,14 +17,11 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            @include('admin.errors.list')
-
-                            {!! Form::open(['url' => '/admin/modules', 'class' => 'form-horizontal']) !!}
-
-                            @include('admin.modules.form')
-
-                            {!! Form::close() !!}
-
+                            @include('admin.modals.confirm', ['message' => '您确认删除该字段吗？'])
+                            @include('admin.layouts.flash')
+                            @include('admin.modules.fields.form')
+                            @include('admin.modules.fields.table')
+                            @include('admin.modules.fields.script')
                         </div>
                     </div>
                 </div>

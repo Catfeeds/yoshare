@@ -77,10 +77,31 @@ class ModuleField extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'alias',
+        'module_id',
+        'title',
         'type',
-        'length',
+        'default',
+        'required',
+        'system',
+        'index',
+        'column_name',
+        'column_title',
+        'column_show',
+        'column_align',
+        'column_width',
+        'column_editable',
+        'column_formatter',
+        'column_index',
+        'editor_name',
+        'editor_title',
+        'editor_show',
+        'editor_type',
+        'editor_options',
+        'editor_columns',
+        'editor_rows',
+        'editor_readonly',
+        'editor_group',
+        'editor_index',
     ];
 
     public function typeName()
@@ -96,5 +117,27 @@ class ModuleField extends Model
     public function columnAlignName()
     {
         return array_key_exists($this->column_align, static::COLUMN_ALIGNS) ? static::COLUMN_ALIGNS[$this->column_align] : '';
+    }
+
+    public static function stores($input)
+    {
+        self::create($input);
+
+        \Session::flash('flash_success', '添加成功');
+        return true;
+    }
+
+    public static function updates($id, $input)
+    {
+        $field = self::find($id);
+
+        if ($field == null) {
+            \Session::flash('flash_warning', '无此记录');
+            return false;
+        }
+        $field->update($input);
+
+        \Session::flash('flash_success', '修改成功');
+        return true;
     }
 }

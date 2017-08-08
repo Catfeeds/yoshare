@@ -31,7 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/tree/', 'CategoryController@tree');
     Route::get('categories/table/{category_id}', 'CategoryController@table');
     Route::get('categories/create/{category_id}', 'CategoryController@create');
-    Route::get('categories/{id}/save','CategoryController@save');
+    Route::get('categories/{id}/save', 'CategoryController@save');
     Route::resource('/categories', 'CategoryController');
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
@@ -65,7 +65,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('members/table', 'MemberController@table');
     Route::get('members/state/{state}', 'MemberController@state');
     Route::resource('members', 'MemberController');
-    Route::get('members/messages/{member_id}','MemberController@message');
+    Route::get('members/messages/{member_id}', 'MemberController@message');
 
     /**
      * 消息管理
@@ -129,17 +129,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::get('sites/table', 'SiteController@table');
     Route::resource('/sites', 'SiteController');
-    Route::get('sites/{id}/delete', 'SiteController@destroy');
 
     /**
      * 模块管理
      */
     Route::get('modules/table', 'ModuleController@table');
     Route::get('modules/fields', 'ModuleController@fields');
-    Route::get('modules/create/{category_id}', 'ModuleController@create');
-    Route::get('modules/{id}/save','ModuleController@save');
+    Route::get('modules/{id}/save', 'ModuleController@save');
     Route::resource('/modules', 'ModuleController');
-    Route::get('modules/{id}/delete', 'ModuleController@destroy');
+
+    /**
+     * 字段管理
+     */
+    Route::get('modules/fields/table/{module_id}', 'ModuleFieldController@table');
+    Route::resource('modules/fields', 'ModuleFieldController');
 
     /**
      * 模板设置

@@ -5,7 +5,7 @@
         @foreach($module->columns as $column)
             @if($column->show)
                 <th data-field="{{ isset($column->name) ? $column->name : $field->name }}"
-                    data-align="{{ $column->align ? : 'left' }}"
+                    data-align="{{ $column->align === 1 ? 'left' : ($column->align === 2 ? 'center' : 'right') }}"
                     data-width="{{ $column->width ? : 60 }}"
                     data-formatter="{{ $column->formatter }}"
                     data-editable="{{ $column->editable }}">{{ $column->title }}</th>

@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Video extends Model
+class File extends Model
 {
+    const TYPE_IMAGE = 1;
+    const TYPE_AUDIO = 2;
+    const TYPE_VIDEO = 3;
+
     protected $fillable = [
         'refer_id',
         'refer_type',
+        'type',
         'title',
         'url',
         'summary',
@@ -20,14 +25,15 @@ class Video extends Model
         return $this->morphTo();
     }
 
-    public static function sync($content, $urls, $summary = '')
+    public static function sync($type, $content, $urls, $summary = '')
     {
         if (!empty($urls)) {
             $urls = explode(',', trim($urls));
 
-            $content->videos()->delete();
+            $content->files()->where('type', $type)->delete();
             foreach ($urls as $key => $url) {
-                $content->videos()->create([
+                $content->files()->create([
+                    'type' => $type,
                     'title' => '',
                     'summary' => $summary,
                     'sort' => $key,

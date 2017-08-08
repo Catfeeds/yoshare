@@ -37,14 +37,24 @@ class BaseModule extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'refer');
+    }
+
     public function images()
     {
-        return $this->morphMany(Image::class, 'refer');
+        return $this->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get();
+    }
+
+    public function audios()
+    {
+        return $this->files()->where('type', File::TYPE_AUDIO)->orderBy('sort')->get();
     }
 
     public function videos()
     {
-        return $this->morphMany(Video::class, 'refer');
+        return $this->files()->where('type', File::TYPE_VIDEO)->orderBy('sort')->get();
     }
 
     public function setCreatedAt($value)

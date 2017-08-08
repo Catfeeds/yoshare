@@ -269,3 +269,16 @@ function array_to_option($array)
 
     return $array;
 }
+
+/**
+ * 字符串(逗号分隔)转选项
+ *
+ * @param $string
+ * @return array
+ */
+function string_to_option($string)
+{
+    $array = explode(',', $string);
+
+    return array_to_option($array);
+}

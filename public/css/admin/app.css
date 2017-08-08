@@ -15,6 +15,22 @@ body {
     width: 20%;
 }
 
+.margin-t-5 {
+    margin-top: 5px;
+}
+
+.margin-b-5 {
+    margin-bottom: 5px;
+}
+
+.margin-l-5 {
+    margin-left: 5px;
+}
+
+.margin-r-5 {
+    margin-right: 5px;
+}
+
 .padding-r-5 {
     padding-right: 5px;
 }

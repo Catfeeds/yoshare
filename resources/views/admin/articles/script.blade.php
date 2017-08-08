@@ -47,6 +47,12 @@
         ].join('');
     }
 
+    function titleFormatter(value, row, index) {
+        return [
+            '<a href="/articles/' + row.id + '" target="_blank">' + row.title + '</a>',
+        ]
+    }
+
     function actionFormatter(value, row, index) {
         return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
     }

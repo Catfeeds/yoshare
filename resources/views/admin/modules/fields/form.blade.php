@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
-                <h4 class="modal-title">请输入模块信息</h4>
+                <h4 class="modal-title">请输入字段信息</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -12,33 +12,36 @@
                             <form id="form" action="/admin/modules" method="post" class="form-horizontal">
                                 {{ csrf_field() }}
                                 <input id="method" name="_method" type="hidden" value="POST">
+                                <input type="hidden" name="module_id" value="{{ $module->id }}" />
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">表名:</label>
+                                        {!! Form::label('name', '名称:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            <input id="name" name="name" class="form-control" placeholder="">
+                                            {!! Form::text('name', null, ['class' => 'form-control']) !!}
                                         </div>
-                                        <label class="col-sm-2 control-label">模块名称:</label>
+                                        {!! Form::label('title', '标题:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            <input id="title" name="title" class="form-control" placeholder="">
+                                            {!! Form::text('title', null, ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">模型类:</label>
-                                        <div class="col-sm-10">
-                                            <input id="model_class" name="model_class" class="form-control" placeholder="">
+                                        {!! Form::label('type', '类型', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::select('type', \App\Models\ModuleField::TYPES, null, ['class' => 'form-control']) !!}
+                                        </div>
+                                        {!! Form::label('default', '默认值:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::text('default', null, ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">控制器类:</label>
-                                        <div class="col-sm-10">
-                                            <input id="controller_class" name="controller_class" class="form-control" placeholder="">
+                                        {!! Form::label('required', '必须:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::checkbox('required') !!}
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">视图路径:</label>
-                                        <div class="col-sm-10">
-                                            <input id="view_path" name="view_path" class="form-control" placeholder="">
+                                        {!! Form::label('system', '系统字段:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::checkbox('system') !!}
                                         </div>
                                     </div>
                                 </div>

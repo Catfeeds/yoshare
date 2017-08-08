@@ -20,17 +20,11 @@
     </div>
 @endif
 
-@if (count($errors) > 0)
-    <div class="am-g">
-        <div class="am-u-md-12">
-            <div class="am-alert am-alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
     </div>
 @endif
 

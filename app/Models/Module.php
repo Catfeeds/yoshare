@@ -23,6 +23,9 @@ class Module extends Model
     protected $fillable = [
         'name',
         'title',
+        'model_class',
+        'controller_class',
+        'view_path',
         'state',
     ];
 
@@ -36,25 +39,65 @@ class Module extends Model
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
-    public static function insert($input)
+    public static function stores($input)
     {
-        $name = $input['name'];
+        $input['state'] = self::STATE_ENABLE;
 
-        if (Schema::hasTable($name)) {
-            \Session::flash('flash_warning', '此数据库表已存在');
-            return false;
-        } else {
-            Schema::create($name, function (Blueprint $table) {
-                $table->increments('id');
-                $table->timestamps();
-            });
-        }
+        $module = self::create($input);
 
         \Session::flash('flash_success', '添加成功');
         return true;
     }
 
-    public static function modify($id, $input)
+    public static function updates($id, $input)
+    {
+        $module = self::find($id);
+
+        if ($module == null) {
+            \Session::flash('flash_warning', '无此记录');
+            return false;
+        }
+        $module->update($input);
+
+        \Session::flash('flash_success', '修改成功');
+        return true;
+    }
+
+    public static function table()
+    {
+        $offset = Request::get('offset') ? Request::get('offset') : 0;
+        $limit = Request::get('limit') ? Request::get('limit') : 20;
+
+        $ds = new DataSource();
+        $modules = static::orderBy('id')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
+
+        $ds->total = static::count();
+
+        $modules->transform(function ($module) {
+            return [
+                'id' => $module->id,
+                'name' => $module->name,
+                'title' => $module->title,
+                'model_class' => $module->model_class,
+                'controller_class' => $module->controller_class,
+                'view_path' => $module->view_path,
+                'sort' => $module->sort,
+                'state' => $module->state,
+                'state_name' => $module->stateName(),
+                'created_at' => empty($module->created_at) ? '' : $module->created_at->toDateTimeString(),
+                'updated_at' => empty($module->updated_at) ? '' : $module->updated_at->toDateTimeString()
+            ];
+        });
+
+        $ds->data = $modules;
+
+        return Response::json($ds);
+    }
+
+    public static function migrate($id)
     {
         $module = Module::generate($id);
 
@@ -129,43 +172,6 @@ class Module extends Model
                 });
             }
         }
-
-        \Session::flash('flash_success', '修改成功');
-        return true;
-    }
-
-    public static function table()
-    {
-        $offset = Request::get('offset') ? Request::get('offset') : 0;
-        $limit = Request::get('limit') ? Request::get('limit') : 20;
-
-        $ds = new DataSource();
-        $modules = static::orderBy('sort')
-            ->skip($offset)
-            ->limit($limit)
-            ->get();
-
-        $ds->total = static::count();
-
-        $modules->transform(function ($module) {
-            return [
-                'id' => $module->id,
-                'name' => $module->name,
-                'title' => $module->title,
-                'model_class' => $module->model_class,
-                'controller_class' => $module->controller_class,
-                'view_path' => $module->view_path,
-                'sort' => $module->sort,
-                'state' => $module->state,
-                'state_name' => $module->stateName(),
-                'created_at' => empty($module->created_at) ? '' : $module->created_at->toDateTimeString(),
-                'updated_at' => empty($module->updated_at) ? '' : $module->updated_at->toDateTimeString()
-            ];
-        });
-
-        $ds->data = $modules;
-
-        return Response::json($ds);
     }
 
     public static function generate($id)

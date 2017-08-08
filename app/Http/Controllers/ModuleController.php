@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleRequest;
-use App\Models\DataSource;
-use App\Models\Module;
 use App\Models\Content;
+use App\Models\Module;
 use Gate;
 use Request;
-use Response;
 
 class ModuleController extends Controller
 {
@@ -33,11 +31,11 @@ class ModuleController extends Controller
         return view('admin.modules.create');
     }
 
-    public function store(ModelRequest $request)
+    public function store(ModuleRequest $request)
     {
         $input = $request->all();
 
-        $ret = Module::insert($input);
+        $ret = Module::stores($input);
         if (!$ret) {
             redirect()->back()->withInput();
         }
@@ -63,7 +61,7 @@ class ModuleController extends Controller
     {
         $input = $request->all();
 
-        $ret = Module::modify($id, $input);
+        $ret = Module::updates($id, $input);
         if (!$ret) {
             redirect()->back()->withInput();
         }
@@ -113,32 +111,6 @@ class ModuleController extends Controller
     public function table()
     {
         return Module::table();
-    }
-
-    public function fields()
-    {
-        $module = Module::find(1);
-
-        $module->fields->transform(function ($field) {
-            $attributes = $field->getAttributes();
-            $attributes['type_name'] = $field->typeName();
-            $attributes['editor_type_name'] = $field->editorTypeName();
-            $attributes['column_align_name'] = $field->columnAlignName();
-            return $attributes;
-        });
-        $ds = new DataSource();
-        $ds->data = $module->fields;
-
-        return Response::json($ds);
-    }
-
-    public function lists($category_id)
-    {
-        $category = Module::find($category_id);
-        if (empty($category)) {
-            abort(404);
-        }
-        return view("admin.templates.modules.list", compact('category'));
     }
 }
 
