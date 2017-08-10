@@ -5,7 +5,7 @@
     @foreach($module->groups as $group)
         @if (count($group->editors) > 0)
             <li class="{{ $loop->first ? 'active' : '' }}">
-                <a href="#{{ 'tab_' . $group->name }}" data-toggle="tab">{{ $group->title }}</a>
+                <a href="#{{ 'tab_' . $group->name }}" data-toggle="tab">{{ $group->name }}</a>
             </li>
         @endif
     @endforeach
@@ -15,7 +15,7 @@
     @foreach($module->groups as $group)
         @if (count($group->editors) > 0)
             <div id="{{ 'tab_' . $group->name }}" class="tab-pane fade in {{ $loop->first ? 'active' : '' }} padding-t-15">
-                <?php $position = 0; $index = 0; ?>
+                <?php $position = 0; ?>
                 @foreach($group->editors as $editor)
                     @if ($editor->show)
                         @if ($position == 0)
@@ -32,7 +32,7 @@
                                         });
                                     </script>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_DATETIME)
-                                    {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
+                                    {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
                                         <div class='input-group date'>
                                             {!! Form::text($editor->name, null, ['class' => 'form-control']) !!}
@@ -41,17 +41,17 @@
                                         </div>
                                     </div>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_SELECT_SINGLE)
-                                    {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
+                                    {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
                                         {!! Form::select($editor->name, string_to_option($editor->options), null, ['class' => 'form-control', $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_SELECT_MULTI)
-                                    {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
+                                    {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
                                         {!! Form::select("$editor->name[]", array_to_option($editor->options), array_to_option($editor->selected)?array_to_option($editor->selected):'', ['class' => 'form-control select2','multiple'=>'multiple']) !!}
                                     </div>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_TEXTAREA)
-                                    {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
+                                    {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
                                         {!! Form::textarea('summary', null, ['class' => 'form-control', 'rows' => $editor->rows, $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
@@ -64,16 +64,17 @@
                                         {!! Form::hidden($editor->name, null, ['class' => 'form-control', 'id' => $editor->name]) !!}
                                     </div>
                                 @else
-                                    {!! Form::label($editor->name, $editor->title . ':', ['class' => 'control-label col-sm-1']) !!}
+                                    {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
                                         {!! Form::text($editor->name, null, ['class' => 'form-control', $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
                                 @endif
                                 <?php
                                 $position += $editor->columns + 1;
-                                if ($loop->last || $position + $group->editors[$index + 1]->columns + 1 > 12) {
+                                if ($loop->last || $position + next($group->editors)->columns + 1 > 12) {
                                     $position = 0;
                                 }
+                                prev($group->editors)
                                 ?>
                                 @if($position == 0 || $position == 12)
                             </div>
@@ -291,7 +292,6 @@
                             </script>
                         @endif
                     @endif
-                    <?php $index++ ?>
                 @endforeach
             </div>
         @endif

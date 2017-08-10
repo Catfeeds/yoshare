@@ -28,6 +28,7 @@
             $('#model_class').val(row.model_class);
             $('#controller_class').val(row.controller_class);
             $('#view_path').val(row.view_path);
+            $('#groups').val(row.groups);
             $('#modal_form').modal('show');
         },
         'click .field': function (e, value, row, index) {
@@ -42,6 +43,7 @@
         $('#title').val('');
         $('#model_class').val('');
         $('#controller_class').val('');
+        $('#groups').val('');
         $('#view_path').val('');
     });
 

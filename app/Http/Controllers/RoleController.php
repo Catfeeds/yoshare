@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataSource;
+use App\Models\DataSource;
 use App\Http\Requests\RoleRequest;
 use App\Models\Permission;
 use App\Models\PermissionRole;

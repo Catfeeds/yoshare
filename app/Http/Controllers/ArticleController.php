@@ -25,7 +25,7 @@ class ArticleController extends Controller
 
     public function __construct()
     {
-        $this->module = Module::generate(Module::ID_ARTICLE);
+        $this->module = Module::transform(Module::ID_ARTICLE);
     }
 
     public function index()

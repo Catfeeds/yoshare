@@ -26,6 +26,7 @@ class Module extends Model
         'model_class',
         'controller_class',
         'view_path',
+        'groups',
         'state',
     ];
 
@@ -84,6 +85,7 @@ class Module extends Model
                 'model_class' => $module->model_class,
                 'controller_class' => $module->controller_class,
                 'view_path' => $module->view_path,
+                'groups' => $module->groups,
                 'sort' => $module->sort,
                 'state' => $module->state,
                 'state_name' => $module->stateName(),
@@ -97,84 +99,13 @@ class Module extends Model
         return Response::json($ds);
     }
 
-    public static function migrate($id)
-    {
-        $module = Module::generate($id);
-
-        if (!Schema::hasTable($module->name)) {
-            Schema::create($module->name, function (Blueprint $table) {
-                $table->increments('id');
-                $table->timestamps();
-            });
-        }
-
-        foreach ($module->fields as $key => $field) {
-            if ($key == 0) {
-                continue;
-            } else {
-                $previous = $module->fields[$key - 1];
-            }
-            if (Schema::hasColumn($module->name, $field->name)) {
-                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
-                    switch ($field->type) {
-                        case ModuleField::TYPE_INTEGER:
-                        case ModuleField::TYPE_ENTITY:
-                            $table->integer($field->name)->after($previous->name)->change();
-                            break;
-                        case ModuleField::TYPE_TEXT:
-                        case ModuleField::TYPE_IMAGE:
-                        case ModuleField::TYPE_AUDIO:
-                        case ModuleField::TYPE_VIDEO:
-                        case ModuleField::TYPE_IMAGES:
-                        case ModuleField::TYPE_AUDIOS:
-                        case ModuleField::TYPE_VIDEOS:
-                            $table->text($field->name, $field->length)->after($previous->name)->change();
-                            break;
-                        case ModuleField::TYPE_LONG_TEXT:
-                        case ModuleField::TYPE_HTML:
-                            $table->longText($field->name)->after($previous->name)->change();
-                            break;
-                        case ModuleField::TYPE_FLOAT:
-                            $table->float($field->name)->after($previous->name)->change();
-                            break;
-                        case ModuleField::TYPE_DATETIME:
-                            $table->datetime($field->name)->nullable()->after($previous->name)->change();
-                            break;
-                    }
-                });
-            } else {
-                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
-                    switch ($field->type) {
-                        case ModuleField::TYPE_INTEGER:
-                        case ModuleField::TYPE_ENTITY:
-                            $table->integer($field->name)->after($previous->name)->comment($field->title);
-                            break;
-                        case  ModuleField::TYPE_TEXT:
-                        case ModuleField::TYPE_IMAGE:
-                        case ModuleField::TYPE_AUDIO:
-                        case ModuleField::TYPE_VIDEO:
-                        case ModuleField::TYPE_IMAGES:
-                        case ModuleField::TYPE_AUDIOS:
-                        case ModuleField::TYPE_VIDEOS:
-                            $table->text($field->name, $field->length)->after($previous->name)->comment($field->title);
-                            break;
-                        case ModuleField::TYPE_LONG_TEXT:
-                        case ModuleField::TYPE_HTML:
-                            $table->text($field->name)->after($previous->name)->comment($field->title);
-                            break;
-                        case ModuleField::TYPE_FLOAT:
-                            $table->float($field->name)->after($previous->name)->comment($field->title);
-                            break;
-                        case ModuleField::TYPE_DATETIME:
-                            $table->datetime($field->name)->nullable()->after($previous->name)->comment($field->title);
-                            break;
-                    }
-                });
-            }
-        }
-    }
-
-    public static function generate($id)
+    /**
+     * 转换结构
+     *
+     * @param $id
+     * @return array|mixed
+     */
+    public static function transform($id)
     {
         $module = Module::find($id);
         $module = [
@@ -185,12 +116,14 @@ class Module extends Model
             'controller_class' => $module->controller_class,
             'view_path' => $module->view_path,
             'fa_icon' => $module->fa_icon,
-            'groups' => json_decode($module->groups),
+            'groups' => explode(',', $module->groups),
             'columns' => $module->fields->map(function ($field) {
                 return [
                     'id' => $field->id,
-                    'name' => $field->column_name,
-                    'title' => $field->column_title,
+                    'name' => $field->name,
+                    'title' => $field->title,
+                    'label' => $field->label,
+                    'type' => $field->type,
                     'show' => $field->column_show,
                     'align' => $field->column_align,
                     'width' => $field->column_width,
@@ -203,10 +136,11 @@ class Module extends Model
             'editors' => $module->fields->map(function ($field) {
                 return [
                     'id' => $field->id,
-                    'name' => $field->editor_name,
-                    'title' => $field->editor_title,
-                    'show' => $field->editor_show,
+                    'name' => $field->name,
+                    'title' => $field->title,
+                    'label' => $field->label,
                     'type' => $field->editor_type,
+                    'show' => $field->editor_show,
                     'options' => $field->editor_options,
                     'columns' => $field->editor_columns,
                     'rows' => $field->editor_rows,
@@ -220,14 +154,17 @@ class Module extends Model
                     'id' => $field->id,
                     'name' => $field->name,
                     'title' => $field->title,
+                    'label' => $field->label,
                     'type' => $field->type,
                     'default' => $field->default,
                     'required' => $field->required,
                     'system' => $field->system,
                     'index' => $field->index,
                     'column' => [
-                        'name' => $field->column_name,
-                        'title' => $field->column_title,
+                        'name' => $field->name,
+                        'title' => $field->title,
+                        'label' => $field->label,
+                        'type' => $field->type,
                         'show' => $field->column_show,
                         'align' => $field->column_align,
                         'width' => $field->column_width,
@@ -237,10 +174,11 @@ class Module extends Model
 
                     ],
                     'editor' => [
-                        'name' => $field->editor_name,
-                        'title' => $field->editor_title,
-                        'show' => $field->editor_show,
+                        'name' => $field->name,
+                        'title' => $field->title,
+                        'label' => $field->label,
                         'type' => $field->editor_type,
+                        'show' => $field->editor_show,
                         'options' => $field->editor_options,
                         'columns' => $field->editor_columns,
                         'rows' => $field->editor_rows,
@@ -254,10 +192,18 @@ class Module extends Model
 
         $module = json_decode(json_encode($module));
 
+        //数组转对象数组
+        $groups = [];
+        foreach ($module->groups as $group) {
+            $groups[] = (object)['name' => $group];
+        }
+
+        $module->groups = $groups;
+
         //编辑器分组
         foreach ($module->groups as $group) {
             //过滤
-            $group->editors = array_values(array_filter($module->editors, function ($editor) use ($group) {
+            $group->editors = (array_filter($module->editors, function ($editor) use ($group) {
                 return $editor->show && $editor->group == $group->name;
             }));
 
@@ -278,5 +224,112 @@ class Module extends Model
         });
 
         return $module;
+    }
+
+    /**
+     * 生成数据表
+     * @param $id
+     */
+    public static function migrate($id)
+    {
+        $module = Module::transform($id);
+
+        if (!Schema::hasTable($module->name)) {
+            Schema::create($module->name, function (Blueprint $table) {
+                $table->increments('id');
+                $table->timestamps();
+            });
+        }
+
+        //删除字段
+        $old_fields = Schema::getColumnListing($module->name);
+
+        $new_fields = [];
+        foreach ($module->fields as $field) {
+            $new_fields[] = $field->name;
+        }
+        $fields = array_diff($old_fields, $new_fields);
+        foreach ($fields as $field) {
+            Schema::table($module->name, function (Blueprint $table) use ($field) {
+                $table->dropColumn($field);
+            });
+        }
+
+        foreach ($module->fields as $key => $field) {
+            if ($key == 0) {
+                continue;
+            } else {
+                $previous = $module->fields[$key - 1];
+            }
+            if (Schema::hasColumn($module->name, $field->name)) {
+                //修改字段
+                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
+                    switch ($field->type) {
+                        case ModuleField::TYPE_INTEGER:
+                        case ModuleField::TYPE_ENTITY:
+                            $table->integer($field->name)->after($previous->name)->change();
+                            break;
+                        case ModuleField::TYPE_TEXT:
+                        case ModuleField::TYPE_IMAGE:
+                        case ModuleField::TYPE_AUDIO:
+                        case ModuleField::TYPE_VIDEO:
+                        case ModuleField::TYPE_IMAGES:
+                        case ModuleField::TYPE_AUDIOS:
+                        case ModuleField::TYPE_VIDEOS:
+                            $table->text($field->name)->after($previous->name)->change();
+                            break;
+                        case ModuleField::TYPE_LONG_TEXT:
+                        case ModuleField::TYPE_HTML:
+                            $table->longText($field->name)->after($previous->name)->change();
+                            break;
+                        case ModuleField::TYPE_FLOAT:
+                            $table->float($field->name)->after($previous->name)->change();
+                            break;
+                        case ModuleField::TYPE_DATETIME:
+                            $table->datetime($field->name)->nullable()->after($previous->name)->change();
+                            break;
+                    }
+                });
+            } else {
+                //新增字段
+                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
+                    switch ($field->type) {
+                        case ModuleField::TYPE_INTEGER:
+                        case ModuleField::TYPE_ENTITY:
+                            $table->integer($field->name)->after($previous->name)->comment($field->title);
+                            break;
+                        case  ModuleField::TYPE_TEXT:
+                        case ModuleField::TYPE_IMAGE:
+                        case ModuleField::TYPE_AUDIO:
+                        case ModuleField::TYPE_VIDEO:
+                        case ModuleField::TYPE_IMAGES:
+                        case ModuleField::TYPE_AUDIOS:
+                        case ModuleField::TYPE_VIDEOS:
+                            $table->text($field->name)->after($previous->name)->comment($field->title);
+                            break;
+                        case ModuleField::TYPE_LONG_TEXT:
+                        case ModuleField::TYPE_HTML:
+                            $table->text($field->name)->after($previous->name)->comment($field->title);
+                            break;
+                        case ModuleField::TYPE_FLOAT:
+                            $table->float($field->name)->after($previous->name)->comment($field->title);
+                            break;
+                        case ModuleField::TYPE_DATETIME:
+                            $table->datetime($field->name)->nullable()->after($previous->name)->comment($field->title);
+                            break;
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 生成代码
+     *
+     * @param $id
+     */
+    public static function generate($id)
+    {
+
     }
 }

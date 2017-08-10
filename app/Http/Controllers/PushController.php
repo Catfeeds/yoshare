@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Gate;
 use Request;
 use App\Models\PushLog;
-use App\DataSource;
+use App\Models\DataSource;
 use Response;
 
 

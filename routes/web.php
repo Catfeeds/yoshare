@@ -134,14 +134,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 模块管理
      */
     Route::get('modules/table', 'ModuleController@table');
-    Route::get('modules/fields', 'ModuleController@fields');
     Route::get('modules/{id}/save', 'ModuleController@save');
+    Route::get('modules/{id}/migrate', 'ModuleController@migrate');
+    Route::get('modules/{id}/generate', 'ModuleController@generate');
     Route::resource('/modules', 'ModuleController');
 
     /**
      * 字段管理
      */
     Route::get('modules/fields/table/{module_id}', 'ModuleFieldController@table');
+    Route::get('modules/fields/{id}/save', 'ModuleFieldController@save');
     Route::resource('modules/fields', 'ModuleFieldController');
 
     /**

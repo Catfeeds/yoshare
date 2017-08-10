@@ -13,20 +13,20 @@
     </li>
     <li class="pull-right">
         <button class="btn btn-info btn-xs margin-r-5 margin-t-5" id="btn_create" data-toggle="modal" data-target="#modal_form">添加字段</button>
-        <button class="btn btn-info btn-xs margin-r-5 margin-t-5">生成代码</button>
-        <button class="btn btn-info btn-xs margin-r-5 margin-t-5">更新数据表</button>
+        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/generate';">生成代码</button>
+        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/migrate';">生成数据表</button>
     </li>
 </ul>
-<div id="tabs" class="tab-content">
+<div id="tabs_table" class="tab-content">
     <div id="tab_field" class="tab-pane fade in active padding-t-15">
         <div class="form-group">
             <div class="col-sm-12">
                 <table id="table_field" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
                     <thead>
                     <tr>
-                        <th data-field="id" data-width="30">ID</th>
-                        <th data-field="name" data-width="60">名称</th>
-                        <th data-field="title" data-width="90">标题</th>
+                        <th data-field="name" data-width="60">英文名称</th>
+                        <th data-field="title" data-width="90">中文名称</th>
+                        <th data-field="label" data-width="90">标签名称</th>
                         <th data-field="type_name" data-align="center" data-width="60">类型</th>
                         <th data-field="default" data-align="center" data-width="45">默认值</th>
                         <th data-field="required" data-align="center" data-width="45" data-formatter="booleanFormatter">必填</th>
@@ -45,9 +45,9 @@
                 <table id="table_column" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
                     <thead>
                     <tr>
-                        <th data-field="id" data-width="30">ID</th>
-                        <th data-field="column_name" data-width="60">名称</th>
-                        <th data-field="column_title" data-width="90">标题</th>
+                        <th data-field="name" data-width="60">英文名称</th>
+                        <th data-field="title" data-width="90">中文名称</th>
+                        <th data-field="label" data-width="90">标签名称</th>
                         <th data-field="column_show" data-align="center" data-width="45" data-formatter="booleanFormatter">显示</th>
                         <th data-field="column_align_name" data-align="center" data-width="45">对齐</th>
                         <th data-field="column_width" data-align="center" data-width="45">宽度</th>
@@ -67,9 +67,9 @@
                 <table id="table_editor" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
                     <thead>
                     <tr>
-                        <th data-field="id" data-width="30">ID</th>
-                        <th data-field="editor_name" data-width="60">名称</th>
-                        <th data-field="editor_title" data-width="90">标题</th>
+                        <th data-field="name" data-width="60">英文名称</th>
+                        <th data-field="title" data-width="90">中文名称</th>
+                        <th data-field="label" data-width="90">标签名称</th>
                         <th data-field="editor_show" data-align="center" data-width="45" data-formatter="booleanFormatter">显示</th>
                         <th data-field="editor_type_name" data-align="center" data-width="60">编辑器</th>
                         <th data-field="editor_options" data-align="center" data-width="90">选项</th>

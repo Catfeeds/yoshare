@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModuleField extends Model
 {
-    const TYPE_INTEGER = 1;
-    const TYPE_FLOAT = 2;
-    const TYPE_TEXT = 3;
-    const TYPE_LONG_TEXT = 3;
+    const TYPE_TEXT = 1;
+    const TYPE_LONG_TEXT = 2;
+    const TYPE_INTEGER = 3;
+    const TYPE_FLOAT = 4;
     const TYPE_DATETIME = 5;
     const TYPE_HTML = 6;
     const TYPE_ENTITY = 7;
@@ -21,10 +21,10 @@ class ModuleField extends Model
     const TYPE_VIDEOS = 13;
 
     const TYPES = [
-        1 => '整数',
-        2 => '浮点数',
-        3 => '文本',
-        4 => '长文本',
+        1 => '文本',
+        2 => '长文本',
+        3 => '整数',
+        4 => '浮点数',
         5 => '日期时间',
         6 => 'HTML',
         7 => '实体引用',
@@ -78,22 +78,20 @@ class ModuleField extends Model
 
     protected $fillable = [
         'module_id',
+        'name',
         'title',
+        'label',
         'type',
         'default',
         'required',
         'system',
         'index',
-        'column_name',
-        'column_title',
         'column_show',
         'column_align',
         'column_width',
         'column_editable',
         'column_formatter',
         'column_index',
-        'editor_name',
-        'editor_title',
         'editor_show',
         'editor_type',
         'editor_options',

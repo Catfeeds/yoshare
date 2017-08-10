@@ -72,13 +72,13 @@ class ModuleController extends Controller
 
     public function save($id)
     {
-        $category = Module::find($id);
+        $module = Module::find($id);
 
-        if (empty($category)) {
+        if (empty($module)) {
             return;
         }
 
-        $category->update(Request::all());
+        $module->update(Request::all());
     }
 
     public function destroy($id)
@@ -111,6 +111,14 @@ class ModuleController extends Controller
     public function table()
     {
         return Module::table();
+    }
+
+    public function migrate($id)
+    {
+        Module::migrate($id);
+
+        \Session::flash('flash_success', '修改成功!');
+        return redirect()->back();
     }
 }
 

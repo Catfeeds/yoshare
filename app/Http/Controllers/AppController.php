@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataSource;
+use App\Models\DataSource;
 use App\Http\Requests\AppRequest;
 use App\Models\App;
 use Request;

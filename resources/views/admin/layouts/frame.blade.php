@@ -81,7 +81,7 @@
     <script src="/plugins/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <!--Select2-->
-    <link href="/plugins/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link href="/plugins/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="/plugins/select2/4.0.3/js/select2.full.min.js"></script>
 
     <!--Echarts-->
@@ -97,13 +97,20 @@
 <script type="text/javascript">
     $('div.alert').not('.alert-danger').delay(3000).slideUp(300);
 
-    $('input:checkbox').each(function() {
+    $('input:checkbox.switch').each(function () {
         $(this).attr('data-size', 'small');
         $(this).attr('data-on-color', 'success');
-        $(this).attr('data-off-color', 'warning');
+        $(this).attr('data-off-color', 'default');
         $(this).attr('data-on-text', '是');
         $(this).attr('data-off-text', '否');
         $(this).bootstrapSwitch();
+
+        //解决checkbox不选中不传值的问题
+        $(this).parent().append('<input type="hidden" name="' + $(this).prop('name') + '" value="' + this.value + '" />');
+        $(this).on('switchChange.bootstrapSwitch', function (event, state) {
+            $(this).val(state ? 1 : 0);
+            $(this).next().val(state ? 1: 0);
+        });
     });
 </script>
 

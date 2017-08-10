@@ -89,20 +89,13 @@ class Article extends BaseModule
             ->count();
 
         $articles->transform(function ($article) {
-            return [
-                'id' => $article->id,
-                'name' => $article->name,
-                'title' => $article->title,
-                'summary' => $article->summary,
-                'published_at' => strtotime($article->published_at) ? $article->published_at->toDateTimeString() : '',
-                'user_id' => empty($article->user) ? '' : $article->user->id,
-                'user_name' => empty($article->user) ? '' : $article->user->name,
-                'sort' => $article->sort,
-                'state' => $article->state,
-                'state_name' => $article->stateName(),
-                'created_at' => empty($article->created_at) ? '' : $article->created_at->toDateTimeString(),
-                'updated_at' => empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString()
-            ];
+            $attributes = $article->getAttributes();
+            $attributes['user_name'] = empty($article->user) ? '' : $article->user->name;
+            $attributes['state_name'] = $article->stateName();
+            $attributes['published_at'] = strtotime($article->published_at) ? $article->published_at->toDateTimeString() : '';
+            $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
+            return $attributes;
         });
 
         $ds->rows = $articles;

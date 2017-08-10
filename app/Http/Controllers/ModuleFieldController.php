@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleFieldRequest;
-use App\Models\Content;
 use App\Models\DataSource;
 use App\Models\Module;
 use App\Models\ModuleField;
@@ -26,7 +25,9 @@ class ModuleFieldController extends Controller
             return redirect('/admin/modules');
         }
 
-        return view('admin.modules.fields.index', compact('module'));
+        $groups = string_to_option($module->groups);
+
+        return view('admin.modules.fields.index', compact('module', 'groups'));
     }
 
     public function store(ModuleFieldRequest $request)
@@ -60,13 +61,13 @@ class ModuleFieldController extends Controller
 
     public function save($id)
     {
-        $category = Module::find($id);
+        $field = ModuleField::find($id);
 
-        if (empty($category)) {
+        if (empty($field)) {
             return;
         }
 
-        $category->update(Request::all());
+        $field->update(Request::all());
     }
 
     public function destroy($id)
