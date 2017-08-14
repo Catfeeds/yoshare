@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "\u638c\u4e0a\u5357\u660cAPI v1",
+        "title": "AMS API v1",
         "termsOfService": "",
         "version": "1.0.0"
     },
@@ -1108,38 +1108,6 @@
                 "responses": {
                     "200": {
                         "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/qcloud/refresh/url": {
-            "get": {
-                "tags": [
-                    "/qcloud \u817e\u8baf\u4e91"
-                ],
-                "summary": "\u5237\u65b0URL",
-                "parameters": [
-                    {
-                        "name": "url",
-                        "in": "query",
-                        "description": "URL",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "t",
-                        "in": "query",
-                        "description": "\u65f6\u95f4\u6233",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u5237\u65b0\u6210\u529f"
                     },
                     "404": {
                         "description": "\u6ca1\u6709\u627e\u5230"

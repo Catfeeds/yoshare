@@ -13,8 +13,8 @@
     </li>
     <li class="pull-right">
         <button class="btn btn-info btn-xs margin-r-5 margin-t-5" id="btn_create" data-toggle="modal" data-target="#modal_form">添加字段</button>
-        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/generate';">生成代码</button>
-        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/migrate';">生成数据表</button>
+        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/generate';">生成模块代码</button>
+        <button class="btn btn-info btn-xs margin-r-5 margin-t-5" onclick="location.href='/admin/modules/{{ $module->id }}/migrate';">生成数据结构</button>
     </li>
 </ul>
 <div id="tabs_table" class="tab-content">

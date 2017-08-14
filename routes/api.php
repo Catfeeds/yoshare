@@ -77,11 +77,6 @@ $api->version('v1', function ($api) {
          * 消息
          */
         $api->get('messages/owns', 'MessageController@owns');
-
-        /**
-         * 腾讯云
-         */
-        $api->get('qcloud/refresh/url', 'QCloudController@refreshUrl');
     });
 
     $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:600'], function ($api) {

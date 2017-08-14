@@ -117,7 +117,15 @@ class ModuleController extends Controller
     {
         Module::migrate($id);
 
-        \Session::flash('flash_success', '修改成功!');
+        \Session::flash('flash_success', '生成数据结构成功!');
+        return redirect()->back();
+    }
+
+    public function generate($id)
+    {
+        Module::generate($id);
+
+        \Session::flash('flash_success', '生成模块代码成功!');
         return redirect()->back();
     }
 }

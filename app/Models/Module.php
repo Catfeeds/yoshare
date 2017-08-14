@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Generator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Request;
@@ -23,12 +24,25 @@ class Module extends Model
     protected $fillable = [
         'name',
         'title',
-        'model_class',
-        'controller_class',
-        'view_path',
+        'table_name',
         'groups',
         'state',
     ];
+
+    public function getModelNameAttribute()
+    {
+        return $this->name;
+    }
+
+    public function getControllerNameAttribute()
+    {
+        return $this->name . 'Controller';
+    }
+
+    public function getPathAttribute()
+    {
+        return str_plural(strtolower($this->name));
+    }
 
     public function fields()
     {
@@ -82,9 +96,7 @@ class Module extends Model
                 'id' => $module->id,
                 'name' => $module->name,
                 'title' => $module->title,
-                'model_class' => $module->model_class,
-                'controller_class' => $module->controller_class,
-                'view_path' => $module->view_path,
+                'table_name' => $module->table_name,
                 'groups' => $module->groups,
                 'sort' => $module->sort,
                 'state' => $module->state,
@@ -112,9 +124,6 @@ class Module extends Model
             'id' => $module->id,
             'name' => $module->name,
             'title' => $module->title,
-            'model_class' => $module->model_class,
-            'controller_class' => $module->controller_class,
-            'view_path' => $module->view_path,
             'fa_icon' => $module->fa_icon,
             'groups' => explode(',', $module->groups),
             'columns' => $module->fields->map(function ($field) {
@@ -232,17 +241,17 @@ class Module extends Model
      */
     public static function migrate($id)
     {
-        $module = Module::transform($id);
+        $module = Module::find($id);
 
-        if (!Schema::hasTable($module->name)) {
-            Schema::create($module->name, function (Blueprint $table) {
+        if (!Schema::hasTable($module->table_name)) {
+            Schema::create($module->table_name, function (Blueprint $table) {
                 $table->increments('id');
                 $table->timestamps();
             });
         }
 
         //删除字段
-        $old_fields = Schema::getColumnListing($module->name);
+        $old_fields = Schema::getColumnListing($module->table_name);
 
         $new_fields = [];
         foreach ($module->fields as $field) {
@@ -250,7 +259,7 @@ class Module extends Model
         }
         $fields = array_diff($old_fields, $new_fields);
         foreach ($fields as $field) {
-            Schema::table($module->name, function (Blueprint $table) use ($field) {
+            Schema::table($module->table_name, function (Blueprint $table) use ($field) {
                 $table->dropColumn($field);
             });
         }
@@ -261,9 +270,9 @@ class Module extends Model
             } else {
                 $previous = $module->fields[$key - 1];
             }
-            if (Schema::hasColumn($module->name, $field->name)) {
+            if (Schema::hasColumn($module->table_name, $field->name)) {
                 //修改字段
-                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
+                Schema::table($module->table_name, function (Blueprint $table) use ($field, $previous) {
                     switch ($field->type) {
                         case ModuleField::TYPE_INTEGER:
                         case ModuleField::TYPE_ENTITY:
@@ -292,7 +301,7 @@ class Module extends Model
                 });
             } else {
                 //新增字段
-                Schema::table($module->name, function (Blueprint $table) use ($field, $previous) {
+                Schema::table($module->table_name, function (Blueprint $table) use ($field, $previous) {
                     switch ($field->type) {
                         case ModuleField::TYPE_INTEGER:
                         case ModuleField::TYPE_ENTITY:
@@ -330,6 +339,22 @@ class Module extends Model
      */
     public static function generate($id)
     {
+        $module = Module::find($id);
+
+        //检查代码是否已生成
+
+        //生成controller
+        Generator::createController($module);
+
+        //生成model
+        Generator::createModel($module);
+
+        //生成view
+        Generator::createViews($module);
+
+        //生成route
+
+        //生成menu
 
     }
 }

@@ -49,7 +49,7 @@
 
     function titleFormatter(value, row, index) {
         return [
-            '<a href="/admin/articles/' + row.id + '" target="_blank">' + row.title + '</a>',
+            '<a href="/admin/__module_path__/' + row.id + '" target="_blank">' + row.title + '</a>',
         ]
     }
 
@@ -66,7 +66,7 @@
             $('#modal_title').text('查看评论');
             $('#window_msg').hide();
 
-            var url = '/admin/articles/comments/' + row.id;
+            var url = '/admin/__module_path__/comments/' + row.id;
             $.ajax({
                 url: url,
                 type: "get",

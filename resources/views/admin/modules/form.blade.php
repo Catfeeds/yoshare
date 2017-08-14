@@ -14,31 +14,19 @@
                                 <input id="method" name="_method" type="hidden" value="POST">
                                 <div class="box-body">
                                     <div class="form-group">
-                                        {!! Form::label('name', '表名:', ['class' => 'control-label col-sm-2']) !!}
+                                        {!! Form::label('name', '英文名称:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                            {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Article']) !!}
                                         </div>
-                                        {!! Form::label('title', '模块名称', ['class' => 'control-label col-sm-2']) !!}
+                                        {!! Form::label('title', '中文名称', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
                                             {!! Form::text('title', null, ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        {!! Form::label('model_class', '模块类', ['class' => 'control-label col-sm-2']) !!}
+                                        {!! Form::label('table_name', '数据表名', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-10">
-                                            {!! Form::text('model_class', null, ['class' => 'form-control', 'placeholder' => 'App\Models\Article']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        {!! Form::label('controller_class', '控制器类', ['class' => 'control-label col-sm-2']) !!}
-                                        <div class="col-sm-10">
-                                            {!! Form::text('controller_class', null, ['class' => 'form-control', 'placeholder' => 'App\Http\Controllers\ArticleController']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        {!! Form::label('view_path', '视图路径', ['class' => 'control-label col-sm-2']) !!}
-                                        <div class="col-sm-10">
-                                            {!! Form::text('view_path', null, ['class' => 'form-control', 'placeholder' => 'admin.articles']) !!}
+                                            {!! Form::text('table_name', null, ['class' => 'form-control', 'placeholder' => 'articles']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">

@@ -13,13 +13,19 @@
 
 Route::get('/', 'HomeController@index');
 
+Route::group(['prefix' => 'web', 'namespace' => 'App\Http\Controllers\Web'], function () {
+    Route::get('categories/{category}', 'CategoryController@show');
+    Route::get('articles/{slug}.html', 'ArticleController@slug');
+    Route::get('articles/list/{category}', 'ArticleController@lists');
+    Route::get('articles/{article}', 'ArticleController@show');
+});
+
 Route::group(['prefix' => 'admin'], function () {
     Route::get('login', 'AdminController@login');
     Route::get('logout', 'Auth\LoginController@logout');
     Route::post('login', 'Auth\LoginController@login');
     Route::get('captcha', 'Auth\LoginController@captcha');
 });
-
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
@@ -41,7 +47,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('articles/table', 'ArticleController@table');
     Route::post('articles/state', 'ArticleController@state');
     Route::get('articles/sort', 'ArticleController@sort');
-    Route::resource('/articles', 'ArticleController');
+    Route::resource('articles', 'ArticleController');
 
     /**
      * 评论管理
@@ -151,10 +157,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::resource('/templates', 'TemplateController');
 });
-
-Route::get('contents/{slug}.html', 'ContentController@slug');
-Route::get('categories/{slug}.html', 'CategoryController@slug');
-Route::get('categories/list/{category_id}', 'CategoryController@lists');
-Route::get('contents/list/{category_id}', 'ContentController@lists');
-Route::get('contents/{content}', 'ContentController@show');
-

@@ -25,9 +25,7 @@
             $('#method').val('PUT');
             $('#name').val(row.name);
             $('#title').val(row.title);
-            $('#model_class').val(row.model_class);
-            $('#controller_class').val(row.controller_class);
-            $('#view_path').val(row.view_path);
+            $('#table_name').val(row.table_name);
             $('#groups').val(row.groups);
             $('#modal_form').modal('show');
         },
@@ -41,10 +39,8 @@
         $('#method').val('POST');
         $('#name').val('');
         $('#title').val('');
-        $('#model_class').val('');
-        $('#controller_class').val('');
+        $('#table_name').val('');
         $('#groups').val('');
-        $('#view_path').val('');
     });
 
 </script>

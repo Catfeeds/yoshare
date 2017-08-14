@@ -18,6 +18,9 @@
                     @can('@article')
                         <li><a href="/admin/articles"><i class="fa fa-file-o"></i> 文章管理</a></li>
                     @endcan
+                    @can('@article')
+                        <li><a href="/admin/news"><i class="fa fa-file-o"></i> 新闻管理</a></li>
+                    @endcan
                     @can('@comment')
                         <li><a href="/admin/comments"><i class="fa fa-comment"></i> 评论管理</a></li>
                     @endcan
