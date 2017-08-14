@@ -63,11 +63,6 @@ class Category extends Model
 
     public function scopeOwns($query)
     {
-        $query->where('site_id', Auth::user()->site_id);
-    }
-
-    public function scopeNodes($query)
-    {
         if (Auth::user()->roles()->where('id', Role::ID_ADMIN)->exists()) {
             $query->where('site_id', Auth::user()->site_id);
         }
@@ -82,25 +77,21 @@ class Category extends Model
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state ] : '';
     }
 
-    public static function getSiteTree()
+    public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true)
     {
-        $categories = Category::owns()->orderBy('sort')->get();
-
-        $root = new Node();
-        $root->id = 0;
-
-        static::getNodes($root, $categories);
-
-        return $root->nodes;
-    }
-
-    public static function tree($state = '', $parent_id = 0, $show_parent = false)
-    {
-        if (empty($state)) {
-            $categories = Category::nodes()->orderBy('sort')->get();
-        } else {
-            $categories = Category::nodes()->where('state', $state)->orderBy('sort')->get();
-        }
+        $categories = Category::owns()
+            ->where(function ($query) use ($state) {
+                if (!empty($state)) {
+                    $query->where('state', $state);
+                }
+            })
+            ->where(function ($query) use ($module_id) {
+                if (!empty($module_id)) {
+                    $query->where('module_id', $module_id);
+                }
+            })
+            ->orderBy('sort')
+            ->get();
 
         $parent = Category::find($parent_id);
         if (empty($parent)) {

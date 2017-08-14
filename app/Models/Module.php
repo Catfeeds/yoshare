@@ -34,6 +34,11 @@ class Module extends Model
         return $this->name;
     }
 
+    public function getModelClassAttribute()
+    {
+        return __NAMESPACE__ . '\\' . $this->name;
+    }
+
     public function getControllerNameAttribute()
     {
         return $this->name . 'Controller';
@@ -124,6 +129,7 @@ class Module extends Model
             'id' => $module->id,
             'name' => $module->name,
             'title' => $module->title,
+            'model_class' => $module->model_class,
             'fa_icon' => $module->fa_icon,
             'groups' => explode(',', $module->groups),
             'columns' => $module->fields->map(function ($field) {
@@ -212,25 +218,25 @@ class Module extends Model
         //编辑器分组
         foreach ($module->groups as $group) {
             //过滤
-            $group->editors = (array_filter($module->editors, function ($editor) use ($group) {
+            $group->editors = array_filter($module->editors, function ($editor) use ($group) {
                 return $editor->show && $editor->group == $group->name;
-            }));
+            });
 
             //分组排序
-            $group->editors = array_sort($group->editors, function ($editor) {
+            $group->editors = array_values(array_sort($group->editors, function ($editor) {
                 return $editor->index;
-            });
+            }));
         }
 
         //表格列过滤
-        $module->columns = array_values(array_filter($module->columns, function ($column) {
+        $module->columns = array_filter($module->columns, function ($column) {
             return $column->show;
-        }));
+        });
 
         //表格列排序
-        $module->columns = array_sort($module->columns, function ($column) {
+        $module->columns = array_values(array_sort($module->columns, function ($column) {
             return $column->index;
-        });
+        }));
 
         return $module;
     }
@@ -343,18 +349,21 @@ class Module extends Model
 
         //检查代码是否已生成
 
-        //生成controller
-        Generator::createController($module);
-
         //生成model
         Generator::createModel($module);
+
+        //生成controller
+        Generator::createController($module);
 
         //生成view
         Generator::createViews($module);
 
         //生成route
+        Generator::appendRoutes($module);
 
         //生成menu
 
+        //生成permission
+        Generator::appendPermissions($module);
     }
 }

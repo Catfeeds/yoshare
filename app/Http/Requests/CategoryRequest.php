@@ -23,14 +23,14 @@ class CategoryRequest extends Request
     {
         return [
             'name'=> 'required',
-            'model_id'=> 'required',
+            'module_id'=> 'required',
         ];
     }
     public function messages()
     {
         return [
             'name.required' => '请输入栏目名称',
-            'model_id.required' => '请选择模型',
+            'module_id.required' => '请选择模块',
         ];
     }
 }

@@ -145,15 +145,7 @@
             $('#table tbody').sortable('disable');
         },
         onEditableSave: function (field, row, old, $el) {
-            $.ajax({
-                url: "/admin/contents/" + row.id + '/save',
-                data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks, 'views': row.views},
-                success: function (data, status) {
-                },
-                error: function (data) {
-                    alert('Error');
-                },
-            });
+            updateRow(field, row, old, $el);
         },
         queryParams: function (params) {
             var object = $('#form_query input,#form_query select').serializeObject();

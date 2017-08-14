@@ -1,31 +1,4 @@
 <script>
-    var category_id = 0;
-
-    $.ajax({
-        type: 'get',
-        async: false,
-        url: '/admin/categories/tree',
-        success: function (data) {
-            $('#tree').treeview({
-                data: data,
-                searchResultColor: 'white',
-                levels: 4,
-                onNodeSelected: function (event, data) {
-                    category_id = data.id;
-                    $('#category_id').val(data.id);
-                    $('#table').bootstrapTable('refresh');
-                }
-            });
-
-            if (getNodeIndex(parseInt(getQueryString('category_id')), data) >= 0) {
-                $('#tree').treeview('selectNode', [nodeIndex, {silent: false}]);
-            }
-            else{
-                $('#tree').treeview('selectNode', [0, {silent: false}]);
-            }
-        }
-    });
-
     function stateFormatter(value, row, index) {
         var style = 'label-primary';
         switch (row.state_name) {
@@ -55,6 +28,18 @@
 
     function actionFormatter(value, row, index) {
         return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
+    }
+
+    function updateRow(field, row, old, $el) {
+        $.ajax({
+            url: '/admin/__module_path__/' + row.id + '/save',
+            data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks},
+            success: function (data, status) {
+            },
+            error: function (data) {
+                alert('Error');
+            },
+        });
     }
 
     window.actionEvents = {

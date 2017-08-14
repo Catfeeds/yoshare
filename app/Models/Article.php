@@ -9,6 +9,8 @@ use Response;
 
 class Article extends BaseModule
 {
+    const MODULE_ID = 1;
+
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;

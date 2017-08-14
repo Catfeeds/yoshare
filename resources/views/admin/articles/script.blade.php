@@ -4,7 +4,7 @@
     $.ajax({
         type: 'get',
         async: false,
-        url: '/admin/categories/tree',
+        url: '/admin/articles/categories',
         success: function (data) {
             $('#tree').treeview({
                 data: data,

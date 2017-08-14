@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Module;
+use App\Models\__module_name__;
 use Gate;
 use Request;
 
+/**
+ * __module_title__
+ */
 class __controller__ extends Controller
 {
     protected $base_url = '/admin/__module_path__';
@@ -15,7 +19,7 @@ class __controller__ extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(__module_id__);
+        $this->module = Module::transform(__module_name__::MODULE_ID);
     }
 
     public function index()
@@ -34,10 +38,7 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
-        //用于取消时跳转
-        $back_url = $this->base_url . '?category_id=' . Request::get('category_id');
-
-        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url]);
     }
 
     public function edit($id)
@@ -47,32 +48,40 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
-        $content = call_user_func([$this->module->model_class, 'find'], $id);
+        $item = call_user_func([$this->module->model_class, 'find'], $id);
 
-        //用于取消时跳转
-        $back_url = $this->base_url . '?category_id=' . $content->category_id;
-
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $content, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $item, 'base_url' => $this->base_url]);
     }
 
     public function store()
     {
         $input = Request::all();
 
-        $content = Content::stores($this->module, $input);
+        Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url . '?category_id=' . $content->category_id);
+        return redirect($this->base_url);
     }
 
     public function update($id)
     {
         $input = Request::all();
 
-        $content = Content::updates($this->module, $id, $input);
+        Content::updates($this->module, $id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->base_url . '?category_id=' . $content->category_id);
+        return redirect($this->base_url);
+    }
+
+    public function save($id)
+    {
+        $item = __module_name__::find($id);
+
+        if (empty($item)) {
+            return;
+        }
+
+        $item->update(Request::all());
     }
 
     public function sort()

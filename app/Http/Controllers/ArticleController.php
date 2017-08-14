@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use Gate;
 use Request;
+use Response;
 
 /**
  * 复制需要修改
@@ -25,7 +27,7 @@ class ArticleController extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(Module::ID_ARTICLE);
+        $this->module = Module::transform(Article::MODULE_ID);
     }
 
     public function index()
@@ -98,5 +100,10 @@ class ArticleController extends Controller
     public function table()
     {
         return Article::table();
+    }
+
+    public function categories()
+    {
+        return Response::json(Category::tree('', 0, Article::MODULE_ID));
     }
 }

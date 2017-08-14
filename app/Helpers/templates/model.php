@@ -9,6 +9,8 @@ use Response;
 
 class __model__ extends BaseModule
 {
+    const MODULE_ID = __module_id__;
+
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;
@@ -27,39 +29,33 @@ class __model__ extends BaseModule
         9 => '@__permission__-publish',
     ];
 
-    protected $table = '__table_name__';
+    protected $table = '__table__';
 
     protected $fillable = [__fillable__];
 
     protected $dates = [__dates__];
 
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'refer');
-    }
-
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
 
-        $content = static::create($input);
+        $item = static::create($input);
 
-        return $content;
+        return $item;
     }
 
     public static function updates($id, $input)
     {
-        $content = static::find($id);
+        $item = static::find($id);
 
-        $content->update($input);
+        $item->update($input);
 
-        return $content;
+        return $item;
     }
 
     public static function table()
     {
         $filters = Request::all();
-        $category_id = $filters['category_id'];
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
@@ -67,21 +63,21 @@ class __model__ extends BaseModule
         $ds = new DataSource();
         $items = static::with('user')
             ->filter($filters)
-            ->where('category_id', $category_id)
             ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
             ->get();
 
         $ds->total = static::filter($filters)
-            ->where('category_id', $category_id)
             ->count();
 
         $items->transform(function ($item) {
             $attributes = $item->getAttributes();
             $attributes['user_name'] = empty($item->user) ? '' : $item->user->name;
             $attributes['state_name'] = $item->stateName();
-            $attributes['published_at'] = strtotime($item->published_at) ? $item->published_at->toDateTimeString() : '';
+            foreach ($item->dates as $date) {
+                $attributes[$date] = empty($item->$date) ? '' : $item->$date->toDateTimeString();
+            }
             $attributes['created_at'] = empty($item->created_at) ? '' : $item->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($item->updated_at) ? '' : $item->updated_at->toDateTimeString();
             return $attributes;

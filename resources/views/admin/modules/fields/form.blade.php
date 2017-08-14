@@ -114,7 +114,7 @@
                                             <div class="form-group">
                                                 {!! Form::label('editor_type', '编辑器类型', ['class' => 'control-label col-sm-2']) !!}
                                                 <div class="col-sm-4">
-                                                    {!! Form::select('editor_type', \App\Models\ModuleField::TYPES, null, ['class' => 'form-control']) !!}
+                                                    {!! Form::select('editor_type', \App\Models\ModuleField::EDITOR_TYPES, null, ['class' => 'form-control']) !!}
                                                 </div>
                                                 {!! Form::label('editor_options', '编辑器选项:', ['class' => 'control-label col-sm-2']) !!}
                                                 <div class="col-sm-4">

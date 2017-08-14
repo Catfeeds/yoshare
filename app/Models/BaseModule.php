@@ -20,8 +20,6 @@ class BaseModule extends Model
 
     const STATE_PERMISSIONS = [];
 
-    protected $dates = ['deleted_at'];
-
     public function site()
     {
         return $this->belongsTo(Site::class);
@@ -55,6 +53,11 @@ class BaseModule extends Model
     public function videos()
     {
         return $this->files()->where('type', File::TYPE_VIDEO)->orderBy('sort')->get();
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'refer');
     }
 
     public function setCreatedAt($value)
@@ -101,20 +104,20 @@ class BaseModule extends Model
             return;
         }
 
-        $contents = static::withTrashed()
+        $items = static::withTrashed()
             ->whereIn('id', $ids)
             ->get();
-        foreach ($contents as $content) {
-            $content->state = $state;
-            $content->save();
+        foreach ($items as $item) {
+            $item->state = $state;
+            $item->save();
             if ($state == static::STATE_DELETED) {
-                $content->delete();
-            } else if ($content->trashed()) {
-                $content->restore();
+                $item->delete();
+            } else if ($item->trashed()) {
+                $item->restore();
             }
             if ($state == static::STATE_PUBLISHED) {
-                $content->published_at = Carbon::now();
-                $content->save();
+                $item->published_at = Carbon::now();
+                $item->save();
             }
         }
     }

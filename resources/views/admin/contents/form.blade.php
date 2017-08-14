@@ -15,7 +15,7 @@
     @foreach($module->groups as $group)
         @if (count($group->editors) > 0)
             <div id="{{ 'tab_' . $group->name }}" class="tab-pane fade in {{ $loop->first ? 'active' : '' }} padding-t-15">
-                <?php $position = 0; ?>
+                <?php $position = 0; $index = 0; ?>
                 @foreach($group->editors as $editor)
                     @if ($editor->show)
                         @if ($position == 0)
@@ -71,10 +71,9 @@
                                 @endif
                                 <?php
                                 $position += $editor->columns + 1;
-                                if ($loop->last || $position + next($group->editors)->columns + 1 > 12) {
+                                if ($loop->last || $position + $group->editors[$index + 1]->columns + 1 > 12) {
                                     $position = 0;
                                 }
-                                prev($group->editors)
                                 ?>
                                 @if($position == 0 || $position == 12)
                             </div>
@@ -292,6 +291,7 @@
                             </script>
                         @endif
                     @endif
+                    <?php $index++ ?>
                 @endforeach
             </div>
         @endif

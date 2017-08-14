@@ -138,7 +138,7 @@ class CategoryController extends Controller
 
     public function tree()
     {
-        return Response::json(Category::tree('', 0, true));
+        return Response::json(Category::tree('', 0));
     }
 
     public function lists($category_id)
