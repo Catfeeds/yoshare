@@ -1,4 +1,12 @@
 <script>
+    function booleanFormatter(value, row, index) {
+        if (value == 1) {
+            return '<i class="fa fa-check"></i>';
+        } else {
+            return '';
+        }
+    }
+
     function stateFormatter(value, row, index) {
         var style = 'label-primary';
         switch (row.state_name) {
@@ -27,6 +35,8 @@
             $('#title').val(row.title);
             $('#table_name').val(row.table_name);
             $('#groups').val(row.groups);
+            $('#is_lock').bootstrapSwitch('state', row.is_lock);
+            $('#is_lock').next().val(row.is_lock);
             $('#modal_form').modal('show');
         },
         'click .field': function (e, value, row, index) {
@@ -41,6 +51,8 @@
         $('#title').val('');
         $('#table_name').val('');
         $('#groups').val('');
+        $('#is_lock').bootstrapSwitch('state', false);
+        $('#is_lock').next().val(0);
     });
 
 </script>

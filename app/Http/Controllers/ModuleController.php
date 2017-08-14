@@ -115,6 +115,16 @@ class ModuleController extends Controller
 
     public function migrate($id)
     {
+        $module = Module::find($id);
+        if (empty($module)) {
+            \Session::flash('flash_warning', '无此记录');
+            return redirect()->back();
+        }
+        if ($module->is_lock) {
+            \Session::flash('flash_warning', '此模块已锁定');
+            return redirect()->back();
+        }
+
         Module::migrate($id);
 
         \Session::flash('flash_success', '生成数据结构成功!');
@@ -123,6 +133,16 @@ class ModuleController extends Controller
 
     public function generate($id)
     {
+        $module = Module::find($id);
+        if (empty($module)) {
+            \Session::flash('flash_warning', '无此记录');
+            return redirect()->back();
+        }
+        if ($module->is_lock) {
+            \Session::flash('flash_warning', '此模块已锁定');
+            return redirect()->back();
+        }
+
         Module::generate($id);
 
         \Session::flash('flash_success', '生成模块代码成功!');

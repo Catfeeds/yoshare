@@ -27,8 +27,9 @@ class Generator
 
         $content = static::replace($module, $content);
 
-        $filable = [];
+        $fillable = [];
         $dates = [];
+        $entities = [];
         foreach ($module->fields as $field) {
             if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
@@ -36,12 +37,15 @@ class Generator
             if ($field->type == ModuleField::TYPE_DATETIME) {
                 $dates[] = '\'' . $field->name . '\'';
             }
-            $filable[] = '\'' . $field->name . '\'';
+            else if ($field->type == ModuleField::TYPE_ENTITY) {
+                $entities[] = '\'' . $field->name . '\'';
+            }
+            $fillable[] = '\'' . $field->name . '\'';
         }
 
-
-        $content = str_replace('__fillable__', implode(',', $filable), $content);
+        $content = str_replace('__fillable__', implode(',', $fillable), $content);
         $content = str_replace('__dates__', implode(',', $dates), $content);
+        $content = str_replace('__entities__', implode(',', $entities), $content);
 
         file_put_contents(base_path('app/Models/' . $module->model_name . '.php'), $content);
     }

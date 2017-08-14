@@ -35,6 +35,8 @@ class __model__ extends BaseModule
 
     protected $dates = [__dates__];
 
+    protected $entities = [__entities__];
+
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
@@ -73,11 +75,15 @@ class __model__ extends BaseModule
 
         $items->transform(function ($item) {
             $attributes = $item->getAttributes();
-            $attributes['user_name'] = empty($item->user) ? '' : $item->user->name;
-            $attributes['state_name'] = $item->stateName();
+            foreach ($item->entities as $entity) {
+                $entity_map = str_replace('_id', '_name', $entity);
+                $entity = str_replace('_id', '', $entity);
+                $attributes[$entity_map] = empty($item->$entity) ? '' : $item->$entity->name;
+            }
             foreach ($item->dates as $date) {
                 $attributes[$date] = empty($item->$date) ? '' : $item->$date->toDateTimeString();
             }
+            $attributes['state_name'] = $item->stateName();
             $attributes['created_at'] = empty($item->created_at) ? '' : $item->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($item->updated_at) ? '' : $item->updated_at->toDateTimeString();
             return $attributes;
@@ -113,8 +119,7 @@ class __model__ extends BaseModule
                 //下移
                 $select->sort = $place->sort - 1;
                 //减小最近100条记录的排序值
-                self::where('category_id', $select->category_id)
-                    ->where('sort', '<', $place->sort)
+                self::where('sort', '<', $place->sort)
                     ->orderBy('sort', 'desc')
                     ->limit(100)
                     ->decrement('sort');
@@ -122,8 +127,7 @@ class __model__ extends BaseModule
                 //上移
                 $select->sort = $place->sort + 1;
                 //增大最近100条记录的排序值
-                self::where('category_id', $select->category_id)
-                    ->where('sort', '>', $place->sort)
+                self::where('sort', '>', $place->sort)
                     ->orderBy('sort', 'asc')
                     ->limit(100)
                     ->increment('sort');

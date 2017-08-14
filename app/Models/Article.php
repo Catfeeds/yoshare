@@ -127,23 +127,21 @@ class Article extends BaseModule
 
         try {
             if ($move_down) {
-                //下移
-                $select->sort = $place->sort - 1;
-                //减小最近100条记录的排序值
-                self::where('category_id', $select->category_id)
-                    ->where('sort', '<', $place->sort)
-                    ->orderBy('sort', 'desc')
-                    ->limit(100)
-                    ->decrement('sort');
-            } else {
-                //上移
-                $select->sort = $place->sort + 1;
-                //增大最近100条记录的排序值
-                self::where('category_id', $select->category_id)
-                    ->where('sort', '>', $place->sort)
-                    ->orderBy('sort', 'asc')
-                    ->limit(100)
+                //序号减小
+                //增加调整区间记录的序号值
+                self::where('sort', '>=', $place->sort)
+                    ->where('sort', '<', $select->sort)
+                    ->where('category_id', $select->category_id)
                     ->increment('sort');
+                $select->sort = $place->sort;
+            } else {
+                //序号增加
+                //减少调整区间记录的序号值
+                self::where('sort', '<=', $place->sort)
+                    ->where('sort', '>', $select->sort)
+                    ->where('category_id', $select->category_id)
+                    ->decrement('sort');
+                $select->sort = $place->sort;
             }
         } catch (Exception $e) {
             return Response::json([

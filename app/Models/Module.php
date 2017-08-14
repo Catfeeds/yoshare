@@ -26,6 +26,7 @@ class Module extends Model
         'title',
         'table_name',
         'groups',
+        'is_lock',
         'state',
     ];
 
@@ -103,6 +104,7 @@ class Module extends Model
                 'title' => $module->title,
                 'table_name' => $module->table_name,
                 'groups' => $module->groups,
+                'is_lock' => $module->is_lock,
                 'sort' => $module->sort,
                 'state' => $module->state,
                 'state_name' => $module->stateName(),
@@ -242,13 +244,11 @@ class Module extends Model
     }
 
     /**
-     * 生成数据表
-     * @param $id
+     * 生成数据结构
+     * @param $module
      */
-    public static function migrate($id)
+    public static function migrate($module)
     {
-        $module = Module::find($id);
-
         if (!Schema::hasTable($module->table_name)) {
             Schema::create($module->table_name, function (Blueprint $table) {
                 $table->increments('id');
@@ -339,14 +339,12 @@ class Module extends Model
     }
 
     /**
-     * 生成代码
+     * 生成模块代码
      *
      * @param $id
      */
-    public static function generate($id)
+    public static function generate($module)
     {
-        $module = Module::find($id);
-
         //检查代码是否已生成
 
         //生成model

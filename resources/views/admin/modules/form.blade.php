@@ -25,8 +25,12 @@
                                     </div>
                                     <div class="form-group">
                                         {!! Form::label('table_name', '数据表名', ['class' => 'control-label col-sm-2']) !!}
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-4">
                                             {!! Form::text('table_name', null, ['class' => 'form-control', 'placeholder' => 'articles']) !!}
+                                        </div>
+                                        {!! Form::label('is_lock', '是否锁定:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::checkbox('is_lock', 1, null, ['class' => 'switch']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
