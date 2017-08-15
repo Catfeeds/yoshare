@@ -66,7 +66,7 @@
                                 @else
                                     {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
-                                        {!! Form::text($editor->name, null, ['class' => 'form-control', $editor->readonly ? 'readonly' : '']) !!}
+                                        {!! Form::text($editor->name, null, ['class' => 'form-control', $editor->required ? 'required' : '', $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
                                 @endif
                                 <?php

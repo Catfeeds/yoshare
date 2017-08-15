@@ -8,6 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Request;
 use Response;
 use Schema;
+use Validator;
 
 class Module extends Model
 {
@@ -131,6 +132,7 @@ class Module extends Model
             'id' => $module->id,
             'name' => $module->name,
             'title' => $module->title,
+            'table_name' => $module->table_name,
             'model_class' => $module->model_class,
             'fa_icon' => $module->fa_icon,
             'groups' => explode(',', $module->groups),
@@ -161,6 +163,7 @@ class Module extends Model
                     'options' => $field->editor_options,
                     'columns' => $field->editor_columns,
                     'rows' => $field->editor_rows,
+                    'required' => $field->required,
                     'readonly' => $field->editor_readonly,
                     'group' => $field->editor_group,
                     'index' => $field->editor_index,
@@ -175,6 +178,9 @@ class Module extends Model
                     'type' => $field->type,
                     'default' => $field->default,
                     'required' => $field->required,
+                    'unique' => 1,
+                    'min_length' => 3,
+                    'max_length' => 10,
                     'system' => $field->system,
                     'index' => $field->index,
                     'column' => [
@@ -199,6 +205,7 @@ class Module extends Model
                         'options' => $field->editor_options,
                         'columns' => $field->editor_columns,
                         'rows' => $field->editor_rows,
+                        'required' => $field->required,
                         'readonly' => $field->editor_readonly,
                         'group' => $field->editor_group,
                         'index' => $field->editor_index,
@@ -341,7 +348,7 @@ class Module extends Model
     /**
      * 生成模块代码
      *
-     * @param $id
+     * @param $module
      */
     public static function generate($module)
     {
@@ -363,5 +370,39 @@ class Module extends Model
 
         //生成permission
         Generator::appendPermissions($module);
+    }
+
+    public static function validate($module, $input)
+    {
+        $rules = [];
+        $messages = [];
+        foreach ($module->fields as $field) {
+            $rule = '';
+            if ($field->required) {
+                $rule .= 'required|';
+                $messages[$field->name . '.required'] = ($field->type == ModuleField::TYPE_ENTITY ? '请选择' : '请输入') . $field->label;
+            }
+            if ($field->min_length != 0) {
+                $rule .= 'min:' . $field->min_length . '|';
+                $messages[$field->name . '.min'] = $field->label . '至少' . $field->min_length . '个字符';
+            }
+            if ($field->max_length != 0) {
+                $rule .= 'max:' . $field->max_length . '|';
+                $messages[$field->name . '.max'] = $field->label . '最多' . $field->max_length . '个字符';
+            }
+            if ($field->unique) {
+                $rule .= 'unique:' . $module->table_name;
+                $messages[$field->name . '.unique'] = $field->label . '已存在';
+            }
+            if (in_array($field->type, [ModuleField::TYPE_INTEGER, ModuleField::TYPE_FLOAT])) {
+                $rule .= 'digits|';
+                $messages[$field->name . '.unique'] = $field->label . '请输入数字';
+            }
+            if ($rule != "") {
+                $rules[$field->name] = trim($rule, '|');
+            }
+        }
+
+        return Validator::make($input, $rules, $messages);
     }
 }

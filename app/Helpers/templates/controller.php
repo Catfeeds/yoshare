@@ -57,6 +57,11 @@ class __controller__ extends Controller
     {
         $input = Request::all();
 
+        $validator = Module::validate($this->module, $input);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
@@ -66,6 +71,11 @@ class __controller__ extends Controller
     public function update($id)
     {
         $input = Request::all();
+
+        $validator = Module::validate($this->module, $input);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         Content::updates($this->module, $id, $input);
 

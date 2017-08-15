@@ -125,7 +125,7 @@ class ModuleController extends Controller
             return redirect()->back();
         }
 
-        Module::migrate($id);
+        Module::migrate($module);
 
         \Session::flash('flash_success', '生成数据结构成功!');
         return redirect()->back();
@@ -143,7 +143,7 @@ class ModuleController extends Controller
             return redirect()->back();
         }
 
-        Module::generate($id);
+        Module::generate($module);
 
         \Session::flash('flash_success', '生成模块代码成功!');
         return redirect()->back();
