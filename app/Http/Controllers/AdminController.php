@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Session;
+
 class AdminController extends Controller
 {
     public function __construct()

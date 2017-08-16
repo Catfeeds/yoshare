@@ -382,11 +382,11 @@ class Module extends Model
                 $rule .= 'required|';
                 $messages[$field->name . '.required'] = ($field->type == ModuleField::TYPE_ENTITY ? '请选择' : '请输入') . $field->label;
             }
-            if ($field->min_length != 0) {
+            if ($field->min_length > 0) {
                 $rule .= 'min:' . $field->min_length . '|';
                 $messages[$field->name . '.min'] = $field->label . '至少' . $field->min_length . '个字符';
             }
-            if ($field->max_length != 0) {
+            if ($field->max_length > 0) {
                 $rule .= 'max:' . $field->max_length . '|';
                 $messages[$field->name . '.max'] = $field->label . '最多' . $field->max_length . '个字符';
             }

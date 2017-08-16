@@ -20,7 +20,7 @@
     <script src="/plugins/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Font Awesome -->
-    <link href="/plugins/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/plugins/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Theme style -->
     <link rel="stylesheet" href="/plugins/admin-lte/2.3.7/css/AdminLTE.min.css">
@@ -86,6 +86,14 @@
 
     <!--Echarts-->
     <script src="/plugins/echarts/3.3.2/echarts.min.js"></script>
+
+    <!--Nestable-->
+    <link href="/plugins/nestable/jquery.nestable.css" rel="stylesheet"/>
+    <script src="/plugins/nestable/jquery.nestable.js"></script>
+
+    <!--FontAwesome-IconPicker-->
+    <link href="/plugins/fontawesome-iconpicker/1.3.0/css/fontawesome-iconpicker.min.css" rel="stylesheet"/>
+    <script src="/plugins/fontawesome-iconpicker/1.3.0/js/fontawesome-iconpicker.min.js"></script>
 
     <link href="/css/admin/app.css" rel="stylesheet">
     <script src="/js/admin/app.js"></script>

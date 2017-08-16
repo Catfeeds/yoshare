@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            @include('admin.modals.confirm', ['message' => '您确认删除该字段吗？'])
+                            @include('admin.layouts.confirm', ['message' => '您确认删除该字段吗？'])
                             @include('admin.layouts.flash')
                             @include('admin.modules.fields.form')
                             @include('admin.modules.fields.table')

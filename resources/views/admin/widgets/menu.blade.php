@@ -84,6 +84,9 @@
                     @can('@module')
                         <li><a href="/admin/modules"><i class="fa fa-book"></i> 模块管理</a></li>
                     @endcan
+                    @can('@menu')
+                        <li><a href="/admin/menus"><i class="fa fa-book"></i> 菜单管理</a></li>
+                    @endcan
                     @can('@role')
                         <li><a href="/admin/roles"><i class="fa fa-users"></i> 角色管理</a></li>
                     @endcan

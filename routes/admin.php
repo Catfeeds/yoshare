@@ -44,7 +44,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 个人信息
      */
-    Route::resource('/profiles', 'ProfileController');
+    Route::resource('profiles', 'ProfileController');
 
     /**
      * 用户管理
@@ -53,41 +53,41 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('users/tree/{id}', 'UserController@tree');
     Route::post('users/grant/{id}', 'UserController@grant');
     Route::get('users/table', 'UserController@table');
-    Route::resource('/users', 'UserController');
+    Route::resource('users', 'UserController');
     Route::get('users/{id}/delete', 'UserController@destroy');
 
     /**
      * 角色管理
      */
     Route::get('roles/table', 'RoleController@table');
-    Route::resource('/roles', 'RoleController');
+    Route::resource('roles', 'RoleController');
     Route::get('roles/{id}/delete', 'RoleController@destroy');
 
     /**
      * 参数设置
      */
     Route::get('options/table', 'OptionController@table');
-    Route::resource('/options', 'OptionController');
+    Route::resource('options', 'OptionController');
 
     /**
      * 数据字典
      */
     Route::get('dictionaries/table', 'DictionaryController@table');
-    Route::resource('/dictionaries', 'DictionaryController');
+    Route::resource('dictionaries', 'DictionaryController');
     Route::get('dictionaries/{id}/delete', 'DictionaryController@destroy');
 
     /**
      * 应用管理
      */
     Route::get('apps/table', 'AppController@table');
-    Route::resource('/apps', 'AppController');
+    Route::resource('apps', 'AppController');
     Route::get('apps/{id}/delete', 'AppController@destroy');
 
     /**
      * 站点管理
      */
     Route::get('sites/table', 'SiteController@table');
-    Route::resource('/sites', 'SiteController');
+    Route::resource('sites', 'SiteController');
 
     /**
      * 模块管理
@@ -96,7 +96,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('modules/{id}/save', 'ModuleController@save');
     Route::get('modules/{id}/migrate', 'ModuleController@migrate');
     Route::get('modules/{id}/generate', 'ModuleController@generate');
-    Route::resource('/modules', 'ModuleController');
+    Route::resource('modules', 'ModuleController');
 
     /**
      * 字段管理
@@ -106,9 +106,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('modules/fields', 'ModuleFieldController');
 
     /**
+     * 菜单管理
+     */
+    Route::get('menus/modules', 'MenuController@modules');
+    Route::post('menus/sort', 'MenuController@sort');
+    Route::resource('menus', 'MenuController');
+
+    /**
      * 模板设置
      */
-    Route::resource('/templates', 'TemplateController');
+    Route::resource('templates', 'TemplateController');
 
     /**
      * 栏目管理
@@ -117,7 +124,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/table/{category_id}', 'CategoryController@table');
     Route::get('categories/create/{category_id}', 'CategoryController@create');
     Route::get('categories/{id}/save', 'CategoryController@save');
-    Route::resource('/categories', 'CategoryController');
+    Route::resource('categories', 'CategoryController');
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
     /**
