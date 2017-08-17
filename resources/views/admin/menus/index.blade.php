@@ -47,32 +47,7 @@
                     <div class="box box-info">
                         <div class="box-body">
                             <div class="dd" id="menu-nestable">
-                                <ol class="dd-list">
-                                    @foreach($menus as $menu)
-                                        <li class="dd-item dd3-item" data-id="{{ $menu->id }}">
-                                            <div class="dd-handle dd3-handle"></div>
-                                            <div class="dd3-content"><i class="fa {{ $menu->icon }}"></i> {{$menu->name}}
-                                                <button class="btn btn-xs btn-danger pull-right btn-menu-remove" data-id="{{ $menu->id }}"><i class="fa fa-times"></i></button>
-                                                <button class="btn btn-xs btn-success pull-right btn-menu-edit" data-id="{{ $menu->id }}" data-name="{{ $menu->name }}" data-icon="{{ $menu->icon }}" data-url="{{ $menu->url }}"><i class="fa fa-edit"></i></button>
-                                            </div>
-                                            @if(count($menu->children) > 0)
-                                                <ol class="dd-list">
-                                                    @endif
-                                                    @foreach ($menu->children()->orderBy('sort')->get() as $child)
-                                                        <li class="dd-item dd3-item" data-id="{{ $child->id }}">
-                                                            <div class="dd-handle dd3-handle"></div>
-                                                            <div class="dd3-content"><i class="fa {{ $child->icon }}"></i> {{$child->name}}
-                                                                <button class="btn btn-xs btn-danger pull-right btn-menu-remove" data-id="{{ $child->id }}"><i class="fa fa-times"></i></button>
-                                                                <button class="btn btn-xs btn-success pull-right btn-menu-edit" data-id="{{ $child->id }}" data-name="{{ $child->name }}" data-icon="{{ $child->icon }}" data-url="{{ $child->url }}"><i class="fa fa-edit"></i></button>
-                                                            </div>
-                                                        </li>
-                                                    @endforeach
-                                                    @if(count($menu->children) > 0)
-                                                </ol>
-                                            @endif
-                                        </li>
-                                    @endforeach
-                                </ol>
+                                {!! \App\Helpers\HtmlBuilder::menuEditor($menus) !!}
                             </div>
                         </div>
                     </div>

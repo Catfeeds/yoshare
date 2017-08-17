@@ -5,39 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">菜单导航</li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-edit"></i>
-                    <span class="menu-item-top">内容管理</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    @can('@category')
-                        <li><a href="/admin/categories"><i class="fa fa-columns"></i> 栏目管理</a></li>
-                    @endcan
-                    @can('@article')
-                        <li><a href="/admin/articles"><i class="fa fa-file-o"></i> 文章管理</a></li>
-                    @endcan
-                    @can('@article')
-                        <li><a href="/admin/news"><i class="fa fa-file-o"></i> 新闻管理</a></li>
-                    @endcan
-                    @can('@comment')
-                        <li><a href="/admin/comments"><i class="fa fa-comment"></i> 评论管理</a></li>
-                    @endcan
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-user"></i>
-                    <span class="menu-item-top">会员管理</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    @can('@member')
-                        <li><a href="/admin/members"><i class="fa fa-user"></i> 会员管理</a></li>
-                    @endcan
-                </ul>
-            </li>
+            {!! \App\Helpers\HtmlBuilder::menuTree(auth()->user()->site->menus()->where('parent_id', 0)->orderBy('sort')->get()) !!}
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-calendar"></i>
@@ -104,7 +72,6 @@
     $(document).ready(function () {
         var url = window.location.pathname;
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li').addClass('active');  //二级链接高亮
-        $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li.treeview').addClass('active');  //一级栏目[含二级链接]高亮
-        $('.sidebar-menu>li').find('a[href="' + url + '"]').closest('li').addClass('active');  //一级栏目[不含二级链接]高亮
+        $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li.treeview').addClass('active');  //一级链接高亮
     });
 </script>

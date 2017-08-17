@@ -21,10 +21,7 @@ class MenuController extends Controller
             $this->middleware('deny403');
         }
 
-        $menus = Menu::owns()
-            ->where('parent_id', 0)
-            ->orderBy('sort')
-            ->get();
+        $menus = auth()->user()->site->menus()->where('parent_id', 0)->orderBy('sort')->get();
 
         return view('admin.menus.index', compact('menus'));
     }

@@ -16,6 +16,11 @@ class Site extends Model
         'master_secret',
     ];
 
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
+
     public static function getNames() {
         $sites = Site::all();
         $names = [];
