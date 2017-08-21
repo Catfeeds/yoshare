@@ -30,6 +30,7 @@ class MenuController extends Controller
     {
         $input = $request->all();
         $input['site_id'] = auth()->user()->site_id;
+        $input['sort'] = auth()->user()->site->menus()->count();
 
         Menu::create($input);
 
@@ -61,7 +62,9 @@ class MenuController extends Controller
             return;
         }
 
+        $menu->children()->delete();
         $menu->delete();
+
         \Session::flash('flash_success', '删除成功');
     }
 
@@ -76,6 +79,7 @@ class MenuController extends Controller
                 'text' => $module->title,
                 'icon' => 'fa ' . $module->icon,
                 'url' => '/admin/' . $module->path,
+                'permission' => '@' . strtolower($module->name),
                 'fa_icon' => $module->icon,
             ];
         }

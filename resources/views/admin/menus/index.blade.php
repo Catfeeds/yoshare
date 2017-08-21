@@ -33,6 +33,9 @@
                                 {!! Form::text('url', '#', ['class' => 'form-control', 'placeholder' => '请输入菜单URL', 'required', 'id' => 'url']) !!}
                             </div>
                             <div class="form-group">
+                                {!! Form::text('permission', '', ['class' => 'form-control', 'placeholder' => '请输入权限编码', 'id' => 'url']) !!}
+                            </div>
+                            <div class="form-group">
                                 <div class="input-group">
                                     {!! Form::text('icon', 'fa-cube', ['class' => 'form-control', 'placeholder' => '请选择菜单图标', 'id' => 'icon']) !!}
                                     <span class="input-group-addon"></span>
@@ -76,6 +79,9 @@
                                         {!! Form::text('url', '#', ['class' => 'form-control', 'placeholder' => '请输入菜单URL', 'required']) !!}
                                     </div>
                                     <div class="form-group">
+                                        {!! Form::text('permission', '', ['class' => 'form-control', 'placeholder' => '请输入权限编码', 'id' => 'url']) !!}
+                                    </div>
+                                    <div class="form-group">
                                         <div class="input-group">
                                             {!! Form::text('icon', 'fa-cube', ['class' => 'form-control', 'placeholder' => '请选择菜单图标']) !!}
                                             <span class="input-group-addon"></span>
@@ -108,6 +114,7 @@
                     onNodeSelected: function (event, data) {
                         $('#form_create input[name=name]').val(data.text);
                         $('#form_create input[name=url]').val(data.url);
+                        $('#form_create input[name=permission]').val(data.permission);
                         $('#form_create input[name=icon]').val(data.fa_icon);
                     }
                 });
@@ -134,10 +141,12 @@
             var id = $(this).data('id');
             var name = $(this).data('name');
             var url = $(this).data('url');
+            var permission = $(this).data('permission');
             var icon = $(this).data('icon');
             $('#form_edit').attr('action', '/admin/menus/' + id);
             $('#form_edit input[name=name]').val(name);
             $('#form_edit input[name=url]').val(url);
+            $('#form_edit input[name=permission]').val(permission);
             $('#form_edit input[name=icon]').val(icon);
             $("#modal_edit").modal('show');
         });

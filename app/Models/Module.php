@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\Generator;
+use App\Helpers\CodeBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Request;
@@ -178,9 +178,9 @@ class Module extends Model
                     'type' => $field->type,
                     'default' => $field->default,
                     'required' => $field->required,
-                    'unique' => 1,
-                    'min_length' => 3,
-                    'max_length' => 10,
+                    'unique' => $field->unique,
+                    'min_length' => $field->min_length,
+                    'max_length' => $field->max_length,
                     'system' => $field->system,
                     'index' => $field->index,
                     'column' => [
@@ -355,21 +355,21 @@ class Module extends Model
         //检查代码是否已生成
 
         //生成model
-        Generator::createModel($module);
+        CodeBuilder::createModel($module);
 
         //生成controller
-        Generator::createController($module);
+        CodeBuilder::createController($module);
 
         //生成view
-        Generator::createViews($module);
+        CodeBuilder::createViews($module);
 
         //生成route
-        Generator::appendRoutes($module);
+        CodeBuilder::appendRoutes($module);
 
         //生成menu
 
         //生成permission
-        Generator::appendPermissions($module);
+        CodeBuilder::appendPermissions($module);
     }
 
     public static function validate($module, $input)

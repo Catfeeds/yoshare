@@ -58,13 +58,23 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                {!! Form::label('required', '必须:', ['class' => 'control-label col-sm-2']) !!}
+                                                {!! Form::label('required', '必填:', ['class' => 'control-label col-sm-2']) !!}
                                                 <div class="col-sm-4">
                                                     {!! Form::checkbox('required', 1, null, ['class' => 'switch']) !!}
                                                 </div>
-                                                {!! Form::label('system', '系统字段:', ['class' => 'control-label col-sm-2']) !!}
+                                                {!! Form::label('unique', '唯一:', ['class' => 'control-label col-sm-2']) !!}
                                                 <div class="col-sm-4">
-                                                    {!! Form::checkbox('system', 1, null, ['class' => 'switch']) !!}
+                                                    {!! Form::checkbox('unique', 1, null, ['class' => 'switch']) !!}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                {!! Form::label('min_length', '最小长度:', ['class' => 'control-label col-sm-2']) !!}
+                                                <div class="col-sm-4">
+                                                    {!! Form::text('min_length', 0, ['class' => 'form-control']) !!}
+                                                </div>
+                                                {!! Form::label('max_length', '最大长度:', ['class' => 'control-label col-sm-2']) !!}
+                                                <div class="col-sm-4">
+                                                    {!! Form::text('max_length', 0, ['class' => 'form-control']) !!}
                                                 </div>
                                             </div>
                                         </div>

@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\ModuleField;
 use App\Models\Permission;
 
-class Generator
+class CodeBuilder
 {
     public static function replace($module, $content)
     {

@@ -66,9 +66,11 @@
             $('#default').val(row.default);
             $('#required').bootstrapSwitch('state', row.required);
             $('#required').next().val(row.required);
-            $('#system').bootstrapSwitch('state', row.system);
-            $('#system').val(row.system);
-            $('#system').next().val(row.system);
+            $('#unique').bootstrapSwitch('state', row.unique);
+            $('#unique').val(row.unique);
+            $('#unique').next().val(row.unique);
+            $('#min_length').val(row.min_length);
+            $('#max_length').val(row.max_length);
             $('#index').val(row.index);
             $('#column_show').bootstrapSwitch('state', row.column_show);
             $('#column_show').next().val(row.column_show);
@@ -106,8 +108,10 @@
         $('#default').val('');
         $('#required').bootstrapSwitch('state', false);
         $('#required').next().val(0);
-        $('#system').bootstrapSwitch('state', false);
-        $('#system').next().val(0);
+        $('#unique').bootstrapSwitch('state', false);
+        $('#unique').next().val(0);
+        $('#min_length').val(0);
+        $('#max_length').val(0);
         $('#index').val(0);
         $('#column_show').bootstrapSwitch('state', false);
         $('#column_show').next().val(0);

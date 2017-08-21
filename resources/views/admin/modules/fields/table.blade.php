@@ -30,7 +30,9 @@
                         <th data-field="type_name" data-align="center" data-width="60">类型</th>
                         <th data-field="default" data-align="center" data-width="45">默认值</th>
                         <th data-field="required" data-align="center" data-width="45" data-formatter="booleanFormatter">必填</th>
-                        <th data-field="system" data-align="center" data-width="45" data-formatter="booleanFormatter">系统</th>
+                        <th data-field="unique" data-align="center" data-width="45" data-formatter="booleanFormatter">唯一</th>
+                        <th data-field="min_length" data-align="center" data-width="45">最小长度</th>
+                        <th data-field="max_length" data-align="center" data-width="45">最大长度</th>
                         <th data-field="index" data-align="center" data-width="45" data-editable="true">序号</th>
                         <th data-field="action" data-align="center" data-width="60" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
                     </tr>
