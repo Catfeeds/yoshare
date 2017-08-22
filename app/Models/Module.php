@@ -46,6 +46,16 @@ class Module extends Model
         return $this->name . 'Controller';
     }
 
+    public function getPluralAttribute()
+    {
+        return str_plural(strtolower($this->name));
+    }
+
+    public function getSingularAttribute()
+    {
+        return str_singular(strtolower($this->name));
+    }
+
     public function getPathAttribute()
     {
         return str_plural(strtolower($this->name));
@@ -364,14 +374,19 @@ class Module extends Model
         CodeBuilder::createViews($module);
 
         //生成route
-        CodeBuilder::appendRoutes($module);
-
-        //生成menu
+        CodeBuilder::createRoute($module);
 
         //生成permission
         CodeBuilder::appendPermissions($module);
     }
 
+    /**
+     * 验证
+     *
+     * @param $module
+     * @param $input
+     * @return \Illuminate\Validation\Validator
+     */
     public static function validate($module, $input)
     {
         $rules = [];

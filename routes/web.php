@@ -11,13 +11,11 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
 
-Route::group(['prefix' => 'web'], function () {
-    Route::get('categories/{category}', 'CategoryController@show');
-    Route::get('articles/{slug}.html', 'ArticleController@slug');
-    Route::get('articles/list/{category}', 'ArticleController@lists');
-    Route::get('articles/{article}', 'ArticleController@show');
+Route::group(['middleware' => 'web'], function () {
+    Route::get('index.html', 'HomeController@index');
 });
 
 require_once __DIR__ . '/admin.php';
+require_once __DIR__ . '/modules/article.php';
+require_once __DIR__ . '/modules/page.php';

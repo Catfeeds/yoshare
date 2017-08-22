@@ -13,10 +13,12 @@ class CodeBuilder
         $content = str_replace('__module_name__', $module->name, $content);
         $content = str_replace('__module_title__', $module->title, $content);
         $content = str_replace('__module_path__', $module->path, $content);
+        $content = str_replace('__module_singular__', $module->singular, $content);
+        $content = str_replace('__module_plural__', $module->plural, $content);
         $content = str_replace('__table__', $module->table_name, $content);
         $content = str_replace('__model__', $module->model_name, $content);
         $content = str_replace('__controller__', $module->controller_name, $content);
-        $content = str_replace('__permission__', strtolower($module->name), $content);
+        $content = str_replace('__permission__', $module->singular, $content);
 
         return $content;
     }
@@ -36,8 +38,7 @@ class CodeBuilder
             }
             if ($field->type == ModuleField::TYPE_DATETIME) {
                 $dates[] = '\'' . $field->name . '\'';
-            }
-            else if ($field->type == ModuleField::TYPE_ENTITY) {
+            } else if ($field->type == ModuleField::TYPE_ENTITY) {
                 $entities[] = '\'' . $field->name . '\'';
             }
             $fillable[] = '\'' . $field->name . '\'';
@@ -93,32 +94,30 @@ class CodeBuilder
         file_put_contents(base_path('resources/views/admin/' . $module->path . '/toolbar.blade.php'), $content);
     }
 
-    public static function appendRoutes($module)
+    public static function createRoute($module)
     {
-        //移除文件末尾的});
-        $routesFile = base_path('routes/admin.php');
-
-        $content = file_get_contents($routesFile);
-
-        //判断路由是否已生成
-        if (str_contains($content, $module->controller_name)) {
-            return;
-        }
-
-        $content = str_replace('});//ROUTE_END', '', $content);
-        file_put_contents($routesFile, $content);
-
-        //获取路由模板并替换
         $content = file_get_contents(__DIR__ . '/templates/route.php');
 
         $content = static::replace($module, $content);
 
-        file_put_contents($routesFile, $content, FILE_APPEND);
+        file_put_contents(base_path('routes/modules/' . $module->singular . '.php'), $content);
+
+        $content = file_get_contents(base_path('routes/web.php'));
+
+        //判断路由是否已生成
+        if (str_contains($content, '/modules/' . $module->singular . '.php')) {
+            return;
+        }
+        //添加路由包含语句
+        $content .= PHP_EOL . 'require_once __DIR__ . \'/modules/' . $module->singular . '.php' . '\';';
+
+        file_put_contents(base_path('routes/web.php'), $content);
+
     }
 
     public static function appendPermissions($module)
     {
-        $module_name = strtolower($module->name);
+        $module_name = $module->singular;
 
         //判断权限是否已存在
         if (Permission::where('name', '@' . $module_name)->exists()) {

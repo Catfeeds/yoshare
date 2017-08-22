@@ -118,6 +118,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('templates', 'TemplateController');
 
     /**
+     * 主题管理
+     */
+    Route::get('themes/tree', 'ThemeController@tree');
+    Route::get('themes/file', 'ThemeController@readFile');
+    Route::post('themes/file', 'ThemeController@writeFile');
+    Route::resource('themes', 'ThemeController');
+
+    /**
      * 栏目管理
      */
     Route::get('categories/tree/', 'CategoryController@tree');
@@ -135,22 +143,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');
-
-    /**
-     * 文章管理
-     */
-    Route::get('articles/table', 'ArticleController@table');
-    Route::post('articles/state', 'ArticleController@state');
-    Route::get('articles/sort', 'ArticleController@sort');
-    Route::get('articles/categories', 'ArticleController@categories');
-    Route::resource('articles', 'ArticleController');
-
-    /**
-    * 新闻管理
-    */
-    Route::get('news/table', 'NewsController@table');
-    Route::post('news/state', 'NewsController@state');
-    Route::get('news/sort', 'NewsController@sort');
-    Route::get('news/{id}/save', 'NewsController@save');
-    Route::resource('news', 'NewsController');
 });//ROUTE_END

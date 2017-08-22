@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\__module_name__;
+use App\Models\Site;
 use Gate;
 use Request;
 
@@ -22,10 +23,58 @@ class __controller__ extends Controller
         $this->module = Module::transform(__module_name__::MODULE_ID);
     }
 
+    public function show($id)
+    {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
+        $__module_singular__ = __module_name__::find($id);
+        if (empty($__module_singular__)) {
+            return abort(404);
+        }
+
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__module_singular__' => $__module_singular__]);
+    }
+
+    public function slug($slug)
+    {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
+        $__module_singular__ = __module_name__::where('slug', $slug)
+            ->first();
+        if (empty($__module_singular__)) {
+            return abort(404);
+        }
+
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__module_singular__' => $__module_singular__]);
+    }
+
+    public function lists()
+    {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
+        $__module_plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        return view('themes.' . $site->theme . '.__module_path__.list', ['site' => $site, '__module_plural__' => $__module_plural__]);
+    }
+
     public function index()
     {
         if (Gate::denies('@__permission__')) {
-            $this->middleware('deny403');
+            return abort(403);
         }
 
         return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
@@ -48,9 +97,9 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
-        $item = call_user_func([$this->module->model_class, 'find'], $id);
+        $__module_singular__ = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $item, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__module_singular__, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -85,13 +134,13 @@ class __controller__ extends Controller
 
     public function save($id)
     {
-        $item = __module_name__::find($id);
+        $__module_singular__ = __module_name__::find($id);
 
-        if (empty($item)) {
+        if (empty($__module_singular__)) {
             return;
         }
 
-        $item->update(Request::all());
+        $__module_singular__->update(Request::all());
     }
 
     public function sort()

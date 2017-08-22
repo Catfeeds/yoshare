@@ -39,6 +39,43 @@ class ArticleController extends Controller
         return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
     }
 
+    public function show($id)
+    {
+        $article = Article::find($id);
+        if (empty($article)) {
+            return abort(404);
+        }
+
+        return view('themes.' . $article->site->theme . '.articles.detail', ['site' => $article->site, 'article' => $article]);
+    }
+
+    public function slug($slug)
+    {
+        $article = Article::where('slug', $slug)
+            ->first();
+        if (empty($article)) {
+            return abort(404);
+        }
+
+        return view('themes.' . $article->site->theme . '.articles.detail', ['site' => $article->site, 'article' => $article]);
+    }
+
+    public function lists($category_id)
+    {
+        $category = Category::find($category_id);
+        if (empty($category)) {
+            return abort(404);
+        }
+
+        $articles = Article::where('category_id', $category_id)
+            ->where('state', Article::STATE_PUBLISHED)
+            ->orderBy('top', 'desc')
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        return view('themes.' . $category->site->theme . '.articles.list', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
+    }
+
     public function create()
     {
         if (Gate::denies('@article-create')) {

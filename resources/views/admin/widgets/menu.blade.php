@@ -8,18 +8,6 @@
             {!! \App\Helpers\HtmlBuilder::menuTree(auth()->user()->site->menus()->where('parent_id', 0)->orderBy('sort')->get()) !!}
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-calendar"></i>
-                    <span class="menu-item-top">主题设置</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="/admin/templates"><i class="fa fa-envelope"></i> 模板设置</a></li>
-                    <li><a href="/admin/styles"><i class="fa fa-envelope"></i> 样式设置</a></li>
-                    <li><a href="/admin/scripts"><i class="fa fa-envelope"></i> 脚本设置</a></li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
                     <i class="fa fa-cog"></i>
                     <span class="menu-item-top">系统管理</span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -38,10 +26,13 @@
                         <li><a href="/admin/apps"><i class="fa fa-android"></i> 应用管理</a></li>
                     @endcan
                     @can('@module')
-                        <li><a href="/admin/modules"><i class="fa fa-book"></i> 模块管理</a></li>
+                        <li><a href="/admin/modules"><i class="fa fa-cubes"></i> 模块管理</a></li>
+                    @endcan
+                    @can('@theme')
+                        <li><a href="/admin/themes"><i class="fa fa-paint-brush"></i> 主题管理</a></li>
                     @endcan
                     @can('@menu')
-                        <li><a href="/admin/menus"><i class="fa fa-book"></i> 菜单管理</a></li>
+                        <li><a href="/admin/menus"><i class="fa fa-bars"></i> 菜单管理</a></li>
                     @endcan
                     @can('@role')
                         <li><a href="/admin/roles"><i class="fa fa-users"></i> 角色管理</a></li>

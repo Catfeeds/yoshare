@@ -5,7 +5,7 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Category extends BaseModule
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
