@@ -117,7 +117,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::get('themes/tree', 'ThemeController@tree');
     Route::get('themes/file', 'ThemeController@readFile');
-    Route::post('themes/file', 'ThemeController@writeFile');
+    Route::post('themes/file', 'ThemeController@createFile');
+    Route::put('themes/file', 'ThemeController@createFile');
+    Route::delete('themes/file', 'ThemeController@removeFile');
     Route::resource('themes', 'ThemeController');
 
     /**

@@ -22,29 +22,32 @@ class ThemeController extends BaseController
                 'id' => 1,
                 'text' => 'default',
                 'tags' => ['7', '默认主题'],
+                'extension' => '.blade.php',
                 'nodes' => [
                     [
                         'id' => 11,
                         'text' => 'css',
                         'tags' => ['3', '样式'],
+                        'extension' => '.css',
+                        'path' => 'default/css',
                         'nodes' => [
                             [
                                 'id' => 111,
                                 'text' => 'index.css',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/css/index.css'),
+                                'path' => 'default/css/index.css',
                             ],
                             [
                                 'id' => 112,
                                 'text' => 'detail.css',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/css/detail.css'),
+                                'path' => 'default/css/detail.css',
                             ],
                             [
                                 'id' => 113,
                                 'text' => 'page.css',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/css/page.css'),
+                                'path' => 'default/css/page.css',
                             ],
                         ],
                     ],
@@ -52,24 +55,26 @@ class ThemeController extends BaseController
                         'id' => 12,
                         'text' => 'js',
                         'tags' => ['3', '脚本'],
+                        'extension' => '.js',
+                        'path' => 'default/js',
                         'nodes' => [
                             [
                                 'id' => 121,
                                 'text' => 'index.js',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/js/index.js'),
+                                'path' => 'default/js/index.js',
                             ],
                             [
                                 'id' => 122,
                                 'text' => 'detail.js',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/js/detail.js'),
+                                'path' => 'default/js/detail.js',
                             ],
                             [
                                 'id' => 123,
                                 'text' => 'page.js',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/js/page.js'),
+                                'path' => 'default/js/page.js',
                             ],
                         ],
                     ],
@@ -77,24 +82,26 @@ class ThemeController extends BaseController
                         'id' => 13,
                         'text' => 'layouts',
                         'tags' => ['1', '布局'],
+                        'extension' => '.blade.php',
+                        'path' => 'default/layouts',
                         'nodes' => [
                             [
                                 'id' => 131,
                                 'text' => 'master.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/layouts/master.blade.php'),
+                                'path' => 'default/layouts/master.blade.php',
                             ],
                             [
                                 'id' => 132,
                                 'text' => 'header.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/layouts/header.blade.php'),
+                                'path' => 'default/layouts/header.blade.php',
                             ],
                             [
                                 'id' => 133,
                                 'text' => 'footer.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/layouts/footer.blade.php'),
+                                'path' => 'default/layouts/footer.blade.php',
                             ],
                         ],
                     ],
@@ -102,24 +109,26 @@ class ThemeController extends BaseController
                         'id' => 14,
                         'text' => 'articles',
                         'tags' => ['2', '文章'],
+                        'extension' => '.blade.php',
+                        'path' => 'default/articles',
                         'nodes' => [
                             [
                                 'id' => 141,
                                 'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/articles/index.blade.php'),
+                                'path' => 'default/articles/index.blade.php',
                             ],
                             [
                                 'id' => 142,
                                 'text' => 'category.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/articles/category.blade.php'),
+                                'path' => 'default/articles/category.blade.php',
                             ],
                             [
                                 'id' => 143,
                                 'text' => 'detail.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/articles/detail.blade.php'),
+                                'path' => 'default/articles/detail.blade.php',
                             ],
                         ],
                     ],
@@ -127,18 +136,20 @@ class ThemeController extends BaseController
                         'id' => 15,
                         'text' => 'pages',
                         'tags' => ['2', '单页'],
+                        'extension' => '.blade.php',
+                        'path' => 'default/pages',
                         'nodes' => [
                             [
                                 'id' => 151,
                                 'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/pages/index.blade.php'),
+                                'path' => 'default/pages/index.blade.php',
                             ],
                             [
                                 'id' => 151,
                                 'text' => 'detail.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/pages/detail.blade.php'),
+                                'path' => 'default/pages/detail.blade.php',
                             ],
                         ],
                     ],
@@ -146,18 +157,20 @@ class ThemeController extends BaseController
                         'id' => 16,
                         'text' => 'videos',
                         'tags' => ['2', '视频'],
+                        'extension' => '.blade.php',
+                        'path' => 'default/videos',
                         'nodes' => [
                             [
                                 'id' => 161,
                                 'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/videos/index.blade.php'),
+                                'path' => 'default/videos/index.blade.php',
                             ],
                             [
                                 'id' => 162,
                                 'text' => 'detail.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/videos/detail.blade.php'),
+                                'path' => 'default/videos/detail.blade.php',
                             ],
                         ],
                     ],
@@ -171,14 +184,31 @@ class ThemeController extends BaseController
     public function createFile()
     {
         $path = request('path');
+
+        $extension = strtolower(pathinfo($path)['extension']);
+        if ($extension == 'php') {
+            $path = theme_view_path($path);
+        }
+        else{
+            $path = theme_asset_path($path);
+        }
+
+        file_put_contents($path, '');
+
+        return $this->responseSuccess();
     }
 
     public function readFile()
     {
         $path = request('path');
 
-        //TODO 判断文件是否在public/themes目录下 文件扩展名不能为.php
-        //TODO 判断文件是否在resource/themes目录下
+        $extension = strtolower(pathinfo($path)['extension']);
+        if ($extension == 'php') {
+            $path = theme_view_path($path);
+        }
+        else{
+            $path = theme_asset_path($path);
+        }
 
         //判断文件是否存在
         if (file_exists($path)) {
@@ -193,13 +223,21 @@ class ThemeController extends BaseController
         $path = request('path');
         $data = request('data');
 
-        //TODO 判断文件是否在public/themes目录下 文件扩展名不能为.php
-        //TODO 判断文件是否在resource/themes目录下
+        $extension = strtolower(pathinfo($path)['extension']);
+        if ($extension == 'php') {
+            $path = theme_view_path($path);
+        }
+        else{
+            $path = theme_asset_path($path);
+        }
 
-        //判断目录是否存在，不存在则创建
+        //判断文件是否存在
+        if (!file_exists($path)) {
+            return $this->responseError('此文件文件不存在');
+        }
 
         file_put_contents($path, $data);
 
-        $this->responseSuccess();
+        return $this->responseSuccess();
     }
 }

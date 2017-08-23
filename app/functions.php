@@ -315,3 +315,25 @@ function is_mobile()
     }
     return false;
 }
+
+/**
+ * 获取主题资源路径
+ *
+ * @param $path
+ * @return string
+ */
+function theme_asset_path($path)
+{
+    return public_path('themes' . DIRECTORY_SEPARATOR . $path);
+}
+
+/**
+ * 获取主题试图路径
+ *
+ * @param $path
+ * @return string
+ */
+function theme_view_path($path)
+{
+    return resource_path('views/themes' . DIRECTORY_SEPARATOR . $path);
+}

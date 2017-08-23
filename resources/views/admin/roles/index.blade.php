@@ -64,10 +64,9 @@
 
         $("#modal_remove").click(function () {
             var row_id = $(this).data('id');
-            var token = document.getElementsByTagName('meta')['csrf-token'].getAttribute('content');
             $.ajax({
                 url: '/admin/roles/' + row_id + '/delete',
-                data: {'_token': token},
+                data: {'_token': '{{ csrf_token() }}'},
                 success: function (data) {
                     window.location.href = '/admin/roles';
                 }

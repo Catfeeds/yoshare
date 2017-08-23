@@ -5,7 +5,7 @@
  */
 Route::group(['middleware' => 'web'], function () {
     Route::get('articles/index.html', 'ArticleController@lists');
-    Route::get('articles/category-{category}.html', 'ArticleController@lists');
+    Route::get('articles/category-{category}.html', 'ArticleController@category');
     Route::get('articles/detail-{article}.html', 'ArticleController@show');
     Route::get('articles/{slug}.html', 'ArticleController@slug');
 });
