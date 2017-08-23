@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
+use App\Models\Site;
 use Gate;
 use Request;
 use Response;
@@ -60,7 +61,18 @@ class ArticleController extends Controller
         return view('themes.' . $article->site->theme . '.articles.detail', ['site' => $article->site, 'article' => $article]);
     }
 
-    public function lists($category_id)
+    public function lists()
+    {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
+        return view('themes.' . $site->theme . '.articles.index', ['site' => $site, 'module' => $this->module]);
+    }
+
+    public function category($category_id)
     {
         $category = Category::find($category_id);
         if (empty($category)) {
@@ -73,7 +85,7 @@ class ArticleController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $category->site->theme . '.articles.list', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
+        return view('themes.' . $category->site->theme . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
     }
 
     public function create()

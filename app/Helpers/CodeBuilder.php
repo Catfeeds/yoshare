@@ -94,7 +94,7 @@ class CodeBuilder
         file_put_contents(base_path('resources/views/admin/' . $module->path . '/toolbar.blade.php'), $content);
     }
 
-    public static function createRoute($module)
+    public static function appendRoutes($module)
     {
         $content = file_get_contents(__DIR__ . '/templates/route.php');
 

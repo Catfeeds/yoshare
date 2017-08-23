@@ -113,11 +113,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('menus', 'MenuController');
 
     /**
-     * 模板设置
-     */
-    Route::resource('templates', 'TemplateController');
-
-    /**
      * 主题管理
      */
     Route::get('themes/tree', 'ThemeController@tree');

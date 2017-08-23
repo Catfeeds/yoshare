@@ -3,12 +3,12 @@
 @section('title', $page->title . ' - ' . $site->name)
 
 @section('head')
-    <link href="{{ url('themes/mobile/css/detail.css') }}" rel="stylesheet">
-    <script src="{{ url('themes/mobile/js/detail.js') }}"></script>
+    <link href="{{ url('themes/default/css/detail.css') }}" rel="stylesheet">
+    <script src="{{ url('themes/default/js/detail.js') }}"></script>
 @endsection
 
 @section('body')
-    @include('themes.mobile.layouts.header')
+    @include('themes.default.layouts.header')
 
     <h2>移动端</h2>
     <h2>{{ $page->title }}</h2>
@@ -16,7 +16,7 @@
         {!! $page->content !!}
     </div>
 
-    @include('themes.mobile.layouts.footer')
+    @include('themes.default.layouts.footer')
 @endsection
 
 @section('js')

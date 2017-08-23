@@ -68,7 +68,7 @@ class __controller__ extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.__module_path__.list', ['site' => $site, '__module_plural__' => $__module_plural__]);
+        return view('themes.' . $site->theme . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__module_plural__' => $__module_plural__]);
     }
 
     public function index()

@@ -11,8 +11,9 @@
     @include('themes.default.layouts.header')
 
     <ul>
-        <li><a href="{{ url('articles/index.html') }}">文章</a></li>
-        <li><a href="{{ url('pages/index.html') }}">页面</a></li>
+        @foreach($pages as $page)
+            <li><a href="{{ url('pages/detail-' . $page->id . '.html') }}">{{ $page->title }}</a></li>
+        @endforeach
     </ul>
 
     @include('themes.default.layouts.footer')

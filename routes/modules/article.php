@@ -4,8 +4,8 @@
  * 文章
  */
 Route::group(['middleware' => 'web'], function () {
-    Route::get('index.html', 'HomeController@index');
-    Route::get('articles/list-{category}.html', 'ArticleController@lists');
+    Route::get('articles/index.html', 'ArticleController@lists');
+    Route::get('articles/category-{category}.html', 'ArticleController@lists');
     Route::get('articles/detail-{article}.html', 'ArticleController@show');
     Route::get('articles/{slug}.html', 'ArticleController@slug');
 });

@@ -66,6 +66,11 @@ class Module extends Model
         return $this->hasMany(ModuleField::class);
     }
 
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
     public function stateName()
     {
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
@@ -374,7 +379,7 @@ class Module extends Model
         CodeBuilder::createViews($module);
 
         //生成route
-        CodeBuilder::createRoute($module);
+        CodeBuilder::appendRoutes($module);
 
         //生成permission
         CodeBuilder::appendPermissions($module);

@@ -30,9 +30,9 @@ class ThemeController extends BaseController
                         'nodes' => [
                             [
                                 'id' => 111,
-                                'text' => 'list.css',
+                                'text' => 'index.css',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/css/list.css'),
+                                'path' => public_path('themes/default/css/index.css'),
                             ],
                             [
                                 'id' => 112,
@@ -55,9 +55,9 @@ class ThemeController extends BaseController
                         'nodes' => [
                             [
                                 'id' => 121,
-                                'text' => 'list.js',
+                                'text' => 'index.js',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => public_path('themes/default/js/list.js'),
+                                'path' => public_path('themes/default/js/index.js'),
                             ],
                             [
                                 'id' => 122,
@@ -105,12 +105,18 @@ class ThemeController extends BaseController
                         'nodes' => [
                             [
                                 'id' => 141,
-                                'text' => 'list.blade.php',
+                                'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/articles/list.blade.php'),
+                                'path' => resource_path('views/themes/default/articles/index.blade.php'),
                             ],
                             [
                                 'id' => 142,
+                                'text' => 'category.blade.php',
+                                'icon' => 'fa fa-file-code-o',
+                                'path' => resource_path('views/themes/default/articles/category.blade.php'),
+                            ],
+                            [
+                                'id' => 143,
                                 'text' => 'detail.blade.php',
                                 'icon' => 'fa fa-file-code-o',
                                 'path' => resource_path('views/themes/default/articles/detail.blade.php'),
@@ -124,9 +130,9 @@ class ThemeController extends BaseController
                         'nodes' => [
                             [
                                 'id' => 151,
-                                'text' => 'list.blade.php',
+                                'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/pages/list.blade.php'),
+                                'path' => resource_path('views/themes/default/pages/index.blade.php'),
                             ],
                             [
                                 'id' => 151,
@@ -143,9 +149,9 @@ class ThemeController extends BaseController
                         'nodes' => [
                             [
                                 'id' => 161,
-                                'text' => 'list.blade.php',
+                                'text' => 'index.blade.php',
                                 'icon' => 'fa fa-file-code-o',
-                                'path' => resource_path('views/themes/default/videos/list.blade.php'),
+                                'path' => resource_path('views/themes/default/videos/index.blade.php'),
                             ],
                             [
                                 'id' => 162,
