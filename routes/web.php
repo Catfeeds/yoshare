@@ -13,6 +13,7 @@
 
 
 Route::group(['middleware' => 'web'], function () {
+    Route::get('/', 'HomeController@index');
     Route::get('index.html', 'HomeController@index');
 });
 
