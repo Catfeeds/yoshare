@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class ModuleFieldRequest extends Request
+class ThemeRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

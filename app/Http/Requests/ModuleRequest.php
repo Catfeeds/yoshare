@@ -22,7 +22,7 @@ class ModuleRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|alpha_num',
             'title' => 'required',
         ];
     }
@@ -31,6 +31,7 @@ class ModuleRequest extends Request
     {
         return [
             'name.required' => '请输入英文名称',
+            'name.alpha_num' => '请输入字母或数字',
             'title.required' => '请输入中文名称',
         ];
     }

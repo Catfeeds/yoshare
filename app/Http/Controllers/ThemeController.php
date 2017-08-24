@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Module;
 use App\Models\Theme;
 use Dropbox\Exception;
 use Response;
@@ -17,9 +18,54 @@ class ThemeController extends BaseController
         return view('admin.themes.index');
     }
 
-    public function getAssetNodes($path, $extension)
+    public function store(ThemeRequest $request)
     {
-        $fullPath = theme_asset_path($path);
+        $input = $request->all();
+        $input['site_id'] = auth()->user()->site_id;
+        $input['sort'] = auth()->user()->site->menus()->count();
+
+        Theme::create($input);
+
+        return redirect('/admin/menus');
+    }
+
+    public function update($id, ThemeRequest $request)
+    {
+        $input = $request->all();
+
+        $theme = Theme::find($id);
+        if ($theme == null) {
+            \Session::flash('flash_warning', '无此记录');
+            redirect()->back()->withInput();
+        }
+
+        $theme->update($input);
+
+        \Session::flash('flash_success', '修改成功!');
+        return redirect('/admin/menus');
+    }
+
+    public function destroy($id)
+    {
+        $theme = Theme::find($id);
+
+        if ($theme == null) {
+            \Session::flash('flash_warning', '无此记录');
+            return;
+        }
+
+        $theme->delete();
+
+        \Session::flash('flash_success', '删除成功');
+    }
+
+    public function getNodes($type = 'asset', $path, $extension)
+    {
+        if ($type == 'asset') {
+            $fullPath = theme_asset_path($path);
+        } else {
+            $fullPath = theme_view_path($path);
+        }
 
         $dir = dir($fullPath);
         $dirs = [];
@@ -38,10 +84,10 @@ class ThemeController extends BaseController
         foreach ($dirs as $dir) {
             $nodes[] = [
                 'text' => $dir,
-                'tags' => ['0'],
+                'tags' => [0],
                 'extension' => $extension,
                 'path' => $path . DIRECTORY_SEPARATOR . $dir,
-                'nodes' => $this->getAssetNodes($path . DIRECTORY_SEPARATOR . $dir),
+                'nodes' => $this->getNodes($type, $path . DIRECTORY_SEPARATOR . $dir, $extension),
             ];
         }
 
@@ -65,7 +111,7 @@ class ThemeController extends BaseController
                 'tags' => [0, '样式'],
                 'extension' => '.css',
                 'path' => $theme->name . '/css',
-                'nodes' => $this->getAssetNodes($theme->name . DIRECTORY_SEPARATOR . 'css', '.css'),
+                'nodes' => $this->getNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'css', '.css'),
             ],
             [
                 'id' => 12,
@@ -74,29 +120,42 @@ class ThemeController extends BaseController
                 'tags' => [0, '脚本'],
                 'extension' => '.js',
                 'path' => $theme->name . '/js',
-                'nodes' => $this->getAssetNodes($theme->name . DIRECTORY_SEPARATOR . 'js', '.js'),
+                'nodes' => $this->getNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'js', '.js'),
             ],
         ];
 
+        $nodes = array_merge($nodes, $this->getNodes('view', $theme->name, '.blade.php'));
+
+        $modules = Module::all();
+
+        //设置Tags和颜色
         for ($i = 0; $i < count($nodes); $i++) {
-            $nodes[$i]['tags'][0] = count($nodes[$i]['nodes']);
+            if (isset($nodes[$i]['tags'])) {
+                $title = '';
+                //获取模块标题
+                foreach ($modules as $module) {
+                    if ($nodes[$i]['text'] == $module->path) {
+                        $title = $module->title;
+                        break;
+                    }
+                }
+
+                if ($nodes[$i]['text'] == 'layouts') {
+                    $nodes[$i]['color'] = '#08c';
+                    $title = '布局';
+                }
+
+                //设置Tags
+                if (empty($title)) {
+                    $nodes[$i]['tags'][0] = count($nodes[$i]['nodes']);
+                } else {
+                    $nodes[$i]['tags'] = [count($nodes[$i]['nodes']), $title];
+                }
+
+            }
         };
 
         return $nodes;
-        $path = theme_view_path($theme->name);
-        $dir = dir($path);
-        $dictionary = [];
-        $files = [];
-        while ($file = $dir->read()) {
-            if ($file != '.' && $file != '..') {
-                if (is_file($path . $file)) {//当前为文件
-                    $files[] = $file;
-                } else {//当前为目录
-                    $this->scanfiles($files[$file], $path . $file . DIRECTORY_SEPARATOR, $file);
-                }
-            }
-        }
-
     }
 
     public function tree()
@@ -116,179 +175,7 @@ class ThemeController extends BaseController
             $node['tags'][0] = count($node['nodes']);
             $nodes[] = $node;
         }
-        return Response::json($nodes);
 
-        $nodes = [
-            [
-                'id' => 1,
-                'text' => 'default',
-                'tags' => ['7', '默认主题'],
-                'extension' => '.blade.php',
-                'path' => 'default',
-                'nodes' => [
-                    [
-                        'id' => 11,
-                        'text' => 'css',
-                        'color' => '#00a47a',
-                        'tags' => ['3', '样式'],
-                        'extension' => '.css',
-                        'path' => 'default/css',
-                        'nodes' => [
-                            [
-                                'id' => 111,
-                                'text' => 'index.css',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/css/index.css',
-                            ],
-                            [
-                                'id' => 112,
-                                'text' => 'detail.css',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/css/detail.css',
-                            ],
-                            [
-                                'id' => 113,
-                                'text' => 'page.css',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/css/page.css',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 12,
-                        'text' => 'js',
-                        'color' => '#f60',
-                        'tags' => ['3', '脚本'],
-                        'extension' => '.js',
-                        'path' => 'default/js',
-                        'nodes' => [
-                            [
-                                'id' => 121,
-                                'text' => 'index.js',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/js/index.js',
-                            ],
-                            [
-                                'id' => 122,
-                                'text' => 'detail.js',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/js/detail.js',
-                            ],
-                            [
-                                'id' => 123,
-                                'text' => 'page.js',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/js/page.js',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 13,
-                        'text' => 'layouts',
-                        'color' => '#08c',
-                        'tags' => ['1', '布局'],
-                        'extension' => '.blade.php',
-                        'path' => 'default/layouts',
-                        'nodes' => [
-                            [
-                                'id' => 131,
-                                'text' => 'master.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/layouts/master.blade.php',
-                            ],
-                            [
-                                'id' => 132,
-                                'text' => 'header.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/layouts/header.blade.php',
-                            ],
-                            [
-                                'id' => 133,
-                                'text' => 'footer.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/layouts/footer.blade.php',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 14,
-                        'text' => 'articles',
-                        'tags' => ['2', '文章'],
-                        'extension' => '.blade.php',
-                        'path' => 'default/articles',
-                        'nodes' => [
-                            [
-                                'id' => 141,
-                                'text' => 'index.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/articles/index.blade.php',
-                            ],
-                            [
-                                'id' => 142,
-                                'text' => 'category.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/articles/category.blade.php',
-                            ],
-                            [
-                                'id' => 143,
-                                'text' => 'detail.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/articles/detail.blade.php',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 15,
-                        'text' => 'pages',
-                        'tags' => ['2', '单页'],
-                        'extension' => '.blade.php',
-                        'path' => 'default/pages',
-                        'nodes' => [
-                            [
-                                'id' => 151,
-                                'text' => 'index.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/pages/index.blade.php',
-                            ],
-                            [
-                                'id' => 151,
-                                'text' => 'detail.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/pages/detail.blade.php',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 16,
-                        'text' => 'videos',
-                        'tags' => ['2', '视频'],
-                        'extension' => '.blade.php',
-                        'path' => 'default/videos',
-                        'nodes' => [
-                            [
-                                'id' => 161,
-                                'text' => 'index.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/videos/index.blade.php',
-                            ],
-                            [
-                                'id' => 162,
-                                'text' => 'detail.blade.php',
-                                'icon' => 'fa fa-file-code-o',
-                                'path' => 'default/videos/detail.blade.php',
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 17,
-                        'text' => 'abcd.blade.php',
-                        'icon' => 'fa fa-file-code-o',
-                        'path' => 'default/abcd.blade.php',
-                    ],
-                ],
-            ],
-
-        ];
         return Response::json($nodes);
     }
 

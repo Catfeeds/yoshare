@@ -49,6 +49,7 @@
                 <div class="col-md-8">
                     <div class="box box-info">
                         <div class="box-body">
+                            @include('admin.layouts.flash')
                             <div class="dd" id="menu-nestable">
                                 {!! \App\Helpers\HtmlBuilder::menuEditor($menus) !!}
                             </div>
