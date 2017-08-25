@@ -25,7 +25,7 @@
 
                             <input type="hidden" name="category_id" value="{{ $category_id }}" id="category_id">
 
-                            @include('admin.categories._form')
+                            @include('admin.categories.form')
 
                             {!! Form::close() !!}
 

@@ -20,3 +20,4 @@ Route::group(['middleware' => 'web'], function () {
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/modules/article.php';
 require_once __DIR__ . '/modules/page.php';
+require_once __DIR__ . '/modules/video.php';

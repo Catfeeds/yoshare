@@ -4,11 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                模型管理
+                模块管理
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">模型管理</li>
+                <li class="active">模块管理</li>
             </ol>
         </section>
         <section class="content">

@@ -3,17 +3,17 @@
 @section('title', $site->name)
 
 @section('head')
-    <link href="{{ url('themes/default/css/index.css') }}" rel="stylesheet">
-    <script src="{{ url('themes/default/js/index.js') }}"></script>
+    <link href="{{ asset('themes/default/css/index.css') }}" rel="stylesheet">
+    <script src="{{ asset('themes/default/js/index.js') }}"></script>
 @endsection
 
 @section('body')
     @include('themes.default.layouts.header')
 
+    <h2>移动端</h2>
     <ul>
-        @foreach($modules as $module)
-            <li><a href="{{ url($module->path . '.html') }}">{{ $module->name }}</a></li>
-        @endforeach
+        <li><a href="{{ url('articles/index.html') }}">文章</a></li>
+        <li><a href="{{ url('pages/index.html') }}">页面</a></li>
     </ul>
 
     @include('themes.default.layouts.footer')

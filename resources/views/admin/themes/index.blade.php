@@ -22,7 +22,7 @@
                         <div class="box-header ui-sortable-handle">
                             <h3 class="box-title"></h3>
                             <div class="box-tools pull-right">
-                                <button class="btn btn-success btn-xs margin-r-5 margin-t-5" id="btn_create_theme" data-toggle="modal" data-target="#modal_form"><i class="fa fa-plus"></i> 添加主题</button>
+                                <button class="btn btn-success btn-xs margin-r-5 margin-t-5" id="btn_create_theme" data-toggle="modal" data-target="#modal_theme"><i class="fa fa-plus"></i> 添加主题</button>
                                 <button class="btn btn-info btn-xs margin-r-5 margin-t-5" id="btn_edit_theme"><i class="fa fa-edit"></i> 编辑主题</button>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         <div class="box-header ui-sortable-handle">
                             <h3 class="box-title"></h3>
                             <div class="box-tools pull-right">
-                                <button class="btn btn-success btn-xs margin-r-5 margin-t-5" id="btn_create_file"><i class="fa fa-plus"></i> 添加文件</button>
+                                <button class="btn btn-success btn-xs margin-r-5 margin-t-5" id="btn_create_file" data-toggle="modal" data-target="#modal_file"><i class="fa fa-plus"></i> 添加文件</button>
                                 <button class="btn btn-danger btn-xs margin-r-5 margin-t-5" id="btn_remove_file">删除文件</button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info btn-xs margin-t-5">变量列表</button>

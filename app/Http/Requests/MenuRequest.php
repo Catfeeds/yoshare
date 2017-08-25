@@ -23,7 +23,6 @@ class MenuRequest extends Request
     {
         return [
             'name' => 'required',
-            'url' => 'required|url',
             'icon' => 'required',
         ];
     }
@@ -33,7 +32,6 @@ class MenuRequest extends Request
         return [
             'name.required' => '请输入名称',
             'url.required' => '请输入URL',
-            'url.url' => '请输入有效的URL',
             'icon.required' => '请选择图标',
         ];
     }

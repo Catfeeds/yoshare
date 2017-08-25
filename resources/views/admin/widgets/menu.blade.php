@@ -28,11 +28,11 @@
                     @can('@module')
                         <li><a href="/admin/modules"><i class="fa fa-cubes"></i> 模块管理</a></li>
                     @endcan
-                    @can('@theme')
-                        <li><a href="/admin/themes"><i class="fa fa-paint-brush"></i> 主题管理</a></li>
-                    @endcan
                     @can('@menu')
                         <li><a href="/admin/menus"><i class="fa fa-bars"></i> 菜单管理</a></li>
+                    @endcan
+                    @can('@theme')
+                        <li><a href="/admin/themes"><i class="fa fa-paint-brush"></i> 主题管理</a></li>
                     @endcan
                     @can('@role')
                         <li><a href="/admin/roles"><i class="fa fa-users"></i> 角色管理</a></li>

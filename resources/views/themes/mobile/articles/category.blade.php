@@ -3,8 +3,8 @@
 @section('title', $category->name . ' - ' . $site->name)
 
 @section('head')
-    <link href="{{ url('themes/default/css/category.css') }}" rel="stylesheet">
-    <script src="{{ url('themes/default/js/category.js') }}"></script>
+    <link href="{{ asset('themes/default/css/category.css') }}" rel="stylesheet">
+    <script src="{{ asset('themes/default/js/category.js') }}"></script>
 @endsection
 
 @section('body')

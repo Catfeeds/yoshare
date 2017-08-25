@@ -162,7 +162,7 @@ class CategoryController extends Controller
                 'id' => $category->id,
                 'code' => $category->code,
                 'name' => $category->name,
-                'model_title' => $category->module->title,
+                'module_title' => $category->module->title,
                 'likes' => $category->likes,
                 'parent_id' => $category->parent_id,
                 'slug' => $category->slug,

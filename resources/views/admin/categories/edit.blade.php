@@ -23,7 +23,7 @@
 
                             {!! Form::model($category,['method' => 'PATCH', 'action' => ['CategoryController@update', $category->id],'class' => 'form-horizontal']) !!}
 
-                            @include('admin.categories._form')
+                            @include('admin.categories.form')
 
                             {!! Form::close() !!}
 

@@ -3,8 +3,8 @@
 @section('title', $site->name)
 
 @section('head')
-    <link href="{{ url('themes/default/css/index.css') }}" rel="stylesheet">
-    <script src="{{ url('themes/default/js/index.js') }}"></script>
+    <link href="{{ asset('themes/default/css/index.css') }}" rel="stylesheet">
+    <script src="{{ asset('themes/default/js/index.js') }}"></script>
 @endsection
 
 @section('body')
