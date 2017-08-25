@@ -33,15 +33,22 @@
                 showTags: true,
                 data: data,
                 onNodeSelected: function (event, data) {
+                    if (typeof(data.id) != 'undefined' ) {
+                        $('#btn_edit_theme').show();
+                    }
+                    else {
+                        $('#btn_edit_theme').hide();
+                    }
                     if (typeof(data.nodes) == 'undefined') {
-                        $('#btn_create').hide();
-                        $('#btn_remove').show();
+                        $('#btn_create_file').hide();
+                        $('#btn_remove_file').show();
+
                         filePath = data.path;
                         readFile(data.path);
                     }
                     else {
-                        $('#btn_create').show();
-                        $('#btn_remove').hide();
+                        $('#btn_create_file').show();
+                        $('#btn_remove_file').hide();
                     }
                 }
             });
@@ -50,17 +57,35 @@
         }
     });
 
-    $('#btn_create').click(function () {
+    $('#btn_create_file').click(function () {
         var nodes = $('#tree').treeview('getSelected');
         if (nodes.length > 0) {
             createFile(nodes[0].path + '/' + 'abcd' + nodes[0].extension);
         }
     });
 
-    $('#btn_remove').click(function () {
+    $('#btn_remove_file').click(function () {
         var nodes = $('#tree').treeview('getSelected');
         if (nodes.length > 0) {
             removeFile(nodes[0].path);
+        }
+    });
+
+    $('#btn_create_theme').click(function () {
+        $('#form').attr('action', '/admin/themes');
+        $('#method').val('POST');
+        $('#name').val('');
+        $('#title').val('');
+    });
+
+    $('#btn_edit_theme').click(function () {
+        var nodes = $('#tree').treeview('getSelected');
+        if (nodes.length > 0) {
+            $('#form').attr('action', '/admin/themes/' + nodes[0].id);
+            $('#method').val('PUT');
+            $('#name').val(nodes[0].text);
+            $('#title').val(nodes[0].tags[1]);
+            $('#modal_form').modal('show');
         }
     });
 

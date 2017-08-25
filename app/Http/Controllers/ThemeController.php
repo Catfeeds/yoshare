@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ThemeRequest;
 use App\Models\Module;
 use App\Models\Theme;
 use Dropbox\Exception;
@@ -21,12 +22,10 @@ class ThemeController extends BaseController
     public function store(ThemeRequest $request)
     {
         $input = $request->all();
-        $input['site_id'] = auth()->user()->site_id;
-        $input['sort'] = auth()->user()->site->menus()->count();
 
         Theme::create($input);
 
-        return redirect('/admin/menus');
+        return redirect('/admin/themes');
     }
 
     public function update($id, ThemeRequest $request)
@@ -42,7 +41,7 @@ class ThemeController extends BaseController
         $theme->update($input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/menus');
+        return redirect('/admin/themes');
     }
 
     public function destroy($id)
@@ -65,6 +64,10 @@ class ThemeController extends BaseController
             $fullPath = theme_asset_path($path);
         } else {
             $fullPath = theme_view_path($path);
+        }
+
+        if (!is_dir($fullPath)) {
+            return [];
         }
 
         $dir = dir($fullPath);
@@ -166,10 +169,11 @@ class ThemeController extends BaseController
         $nodes = [];
         foreach ($themes as $theme) {
             $node = [
+                'id' => $theme->id,
                 'text' => $theme->name,
                 'tags' => [0, $theme->title],
                 'extension' => '.blade.php',
-                'path' => 'default',
+                'path' => $theme->name,
                 'nodes' => $this->getThemeNodes($theme)
             ];
             $node['tags'][0] = count($node['nodes']);
@@ -235,6 +239,11 @@ class ThemeController extends BaseController
         }
 
         try {
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0755, true);
+            }
+
             file_put_contents($path, '');
 
             \Session::flash('flash_success', '创建成功!');
