@@ -12,6 +12,7 @@ class Menu extends Model
         'parent_id',
         'name',
         'url',
+        'permission',
         'icon',
         'sort',
     ];

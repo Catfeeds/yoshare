@@ -26,6 +26,7 @@ class Module extends Model
         'name',
         'title',
         'table_name',
+        'icon',
         'groups',
         'is_lock',
         'state',
@@ -82,6 +83,87 @@ class Module extends Model
 
         $module = self::create($input);
 
+        $module->fields()->create([
+            'name' => 'id',
+            'title' => 'ID',
+            'label' => 'ID',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 0,
+            'column_show' => 1,
+            'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
+            'column_width' => 30,
+            'column_index' => 1,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'site_id',
+            'title' => '站点ID',
+            'label' => '站点',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 1,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'sort',
+            'title' => '序号',
+            'label' => '序号',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 2,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'state',
+            'title' => '状态',
+            'label' => '状态',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 3,
+            'column_show' => 1,
+            'column_align' => ModuleField::COLUMN_ALIGN_CENTER,
+            'column_width' => 45,
+            'column_formatter' => 'stateFormatter',
+            'column_index' => 2,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'created_at',
+            'title' => '创建时间',
+            'label' => '创建时间',
+            'type' => ModuleField::TYPE_DATETIME,
+            'system' => 1,
+            'index' => 4,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'updated_at',
+            'title' => '修改时间',
+            'label' => '修改时间',
+            'type' => ModuleField::TYPE_DATETIME,
+            'system' => 1,
+            'index' => 5,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'deleted_at',
+            'title' => '删除时间',
+            'label' => '删除时间',
+            'type' => ModuleField::TYPE_DATETIME,
+            'system' => 1,
+            'index' => 6,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'published_at',
+            'title' => '发布时间',
+            'label' => '发布时间',
+            'type' => ModuleField::TYPE_DATETIME,
+            'system' => 1,
+            'index' => 7,
+        ]);
+
         \Session::flash('flash_success', '添加成功');
         return true;
     }
@@ -114,19 +196,16 @@ class Module extends Model
         $ds->total = static::count();
 
         $modules->transform(function ($module) {
-            return [
-                'id' => $module->id,
-                'name' => $module->name,
-                'title' => $module->title,
-                'table_name' => $module->table_name,
-                'groups' => $module->groups,
-                'is_lock' => $module->is_lock,
-                'sort' => $module->sort,
-                'state' => $module->state,
-                'state_name' => $module->stateName(),
-                'created_at' => empty($module->created_at) ? '' : $module->created_at->toDateTimeString(),
-                'updated_at' => empty($module->updated_at) ? '' : $module->updated_at->toDateTimeString()
-            ];
+            $attributes = $module->getAttributes();
+
+            foreach ($module->dates as $date) {
+                $attributes[$date] = empty($module->$date) ? '' : $module->$date->toDateTimeString();
+            }
+            $attributes['state_name'] = $module->stateName();
+            $attributes['created_at'] = empty($module->created_at) ? '' : $module->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($module->updated_at) ? '' : $module->updated_at->toDateTimeString();
+
+            return $attributes;
         });
 
         $ds->data = $modules;
@@ -292,11 +371,12 @@ class Module extends Model
             });
         }
 
-        foreach ($module->fields as $key => $field) {
+        $fields = $module->fields()->orderBy('index')->get();
+        foreach ($fields as $key => $field) {
             if ($key == 0) {
                 continue;
             } else {
-                $previous = $module->fields[$key - 1];
+                $previous = $fields[$key - 1];
             }
             if (Schema::hasColumn($module->table_name, $field->name)) {
                 //修改字段

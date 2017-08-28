@@ -87,7 +87,7 @@ class ModuleFieldController extends Controller
     {
         $module = Module::find($module_id);
 
-        $module->fields->transform(function ($field) {
+        $fields = $module->fields()->orderBy('index')->get()->map(function ($field) {
             $attributes = $field->getAttributes();
             $attributes['type_name'] = $field->typeName();
             $attributes['editor_type_name'] = $field->editorTypeName();
@@ -95,7 +95,7 @@ class ModuleFieldController extends Controller
             return $attributes;
         });
         $ds = new DataSource();
-        $ds->data = $module->fields;
+        $ds->data = $fields;
 
         return Response::json($ds);
     }

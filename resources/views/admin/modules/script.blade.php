@@ -1,4 +1,10 @@
 <script>
+    $('input[name=icon]').iconpicker();
+
+    function iconFormatter(value, row, index) {
+        return '<i class="fa '+ row.icon +'"></i>';
+    }
+
     function booleanFormatter(value, row, index) {
         if (value == 1) {
             return '<i class="fa fa-check"></i>';
@@ -34,6 +40,7 @@
             $('#name').val(row.name);
             $('#title').val(row.title);
             $('#table_name').val(row.table_name);
+            $('#icon').val(row.icon);
             $('#groups').val(row.groups);
             $('#is_lock').bootstrapSwitch('state', row.is_lock);
             $('#is_lock').next().val(row.is_lock);
@@ -50,6 +57,7 @@
         $('#name').val('');
         $('#title').val('');
         $('#table_name').val('');
+        $('#icon').val('');
         $('#groups').val('');
         $('#is_lock').bootstrapSwitch('state', false);
         $('#is_lock').next().val(0);

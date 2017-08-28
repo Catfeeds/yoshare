@@ -32,7 +32,7 @@ class CodeBuilder
         $fillable = [];
         $dates = [];
         $entities = [];
-        foreach ($module->fields as $field) {
+        foreach ($module->fields()->orderBy('index')->get() as $field) {
             if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
             }

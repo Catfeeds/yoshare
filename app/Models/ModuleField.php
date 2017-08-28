@@ -122,6 +122,11 @@ class ModuleField extends Model
 
     public static function stores($input)
     {
+        //设置序号+1
+        if (isset($input['index']) && intval($input['index']) == 0) {
+            $input['index'] = ModuleField::where('module_id', $input['module_id'])->max('index') + 1;
+        }
+
         self::create($input);
 
         \Session::flash('flash_success', '添加成功');
@@ -136,6 +141,7 @@ class ModuleField extends Model
             \Session::flash('flash_warning', '无此记录');
             return false;
         }
+
         $field->update($input);
 
         \Session::flash('flash_success', '修改成功');

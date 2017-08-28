@@ -20,7 +20,7 @@
         </section>
         <section class="content">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="box box-success">
                         <div class="box-body">
                             <div id="tree">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
@@ -160,7 +160,6 @@
                 method: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'data': data},
                 success: function (data) {
-                    // console.log(data);
                 }
             });
         });

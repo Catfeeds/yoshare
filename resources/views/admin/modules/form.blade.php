@@ -16,7 +16,7 @@
                                     <div class="form-group">
                                         {!! Form::label('name', '英文名称:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Article']) !!}
+                                            {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => '英文首字母大写']) !!}
                                         </div>
                                         {!! Form::label('title', '中文名称', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
@@ -26,11 +26,20 @@
                                     <div class="form-group">
                                         {!! Form::label('table_name', '数据表名', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            {!! Form::text('table_name', null, ['class' => 'form-control', 'placeholder' => 'articles']) !!}
+                                            {!! Form::text('table_name', null, ['class' => 'form-control', 'placeholder' => '英文首字母小写、复数']) !!}
                                         </div>
                                         {!! Form::label('is_lock', '是否锁定:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
                                             {!! Form::checkbox('is_lock', 1, null, ['class' => 'switch']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('icon', '图标', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                {!! Form::text('icon', 'fa-cube', ['class' => 'form-control']) !!}
+                                                <span class="input-group-addon"></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">

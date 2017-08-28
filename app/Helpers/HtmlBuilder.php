@@ -21,7 +21,7 @@ class HtmlBuilder
             $html .= '    <div class="dd-handle dd3-handle"></div>';
             $html .= '    <div class="dd3-content"><i class="fa ' . $menu->icon . '"></i> ' . $menu->name;
             $html .= '        <button class="btn btn-xs btn-danger pull-right btn-menu-remove" data-id="' . $menu->id . '"><i class="fa fa-times"></i></button>';
-            $html .= '        <button class="btn btn-xs btn-success pull-right btn-menu-edit" data-id="' . $menu->id . '" data-name="' . $menu->name . '" data-icon="' . $menu->icon . '" data-url="' . $menu->url . '"><i class="fa fa-edit"></i></button>';
+            $html .= '        <button class="btn btn-xs btn-success pull-right btn-menu-edit" data-id="' . $menu->id . '" data-name="' . $menu->name . '" data-icon="' . $menu->icon . '" data-url="' . $menu->url . '" data-permission="' . $menu->permission .'"><i class="fa fa-edit"></i></button>';
             $html .= '    </div>';
 
             if (count($menu->children) > 0) {
