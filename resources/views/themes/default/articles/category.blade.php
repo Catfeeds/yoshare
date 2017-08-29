@@ -1,6 +1,6 @@
 @extends('themes.default.layouts.master')
 
-@section('title', $category->name . ' - ' . $site->name)
+@section('title', $category->name . ' - ' . $site->title)
 
 @section('head')
     <link href="{{ asset('themes/default/css/category.css') }}" rel="stylesheet">

@@ -88,6 +88,7 @@ class SiteController extends Controller
             return [
                 'id' => $site->id,
                 'name' => $site->name,
+                'title' => $site->title,
                 'company' => $site->company,
                 'username' => $site->username,
                 'app_key' => $site->app_key,
