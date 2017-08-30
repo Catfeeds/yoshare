@@ -80,6 +80,7 @@ class BaseModule extends Model
     {
         $query->where(function ($query) use ($filters) {
             empty($filters['id']) ?: $query->where('id', $filters['id']);
+            empty($filters['category_id']) ?: $query->where('category_id', $filters['category_id']);
             empty($filters['title']) ?: $query->where('title', 'like', '%' . $filters['title'] . '%');
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);

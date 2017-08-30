@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\__module_name__;
 use App\Models\Site;
 use Gate;
 use Request;
+use Response;
 
 /**
  * __module_title__
@@ -156,5 +158,10 @@ class __controller__ extends Controller
     public function table()
     {
         return __module_name__::table();
+    }
+
+    public function categories()
+    {
+        return Response::json(Category::tree('', 0, $this->module->id));
     }
 }

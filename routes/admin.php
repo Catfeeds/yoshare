@@ -140,4 +140,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');
-});//ROUTE_END
+});
+
+require_once __DIR__ . '/modules/article.php';
+require_once __DIR__ . '/modules/page.php';
+require_once __DIR__ . '/modules/question.php';
+
+require_once __DIR__ . '/modules/video.php';

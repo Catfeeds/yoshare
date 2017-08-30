@@ -153,6 +153,6 @@ class ArticleController extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, Article::MODULE_ID));
+        return Response::json(Category::tree('', 0, $this->module->id, false));
     }
 }

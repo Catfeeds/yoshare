@@ -72,7 +72,6 @@ class Article extends BaseModule
     public static function table()
     {
         $filters = Request::all();
-        $category_id = $filters['category_id'];
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
@@ -80,14 +79,12 @@ class Article extends BaseModule
         $ds = new DataSource();
         $articles = static::with('user')
             ->filter($filters)
-            ->where('category_id', $category_id)
             ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
             ->get();
 
         $ds->total = static::filter($filters)
-            ->where('category_id', $category_id)
             ->count();
 
         $articles->transform(function ($article) {

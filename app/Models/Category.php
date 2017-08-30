@@ -25,7 +25,7 @@ class Category extends BaseModule
         'code',
         'name',
         'parent_id',
-        'model_id',
+        'module_id',
         'title',
         'subtitle',
         'likes',

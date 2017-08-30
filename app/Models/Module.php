@@ -111,7 +111,7 @@ class Module extends Model
             'label' => '序号',
             'type' => ModuleField::TYPE_INTEGER,
             'system' => 1,
-            'index' => 2,
+            'index' => 91,
         ]);
 
         $module->fields()->create([
@@ -125,7 +125,7 @@ class Module extends Model
             'column_align' => ModuleField::COLUMN_ALIGN_CENTER,
             'column_width' => 45,
             'column_formatter' => 'stateFormatter',
-            'column_index' => 2,
+            'column_index' => 92,
         ]);
 
         $module->fields()->create([
@@ -134,7 +134,7 @@ class Module extends Model
             'label' => '创建时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 4,
+            'index' => 93,
         ]);
 
         $module->fields()->create([
@@ -143,7 +143,7 @@ class Module extends Model
             'label' => '修改时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 5,
+            'index' => 94,
         ]);
 
         $module->fields()->create([
@@ -152,7 +152,7 @@ class Module extends Model
             'label' => '删除时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 6,
+            'index' => 95,
         ]);
 
         $module->fields()->create([
@@ -161,7 +161,7 @@ class Module extends Model
             'label' => '发布时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 7,
+            'index' => 96,
         ]);
 
         \Session::flash('flash_success', '添加成功');
@@ -447,22 +447,21 @@ class Module extends Model
      */
     public static function generate($module)
     {
-        //检查代码是否已生成
-
+        $builder = new CodeBuilder($module);
         //生成model
-        CodeBuilder::createModel($module);
+        $builder->createModel();
 
         //生成controller
-        CodeBuilder::createController($module);
+        $builder->createController();
 
         //生成view
-        CodeBuilder::createViews($module);
+        $builder->createViews();
 
         //生成route
-        CodeBuilder::appendRoutes($module);
+        $builder->appendRoutes();
 
         //生成permission
-        CodeBuilder::appendPermissions($module);
+        $builder->appendPermissions();
     }
 
     /**
@@ -491,12 +490,8 @@ class Module extends Model
                 $messages[$field->name . '.max'] = $field->label . '最多' . $field->max_length . '个字符';
             }
             if ($field->unique) {
-                $rule .= 'unique:' . $module->table_name;
+                $rule .= 'unique:' . $module->table_name . '|';
                 $messages[$field->name . '.unique'] = $field->label . '已存在';
-            }
-            if (in_array($field->type, [ModuleField::TYPE_INTEGER, ModuleField::TYPE_FLOAT])) {
-                $rule .= 'digits|';
-                $messages[$field->name . '.unique'] = $field->label . '请输入数字';
             }
             if ($rule != "") {
                 $rules[$field->name] = trim($rule, '|');
