@@ -23,7 +23,10 @@ class SiteRequest extends Request
     {
         return [
             'name' => 'required',
-            'company' => 'required',
+            'title' => 'required',
+            'directory' => 'required',
+            'domain' => 'required',
+            'title' => 'required',
         ];
     }
 
@@ -31,7 +34,9 @@ class SiteRequest extends Request
     {
         return [
             'name.required' => '请输入名称',
-            'company.required' => '请输入单位名称',
+            'title.required' => '请输入标题',
+            'directory.required' => '请输入目录',
+            'domain.required' => '请输入域名',
         ];
     }
 }

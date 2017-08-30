@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Theme;
 
 class Site extends Model
 {
@@ -10,12 +11,17 @@ class Site extends Model
 
     protected $fillable = [
         'name',
-        'company',
-        'desktop_theme',
+        'title',
+        'default_theme',
         'mobile_theme',
-        'app_key',
-        'master_secret',
+        'jpush_app_key',
+        'jpus_app_secret',
         'username',
+        'directory',
+        'domain',
+        'wechat_app_id',
+        'wechat_secret'
+
     ];
 
     public function getThemeAttribute()
@@ -23,7 +29,7 @@ class Site extends Model
         if (is_mobile() && !empty($this->mobile_theme)) {
             return $this->mobile_theme;
         } else {
-            return $this->desktop_theme;
+            return $this->default_theme;
         }
     }
 
@@ -45,5 +51,14 @@ class Site extends Model
             $names[$site->id] = $site->name;
         }
         return $names;
+    }
+
+    public  static function getThemes(){
+        $theme = Theme::all();
+        $themes = [];
+        foreach ($theme as  $row) {
+            $themes[$row->id] = $row->title;
+        }
+        return $themes;
     }
 }

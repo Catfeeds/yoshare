@@ -35,11 +35,10 @@
                                 <thead>
                                 <tr>
                                     <th data-field="id">ID</th>
-                                    <th data-field="name">名称</th>
-                                    <th data-field="company">单位名称</th>
-                                    <th data-field="app_key">推送KEY</th>
-                                    <th data-field="master_secret">推送密钥</th>
-                                    <th data-field="created_at" data-width="120">创建时间</th>
+                                    <th data-field="name">英文名称</th>
+                                    <th data-field="title">标题</th>
+                                    <th data-field="directory">目录</th>
+                                    <th data-field="domain">域名</th>
                                     <th data-field="updated_at" data-width="120">更新时间</th>
                                     <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-width="100">操作</th>
                                 </tr>

@@ -34,8 +34,8 @@ class SiteController extends Controller
             \Session::flash('flash_warning', '无此记录');
             return redirect('/admin/sites');
         }
-
-        return view('admin.sites.edit', compact('site'));
+        $themes = Site::getThemes();
+        return view('admin.sites.edit', compact('site','themes'));
     }
 
     public function update($id, SiteRequest $request)
@@ -68,7 +68,8 @@ class SiteController extends Controller
 
     public function create()
     {
-        return view('admin.sites.create');
+         $themes = Site::getThemes();
+        return view('admin.sites.create',compact('themes'));
     }
 
     public function store(SiteRequest $request)
@@ -88,11 +89,9 @@ class SiteController extends Controller
             return [
                 'id' => $site->id,
                 'name' => $site->name,
-                'company' => $site->company,
-                'username' => $site->username,
-                'app_key' => $site->app_key,
-                'master_secret' => $site->master_secret,
-                'created_at' => $site->created_at->format('Y-m-d H:i:s'),
+                'title' => $site->title,
+                'directory' => $site->directory,
+                'domain' => $site->domain,
                 'updated_at' => $site->updated_at->format('Y-m-d H:i:s'),
             ];
         });
