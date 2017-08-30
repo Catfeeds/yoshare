@@ -57,6 +57,18 @@
         return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
     }
 
+    function updateRow(field, row, old, $el) {
+        $.ajax({
+            url: '/admin/articles/' + row.id + '/save',
+            data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks},
+            success: function (data, status) {
+            },
+            error: function (data) {
+                alert('Error');
+            },
+        });
+    }
+
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             window.location.href = '{{ $base_url }}/' + row.id + '/edit';

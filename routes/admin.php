@@ -145,5 +145,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 require_once __DIR__ . '/modules/article.php';
 require_once __DIR__ . '/modules/page.php';
 require_once __DIR__ . '/modules/question.php';
-
 require_once __DIR__ . '/modules/video.php';

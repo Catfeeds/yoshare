@@ -31,42 +31,28 @@ class Article extends BaseModule
 
     protected $table = 'articles';
 
-    protected $fillable = [
-        'site_id',
-        'category_id',
-        'title',
-        'summary',
-        'image_url',
-        'content',
-        'member_id',
-        'user_id',
-        'sort',
-        'state',
-    ];
+    protected $fillable = ['category_id','type','title','summary','image_url','content','top','published_at','images','videos','member_id','user_id','sort','state','site_id'];
 
     protected $dates = ['published_at'];
 
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'refer');
-    }
+    protected $entities = ['member_id','user_id'];
 
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
 
-        $content = static::create($input);
+        $article = static::create($input);
 
-        return $content;
+        return $article;
     }
 
     public static function updates($id, $input)
     {
-        $content = static::find($id);
+        $article = static::find($id);
 
-        $content->update($input);
+        $article->update($input);
 
-        return $content;
+        return $article;
     }
 
     public static function table()
@@ -89,9 +75,15 @@ class Article extends BaseModule
 
         $articles->transform(function ($article) {
             $attributes = $article->getAttributes();
-            $attributes['user_name'] = empty($article->user) ? '' : $article->user->name;
+            foreach ($article->entities as $entity) {
+                $entity_map = str_replace('_id', '_name', $entity);
+                $entity = str_replace('_id', '', $entity);
+                $attributes[$entity_map] = empty($article->$entity) ? '' : $article->$entity->name;
+            }
+            foreach ($article->dates as $date) {
+                $attributes[$date] = empty($article->$date) ? '' : $article->$date->toDateTimeString();
+            }
             $attributes['state_name'] = $article->stateName();
-            $attributes['published_at'] = strtotime($article->published_at) ? $article->published_at->toDateTimeString() : '';
             $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
             return $attributes;
@@ -124,21 +116,21 @@ class Article extends BaseModule
 
         try {
             if ($move_down) {
-                //序号减小
-                //增加调整区间记录的序号值
-                self::where('sort', '>=', $place->sort)
-                    ->where('sort', '<', $select->sort)
-                    ->where('category_id', $select->category_id)
-                    ->increment('sort');
-                $select->sort = $place->sort;
-            } else {
-                //序号增加
-                //减少调整区间记录的序号值
-                self::where('sort', '<=', $place->sort)
-                    ->where('sort', '>', $select->sort)
-                    ->where('category_id', $select->category_id)
+                //下移
+                $select->sort = $place->sort - 1;
+                //减小最近100条记录的排序值
+                self::where('sort', '<', $place->sort)
+                    ->orderBy('sort', 'desc')
+                    ->limit(100)
                     ->decrement('sort');
-                $select->sort = $place->sort;
+            } else {
+                //上移
+                $select->sort = $place->sort + 1;
+                //增大最近100条记录的排序值
+                self::where('sort', '>', $place->sort)
+                    ->orderBy('sort', 'asc')
+                    ->limit(100)
+                    ->increment('sort');
             }
         } catch (Exception $e) {
             return Response::json([

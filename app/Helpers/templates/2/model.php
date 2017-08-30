@@ -41,18 +41,18 @@ class __model__ extends BaseModule
     {
         $input['state'] = static::STATE_NORMAL;
 
-        $item = static::create($input);
+        $__singular__ = static::create($input);
 
-        return $item;
+        return $__singular__;
     }
 
     public static function updates($id, $input)
     {
-        $item = static::find($id);
+        $__singular__ = static::find($id);
 
-        $item->update($input);
+        $__singular__->update($input);
 
-        return $item;
+        return $__singular__;
     }
 
     public static function table()
@@ -63,7 +63,7 @@ class __model__ extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
-        $items = static::with('user')
+        $__plural__ = static::with('user')
             ->filter($filters)
             ->orderBy('sort', 'desc')
             ->skip($offset)
@@ -73,23 +73,23 @@ class __model__ extends BaseModule
         $ds->total = static::filter($filters)
             ->count();
 
-        $items->transform(function ($item) {
-            $attributes = $item->getAttributes();
-            foreach ($item->entities as $entity) {
+        $__plural__->transform(function ($__singular__) {
+            $attributes = $__singular__->getAttributes();
+            foreach ($__singular__->entities as $entity) {
                 $entity_map = str_replace('_id', '_name', $entity);
                 $entity = str_replace('_id', '', $entity);
-                $attributes[$entity_map] = empty($item->$entity) ? '' : $item->$entity->name;
+                $attributes[$entity_map] = empty($__singular__->$entity) ? '' : $__singular__->$entity->name;
             }
-            foreach ($item->dates as $date) {
-                $attributes[$date] = empty($item->$date) ? '' : $item->$date->toDateTimeString();
+            foreach ($__singular__->dates as $date) {
+                $attributes[$date] = empty($__singular__->$date) ? '' : $__singular__->$date->toDateTimeString();
             }
-            $attributes['state_name'] = $item->stateName();
-            $attributes['created_at'] = empty($item->created_at) ? '' : $item->created_at->toDateTimeString();
-            $attributes['updated_at'] = empty($item->updated_at) ? '' : $item->updated_at->toDateTimeString();
+            $attributes['state_name'] = $__singular__->stateName();
+            $attributes['created_at'] = empty($__singular__->created_at) ? '' : $__singular__->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($__singular__->updated_at) ? '' : $__singular__->updated_at->toDateTimeString();
             return $attributes;
         });
 
-        $ds->rows = $items;
+        $ds->rows = $__plural__;
 
         return Response::json($ds);
     }

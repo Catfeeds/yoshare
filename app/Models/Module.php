@@ -106,12 +106,30 @@ class Module extends Model
         ]);
 
         $module->fields()->create([
+            'name' => 'member_id',
+            'title' => '会员ID',
+            'label' => '会员',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 91,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'user_id',
+            'title' => '用户ID',
+            'label' => '用户',
+            'type' => ModuleField::TYPE_INTEGER,
+            'system' => 1,
+            'index' => 92,
+        ]);
+
+        $module->fields()->create([
             'name' => 'sort',
             'title' => '序号',
             'label' => '序号',
             'type' => ModuleField::TYPE_INTEGER,
             'system' => 1,
-            'index' => 91,
+            'index' => 93,
         ]);
 
         $module->fields()->create([
@@ -125,7 +143,7 @@ class Module extends Model
             'column_align' => ModuleField::COLUMN_ALIGN_CENTER,
             'column_width' => 45,
             'column_formatter' => 'stateFormatter',
-            'column_index' => 92,
+            'column_index' => 94,
         ]);
 
         $module->fields()->create([
@@ -134,7 +152,7 @@ class Module extends Model
             'label' => '创建时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 93,
+            'index' => 95,
         ]);
 
         $module->fields()->create([
@@ -143,7 +161,7 @@ class Module extends Model
             'label' => '修改时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 94,
+            'index' => 96,
         ]);
 
         $module->fields()->create([
@@ -152,7 +170,7 @@ class Module extends Model
             'label' => '删除时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 95,
+            'index' => 97,
         ]);
 
         $module->fields()->create([
@@ -161,7 +179,7 @@ class Module extends Model
             'label' => '发布时间',
             'type' => ModuleField::TYPE_DATETIME,
             'system' => 1,
-            'index' => 96,
+            'index' => 98,
         ]);
 
         \Session::flash('flash_success', '添加成功');

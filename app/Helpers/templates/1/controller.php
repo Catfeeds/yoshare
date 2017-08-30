@@ -33,12 +33,12 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        $__module_singular__ = __module_name__::find($id);
-        if (empty($__module_singular__)) {
+        $__singular__ = __module_name__::find($id);
+        if (empty($__singular__)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__module_singular__' => $__module_singular__]);
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function slug($slug)
@@ -49,13 +49,13 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        $__module_singular__ = __module_name__::where('slug', $slug)
+        $__singular__ = __module_name__::where('slug', $slug)
             ->first();
-        if (empty($__module_singular__)) {
+        if (empty($__singular__)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__module_singular__' => $__module_singular__]);
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function lists()
@@ -66,11 +66,11 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        $__module_plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
+        $__plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__module_plural__' => $__module_plural__]);
+        return view('themes.' . $site->theme . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
     public function index()
@@ -99,9 +99,9 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
-        $__module_singular__ = call_user_func([$this->module->model_class, 'find'], $id);
+        $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__module_singular__, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -136,13 +136,13 @@ class __controller__ extends Controller
 
     public function save($id)
     {
-        $__module_singular__ = __module_name__::find($id);
+        $__singular__ = __module_name__::find($id);
 
-        if (empty($__module_singular__)) {
+        if (empty($__singular__)) {
             return;
         }
 
-        $__module_singular__->update(Request::all());
+        $__singular__->update(Request::all());
     }
 
     public function sort()

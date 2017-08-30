@@ -48,6 +48,7 @@
                                 <div class="box-footer">
                                     <button class="btn btn-default" data-dismiss="modal">取消</button>
                                     <button class="btn btn-info pull-right" id="btn_query" data-dismiss="modal">查询
+                                    <button type="reset" class="btn btn-default pull-right margin-r-5">清除
                                     </button>
                                 </div>
                             </form>

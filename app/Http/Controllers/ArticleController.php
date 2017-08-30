@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Content;
@@ -13,12 +12,7 @@ use Request;
 use Response;
 
 /**
- * 复制需要修改
- * $path
- * $view
- * Module::ID
- * Request
- * 模型类名称
+ * 文章
  */
 class ArticleController extends Controller
 {
@@ -31,34 +25,37 @@ class ArticleController extends Controller
         $this->module = Module::transform(Article::MODULE_ID);
     }
 
-    public function index()
-    {
-        if (Gate::denies('@article')) {
-            $this->middleware('deny403');
-        }
-
-        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
-    }
-
     public function show($id)
     {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
         $article = Article::find($id);
         if (empty($article)) {
             return abort(404);
         }
 
-        return view('themes.' . $article->site->theme . '.articles.detail', ['site' => $article->site, 'article' => $article]);
+        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
     }
 
     public function slug($slug)
     {
+        $site_id = request('site_id') ?: Site::ID_DEFAULT;
+        $site = Site::find($site_id);
+        if (empty($site)) {
+            return abort(404);
+        }
+
         $article = Article::where('slug', $slug)
             ->first();
         if (empty($article)) {
             return abort(404);
         }
 
-        return view('themes.' . $article->site->theme . '.articles.detail', ['site' => $article->site, 'article' => $article]);
+        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
     }
 
     public function lists()
@@ -69,7 +66,11 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.articles.index', ['site' => $site, 'module' => $this->module]);
+        $articles = Article::where('state', Article::STATE_PUBLISHED)
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        return view('themes.' . $site->theme . '.articles.index', ['site' => $site, 'module' => $this->module, 'articles' => $articles]);
     }
 
     public function category($category_id)
@@ -88,6 +89,15 @@ class ArticleController extends Controller
         return view('themes.' . $category->site->theme . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
     }
 
+    public function index()
+    {
+        if (Gate::denies('@article')) {
+            return abort(403);
+        }
+
+        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
+    }
+
     public function create()
     {
         if (Gate::denies('@article-create')) {
@@ -95,10 +105,7 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
-        //用于取消时跳转
-        $back_url = $this->base_url . '?category_id=' . Request::get('category_id');
-
-        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url]);
     }
 
     public function edit($id)
@@ -108,32 +115,50 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
-        $content = call_user_func([$this->module->model_class, 'find'], $id);
+        $article = call_user_func([$this->module->model_class, 'find'], $id);
 
-        //用于取消时跳转
-        $back_url = $this->base_url . '?category_id=' . $content->category_id;
-
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $content, 'base_url' => $this->base_url, 'back_url' => $back_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $article, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $article->category_id]);
     }
 
-    public function store(ArticleRequest $request)
+    public function store()
     {
-        $input = $request->all();
+        $input = Request::all();
 
-        $content = Content::stores($this->module, $input);
+        $validator = Module::validate($this->module, $input);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $article = Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url . '?category_id=' . $content->category_id);
+        return redirect($this->base_url . '?category_id=' . $article->category_id);
     }
 
-    public function update($id, ArticleRequest $request)
+    public function update($id)
     {
-        $input = $request->all();
+        $input = Request::all();
 
-        $content = Content::updates($this->module, $id, $input);
+        $validator = Module::validate($this->module, $input);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $article = Content::updates($this->module, $id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->base_url . '?category_id=' . $content->category_id);
+        return redirect($this->base_url . '?category_id=' . $article->category_id);
+    }
+
+    public function save($id)
+    {
+        $article = Article::find($id);
+
+        if (empty($article)) {
+            return;
+        }
+
+        $article->update(Request::all());
     }
 
     public function sort()

@@ -27,8 +27,8 @@ class CodeBuilder
         $content = str_replace('__module_name__', $this->module->name, $content);
         $content = str_replace('__module_title__', $this->module->title, $content);
         $content = str_replace('__module_path__', $this->module->path, $content);
-        $content = str_replace('__module_singular__', $this->module->singular, $content);
-        $content = str_replace('__module_plural__', $this->module->plural, $content);
+        $content = str_replace('__singular__', $this->module->singular, $content);
+        $content = str_replace('__plural__', $this->module->plural, $content);
         $content = str_replace('__table__', $this->module->table_name, $content);
         $content = str_replace('__model__', $this->module->model_name, $content);
         $content = str_replace('__controller__', $this->module->controller_name, $content);
