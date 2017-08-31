@@ -75,10 +75,8 @@
         $('#is_lock').next().val(0);
         //获取被复制module_id
         var row = $('#table').bootstrapTable('getSelections');
-        console.log(row[0].id);
         if(row.length == 0 || row.length > 1){
-            alert('请选择一个模型');
-            return false;
+            return toastrs('warning', '请选择一个模型');
         }
         $('#module_id').val(row[0].id);
     });
