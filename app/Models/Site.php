@@ -48,7 +48,7 @@ class Site extends Model
         $sites = Site::all();
         $names = [];
         foreach ($sites as $site) {
-            $names[$site->id] = $site->name;
+            $names[$site->id] = $site->title;
         }
         return $names;
     }

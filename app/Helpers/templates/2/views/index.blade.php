@@ -26,11 +26,11 @@
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
-                            @include('admin.articles.toolbar')
-                            @include('admin.articles.query')
+                            @include('admin.__module_path__.toolbar')
+                            @include('admin.__module_path__.query')
                             @include('admin.contents.table')
                             @include('admin.contents.script')
-                            @include('admin.articles.script')
+                            @include('admin.__module_path__.script')
                         </div>
                     </div>
                 </div>

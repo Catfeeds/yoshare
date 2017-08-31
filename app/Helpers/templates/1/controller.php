@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
+use App\Models\__module_name__;
 use App\Models\Site;
 use Gate;
 use Request;
 use Response;
 
 /**
- * 文章
+ * __module_title__
  */
-class ArticleController extends Controller
+class __controller__ extends Controller
 {
-    protected $base_url = '/admin/articles';
-    protected $view_path = 'admin.articles';
+    protected $base_url = '/admin/__module_path__';
+    protected $view_path = 'admin.__module_path__';
     protected $module;
 
     public function __construct()
     {
-        $this->module = Module::transform(Article::MODULE_ID);
+        $this->module = Module::transform(__module_name__::MODULE_ID);
     }
 
     public function show($id)
@@ -33,12 +33,12 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        $article = Article::find($id);
-        if (empty($article)) {
+        $__singular__ = __module_name__::find($id);
+        if (empty($__singular__)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function slug($slug)
@@ -49,13 +49,13 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        $article = Article::where('slug', $slug)
+        $__singular__ = __module_name__::where('slug', $slug)
             ->first();
-        if (empty($article)) {
+        if (empty($__singular__)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function lists()
@@ -66,32 +66,16 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        $articles = Article::where('state', Article::STATE_PUBLISHED)
+        $__plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.articles.index', ['site' => $site, 'module' => $this->module, 'articles' => $articles]);
-    }
-
-    public function category($category_id)
-    {
-        $category = Category::find($category_id);
-        if (empty($category)) {
-            return abort(404);
-        }
-
-        $articles = Article::where('category_id', $category_id)
-            ->where('state', Article::STATE_PUBLISHED)
-            ->orderBy('top', 'desc')
-            ->orderBy('sort', 'desc')
-            ->get();
-
-        return view('themes.' . $category->site->theme . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
+        return view('themes.' . $site->theme . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
     public function index()
     {
-        if (Gate::denies('@article')) {
+        if (Gate::denies('@__permission__')) {
             return abort(403);
         }
 
@@ -100,7 +84,7 @@ class ArticleController extends Controller
 
     public function create()
     {
-        if (Gate::denies('@article-create')) {
+        if (Gate::denies('@__permission__-create')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
@@ -110,14 +94,14 @@ class ArticleController extends Controller
 
     public function edit($id)
     {
-        if (Gate::denies('@article-edit')) {
+        if (Gate::denies('@__permission__-edit')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
 
-        $article = call_user_func([$this->module->model_class, 'find'], $id);
+        $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $article, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $article->category_id]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -129,10 +113,10 @@ class ArticleController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $article = Content::stores($this->module, $input);
+        Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url . '?category_id=' . $article->category_id);
+        return redirect($this->base_url);
     }
 
     public function update($id)
@@ -144,40 +128,40 @@ class ArticleController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $article = Content::updates($this->module, $id, $input);
+        Content::updates($this->module, $id, $input);
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->base_url . '?category_id=' . $article->category_id);
+        return redirect($this->base_url);
     }
 
     public function save($id)
     {
-        $article = Article::find($id);
+        $__singular__ = __module_name__::find($id);
 
-        if (empty($article)) {
+        if (empty($__singular__)) {
             return;
         }
 
-        $article->update(Request::all());
+        $__singular__->update(Request::all());
     }
 
     public function sort()
     {
-        return Article::sort();
+        return __module_name__::sort();
     }
 
     public function state()
     {
-        Article::state(request()->all());
+        __module_name__::state(request()->all());
     }
 
     public function table()
     {
-        return Article::table();
+        return __module_name__::table();
     }
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id, false));
+        return Response::json(Category::tree('', 0, $this->module->id));
     }
 }

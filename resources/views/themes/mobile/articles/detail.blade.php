@@ -1,6 +1,6 @@
 @extends('themes.default.layouts.master')
 
-@section('title', $article->title . ' - ' . $site->name)
+@section('title', $article->title . ' - ' . $site->title)
 
 @section('head')
     <link href="{{ asset('themes/default/css/detail.css') }}" rel="stylesheet">

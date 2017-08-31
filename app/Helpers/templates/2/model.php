@@ -7,9 +7,9 @@ use Request;
 use Response;
 
 
-class Article extends BaseModule
+class __model__ extends BaseModule
 {
-    const MODULE_ID = 1;
+    const MODULE_ID = __module_id__;
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
@@ -24,35 +24,35 @@ class Article extends BaseModule
     ];
 
     const STATE_PERMISSIONS = [
-        0 => '@article-delete',
-        2 => '@article-cancel',
-        9 => '@article-publish',
+        0 => '@__permission__-delete',
+        2 => '@__permission__-cancel',
+        9 => '@__permission__-publish',
     ];
 
-    protected $table = 'articles';
+    protected $table = '__table__';
 
-    protected $fillable = ['category_id','type','title','summary','image_url','content','top','published_at','images','videos','member_id','user_id','sort','state','site_id'];
+    protected $fillable = [__fillable__];
 
-    protected $dates = ['published_at'];
+    protected $dates = [__dates__];
 
-    protected $entities = ['member_id','user_id'];
+    protected $entities = [__entities__];
 
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
 
-        $article = static::create($input);
+        $__singular__ = static::create($input);
 
-        return $article;
+        return $__singular__;
     }
 
     public static function updates($id, $input)
     {
-        $article = static::find($id);
+        $__singular__ = static::find($id);
 
-        $article->update($input);
+        $__singular__->update($input);
 
-        return $article;
+        return $__singular__;
     }
 
     public static function table()
@@ -63,7 +63,7 @@ class Article extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
-        $articles = static::with('user')
+        $__plural__ = static::with('user')
             ->filter($filters)
             ->orderBy('sort', 'desc')
             ->skip($offset)
@@ -73,23 +73,23 @@ class Article extends BaseModule
         $ds->total = static::filter($filters)
             ->count();
 
-        $articles->transform(function ($article) {
-            $attributes = $article->getAttributes();
-            foreach ($article->entities as $entity) {
+        $__plural__->transform(function ($__singular__) {
+            $attributes = $__singular__->getAttributes();
+            foreach ($__singular__->entities as $entity) {
                 $entity_map = str_replace('_id', '_name', $entity);
                 $entity = str_replace('_id', '', $entity);
-                $attributes[$entity_map] = empty($article->$entity) ? '' : $article->$entity->name;
+                $attributes[$entity_map] = empty($__singular__->$entity) ? '' : $__singular__->$entity->name;
             }
-            foreach ($article->dates as $date) {
-                $attributes[$date] = empty($article->$date) ? '' : $article->$date->toDateTimeString();
+            foreach ($__singular__->dates as $date) {
+                $attributes[$date] = empty($__singular__->$date) ? '' : $__singular__->$date->toDateTimeString();
             }
-            $attributes['state_name'] = $article->stateName();
-            $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
-            $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
+            $attributes['state_name'] = $__singular__->stateName();
+            $attributes['created_at'] = empty($__singular__->created_at) ? '' : $__singular__->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($__singular__->updated_at) ? '' : $__singular__->updated_at->toDateTimeString();
             return $attributes;
         });
 
-        $ds->rows = $articles;
+        $ds->rows = $__plural__;
 
         return Response::json($ds);
     }
