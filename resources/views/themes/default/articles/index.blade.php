@@ -12,7 +12,7 @@
 
     <ul>
         @foreach($site->categories as $category)
-            <li><a href="{{ url('articles/category-' . $category->id . '.html') }}">{{ $category->name }}</a></li>
+            <li><a href="{{ "category-$category->id.html" }}">{{ $category->name }}</a></li>
         @endforeach
     </ul>
 
@@ -20,7 +20,7 @@
 @endsection
 
 @section('js')
-<script>
-    
-</script>
+    <script>
+
+    </script>
 @endsection

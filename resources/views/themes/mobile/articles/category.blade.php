@@ -13,7 +13,7 @@
     <h2>移动端</h2>
     <ul>
         @foreach($articles as $article)
-            <li><a href="{{ url('articles/detail-' . $article->id . '.html') }}">{{ $article->title }}</a></li>
+            <li><a href="{{ "detail-$article->id.html" }}">{{ $article->title }}</a></li>
         @endforeach
     </ul>
 

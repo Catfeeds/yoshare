@@ -34,17 +34,7 @@ $api->version('v1', function ($api) {
          */
         $api->get('comments/create', 'CommentController@create');
         $api->get('comments/like', 'CommentController@like');
-
-        /**
-         * 内容
-         */
-        $api->get('contents/list', 'ContentController@lists');
-        $api->get('contents/search', 'ContentController@search');
-        $api->get('contents/slides', 'ContentController@slides');
-        $api->get('contents/info', 'ContentController@info');
-        $api->get('contents/about', 'ContentController@about');
-        $api->get('contents/detail', 'ContentController@detail');
-        $api->get('contents/share', 'ContentController@share');
+        $api->get('comments/list', 'CommentController@lists');
 
         /**
          * 收藏
@@ -77,12 +67,5 @@ $api->version('v1', function ($api) {
          * 消息
          */
         $api->get('messages/owns', 'MessageController@owns');
-    });
-
-    $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:600'], function ($api) {
-        /**
-         * 评论
-         */
-        $api->get('comments/list', 'CommentController@lists');
     });
 });

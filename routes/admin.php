@@ -141,8 +141,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');
 });
-
-require_once __DIR__ . '/modules/article.php';
-require_once __DIR__ . '/modules/page.php';
-require_once __DIR__ . '/modules/question.php';
-require_once __DIR__ . '/modules/video.php';
