@@ -63,4 +63,24 @@
         $('#is_lock').next().val(0);
     });
 
+    $('#btn_copy').click(function () {
+        $('#form').attr('action', '/admin/modules/copy');
+        $('#method').val('POST');
+        $('#name').val('');
+        $('#title').val('');
+        $('#table_name').val('');
+        $('#icon').val('');
+        $('#groups').val('');
+        $('#is_lock').bootstrapSwitch('state', false);
+        $('#is_lock').next().val(0);
+        //获取被复制module_id
+        var row = $('#table').bootstrapTable('getSelections');
+        console.log(row[0].id);
+        if(row.length == 0 || row.length > 1){
+            alert('请选择一个模型');
+            return false;
+        }
+        $('#module_id').val(row[0].id);
+    });
+
 </script>

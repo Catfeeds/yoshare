@@ -97,6 +97,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('modules/{id}/migrate', 'ModuleController@migrate');
     Route::get('modules/{id}/generate', 'ModuleController@generate');
     Route::resource('modules', 'ModuleController');
+    Route::post('modules/copy', 'ModuleController@copy');
 
     /**
      * 字段管理
@@ -143,6 +144,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 });
 
 require_once __DIR__ . '/modules/article.php';
-require_once __DIR__ . '/modules/page.php';
-require_once __DIR__ . '/modules/question.php';
 require_once __DIR__ . '/modules/video.php';

@@ -43,6 +43,18 @@ class ModuleController extends Controller
         return redirect('/admin/modules');
     }
 
+    public function copy(ModuleRequest $request)
+    {
+        $input = $request->all();
+
+        $ret = Module::copy($input);
+        if (!$ret) {
+            redirect()->back()->withInput();
+        }
+
+        return redirect('/admin/modules');
+    }
+
     public function edit($id)
     {
         $module = Module::find($id);

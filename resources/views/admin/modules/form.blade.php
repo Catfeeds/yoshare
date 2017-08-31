@@ -12,6 +12,7 @@
                             <form id="form" action="/admin/modules" method="post" class="form-horizontal">
                                 {{ csrf_field() }}
                                 <input id="method" name="_method" type="hidden" value="POST">
+                                <input id="module_id" name="module_id" type="hidden" value="">
                                 <div class="box-body">
                                     <div class="form-group">
                                         {!! Form::label('name', '英文名称:', ['class' => 'control-label col-sm-2']) !!}

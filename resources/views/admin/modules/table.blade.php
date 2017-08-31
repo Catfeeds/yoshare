@@ -3,6 +3,7 @@
        data-url="/admin/modules/table">
     <thead>
     <tr>
+        <th data-field="state" data-checkbox="true"></th>
         <th data-field="id" data-width="45">ID</th>
         <th data-field="name" data-width="90">英文名称</th>
         <th data-field="title" data-width="90">中文名称</th>
