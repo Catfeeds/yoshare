@@ -98,9 +98,10 @@ function replace_content_url($content)
  * HTTP GET
  *
  * @param $url
+ * @param array $opts
  * @return string
  */
-function curl_get($url)
+function curl_get($url, $opts = [])
 {
     //初始化
     $ch = curl_init();
@@ -110,8 +111,16 @@ function curl_get($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
 
+    foreach ($opts as $k => $opt) {
+        curl_setopt($ch, $k, $opt);
+    }
+
     //执行并获取内容
     $result = curl_exec($ch);
+
+    if (!$result) {
+        var_dump(curl_error($ch));
+    }
 
     //释放curl句柄
     curl_close($ch);

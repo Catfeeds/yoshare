@@ -489,6 +489,9 @@ class Module extends Model
         //生成controller
         $builder->createController();
 
+        //生成api
+        $builder->createApi();
+
         //生成view
         $builder->createViews();
 

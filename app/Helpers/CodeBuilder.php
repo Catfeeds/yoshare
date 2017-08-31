@@ -14,6 +14,7 @@ class CodeBuilder
     {
         $this->module = $module;
 
+        //判断此模块是否有栏目字段
         if ($this->module->fields()->where('name', 'category_id')->count() > 0) {
             $this->template_path = __DIR__ . '/templates/2/';
         } else {
@@ -74,6 +75,15 @@ class CodeBuilder
         file_put_contents(base_path('app/Http/Controllers/' . $this->module->controller_name . '.php'), $content);
     }
 
+    public function createApi()
+    {
+        $content = file_get_contents($this->template_path . 'api.php');
+
+        $content = static::replace($content);
+
+        file_put_contents(base_path('app/Api/Controllers/' . $this->module->controller_name . '.php'), $content);
+    }
+
     public function createViews()
     {
         //创建视图目录
@@ -110,23 +120,29 @@ class CodeBuilder
 
     public function appendRoutes()
     {
-        $content = file_get_contents($this->template_path . 'route.php');
+        //创建路由目录
+        @mkdir(base_path('routes/modules/' . $this->module->path), 0755, true);
+
+        //web.php
+        $content = file_get_contents($this->template_path . 'routes/web.php');
 
         $content = static::replace($content);
 
-        file_put_contents(base_path('routes/modules/' . $this->module->singular . '.php'), $content);
+        file_put_contents(base_path('routes/modules/' . $this->module->path . '/web.php'), $content);
 
-        $content = file_get_contents(base_path('routes/admin.php'));
+        //admin.php
+        $content = file_get_contents($this->template_path . 'routes/admin.php');
 
-        //判断路由是否已生成
-        if (str_contains($content, '/modules/' . $this->module->singular . '.php')) {
-            return;
-        }
-        //添加路由包含语句
-        $content .= PHP_EOL . 'require_once __DIR__ . \'/modules/' . $this->module->singular . '.php' . '\';';
+        $content = static::replace($content);
 
-        file_put_contents(base_path('routes/admin.php'), $content);
+        file_put_contents(base_path('routes/modules/' . $this->module->path . '/admin.php'), $content);
 
+        //api.php
+        $content = file_get_contents($this->template_path . 'routes/api.php');
+
+        $content = static::replace($content);
+
+        file_put_contents(base_path('routes/modules/' . $this->module->path . '/api.php'), $content);
     }
 
     public function appendPermissions()
