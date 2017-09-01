@@ -130,31 +130,18 @@ class MemberController extends Controller
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        $state = Request::get('state');
+        
 
+        
+        $members = Member::filter($filters)
+        ->orderBy('id', 'desc')
+        ->skip($offset)
+        ->limit($limit)
+        ->get();
 
-        if($state == ''){
-            $members = Member::filter($filters)
-            ->orderBy('id', 'desc')
-            ->skip($offset)
-            ->limit($limit)
-            ->get();
-
-            $total = Member::filter($filters)
-            ->count();
-        }else{
-            
-             $members = Member::filter($filters)
-            ->orderBy('id', 'desc')
-            ->where('state',$state)
-            ->skip($offset)
-            ->limit($limit)
-            ->get();
-
-             $total = Member::filter($filters)
-             ->where('state',$state)
-             ->count();
-        }
+        $total = Member::filter($filters)
+        ->count();
+       
         
 
         $members->transform(function ($member) {

@@ -47,6 +47,7 @@ class SmsController extends Controller{
                 'site'=>$log->site->name,
                 'mobile'=>$log->mobile,
                 'message' => $log->message,
+                'state_name'  => $log->stateName(),
                 'created_at' => $log->created_at->toDateTimeString(),
                 'updated_at' => $log->updated_at->toDateTimeString(),
             ];

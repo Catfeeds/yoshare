@@ -44,7 +44,7 @@ class Sms
         $smsLog = SmsLog::create([
                 'site_id' => $this->site_id,
                 'mobile' => $mobile,
-                'message' => $content
+                'message' => $content,
             ]);
         
         $ch = curl_init(config("site.$this->site_id.sms.url"));
@@ -62,10 +62,14 @@ class Sms
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($ch);
         if (curl_errno($ch) != 0) {
+            $smsLog->state = 2;
+            $smsLog->save();
             return false;
         }
         $xml = simplexml_load_string($ret);
         if ($xml->returnstatus == 'Success') {
+            $smsLog->state = 1;
+            $smsLog->save();
             return true;
         }
         return false;

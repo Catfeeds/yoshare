@@ -25,4 +25,4 @@ CREATE TABLE `cms_sms_logs`(
     PRIMARY KEY (`id`),
     KEY `site_id` (`site_id`)
 );
-
+ALTER TABLE `cms_sms_logs` ADD `state`  TINYINT(1) NOT NULL COMMENT '状态:1成功 2失败' AFTER `message`;

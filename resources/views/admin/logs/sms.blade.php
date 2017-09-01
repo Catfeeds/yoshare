@@ -26,6 +26,7 @@
                                     <th data-field="site" data-width="60" data-align="center">站点</th>
                                     <th data-field="mobile" data-width="90"   data-align="center">手机号</th>
                                     <th data-field="message">内容信息</th>
+                                    <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
                                     <th data-field="created_at" data-width="150" data-align="center">发送时间</th>
                                 </tr>
                                 </thead>
@@ -57,6 +58,21 @@
                 return object;
             },
         });
+
+       function stateFormatter(value, row, index) {
+            var style = 'label-primary';
+            switch (row.state_name) {
+                case '成功':
+                    style = 'label-success';
+                    break;
+                case '失败':
+                    style = 'label-danger';
+                    break;
+            }
+            return [
+                '<span class="label ' + style + '">' + value + '</span>',
+            ].join('');
+        }
 
         
     </script>
