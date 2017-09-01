@@ -2,7 +2,7 @@
 
 namespace App\Api\Controllers;
 
-use App\Libraries\NctvSms;
+use App\Libraries\Sms;
 use App\Models\Favorite;
 use App\Models\Member;
 use App\Models\Message;
@@ -433,7 +433,7 @@ class MemberController extends BaseController
                 Cache::increment('captcha_times_' . $mobile, 1);
             }
 
-            $sms = new NctvSms($site_id);
+            $sms = new Sms($site_id);
             $code = random(4);
             $content = $sms->getContent($type, $code);
             $ret = $sms->send($mobile, $content);
