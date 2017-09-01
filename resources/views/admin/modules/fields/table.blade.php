@@ -52,7 +52,7 @@
                         <th data-field="label" data-width="90">标签名称</th>
                         <th data-field="column_show" data-align="center" data-width="45" data-formatter="booleanFormatter">显示</th>
                         <th data-field="column_align_name" data-align="center" data-width="45">对齐</th>
-                        <th data-field="column_width" data-align="center" data-width="45">宽度</th>
+                        <th data-field="column_width" data-align="center" data-width="45" data-editable="true">宽度</th>
                         <th data-field="column_editable" data-align="center" data-width="45" data-formatter="booleanFormatter">可编辑</th>
                         <th data-field="column_formatter" data-align="center" data-width="45">格式</th>
                         <th data-field="column_index" data-align="center" data-width="45" data-editable="true">序号</th>
@@ -75,8 +75,8 @@
                         <th data-field="editor_show" data-align="center" data-width="45" data-formatter="booleanFormatter">显示</th>
                         <th data-field="editor_type_name" data-align="center" data-width="60">编辑器</th>
                         <th data-field="editor_options" data-align="center" data-width="90">选项</th>
-                        <th data-field="editor_columns" data-align="center" data-width="45">列数</th>
-                        <th data-field="editor_rows" data-align="center" data-width="45">行数</th>
+                        <th data-field="editor_rows" data-align="center" data-width="45" data-editable="true">行数</th>
+                        <th data-field="editor_columns" data-align="center" data-width="45" data-editable="true">列数</th>
                         <th data-field="editor_group" data-align="center" data-width="90">分组</th>
                         <th data-field="editor_index" data-align="center" data-width="45" data-editable="true">序号</th>
                         <th data-field="action" data-align="center" data-width="60" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
