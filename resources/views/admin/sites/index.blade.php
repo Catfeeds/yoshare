@@ -15,31 +15,26 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box box-info">
+                        @include('admin.layouts.flash')
+                        @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
+                        <div class="box-header">
+                            <button class="btn btn-primary btn-xs margin-r-5 margin-t-5" onclick="window.location.href='/admin/sites/create';"> 添加站点</button>
+                        </div>
                         <div class="box-body">
-                            @include('admin.layouts.flash')
-                            @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                            <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
-                                        onclick="javascript:window.location.href='/admin/sites/create'">新增
-                                </button>
-                            </div>
-
                             <table data-toggle="table"
-                                   data-url="sites/table"
-                                   data-toolbar="#toolbar">
+                                   data-url="sites/table">
                                 <thead>
                                 <tr>
-                                    <th data-field="id">ID</th>
+                                    <th data-field="id" data-align="center" data-width="45">ID</th>
                                     <th data-field="name">英文名称</th>
                                     <th data-field="title">标题</th>
-                                    <th data-field="directory">目录</th>
-                                    <th data-field="domain">域名</th>
+                                    <th data-field="domain" data-width="200">域名</th>
+                                    <th data-field="directory" data-width="200">目录</th>
                                     <th data-field="updated_at" data-align="center" data-width="120">更新时间</th>
                                     <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center" data-width="100">操作</th>
                                 </tr>
                                 </thead>
                             </table>
-
                         </div>
                     </div>
                 </div>
@@ -51,7 +46,8 @@
 
         function actionFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',
+                '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs margin-r-5">编辑</button></a>',
+                '<a class="publish" href="javascript:void(0)"><button class="btn btn-primary btn-xs margin-r-5">发布</button></a>',
             ].join('');
         }
 
@@ -59,26 +55,21 @@
             var row_id = $(this).data('id');
 
             $.ajax({
-                type:'get',
+                type: 'get',
                 data: {'_token': '{{ csrf_token() }}'},
-                url:'/admin/sites/'+row_id+'/delete',
-                success:function(data){
+                url: '/admin/sites/' + row_id + '/delete',
+                success: function (data) {
                     window.location.href = '/admin/sites';
                 }
             });
         });
 
         window.actionEvents = {
-            'click .like': function (e, value, row, index) {
-
-                alert('You click like icon, row: ' + JSON.stringify(row));
-                console.log(value, row, index);
-            },
             'click .edit': function (e, value, row, index) {
                 window.location.href = '/admin/sites/' + row.id + '/edit';
             },
-            'click .remove': function (e, value, row, index) {
-                $('#modal_remove').data('id', row.id);
+            'click .publish': function (e, value, row, index) {
+                window.location.href = '/admin/sites/' + row.id + '/publish';
             },
         };
 

@@ -38,7 +38,7 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $site->theme->name . '.articles.detail', ['site' => $site, 'article' => $article]);
     }
 
     public function slug($slug)
@@ -55,7 +55,7 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $site->theme->name . '.articles.detail', ['site' => $site, 'article' => $article]);
     }
 
     public function lists()
@@ -70,7 +70,7 @@ class ArticleController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.articles.index', ['site' => $site, 'module' => $this->module, 'articles' => $articles]);
+        return view('themes.' . $site->theme->name . '.articles.index', ['site' => $site, 'module' => $this->module, 'articles' => $articles]);
     }
 
     public function category($category_id)
@@ -86,7 +86,7 @@ class ArticleController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $category->site->theme . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
+        return view('themes.' . $category->site->theme->name . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
     }
 
     public function index()
