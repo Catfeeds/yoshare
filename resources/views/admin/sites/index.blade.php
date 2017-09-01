@@ -19,18 +19,13 @@
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-sm margin-r-5" id="create"
+                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
                                         onclick="javascript:window.location.href='/admin/sites/create'">新增
                                 </button>
                             </div>
 
                             <table data-toggle="table"
                                    data-url="sites/table"
-                                   data-pagination="true"
-                                   data-search="true"
-                                   data-show-refresh="true"
-                                   data-show-toggle="true"
-                                   data-show-columns="true"
                                    data-toolbar="#toolbar">
                                 <thead>
                                 <tr>
@@ -39,8 +34,8 @@
                                     <th data-field="title">标题</th>
                                     <th data-field="directory">目录</th>
                                     <th data-field="domain">域名</th>
-                                    <th data-field="updated_at" data-width="120">更新时间</th>
-                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-width="100">操作</th>
+                                    <th data-field="updated_at" data-align="center" data-width="120">更新时间</th>
+                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center" data-width="100">操作</th>
                                 </tr>
                                 </thead>
                             </table>

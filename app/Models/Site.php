@@ -15,7 +15,7 @@ class Site extends Model
         'default_theme',
         'mobile_theme',
         'jpush_app_key',
-        'jpus_app_secret',
+        'jpush_app_secret',
         'username',
         'directory',
         'domain',
