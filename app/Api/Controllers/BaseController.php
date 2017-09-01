@@ -14,7 +14,7 @@ use Request;
  *     basePath="/api",
  *     @SWG\Info(
  *         version="1.0.0",
- *         title="AMS API v1",
+ *         title="CMS API v1",
  *         termsOfService="",
  *     ),
  * )
