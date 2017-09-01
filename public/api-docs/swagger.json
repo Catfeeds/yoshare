@@ -1063,7 +1063,7 @@
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "\u7c7b\u578b(0:\u627e\u56de\u5bc6\u7801,1:\u6ce8\u518c,2:\u91cd\u7f6e\u5bc6\u7801,3:\u7ed1\u5b9a\u624b\u673a,4:\u89e3\u9664\u7ed1\u5b9a\u624b\u673a,5:\u767b\u5f55\u9a8c\u8bc1)",
+                        "description": "\u7c7b\u578b(0:\u627e\u56de\u5bc6\u7801,1:\u6ce8\u518c,2:\u91cd\u7f6e\u5bc6\u7801,3:\u7ed1\u5b9a\u624b\u673a,4:\u89e3\u9664\u7ed1\u5b9a\u624b\u673a)",
                         "required": true,
                         "type": "string"
                     }
