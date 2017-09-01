@@ -38,7 +38,7 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
+        return view('themes.' . $site->theme->name . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function slug($slug)
@@ -55,7 +55,7 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
+        return view('themes.' . $site->theme->name . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
     }
 
     public function lists()
@@ -70,7 +70,7 @@ class __controller__ extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
+        return view('themes.' . $site->theme->name . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
     public function index()

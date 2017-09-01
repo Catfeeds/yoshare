@@ -19,27 +19,28 @@
             </div>
         </div>
 
-      
+
         <div class="form-group">
-            {!! Form::label('directory', '目录:',['class' => 'control-label col-sm-1']) !!}
-            <div class="col-sm-5">
-                {!! Form::text('directory', null, ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::label('domain', '域名:', ['class' => 'control-label col-sm-1']) !!}
+
+            {!! Form::label('domain', '站点域名:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
                 {!! Form::text('domain', null, ['class' => 'form-control']) !!}
             </div>
+            {!! Form::label('directory', '发布目录:',['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                {!! Form::text('directory', null, ['class' => 'form-control']) !!}
+            </div>
         </div>
 
-       
+
         <div class="form-group">
-            {!! Form::label('default_theme', '默认主题:',['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('default_theme_id', '默认主题:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
-                {!! Form::select('default_theme',$themes, !isset($site->default_theme) ? '1':$site->default_theme ,['class' => 'form-control col-sm-2']) !!}
+                {!! Form::select('default_theme_id', $themes, !isset($site) ? '1':$site->default_theme_id ,['class' => 'form-control col-sm-2']) !!}
             </div>
-            {!! Form::label('mobile_theme', '移动主题:',['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('mobile_theme_id', '移动主题:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
-                {!! Form::select('mobile_theme',$themes, !isset($site->mobile_theme) ? '1':$site->mobile_theme ,['class' => 'form-control col-sm-2']) !!}
+                {!! Form::select('mobile_theme_id', $themes, !isset($site) ? '1':$site->mobile_theme_id ,['class' => 'form-control col-sm-2']) !!}
             </div>
         </div>
 

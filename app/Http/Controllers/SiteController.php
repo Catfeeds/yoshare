@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Http\Requests\SiteRequest;
+use App\Models\DataSource;
 use App\Models\Site;
+use Auth;
+use Gate;
 use Request;
 use Response;
-use Gate;
-use Auth;
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     public function __construct()
     {
@@ -35,7 +35,7 @@ class SiteController extends Controller
             return redirect('/admin/sites');
         }
         $themes = Site::getThemes();
-        return view('admin.sites.edit', compact('site','themes'));
+        return view('admin.sites.edit', compact('site', 'themes'));
     }
 
     public function update($id, SiteRequest $request)
@@ -48,7 +48,7 @@ class SiteController extends Controller
                 ->withInput($request->input());
         }
         $input = Request::all();
-        $input['username'] = Auth::user()->name;
+        $input['user_id'] = Auth::user()->id;
         $sites->update($input);
 
         \Session::flash('flash_success', '修改成功!');
@@ -68,14 +68,14 @@ class SiteController extends Controller
 
     public function create()
     {
-         $themes = Site::getThemes();
-        return view('admin.sites.create',compact('themes'));
+        $themes = Site::getThemes();
+        return view('admin.sites.create', compact('themes'));
     }
 
     public function store(SiteRequest $request)
     {
         $input = Request::all();
-        $input['username'] = Auth::user()->name;
+        $input['user_id'] = Auth::user()->id;
         Site::create($input);
         \Session::flash('flash_success', '添加成功');
         return redirect('/admin/sites');
@@ -92,6 +92,7 @@ class SiteController extends Controller
                 'title' => $site->title,
                 'directory' => $site->directory,
                 'domain' => $site->domain,
+                'user_name' => $site->user->name,
                 'updated_at' => $site->updated_at->format('Y-m-d H:i:s'),
             ];
         });
@@ -100,5 +101,20 @@ class SiteController extends Controller
         $ds->data = $sites;
 
         return Response::json($ds);
+    }
+
+    public function publish($id)
+    {
+        $site = Site::find($id);
+        if (empty($site)) {
+            \Session::flash('flash_warning', '无此记录');
+            return redirect()->back();
+        }
+
+        $site->publish($site->default_theme);
+        $site->publish($site->mobile_theme, 'iPhone');
+
+        \Session::flash('flash_success', '发布成功');
+        return redirect()->back();
     }
 }

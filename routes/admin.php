@@ -93,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 站点管理
      */
     Route::get('sites/table', 'SiteController@table');
+    Route::get('sites/{id}/publish', 'SiteController@publish');
     Route::resource('sites', 'SiteController');
 
     /**
