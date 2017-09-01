@@ -2,7 +2,7 @@
 
 namespace App\Api\Controllers;
 
-use App\Libraries\NctvSms;
+use App\Libraries\Sms;
 use App\Models\Favorite;
 use App\Models\Member;
 use App\Models\Message;
@@ -401,7 +401,7 @@ class MemberController extends BaseController
      *   tags={"/members 会员"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="integer"),
      *   @SWG\Parameter(name="mobile", in="query", required=true, description="手机号", type="string"),
-     *   @SWG\Parameter(name="type", in="query", required=true, description="类型(0:找回密码,1:注册,2:重置密码,3:绑定手机,4:解除绑定手机,5:登录验证)", type="string"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型(0:找回密码,1:注册,2:重置密码,3:绑定手机,4:解除绑定手机)", type="string"),
      *   @SWG\Response(
      *     response=200,
      *     description="正常"
@@ -433,7 +433,7 @@ class MemberController extends BaseController
                 Cache::increment('captcha_times_' . $mobile, 1);
             }
 
-            $sms = new NctvSms($site_id);
+            $sms = new Sms($site_id);
             $code = random(4);
             $content = $sms->getContent($type, $code);
             $ret = $sms->send($mobile, $content);

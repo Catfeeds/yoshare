@@ -186,6 +186,23 @@ class Module extends Model
         return true;
     }
 
+    public static function copy($input)
+    {
+        $input['state'] = self::STATE_ENABLE;
+
+        $module = self::create($input);
+
+        $moduleFields = ModuleField::where('module_id', $input['module_id'])->get();
+
+        foreach ($moduleFields as $moduleField) {
+            $input = $moduleField->attributes;
+            $module->fields()->create($input);
+        }
+
+        \Session::flash('flash_success', '复制成功');
+        return true;
+    }
+
     public static function updates($id, $input)
     {
         $module = self::find($id);
@@ -471,6 +488,9 @@ class Module extends Model
 
         //生成controller
         $builder->createController();
+
+        //生成api
+        $builder->createApi();
 
         //生成view
         $builder->createViews();

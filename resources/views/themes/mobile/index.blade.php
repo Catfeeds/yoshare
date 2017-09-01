@@ -12,8 +12,8 @@
 
     <h2>移动端</h2>
     <ul>
-        <li><a href="{{ url('articles/index.html') }}">文章</a></li>
-        <li><a href="{{ url('pages/index.html') }}">页面</a></li>
+        <li><a href="articles/index.html">文章</a></li>
+        <li><a href="pages/index.html">页面</a></li>
     </ul>
 
     @include('themes.default.layouts.footer')
