@@ -81,7 +81,7 @@ class Site extends Model
         $modules = Module::where('state', Module::STATE_ENABLE)->get();
 
         //创建站点目录
-        $path = public_path("sites/$this->name/$theme->name");
+        $path = public_path("$this->directory/$theme->name");
         if (!is_dir($path)) {
             //创建模块目录
             @mkdir($path, 0755, true);
@@ -96,7 +96,7 @@ class Site extends Model
             $rows = call_user_func([$module->model_class, 'all']);
             $categories = Category::where('module_id', $module->id)->get();
 
-            $path = public_path("sites/$this->name/$theme->name/$module->plural");
+            $path = public_path("$this->directory/$theme->name/$module->plural");
             if (!is_dir($path)) {
                 //创建模块目录
                 @mkdir($path, 0755, true);
