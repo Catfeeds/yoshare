@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\BuildHtmlCommand;
 use App\Console\Commands\CleanHtmlCommand;
+use App\Console\Commands\SwaggerCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         BuildHtmlCommand::class,
         CleanHtmlCommand::class,
+        SwaggerCommand::class,
     ];
 
     /**

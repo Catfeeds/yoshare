@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\CodeBuilder;
+use App\Libraries\Swagger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Request;
@@ -500,6 +501,9 @@ class Module extends Model
 
         //生成permission
         $builder->appendPermissions();
+
+        //生成api文档
+        Swagger::make();
     }
 
     /**
