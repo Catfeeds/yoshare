@@ -18,6 +18,6 @@ class HomeController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.index', compact('site'));
+        return view('themes.' . $site->theme->name . '.index', compact('site'));
     }
 }

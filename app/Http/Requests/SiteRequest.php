@@ -24,9 +24,8 @@ class SiteRequest extends Request
         return [
             'name' => 'required',
             'title' => 'required',
-            'directory' => 'required',
             'domain' => 'required',
-            'title' => 'required',
+            'directory' => 'required',
         ];
     }
 
@@ -35,8 +34,8 @@ class SiteRequest extends Request
         return [
             'name.required' => '请输入名称',
             'title.required' => '请输入标题',
-            'directory.required' => '请输入目录',
             'domain.required' => '请输入域名',
+            'directory.required' => '请输入发布目录',
         ];
     }
 }
