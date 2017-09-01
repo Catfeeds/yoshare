@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use Exception;
+use App\Models\SmsLog;
 
 class Sms
 {
@@ -39,6 +40,13 @@ class Sms
     //发送函数
     public function send($mobile, $content, $sendTime = '', $extno = '')
     {
+        //记录日志
+        $smsLog = SmsLog::create([
+                'site_id' => $this->site_id,
+                'mobile' => $mobile,
+                'message' => $content
+            ]);
+        
         $ch = curl_init(config("site.$this->site_id.sms.url"));
         $args = array(
             'action' => config("site.$this->site_id.sms.action"),

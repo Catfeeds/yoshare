@@ -60,6 +60,7 @@
             striped: true,
             queryParams: function (params) {
                 var object = $('#form_query input,#form_query select').serializeObject();
+                console.log($('#state').val());
                 object['state'] = $('#state').val();
                 object['_token'] = '{{ csrf_token() }}';
                 object['offset'] = params.offset;

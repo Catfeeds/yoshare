@@ -8,7 +8,7 @@ use App\Models\DataSource;
 use Response;
 
 
-class SmsLogsController extends Controller{
+class SmsController extends Controller{
 	public  function index(){
 		if (Gate::denies('@log')) {
             $this->middleware('deny403');

@@ -17,11 +17,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('push/log', 'PushController@log');
     Route::get('push/log/table', 'PushController@table');
     Route::resource('push', 'PushController');
+
     /**
      * SMS日志管理
      */
-    Route::get('sms/log','SmsLogsController@index');
-    Route::get('sms/log/table', 'SmsLogsController@table');
+    Route::get('sms/log','SmsController@index');
+    Route::get('sms/log/table', 'SmsController@table');
 
     /**
      * 会员管理
