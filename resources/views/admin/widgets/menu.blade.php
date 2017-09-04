@@ -61,7 +61,7 @@
 
 <script>
     $(document).ready(function () {
-        var url = window.location.pathname;
+        var url = window.location.pathname.replace(/\/[0-9]*\/edit/, '');
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li').addClass('active');  //二级链接高亮
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li.treeview').addClass('active');  //一级链接高亮
     });
