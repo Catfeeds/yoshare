@@ -26,9 +26,7 @@ class SmsController extends Controller{
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        $state = Request::get('state');
 
-        
         $logs = SmsLog::filter($filters)
         	->owns()
             ->orderBy('id', 'desc')
@@ -39,12 +37,11 @@ class SmsController extends Controller{
         $total = SmsLog::filter($filters)
         		->owns()
                 ->count();
-       
 
         $logs->transform(function ($log) {
             return [
                 'id' => $log->id,
-                'site'=>$log->site->name,
+                'site_title'=>$log->site->title,
                 'mobile'=>$log->mobile,
                 'message' => $log->message,
                 'state_name'  => $log->stateName(),
