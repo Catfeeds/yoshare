@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Auth;
-use Illuminate\Database\Eloquent\Model;
 
 class Category extends BaseModule
 {
@@ -28,15 +27,14 @@ class Category extends BaseModule
         'module_id',
         'title',
         'subtitle',
-        'likes',
-        'slug',
         'link_type',
         'link',
         'image_url',
         'cover_url',
         'author',
-        'description',
+        'summary',
         'content',
+        'likes',
         'state',
         'sort',
     ];
@@ -65,8 +63,7 @@ class Category extends BaseModule
     {
         if (Auth::user()->roles()->where('id', Role::ID_ADMIN)->exists()) {
             $query->where('site_id', Auth::user()->site_id);
-        }
-        else {
+        } else {
             $category_ids = Auth::user()->categories->pluck('id')->toArray();
             $query->where('site_id', Auth::user()->site_id)->whereIn('id', $category_ids);
         }
@@ -74,7 +71,7 @@ class Category extends BaseModule
 
     public function stateName()
     {
-        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state ] : '';
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
     public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true)
@@ -98,8 +95,7 @@ class Category extends BaseModule
             $root = new Node();
             $root->id = $parent_id;
             $root->text = '所有栏目';
-        }
-        else {
+        } else {
             $root = new Node();
             $root->id = $parent->id;
             $root->text = $parent->name;
@@ -109,8 +105,7 @@ class Category extends BaseModule
 
         if ($show_parent) {
             return [$root];
-        }
-        else {
+        } else {
             return $root->nodes;
         }
     }
@@ -122,6 +117,7 @@ class Category extends BaseModule
                 $node = new Node();
                 $node->id = $category->id;
                 $node->text = $category->name;
+                $node->tags = [$category->module->title];
 
                 $parent->nodes[] = $node;
                 static::getNodes($node, $categories);

@@ -47,7 +47,7 @@
                         <li><a href="/admin/menus"><i class="fa fa-bars"></i> 菜单管理</a></li>
                     @endcan
                     @can('@role')
-                        <li><a href="/admin/roles"><i class="fa fa-users"></i> 角色管理</a></li>
+                        <li><a href="/admin/roles"><i class="fa fa-street-view"></i> 角色管理</a></li>
                     @endcan
                     @can('@user')
                         <li><a href="/admin/users"><i class="fa fa-user"></i> 用户管理</a></li>
