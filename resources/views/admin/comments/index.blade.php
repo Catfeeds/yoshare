@@ -23,8 +23,8 @@
                                 <tr>
                                     <th data-field="state" data-checkbox="true"></th>
                                     <th data-field="id" data-width="50" data-align="center">ID</th>
-                                    <th data-field="content_id" data-width="50">原文ID</th>
-                                    <th data-field="content" data-width="220" data-formatter="titleFormatter">评论</th>
+                                    <th data-field="refer_id" data-width="50">原文ID</th>
+                                    <th data-field="content" data-width="220" data-formatter="contentFormatter">评论</th>
                                     <th data-field="nick_name" data-width="120" data-align="center">会员</th>
                                     <th data-field="ip" data-width="100" data-align="center">IP</th>
                                     <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
@@ -58,8 +58,8 @@
             },
         });
 
-        function titleFormatter(value, row, index) {
-            return '<a href="/admin/contents/' + row.content_id + '" target="_blank"  class="content_title" data-toggle="tooltip" data-placement="top" title="' + value + '">' + value + '</a>';
+        function contentFormatter(value, row, index) {
+            return '<a href="/admin/contents/' + row.refer_id + '" target="_blank"  class="content_title" data-toggle="tooltip" data-placement="top" title="' + value + '">' + value + '</a>';
         }
 
         function actionFormatter(value, row, index) {

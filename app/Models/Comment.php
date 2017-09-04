@@ -21,7 +21,6 @@ class Comment extends Model
         'ip',
         'user_id',
         'state',
-        'username',
     ];
 
     public function refer()
@@ -59,10 +58,11 @@ class Comment extends Model
         $query->where('site_id', Auth::user()->site_id);
     }
 
-    public function scopeFilter($query, $id)
+    public function scopeFilter($query, $filters)
     {
-        $query->where(function ($query) use ($id) {
-            !empty($id) ? $query->where('refer_id', $id) : '';
+        $query->where(function ($query) use ($filters) {
+            !empty($id) ? $query->where('refer_id', $filters['id']) : '';
+            isset($filters['state']) && $filters['state'] !== '' ? $query->where('state', $filters['state']) : '';
         });
     }
 }
