@@ -62,17 +62,17 @@ class Sms
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($ch);
         if (curl_errno($ch) != 0) {
-            $smsLog->state = static::STATE_FAILURE;
+            $smsLog->state = SmsLog::STATE_FAILURE;
             $smsLog->save();
             return false;
         }
         $xml = simplexml_load_string($ret);
         if ($xml->returnstatus == 'Success') {
-            $smsLog->state = static::STATE_SUCCESS;
+            $smsLog->state = SmsLog::STATE_SUCCESS;
             $smsLog->save();
             return true;
         }
-        $smsLog->state = static::STATE_FAILURE;
+        $smsLog->state = SmsLog::STATE_FAILURE;
         $smsLog->save();
         return false;
     }
