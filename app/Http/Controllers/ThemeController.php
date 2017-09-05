@@ -124,7 +124,7 @@ class ThemeController extends BaseController
                     $nodes[$i]['nodes'] = $this->setNodeTag($nodes[$i]['nodes']);
                 }
             }
-        };
+        }
 
         return $nodes;
     }

@@ -148,12 +148,6 @@ class ModuleField extends Model
             return false;
         }
 
-        $moduleField = ModuleField::where('name', $input['name'])->first();
-        if($moduleField){
-            \Session::flash('flash_warning', '字段已存在');
-            return false;
-        }
-
         $field->update($input);
 
         \Session::flash('flash_success', '修改成功');
