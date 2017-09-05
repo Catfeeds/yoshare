@@ -150,6 +150,11 @@ class __controller__ extends Controller
         return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
     }
 
+    public function comment($id)
+    {
+        return view('admin.comments.comment', compact('id'));
+    }
+
     public function save($id)
     {
         $__singular__ = __module_name__::find($id);
