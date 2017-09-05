@@ -28,6 +28,11 @@ class Comment extends Model
         return $this->morphTo();
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'refer');
+    }
+
     public function member()
     {
         return $this->belongsTo(Member::class);
@@ -36,6 +41,11 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
     public function stateName()

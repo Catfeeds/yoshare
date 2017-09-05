@@ -4,12 +4,48 @@ namespace App\Api\Controllers;
 
 use App\Models\Comment;
 use App\Models\Content;
+use App\Models\File;
 use App\Models\Option;
+use EasyWeChat\Message\Article;
 use Exception;
 use Request;
 
 class CommentController extends BaseController
 {
+    public function transform($comment)
+    {
+        return [
+            'id' => $comment->id,
+            'children' => $comment->children()->where('state', Comment::STATE_PASSED)->orderBy('id', 'desc')->get()->transform(function ($child) {
+                return [
+                    'id' => $child->id,
+                    'content' => $child->content,
+                    'likes' => $child->likes,
+                    'member_id' => $child->member->id,
+                    'member_name' => $child->member->name,
+                    'member_type' => $child->member->type,
+                    'nick_name' => $child->member->nick_name,
+                    'avatar_url' => get_image_url($child->member->avatar_url),
+                    'time' => $child->created_at->toDateTimeString(),
+                ];
+            }),
+            'images' => $comment->files()->where('type', File::TYPE_IMAGE)->transform(function ($file) use ($comment) {
+                return [
+                    'id' => $file->id,
+                    'refer_id'=> $file->id,
+                    'title' => !empty($file->title) ?: $comment->title,
+                    'url' => get_image_url($file->url),
+                    'summary' => $file->summary,
+                ];
+            }),
+            'content' => $comment->content,
+            'likes' => $comment->likes,
+            'member_name' => $comment->member->name,
+            'nick_name' => $comment->member->nick_name,
+            'avatar_url' => get_image_url($comment->member->avatar_url),
+            'time' => $comment->created_at->toDateTimeString(),
+        ];
+    }
     /**
      * @SWG\Get(
      *   path="/comments/list",
@@ -34,27 +70,19 @@ class CommentController extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
         $content_id = Request::get('content_id');
 
-        $total = Comment::where('content_id', $content_id)
+        $total = Comment::where('refer_id', $content_id)
             ->where('state', Comment::STATE_PASSED)
             ->count();
 
         $comments = Comment::with('member')
-            ->where('content_id', $content_id)
+            ->where('refer_id', $content_id)
             ->where('state', Comment::STATE_PASSED)
             ->orderBy('id', 'desc')
             ->forPage($page, $page_size)
             ->get();
 
         $comments->transform(function ($comment) {
-            return [
-                'id' => $comment->id,
-                'content' => $comment->content,
-                'likes' => $comment->likes,
-                'member_name' => $comment->member->name,
-                'nick_name' => $comment->member->nick_name,
-                'avatar_url' => get_image_url($comment->member->avatar_url),
-                'time' => $comment->created_at->toDateTimeString(),
-            ];
+            return $this->transform($comment);
         });
 
         return $this->response([
@@ -99,7 +127,7 @@ class CommentController extends BaseController
         }
 
         //根据内容类型获取标题
-        $content = Content::find($content_id);
+        $content = Article::find($content_id);
 
         //增加评论数
         $content->comments += 1;
@@ -111,7 +139,8 @@ class CommentController extends BaseController
         //增加评论记录
         $comment = new Comment();
         $comment->site_id = $content->site_id;
-        $comment->content_id = $content->id;
+        $comment->refer_id = $content->id;
+        $comment->refer_type = $content->id;
         $comment->content_title = $content->title;
         $comment->content = $commentContent;
         $comment->member_id = $member->id;
@@ -119,6 +148,7 @@ class CommentController extends BaseController
         $comment->state = $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED;
 
         $comment->save();
+
 
         return $this->responseSuccess();
     }

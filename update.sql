@@ -35,4 +35,5 @@ ALTER TABLE `cms_comments` CHANGE `content_id` `refer_id` INT(10) unsigned NOT N
 ALTER TABLE `cms_comments` ADD `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型' AFTER `refer_id`;
 alter table cms_comments drop column content_title;
 UPDATE `cms_comments` SET `refer_type`='App\\Models\\Article';
+ALTER TABLE `cms_comments` ADD `parent_id` INT(10) NOT NULL COMMENT '上级ID' AFTER `site_id`;
 
