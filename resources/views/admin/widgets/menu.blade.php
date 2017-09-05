@@ -61,7 +61,10 @@
 
 <script>
     $(document).ready(function () {
-        var url = window.location.pathname.replace(/\/[0-9]*\/edit/, '');
+        var url = window.location.pathname;
+        url = url.replace(/\/[0-9]*\/edit/, ''); // articles/1/edit
+        url = url.replace(/\b\/create[\/0-9]*\b/, ''); // categories/create/1
+        url = url.replace(/\b\/create\?[\s\S]*\b/, ''); // articles/create?category_id=1
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li').addClass('active');  //二级链接高亮
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li.treeview').addClass('active');  //一级链接高亮
     });
