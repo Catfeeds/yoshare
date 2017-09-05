@@ -13,38 +13,30 @@
         </section>
         <section class="content">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="box box-success">
                         <div class="box-body">
                             <div id="tree"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <div class="box box-info">
+                        <div class="box-header">
+                            <button class="btn btn-primary btn-xs margin-r-5 margin-t-5" onclick="window.location.href='/admin/categories/create/{{ $category_id }}';"> 新增子栏目</button>
+                        </div>
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
                             @include('admin.layouts.modal', ['id' => 'modal_create'])
-                            <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-sm margin-r-5 create">新增子栏目</button>
-                            </div>
-
                             <table id="table"
                                    data-toggle="table"
-                                   data-url="/admin/categories/table/{{ $category_id }}"
-                                   data-pagination="false"
-                                   data-search="true"
-                                   data-show-refresh="true"
-                                   data-show-toggle="true"
-                                   data-show-columns="true"
-                                   data-toolbar="#toolbar">
+                                   data-url="/admin/categories/table/{{ $category_id }}">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-align="center" data-width="45">ID</th>
                                     <th data-field="name">栏目名称</th>
                                     <th data-field="module_title" data-align="center" data-width="90">模块</th>
-                                    <th data-field="slug" data-align="center" data-width="90">网址缩略名</th>
                                     <th data-field="sort" data-align="center" data-width="60" data-editable="true">序号</th>
                                     <th data-field="state_name" data-align="center" data-width="90" data-formatter="stateFormatter">状态</th>
                                     <th data-field="action" data-align="center" data-width="70" data-formatter="actionFormatter" data-events="actionEvents"> 操作
@@ -56,14 +48,14 @@
                     </div>
                 </div>
             </div>
-        </section><!-- /.content -->
+        </section>
     </div>
-    <!-- /.content-wrapper -->
     <script>
         $.getJSON('/admin/categories/tree', function (data) {
             $('#tree').treeview({
-                data: data,
+                showTags: true,
                 searchResultColor: 'white',
+                data: data,
                 levels: 3,
                 onNodeSelected: function (event, data) {
                     location.href = '/admin/categories?category_id=' + data.id;
@@ -86,13 +78,9 @@
                     },
                     error: function (data) {
                         alert('Error');
-                    },
+                    }
                 });
-            },
-        });
-
-        $(".create").click(function () {
-            window.location.href = '/admin/categories/create/' + '{{ $category_id }}';
+            }
         });
 
         $('#table').on('all.bs.table', function (e, name, args) {

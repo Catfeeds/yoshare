@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\CodeBuilder;
+use App\Libraries\Swagger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Request;
@@ -109,7 +110,7 @@ class Module extends Model
             'name' => 'member_id',
             'title' => '会员ID',
             'label' => '会员',
-            'type' => ModuleField::TYPE_INTEGER,
+            'type' => ModuleField::TYPE_ENTITY,
             'system' => 1,
             'index' => 91,
         ]);
@@ -118,7 +119,7 @@ class Module extends Model
             'name' => 'user_id',
             'title' => '用户ID',
             'label' => '用户',
-            'type' => ModuleField::TYPE_INTEGER,
+            'type' => ModuleField::TYPE_ENTITY,
             'system' => 1,
             'index' => 92,
         ]);
@@ -138,12 +139,12 @@ class Module extends Model
             'label' => '状态',
             'type' => ModuleField::TYPE_INTEGER,
             'system' => 1,
-            'index' => 3,
+            'index' => 94,
             'column_show' => 1,
             'column_align' => ModuleField::COLUMN_ALIGN_CENTER,
             'column_width' => 45,
             'column_formatter' => 'stateFormatter',
-            'column_index' => 94,
+            'column_index' => 9,
         ]);
 
         $module->fields()->create([
@@ -500,6 +501,9 @@ class Module extends Model
 
         //生成permission
         $builder->appendPermissions();
+
+        //生成api文档
+        Swagger::make();
     }
 
     /**

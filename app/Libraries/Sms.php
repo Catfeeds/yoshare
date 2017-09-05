@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use Exception;
+use App\Models\SmsLog;
 
 class Sms
 {
@@ -39,6 +40,13 @@ class Sms
     //发送函数
     public function send($mobile, $content, $sendTime = '', $extno = '')
     {
+        //记录日志
+        $smsLog = SmsLog::create([
+            'site_id' => $this->site_id,
+            'mobile' => $mobile,
+            'message' => $content,
+            ]);
+        
         $ch = curl_init(config("site.$this->site_id.sms.url"));
         $args = array(
             'action' => config("site.$this->site_id.sms.action"),
@@ -48,18 +56,24 @@ class Sms
             'content' => $content,
             'sendTime' => $sendTime,
             'extno' => $extno,
-        );
+            );
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($ch);
         if (curl_errno($ch) != 0) {
+            $smsLog->state = SmsLog::STATE_FAILURE;
+            $smsLog->save();
             return false;
         }
         $xml = simplexml_load_string($ret);
         if ($xml->returnstatus == 'Success') {
+            $smsLog->state = SmsLog::STATE_SUCCESS;
+            $smsLog->save();
             return true;
         }
+        $smsLog->state = SmsLog::STATE_FAILURE;
+        $smsLog->save();
         return false;
     }
 }

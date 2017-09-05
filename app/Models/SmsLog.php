@@ -6,11 +6,14 @@ use Auth;
 
 class SmsLog extends Model
 {
-   
+    const STATE_SUCCESS = 1;
+    const STATE_FAILURE = 2;
+    
     protected $fillable = [
         'site_id',
         'mobile',
-        'message'
+        'message',
+        'state'
     ];
     public function scopeOwns($query)
     {
@@ -27,6 +30,17 @@ class SmsLog extends Model
             !empty($filters['start_date']) ? $query->where('created_at', '>=', $filters['start_date'])
                 ->where('created_at', '<=', $filters['end_date']) : '';
         });
+    }
+    public function stateName()
+    {
+        switch ($this->state) {
+            case static::STATE_SUCCESS:
+                return '成功';
+                break;
+            case static::STATE_FAILURE:
+                return '失败';
+                break;
+        }
     }
 
 

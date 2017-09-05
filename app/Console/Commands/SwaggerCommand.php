@@ -2,26 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Category;
-use App\Models\Module;
-use App\Models\Site;
+use App\Libraries\Swagger;
 use Illuminate\Console\Command;
 
-class BuildHtmlCommand extends Command
+class SwaggerCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'build:html {site}';
+    protected $signature = 'swagger';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate the html file for the site.';
+    protected $description = 'Make swagger json.';
 
     /**
      * Create a new command instance.
@@ -40,11 +38,6 @@ class BuildHtmlCommand extends Command
      */
     public function handle()
     {
-        $site = Site::find($this->argument('site'));
-
-        $site->publish($site->default_theme);
-        $site->publish($site->mobile_theme, 'iPhone');
-
-        $this->info($site->title . '静态页面生成完成!');
+        Swagger::make();
     }
 }

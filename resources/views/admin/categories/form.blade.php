@@ -46,21 +46,17 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('slug', '网址缩略名:', ['class' => 'control-label col-sm-1']) !!}
-            <div class="col-sm-3">
-                {!! Form::text('slug', null, ['class' => 'form-control']) !!}
-            </div>
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
-            <div class="col-sm-1">
+            <div class="col-sm-3">
                 {!! Form::select('link_type', \App\Models\Content::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
-            <div class="col-sm-6" id="link"></div>
+            <div class="col-sm-8" id="link"></div>
         </div>
 
         <div class="form-group">
-            {!! Form::label('description', '描述:', ['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('summary', '摘要:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-11">
-                {!! Form::textarea('description', null, ['rows'=>'4','class' => 'form-control']) !!}
+                {!! Form::textarea('summary', null, ['rows'=>'4','class' => 'form-control']) !!}
             </div>
         </div>
 

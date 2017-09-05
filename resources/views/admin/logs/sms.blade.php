@@ -3,11 +3,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                SMS日志
+                短信日志
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">SMS日志</li>
+                <li class="active">短信日志</li>
             </ol>
         </section>
         <section class="content">
@@ -23,9 +23,10 @@
                                 <tr>
                                     <th data-field="state" data-checkbox="true"></th>
                                     <th data-field="id" data-width="30">ID</th>
-                                    <th data-field="site" data-width="60" data-align="center">站点</th>
-                                    <th data-field="mobile" data-width="90"   data-align="center">手机号</th>
-                                    <th data-field="message">内容信息</th>
+                                    <th data-field="site_title" data-width="60" data-align="center">站点</th>
+                                    <th data-field="mobile" data-width="90" data-align="center">手机号</th>
+                                    <th data-field="message">信息</th>
+                                    <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
                                     <th data-field="created_at" data-width="150" data-align="center">发送时间</th>
                                 </tr>
                                 </thead>
@@ -58,6 +59,21 @@
             },
         });
 
-        
+        function stateFormatter(value, row, index) {
+            var style = 'label-primary';
+            switch (row.state_name) {
+                case '成功':
+                    style = 'label-success';
+                    break;
+                case '失败':
+                    style = 'label-danger';
+                    break;
+            }
+            return [
+                '<span class="label ' + style + '">' + value + '</span>',
+            ].join('');
+        }
+
+
     </script>
 @endsection

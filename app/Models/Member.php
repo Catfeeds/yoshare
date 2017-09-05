@@ -59,6 +59,7 @@ class Member extends Model
             !empty($filters['id']) ? $query->where('id', $filters['id']) : '';
             !empty($filters['nick_name']) ? $query->where('nick_name', 'like', '%' . $filters['nick_name'] . '%') : '';
             !empty($filters['mobile']) ? $query->where('mobile', $filters['mobile']) : '';
+            $filters['state'] != '' ? $query->where('state', $filters['state']) : '';
             !empty($filters['start_date']) ? $query->where('created_at', '>=', $filters['start_date'])
                 ->where('created_at', '<=', $filters['end_date']) : '';
         });
