@@ -50,6 +50,13 @@ class ModuleFieldController extends Controller
     {
         $input = $request->all();
 
+        $moduleField = ModuleField::where(array('name'=>$input['name'], 'module_id'=> $input['module_id']))->count();
+
+        if($moduleField > 0){
+            \Session::flash('flash_warning', '字段已存在');
+            return redirect()->back();
+        }
+
         $ret = ModuleField::updates($id, $input);
         if (!$ret) {
             redirect()->back()->withInput();
