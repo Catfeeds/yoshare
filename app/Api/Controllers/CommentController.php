@@ -120,7 +120,6 @@ class CommentController extends BaseController
 
         $comment->save();
 
-
         return $this->responseSuccess();
     }
 
