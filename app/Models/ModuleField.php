@@ -127,7 +127,9 @@ class ModuleField extends Model
             $input['index'] = ModuleField::where('module_id', $input['module_id'])->where('index', '<=', '90')->max('index') + 1;
         }
 
-        $moduleField = ModuleField::where('name', $input['name'])->first();
+        $moduleField = ModuleField::where('name', $input['name'])
+            ->where('module_id', $input['module_id'])
+            ->first();
         if($moduleField){
             \Session::flash('flash_warning', '字段已存在');
             return false;
