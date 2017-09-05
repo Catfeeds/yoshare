@@ -63,41 +63,26 @@ class CommentController extends Controller
 
     public function table()
     {
+        $filter = Request::all();
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        $state = Request::get('state');
-        $id = Request::get('id');
 
-        if (empty($state) && $state == '') {
-            $comments = Comment::owns()
-                ->filter($id)
-                ->orderBy('id', 'desc')
-                ->skip($offset)
-                ->limit($limit)
-                ->get();
+        $comments = Comment::owns()
+            ->filter($filter)
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
 
-            $total = Comment::owns()
-                ->filter($id)
-                ->count();
-        } else {
-            $comments = Comment::owns()
-                ->filter($id)
-                ->where('state', $state)
-                ->orderBy('id', 'desc')
-                ->skip($offset)
-                ->limit($limit)
-                ->get();
-
-            $total = Comment::owns()
-                ->filter($id)
-                ->where('state', $state)
-                ->count();
-        }
+        $count = Comment::owns()
+            ->filter($filter)
+            ->count();
 
         $comments->transform(function ($comment) {
             return [
                 'id' => $comment->id,
                 'refer_id' => $comment->refer_id,
+                'content' => $comment->content,
                 'summary' => $comment->summary,
                 'nick_name' => empty($comment->member) ?: $comment->member->nick_name,
                 'member_name' => empty($comment->member) ?: $comment->member->name,
@@ -111,7 +96,7 @@ class CommentController extends Controller
         });
 
         $ds = New DataSource();
-        $ds->total = $total;
+        $ds->total = $count;
         $ds->rows = $comments;
 
         return Response::json($ds);

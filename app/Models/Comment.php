@@ -21,12 +21,16 @@ class Comment extends Model
         'ip',
         'user_id',
         'state',
-        'username',
     ];
 
     public function refer()
     {
         return $this->morphTo();
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'refer');
     }
 
     public function member()
@@ -37,6 +41,11 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
     public function stateName()
@@ -59,10 +68,11 @@ class Comment extends Model
         $query->where('site_id', Auth::user()->site_id);
     }
 
-    public function scopeFilter($query, $id)
+    public function scopeFilter($query, $filters)
     {
-        $query->where(function ($query) use ($id) {
-            !empty($id) ? $query->where('refer_id', $id) : '';
+        $query->where(function ($query) use ($filters) {
+            !empty($id) ? $query->where('refer_id', $filters['id']) : '';
+            isset($filters['state']) && $filters['state'] !== '' ? $query->where('state', $filters['state']) : '';
         });
     }
 }

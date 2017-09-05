@@ -26,3 +26,14 @@ CREATE TABLE `cms_sms_logs`(
     KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ALTER TABLE `cms_sms_logs` ADD `state`  TINYINT(1) NOT NULL COMMENT '状态:1成功 2失败' AFTER `message`;
+
+-- -----------
+-- 2017-05-18
+-- -----------
+ALTER TABLE `cms_comments` CHANGE `username` `user_id` INT(10)  unsigned NOT NULL COMMENT '用户ID';
+ALTER TABLE `cms_comments` CHANGE `content_id` `refer_id` INT(10) unsigned NOT NULL COMMENT '关联ID';
+ALTER TABLE `cms_comments` ADD `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型' AFTER `refer_id`;
+alter table cms_comments drop column content_title;
+UPDATE `cms_comments` SET `refer_type`='App\\Models\\Article';
+ALTER TABLE `cms_comments` ADD `parent_id` INT(10) NOT NULL COMMENT '上级ID' AFTER `site_id`;
+
