@@ -26,6 +26,7 @@
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
+                            @include('admin.layouts.modal', ['id' => 'modal_comment'])
                             @include('admin.__module_path__.toolbar')
                             @include('admin.__module_path__.query')
                             @include('admin.contents.table')

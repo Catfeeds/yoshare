@@ -4,7 +4,10 @@ namespace App\Api\Controllers;
 
 use App\Models\__model__;
 use App\Models\File;
+use App\Models\Option;
+use App\Models\Comment;
 use Request;
+use Exception;
 
 class __controller__ extends BaseController
 {
@@ -209,5 +212,62 @@ class __controller__ extends BaseController
             $share = 1;
             return view("themes.$theme.__module_path__.detail", compact('site', '__singular__', 'share'))->__toString();
         });
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/__module_path__/comments/create",
+     *   summary="发表__module_title__评论",
+     *   tags={"/__module_path__ __module_title__"},
+     *   @SWG\Parameter(name="id", in="query", required=true, description="__module_title__ID", type="string"),
+     *   @SWG\Parameter(name="content", in="query", required=true, description="评论__module_title__", type="string"),
+     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="评论成功"
+     *   ),
+     *   @SWG\Response(
+     *     response="404",
+     *     description="没有找到"
+     *   )
+     * )
+     */
+    public function create()
+    {
+        $id = Request::get('id');
+        $commentContent = Request::get('content');
+
+        try {
+            $member = \JWTAuth::parseToken()->authenticate();
+            if (!$member) {
+                return $this->responseError('无效的token,请重新登录');
+            }
+        } catch (Exception $e) {
+            return $this->responseError('无效的token,请重新登录');
+        }
+
+        //根据内容类型获取标题
+        $__plural__ = __model__::find($id);
+
+        //增加评论数
+        $__plural__->comments += 1;
+        $__plural__->save();
+
+        //是否免审核
+        $option = Option::getValue(Option::COMMENT_REQUIRE_PASS);
+
+        //增加评论记录
+        $comment = new Comment();
+        $comment->site_id = $__plural__->site_id;
+        $comment->refer_id = $__plural__->id;
+        $comment->refer_type = $__plural__->getMorphClass();
+        $comment->content = $commentContent;
+        $comment->member_id = $member->id;
+        $comment->ip = get_client_ip();
+        $comment->state = $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED;
+
+        $comment->save();
+
+        return $this->responseSuccess();
     }
 }

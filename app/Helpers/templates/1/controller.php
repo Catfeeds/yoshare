@@ -134,6 +134,11 @@ class __controller__ extends Controller
         return redirect($this->base_url);
     }
 
+    public function comment($id)
+    {
+        return view('admin.comments.comment', compact('id'));
+    }
+
     public function save($id)
     {
         $__singular__ = __module_name__::find($id);

@@ -12,5 +12,6 @@ $api->version('v1', function ($api) {
         $api->get('__module_path__/info', '__controller__@info');
         $api->get('__module_path__/detail', '__controller__@detail');
         $api->get('__module_path__/share', '__controller__@share');
+        $api->get('__module_path__/comments/create','__controller__@create');
     });
 });

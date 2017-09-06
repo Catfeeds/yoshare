@@ -71,7 +71,7 @@ class Comment extends Model
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
-            !empty($id) ? $query->where('refer_id', $filters['id']) : '';
+            !empty($filters['id']) ? $query->where('refer_id', $filters['id']) : '';
             isset($filters['state']) && $filters['state'] !== '' ? $query->where('state', $filters['state']) : '';
         });
     }

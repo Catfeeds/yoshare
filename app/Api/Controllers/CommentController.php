@@ -140,7 +140,6 @@ class CommentController extends BaseController
         $comment = new Comment();
         $comment->site_id = $content->site_id;
         $comment->refer_id = $content->id;
-        $comment->refer_type = $content->id;
         $comment->content_title = $content->title;
         $comment->content = $commentContent;
         $comment->member_id = $member->id;
@@ -193,12 +192,14 @@ class CommentController extends BaseController
         }
 
         if ($flag) {
-            $comment->increment('likes');
+            $comment->likes++;
+            $comment->save();
+        } else {
+            if ($comment->likes > 0) {
+                $comment->likes--;
+                $comment->save();
+            }
         }
-        else{
-            $comment->decrement('likes');
-        }
-
 
         return $this->responseSuccess();
     }

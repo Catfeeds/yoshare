@@ -50,7 +50,10 @@ class ModuleFieldController extends Controller
     {
         $input = $request->all();
 
-        $moduleField = ModuleField::where(array('name'=>$input['name'], 'module_id'=> $input['module_id']))->count();
+        $moduleField = ModuleField::where('name', $input['name'])
+            ->where('module_id', $input['module_id'])
+            ->where('id', '<>', $id)
+            ->count();
 
         if($moduleField > 0){
             \Session::flash('flash_warning', '字段已存在');

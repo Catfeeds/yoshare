@@ -27,7 +27,15 @@
     }
 
     function actionFormatter(value, row, index) {
-        return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
+        //编辑
+        html ='<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>' +
+                '<span> </span>';
+
+        //评论
+        html +='<button class="btn btn-info btn-xs comment" data-toggle="modal" data-target="#modal_comment">' +
+                '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+
+        return html;
     }
 
     function updateRow(field, row, old, $el) {
