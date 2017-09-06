@@ -3,10 +3,9 @@
 namespace App\Api\Controllers;
 
 use App\Models\Comment;
-use App\Models\Content;
 use App\Models\File;
+use App\Models\Module;
 use App\Models\Option;
-use EasyWeChat\Message\Article;
 use Exception;
 use Request;
 
@@ -29,10 +28,10 @@ class CommentController extends BaseController
                     'time' => $child->created_at->toDateTimeString(),
                 ];
             }),
-            'images' => $comment->files()->where('type', File::TYPE_IMAGE)->transform(function ($file) use ($comment) {
+            'images' => $comment->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($file) use ($comment) {
                 return [
                     'id' => $file->id,
-                    'refer_id'=> $file->id,
+                    'refer_id' => $file->id,
                     'title' => !empty($file->title) ?: $comment->title,
                     'url' => get_image_url($file->url),
                     'summary' => $file->summary,
@@ -46,12 +45,14 @@ class CommentController extends BaseController
             'time' => $comment->created_at->toDateTimeString(),
         ];
     }
+
     /**
      * @SWG\Get(
      *   path="/comments/list",
      *   summary="获取评论列表",
      *   tags={"/comments 评论"},
-     *   @SWG\Parameter(name="content_id", in="query", required=true, description="内容ID", type="string"),
+     *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
      *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
      *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
      *   @SWG\Response(
@@ -68,14 +69,19 @@ class CommentController extends BaseController
     {
         $page_size = Request::get('page_size') ? Request::get('page_size') : 20;
         $page = Request::get('page') ? Request::get('page') : 1;
-        $content_id = Request::get('content_id');
+        $type = Request::get('type');
+        $id = Request::get('id');
 
-        $total = Comment::where('refer_id', $content_id)
+        $module = Module::find($type);
+
+        $total = Comment::where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
             ->where('state', Comment::STATE_PASSED)
             ->count();
 
         $comments = Comment::with('member')
-            ->where('refer_id', $content_id)
+            ->where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
             ->where('state', Comment::STATE_PASSED)
             ->orderBy('id', 'desc')
             ->forPage($page, $page_size)
@@ -94,12 +100,13 @@ class CommentController extends BaseController
     }
 
     /**
-     * @SWG\Get(
+     * @SWG\Post(
      *   path="/comments/create",
      *   summary="发表评论",
      *   tags={"/comments 评论"},
-     *   @SWG\Parameter(name="content_id", in="query", required=true, description="内容ID", type="string"),
-     *   @SWG\Parameter(name="content", in="query", required=true, description="评论内容", type="string"),
+     *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
+     *   @SWG\Parameter(name="content", in="query", required=true, description="内容", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
@@ -113,9 +120,9 @@ class CommentController extends BaseController
      */
     public function create()
     {
-        $content_id = Request::get('content_id');
+        $id = Request::get('id');
+        $type = Request::get('type');
         $commentContent = Request::get('content');
-        \Log::debug(Request::get('token'));
 
         try {
             $member = \JWTAuth::parseToken()->authenticate();
@@ -126,21 +133,25 @@ class CommentController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        //根据内容类型获取标题
-        $content = Article::find($content_id);
+        $module = Module::find($type);
+        $__singular__ = call_user_func([$module->model_class, 'find'], $id);
+
+        if (empty($__singular__)) {
+            return $this->responseError('此ID不存在');
+        }
 
         //增加评论数
-        $content->comments += 1;
-        $content->save();
+        $__singular__->comments += 1;
+        $__singular__->save();
 
         //是否免审核
         $option = Option::getValue(Option::COMMENT_REQUIRE_PASS);
 
         //增加评论记录
         $comment = new Comment();
-        $comment->site_id = $content->site_id;
-        $comment->refer_id = $content->id;
-        $comment->content_title = $content->title;
+        $comment->site_id = $__singular__->site_id;
+        $comment->refer_id = $__singular__->id;
+        $comment->refer_type = $__singular__->getMorphClass();
         $comment->content = $commentContent;
         $comment->member_id = $member->id;
         $comment->ip = get_client_ip();

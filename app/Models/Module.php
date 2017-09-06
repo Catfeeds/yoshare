@@ -40,7 +40,7 @@ class Module extends Model
 
     public function getModelClassAttribute()
     {
-        return __NAMESPACE__ . '\\' . $this->name;
+        return __NAMESPACE__ . '\\' . ucfirst($this->name);
     }
 
     public function getControllerNameAttribute()

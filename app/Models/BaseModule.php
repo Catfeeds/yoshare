@@ -60,6 +60,11 @@ class BaseModule extends Model
         return $this->morphMany(Comment::class, 'refer');
     }
 
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'refer');
+    }
+
     public function setCreatedAt($value)
     {
         $this->attributes['sort'] = strtotime($value);
