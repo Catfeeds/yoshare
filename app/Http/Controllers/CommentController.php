@@ -83,7 +83,6 @@ class CommentController extends Controller
                 'id' => $comment->id,
                 'refer_id' => $comment->refer_id,
                 'content' => $comment->content,
-                'content_title' => $comment->content_title,
                 'nick_name' => empty($comment->member) ? $comment->user->name : $comment->member->nick_name,
                 'ip' => $comment->ip,
                 'likes' => $comment->likes,
