@@ -71,3 +71,88 @@ CREATE TABLE `cms_favorites` (
 -- 2017-9-7
 -- -----------
 ALTER TABLE `cms_comments` ADD `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除日期' AFTER `updated_at`;
+
+
+#问卷表
+CREATE TABLE `cms_surveys` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `image_url` text NOT NULL COMMENT '封面图',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `state` tinyint(1) NOT NULL COMMENT '状态',
+  `amount` int(11) DEFAULT NULL COMMENT '点击量',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `is_top` tinyint(1) DEFAULT NULL COMMENT '是否推荐到轮播图',
+  `likes` int(10) DEFAULT '0' COMMENT '点赞数',
+  `multiple` tinyint(1) DEFAULT NULL COMMENT '是否多选',
+  `link` varchar(255) DEFAULT NULL COMMENT '外链',
+  `member_id` int(10) NOT NULL COMMENT '会员ID',
+  `sort` int(11) NOT NULL COMMENT '序号',
+  `begin_date` datetime DEFAULT NULL COMMENT '问卷开始时间',
+  `end_date` datetime DEFAULT NULL COMMENT '问卷结束时间',
+  `created_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `published_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`),
+  KEY `site_id` (`site_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+#问卷回答连表
+CREATE TABLE `cms_survey_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `survey_id` int(10) unsigned NOT NULL COMMENT '问卷ID',
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '标题',
+  `image_url` text COLLATE utf8_unicode_ci NOT NULL COMMENT '图片URL',
+  `survey_title_id` int(11) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT '描述',
+  `amount` int(10) unsigned NOT NULL COMMENT '问卷数量',
+  `percent` float NOT NULL COMMENT '百分比',
+  `sort` int(11) NOT NULL COMMENT '序号',
+  `created_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `published_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `survey_id` (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#问卷子标题连表
+CREATE TABLE `cms_survey_titles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `survey_id` int(10) unsigned NOT NULL COMMENT '问卷ID',
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '子标题',
+  `created_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `published_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `survey_id` (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#问卷数据记录表
+CREATE TABLE `cms_survey_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `survey_id` int(10) unsigned NOT NULL COMMENT '问卷ID',
+  `survey_item_ids` text COLLATE utf8_unicode_ci NOT NULL COMMENT '选项IDS',
+  `comment` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '评论',
+  `person_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '姓名',
+  `person_mobile` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '手机号',
+  `avatar_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `member_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '会员名',
+  `nick_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '昵称',
+  `ip` char(15) COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP',
+  `sort` int(11) NOT NULL COMMENT '序号',
+  `created_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `published_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `survey_id` (`survey_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+

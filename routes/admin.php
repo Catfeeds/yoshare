@@ -21,7 +21,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * SMS日志管理
      */
-    Route::get('sms/log','SmsController@index');
+    Route::get('sms/log', 'SmsController@index');
     Route::get('sms/log/table', 'SmsController@table');
 
     /**
@@ -151,5 +151,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');
+
+    /**
+     * 问卷管理
+     */
+    Route::get('survey/items/table/{survey_id}', 'SurveyItemController@table');
+    Route::resource('survey/items', 'SurveyItemController');
+
+    Route::get('surveys/table', 'SurveyController@table');
+    Route::post('surveys/top/{id}', 'SurveyController@top');
+    Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
+    Route::post('surveys/state/{state}', 'SurveyController@state');
+    Route::resource('surveys', 'SurveyController');
 
 });

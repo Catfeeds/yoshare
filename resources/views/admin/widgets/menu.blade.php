@@ -22,6 +22,9 @@
                     @can('@category')
                         <li><a href="/admin/categories"><i class="fa fa-columns"></i> 栏目管理</a></li>
                     @endcan
+                    @can('@survey')
+                        <li><a href="/admin/surveys"><i class="fa fa-columns"></i> 问卷管理</a></li>
+                    @endcan
                 </ul>
             </li>
             <li class="treeview">
