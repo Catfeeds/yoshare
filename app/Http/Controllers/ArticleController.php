@@ -150,7 +150,7 @@ class ArticleController extends Controller
         return redirect($this->base_url . '?category_id=' . $article->category_id);
     }
 
-    public function comment($id)
+    public function comments($id)
     {
         return view('admin.comments.list', compact('id'));
     }

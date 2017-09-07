@@ -147,7 +147,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 评论管理
      */
     Route::get('comments/table', 'CommentController@table');
-    Route::post('comments/state/{state}', 'CommentController@state');
+    Route::post('comments/state', 'CommentController@state');
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');

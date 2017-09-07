@@ -87,12 +87,14 @@
                 return false;
             }
 
+            var ids = [row_id];
             $.ajax({
-                type: 'get',
-                data: {'_token': '{{ csrf_token() }}'},
-                url: '/admin/comments/' + row_id + '/delete',
-                success: function (data) {
-                    window.location.href = '/admin/comments';
+                url: '/admin/comments/state',
+                type: 'POST',
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
+                success: function () {
+                    $('#modal').modal('hide');
+                    $('#table').bootstrapTable('refresh');
                 }
             });
         });
@@ -104,12 +106,13 @@
 
         window.actionEvents = {
             'click .pass': function (e, value, row, index) {
+                var ids = [row.id];
                 $.ajax({
-                    type: 'get',
-                    data: {'_token': '{{ csrf_token() }}'},
-                    url: '/admin/comments/pass/' + row.id,
-                    success: function (data) {
-                        window.location.href = '/admin/comments';
+                    url: '/admin/comments/state',
+                    type: 'POST',
+                    data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_PASSED }}'},
+                    success: function () {
+                        $('#table').bootstrapTable('refresh');
                     }
                 });
             },

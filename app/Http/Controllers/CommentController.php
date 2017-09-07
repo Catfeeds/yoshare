@@ -101,42 +101,9 @@ class CommentController extends Controller
         return Response::json($ds);
     }
 
-    public function state($state)
+    public function state()
     {
-        $ids = Request::get('ids');
-
-        switch ($state) {
-            case Comment::STATE_PASSED:
-                if (Gate::denies('@comment-pass')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '已审核';
-                break;
-            case Comment::STATE_DELETED:
-                if (Gate::denies('@comment-delete')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '删除';
-                break;
-            default:
-                \Session::flash('flash_warning', '操作错误!');
-                return;
-        }
-
-        foreach ($ids as $id) {
-            $article = Comment::find($id);
-
-            if ($article == null) {
-                \Session::flash('flash_warning', '无此记录!');
-                return;
-            }
-
-            $article->state = $state;
-            $article->save();
-        }
-
-        \Session::flash('flash_success', $state_name . '成功!');
+        Comment::state(request()->all());
     }
+
 }

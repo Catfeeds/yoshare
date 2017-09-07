@@ -40,8 +40,8 @@ CREATE TABLE `cms_comments` (
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '评论内容',
   `likes` int(10) unsigned NOT NULL COMMENT '点赞数',
   `member_id` int(10) NOT NULL COMMENT '会员ID',
-  `ip` char(15) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(10) unsigned NOT NULL COMMENT '用户',
+  `ip` char(15) COLLATE utf8_unicode_ci NOT NULL,
   `state` tinyint(1) NOT NULL COMMENT '状态',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `cms_comments` (
   KEY `cms_comments_index_1` (`refer_id`,`state`),
   KEY `site_id` (`site_id`),
   KEY `state` (`state`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- -----------
 -- 2017-9-6
@@ -66,4 +66,8 @@ CREATE TABLE `cms_favorites` (
   PRIMARY KEY (`id`),
   KEY `site_id` (`site_id`),
   KEY `content_id` (`refer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- -----------
+-- 2017-9-7
+-- -----------
+ALTER TABLE `cms_comments` ADD `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除日期' AFTER `updated_at`;

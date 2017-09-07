@@ -134,7 +134,7 @@ class __controller__ extends Controller
         return redirect($this->base_url);
     }
 
-    public function comment($id)
+    public function comments($id)
     {
         return view('admin.comments.list', compact('id'));
     }

@@ -73,6 +73,9 @@ class CommentController extends BaseController
         $id = Request::get('id');
 
         $module = Module::find($type);
+        if(!$module){
+            return $this->responseError('此类型不存在');
+        }
 
         $total = Comment::where('refer_id', $id)
             ->where('refer_type', $module->model_class)
@@ -134,24 +137,27 @@ class CommentController extends BaseController
         }
 
         $module = Module::find($type);
-        $__singular__ = call_user_func([$module->model_class, 'find'], $id);
+        if(!$module){
+            return $this->responseError('此类型不存在');
+        }
 
-        if (empty($__singular__)) {
+        $model = call_user_func([$module->model_class, 'find'], $id);
+
+        if (empty($model)) {
             return $this->responseError('此ID不存在');
         }
 
         //增加评论数
-        $__singular__->comments += 1;
-        $__singular__->save();
+        $model->increment('comments');
 
         //是否免审核
         $option = Option::getValue(Option::COMMENT_REQUIRE_PASS);
 
         //增加评论记录
         $comment = new Comment();
-        $comment->site_id = $__singular__->site_id;
-        $comment->refer_id = $__singular__->id;
-        $comment->refer_type = $__singular__->getMorphClass();
+        $comment->site_id = $model->site_id;
+        $comment->refer_id = $model->id;
+        $comment->refer_type = $model->getMorphClass();
         $comment->content = $commentContent;
         $comment->member_id = $member->id;
         $comment->ip = get_client_ip();
@@ -203,12 +209,10 @@ class CommentController extends BaseController
         }
 
         if ($flag) {
-            $comment->likes++;
-            $comment->save();
+            $comment->increment('likes');
         } else {
             if ($comment->likes > 0) {
-                $comment->likes--;
-                $comment->save();
+                $comment->decrement('likes');
             }
         }
 

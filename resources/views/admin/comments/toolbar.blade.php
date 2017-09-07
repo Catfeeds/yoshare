@@ -2,7 +2,8 @@
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
     <button class="btn btn-success btn-xs margin-r-5 action"
-            value="{{ \App\Models\Comment::STATE_PASSED }}">审核</button>
+            value="{{ \App\Models\Comment::STATE_PASSED }}">审核
+    </button>
     <button class="btn btn-danger btn-xs margin-r-5" id="delete"
             value="{{ \App\Models\Comment::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal"
             data-target="#modal">删除
@@ -36,11 +37,12 @@
         }
 
         $.ajax({
-            url: '/admin/comments/state/' + state,
+            url: '/admin/comments/state',
             type: 'POST',
-            data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+            data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
             success: function () {
-                window.location.reload();
+                $('#modal').modal('hide');
+                $('#table').bootstrapTable('refresh');
             }
         });
     });
@@ -68,11 +70,11 @@
         }
         if (ids.length > 0) {
             $.ajax({
-                url: '/admin/comments/state/' + state,
+                url: '/admin/comments/state',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
                 success: function () {
-                    window.location.reload();
+                    $('#table').bootstrapTable('refresh');
                 }
             });
         }

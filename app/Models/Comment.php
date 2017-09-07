@@ -3,13 +3,22 @@
 namespace App\Models;
 
 use Auth;
+use Gate;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
+    use SoftDeletes;
+
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_PASSED = 9;
+
+    const STATE_PERMISSIONS = [
+        0 => '@comment-delete',
+        9 => '@comment-pass',
+    ];
 
     const TYPE_ARTICLE = 1;
     const TYPE_QUESTION = 2;
@@ -18,8 +27,7 @@ class Comment extends Model
         'site_id',
         'refer_id',
         'refer_type',
-        'content',
-        'content_title',
+        'summary',
         'likes',
         'member_id',
         'ip',
@@ -76,7 +84,38 @@ class Comment extends Model
     {
         $query->where(function ($query) use ($filters) {
             !empty($filters['id']) ? $query->where('refer_id', $filters['id']) : '';
-            isset($filters['state']) && $filters['state'] !== '' ? $query->where('state', $filters['state']) : '';
         });
+        if (isset($filters['state'])) {
+            if (!empty($filters['state'])) {
+                $query->where('state', $filters['state']);
+            } else if ($filters['state'] === strval(static::STATE_DELETED)) {
+                $query->onlyTrashed();
+            }
+        }
+    }
+
+    public static function state($input)
+    {
+        $ids = $input['ids'];
+        $state = $input['state'];
+
+        //判断是否有操作权限
+        $permission = array_key_exists($state, static::STATE_PERMISSIONS) ? static::STATE_PERMISSIONS[$state] : '';
+        if (!empty($permission) && Gate::denies($permission)) {
+            return;
+        }
+
+        $items = static::withTrashed()
+            ->whereIn('id', $ids)
+            ->get();
+        foreach ($items as $item) {
+            $item->state = $state;
+            $item->save();
+            if ($state == static::STATE_DELETED) {
+                $item->delete();
+            } else if ($item->trashed()) {
+                $item->restore();
+            }
+        }
     }
 }
