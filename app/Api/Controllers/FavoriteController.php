@@ -2,9 +2,9 @@
 
 namespace App\Api\Controllers;
 
-use App\Models\Content;
-use App\Models\ContentItem;
+use App\Models\Module;
 use App\Models\Favorite;
+use App\Models\File;
 use DB;
 use Exception;
 use Request;
@@ -12,15 +12,32 @@ use Request;
 
 class FavoriteController extends BaseController
 {
+    public function transform($favorite)
+    {
+        $attributes['favorite_id'] = $favorite->id;
+        $attributes = $favorite->refer->getAttributes();
+        $attributes['images'] = $favorite->refer->images()->transform(function ($item) use ($favorite) {
+            return [
+                'id' => $item->id,
+                'title' => !empty($item->title) ?: $favorite->refer->title,
+                'url' => get_image_url($item->url),
+                'summary' => $item->summary,
+            ];
+        });
+        $attributes['time'] = $favorite->refer->published_at->format('m-d H:i');
+        $attributes['time_trans'] = time_trans(strtotime($favorite->refer->published_at));
+        return $attributes;
+    }
+
     /**
      * @SWG\Get(
      *   path="/favorites/list",
      *   summary="获取收藏列表",
      *   tags={"/favorites 收藏"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
      *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
+     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
      *     description="查询成功"
@@ -46,8 +63,7 @@ class FavoriteController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        $favorites = Favorite::with('content.items')
-            ->where('site_id', $site_id)
+        $favorites = Favorite::where('site_id', $site_id)
             ->where('member_id', $member->id)
             ->orderBy('created_at', 'desc')
             ->skip(($page - 1) * $page_size)
@@ -55,42 +71,11 @@ class FavoriteController extends BaseController
             ->get();
 
         $favorites = $favorites->filter(function ($favorite) {
-            return !empty($favorite->content);
+            return $favorite->refer()->exists();
         });
 
         $favorites->transform(function ($favorite) {
-            return [
-                'favorite_id' => $favorite->id,
-                'id' => $favorite->content->id,
-                'type' => $favorite->content->type,
-                'title' => $favorite->content->title,
-                'subtitle' => $favorite->content->subtitle,
-                'keywords' => $favorite->content->keywords,
-                'author' => $favorite->content->author,
-                'tags' => $favorite->content->tags,
-                'source' => $favorite->content->source,
-                'link_type' =>$favorite->content->link_type,
-                'link' => $favorite->content->link,
-                'image_url' => get_image_url($favorite->content->image_url),
-                'video_url' => get_video_url($favorite->content->video_url),
-                'live_url' => $favorite->content->live_url,
-                'video_duration' => $favorite->content->video_duration,
-                'images' => $favorite->content->items()->orderBy('sort')->get()->where('type', ContentItem::TYPE_IMAGE)->transform(function ($item) use ($favorite) {
-                    return [
-                        'id' => $item->id,
-                        'title' => !empty($item->title) ?: $favorite->content->title,
-                        'url' => get_image_url($item->url),
-                        'description' => $item->description,
-                    ];
-                }),
-                'summary' => $favorite->content->summary,
-                'clicks' => $favorite->content->clicks + $favorite->content->views,
-                'comments' => $favorite->content->comments,
-                'favorites' => $favorite->content->favorites,
-                'is_top' => $favorite->content->is_top,
-                'time' => $favorite->content->published_at->format('m-d H:i'),
-                'time_trans' => time_trans(strtotime($favorite->content->published_at)),
-            ];
+            return $this->transform($favorite);
         });
 
         return $this->responseSuccess(array_values($favorites->toArray()));
@@ -101,7 +86,8 @@ class FavoriteController extends BaseController
      *   path="/favorites/create",
      *   summary="添加收藏",
      *   tags={"/favorites 收藏"},
-     *   @SWG\Parameter(name="content_id", in="query", required=true, description="内容ID", type="string"),
+     *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
@@ -119,7 +105,8 @@ class FavoriteController extends BaseController
      */
     public function create()
     {
-        $content_id = Request::get('content_id');
+        $id = Request::get('id');
+        $type = Request::get('type');
 
         try {
             $member = \JWTAuth::parseToken()->authenticate();
@@ -130,8 +117,13 @@ class FavoriteController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
+        $module = Module::find($type);
+
         //检查收藏记录数是否过多
-        $count = DB::table('favorites')->where('member_id', $member->id)
+        $count = DB::table('favorites')
+            ->where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
+            ->where('member_id', $member->id)
             ->count();
 
         if ($count >= 1000) {
@@ -139,35 +131,33 @@ class FavoriteController extends BaseController
         }
 
         //检查总记录数是否过多
-        $count = DB::table('favorites')->count();
+        $count = DB::table('favorites')
+            ->where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
+            ->count();
         if ($count >= 1000 * 1000) {
             return $this->responseError('收藏数量过多');
         }
 
-        //判断是否存在
-        $content = Content::find($content_id);
+        $__singular__ = call_user_func([$module->model_class, 'find'], $id);
 
-        if (empty($content)) {
-            return $this->responseError('此内容ID不存在');
+        if (empty($__singular__)) {
+            return $this->responseError('此ID不存在');
         }
 
         //判断此收藏是否已存在
-        $favorite = Favorite::where('member_id', $member->id)
-            ->where('content_id', $content_id)
-            ->first();
-
-        if (empty($favorite)) {
+        if (!Favorite::where('member_id', $member->id)->where('refer_id', $id)->where('refer_type', $module->model_class)->exists()) {
             //增加收藏数
-            $content->favorites += 1;
-            $content->save();
+            $__singular__->favorites += 1;
+            $__singular__->save();
 
             //增加收藏记录
             $favorite = new Favorite();
-            $favorite->site_id = $content->site_id;
-            $favorite->category_id = $content->category_id;
-            $favorite->content_id = $content_id;
-            $favorite->title = $content->title;
+            $favorite->site_id = $__singular__->site_id;
+            $favorite->refer_id = $__singular__->id;
+            $favorite->refer_type = $__singular__->getMorphClass();
             $favorite->member_id = $member->id;
+
             $favorite->save();
         }
 
@@ -215,7 +205,8 @@ class FavoriteController extends BaseController
      *   path="/favorites/delete",
      *   summary="删除收藏",
      *   tags={"/favorites 收藏"},
-     *   @SWG\Parameter(name="content_id", in="query", required=true, description="内容ID", type="integer"),
+     *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="integer"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
@@ -229,6 +220,9 @@ class FavoriteController extends BaseController
      */
     public function delete()
     {
+        $id = Request::get('id');
+        $type = Request::get('type');
+
         try {
             $member = \JWTAuth::parseToken()->authenticate();
             if (!$member) {
@@ -238,9 +232,16 @@ class FavoriteController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        $content_id = Request::get('content_id');
+        $module = Module::find($type);
 
-        Favorite::where('content_id', $content_id)->delete();
+        $favorite = Favorite::where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
+            ->where('member_id', $member->id)
+            ->first();
+
+        if($favorite){
+            $favorite->delete();
+        }
 
         return $this->responseSuccess();
     }
@@ -248,9 +249,10 @@ class FavoriteController extends BaseController
     /**
      * @SWG\Get(
      *   path="/favorites/exist",
-     *   summary="内容是否收藏",
+     *   summary="是否收藏",
      *   tags={"/favorites 收藏"},
-     *   @SWG\Parameter(name="content_id", in="query", required=true, description="内容ID", type="string"),
+     *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
@@ -264,6 +266,9 @@ class FavoriteController extends BaseController
      */
     public function exist()
     {
+        $id = Request::get('id');
+        $type = Request::get('type');
+
         try {
             $member = \JWTAuth::parseToken()->authenticate();
             if (!$member) {
@@ -273,16 +278,16 @@ class FavoriteController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        $content_id = Request::get('content_id');
+        $module = Module::find($type);
 
-        $favorite = Favorite::where('member_id', $member->id)
-            ->where('content_id', $content_id)
+        $favorite = Favorite::where('refer_id', $id)
+            ->where('refer_type', $module->model_class)
+            ->where('member_id', $member->id)
             ->first();
 
         if ($favorite) {
             return $this->responseSuccess();
-        }
-        else{
+        } else {
             return $this->responseError('未收藏');
         }
     }

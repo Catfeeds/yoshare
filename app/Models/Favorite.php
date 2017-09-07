@@ -9,15 +9,15 @@ class Favorite extends Model
     protected $fillable = [
         'site_id',
         'category_id',
-        'content_id',
+        'refer_id',
+        'refer_type',
         'title',
         'member_id',
-        'member_name',
     ];
 
-    public function content()
+    public function refer()
     {
-        return $this->belongsTo(Content::class);
+        return $this->morphTo();
     }
 
     public function member()

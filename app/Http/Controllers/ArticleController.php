@@ -152,7 +152,7 @@ class ArticleController extends Controller
 
     public function comment($id)
     {
-        return view('admin.comments.comment', compact('id'));
+        return view('admin.comments.list', compact('id'));
     }
 
     public function save($id)

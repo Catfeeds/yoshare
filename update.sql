@@ -28,12 +28,42 @@ CREATE TABLE `cms_sms_logs`(
 ALTER TABLE `cms_sms_logs` ADD `state`  TINYINT(1) NOT NULL COMMENT '状态:1成功 2失败' AFTER `message`;
 
 -- -----------
--- 2017-05-18
+-- 2017-9-5
 -- -----------
-ALTER TABLE `cms_comments` CHANGE `username` `user_id` INT(10)  unsigned NOT NULL COMMENT '用户ID';
-ALTER TABLE `cms_comments` CHANGE `content_id` `refer_id` INT(10) unsigned NOT NULL COMMENT '关联ID';
-ALTER TABLE `cms_comments` ADD `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型' AFTER `refer_id`;
-alter table cms_comments drop column content_title;
-UPDATE `cms_comments` SET `refer_type`='App\\Models\\Article';
-ALTER TABLE `cms_comments` ADD `parent_id` INT(10) NOT NULL COMMENT '上级ID' AFTER `site_id`;
+DROP TABLE IF EXISTS `cms_comments`;
+CREATE TABLE `cms_comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `parent_id` int(10) NOT NULL COMMENT '上级ID',
+  `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
+  `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '评论内容',
+  `likes` int(10) unsigned NOT NULL COMMENT '点赞数',
+  `member_id` int(10) NOT NULL COMMENT '会员ID',
+  `ip` char(15) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户',
+  `state` tinyint(1) NOT NULL COMMENT '状态',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cms_comments_index_1` (`refer_id`,`state`),
+  KEY `site_id` (`site_id`),
+  KEY `state` (`state`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- -----------
+-- 2017-9-6
+-- -----------
+DROP TABLE IF EXISTS `cms_favorites`;
+CREATE TABLE `cms_favorites` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
+  `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型',
+  `member_id` int(10) NOT NULL COMMENT '会员ID',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_id` (`site_id`),
+  KEY `content_id` (`refer_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

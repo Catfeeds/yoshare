@@ -55,8 +55,7 @@
 
     function actionFormatter(value, row, index) {
         //编辑
-        html ='<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>' +
-                '<span> </span>';
+        html ='<button class="btn btn-primary btn-xs edit margin-r-5" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
 
         //评论
         html +='<button class="btn btn-info btn-xs comment" data-toggle="modal" data-target="#modal_comment">' +
