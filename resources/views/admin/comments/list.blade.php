@@ -23,6 +23,22 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-xs-12">
+        <h4>回答</h4>
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="col-sm-12" style="padding: 0px 0px 10px 0px;">
+                    {!! Form::textarea('content', null, ['id'=>'content','class' => 'form-control', 'rows' => '4']) !!}
+                </div>
+                <button type="submit" class="btn btn-lg btn-info btn-block center-block submit" onclick="confirm()">
+                    提交回答
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $('#comment_table').bootstrapTable({
         method: 'get',
@@ -101,6 +117,49 @@
             });
         }
     };
+
+    function confirm() {
+        toastr.options = {
+            'closeButton': true,
+            'showDuration': 100,
+            'hideDuration': 0,
+            'timeOut': 0,
+            'extendedTimeOut': 0,
+            'positionClass': 'toast-top-center',
+        };
+        toastr['info']('您确定提交该条回答吗？&nbsp;&nbsp;&nbsp;<span onclick="commit();" style="text-decoration: underline;">确定</span>');
+    }
+
+    function commit() {
+        var content_val = $.trim($('#content').val());
+        if (content_val == '') {
+            toastrs('warning', '请输入回答内容，再提交！');
+            return false;
+        }
+
+        $.ajax({
+            url: '{{ "/admin/questions/reply/".$id }}',
+            type: 'post',
+            data: {
+                'content': $('#content').val(),
+                '_token': '{{ csrf_token() }}'
+            },
+            success: function (data) {
+                if (data.status_code == 200) {
+                    $('#comment_table').bootstrapTable('selectPage', 1);
+                    $('#comment_table').bootstrapTable('refresh', {silent: true});
+                    $('#content').val('');
+                    toastrs('success', '回复成功！');
+
+                } else {
+                    toastrs('error', data.message);
+                }
+            },
+            error: function () {
+                toastrs('warning', '系统繁忙！');
+            }
+        });
+    }
 
     function titleFormatter(value, row, index) {
         return [
