@@ -12,6 +12,5 @@ $api->version('v1', function ($api) {
         $api->get('articles/info', 'ArticleController@info');
         $api->get('articles/detail', 'ArticleController@detail');
         $api->get('articles/share', 'ArticleController@share');
-        $api->get('articles/comments/create','ArticleController@create');
     });
 });
