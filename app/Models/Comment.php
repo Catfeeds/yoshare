@@ -27,7 +27,7 @@ class Comment extends Model
         'site_id',
         'refer_id',
         'refer_type',
-        'summary',
+        'content',
         'likes',
         'member_id',
         'ip',
