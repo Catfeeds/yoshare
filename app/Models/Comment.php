@@ -15,13 +15,13 @@ class Comment extends Model
     const STATE_NORMAL = 1;
     const STATE_PASSED = 9;
 
+    const TYPE_ARTICLE = 1;
+    const TYPE_QUESTION = 2;
+
     const STATE_PERMISSIONS = [
         0 => '@comment-delete',
         9 => '@comment-pass',
     ];
-
-    const TYPE_ARTICLE = 1;
-    const TYPE_QUESTION = 2;
 
     protected $fillable = [
         'site_id',
