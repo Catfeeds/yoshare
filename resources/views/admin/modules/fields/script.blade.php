@@ -133,7 +133,7 @@
         $('#editor_index').val(0);
     });
 
-    $('#btn_confirm').click(function () {
+    $('#modal_remove').click(function () {
         var row_id = $(this).data('id');
         $.ajax({
             url: '/admin/modules/fields/' + row_id,

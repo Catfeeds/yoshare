@@ -139,6 +139,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
     /**
+     * 问答管理
+     */
+    Route::post('questions/reply/{id}', 'QuestionController@reply');
+
+    /**
      * 评论管理
      */
     Route::get('comments/table', 'CommentController@table');
@@ -146,4 +151,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
     Route::get('comments/{id}/delete', 'CommentController@destroy');
+
 });

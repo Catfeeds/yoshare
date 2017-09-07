@@ -11,11 +11,15 @@ class Comment extends Model
     const STATE_NORMAL = 1;
     const STATE_PASSED = 9;
 
+    const TYPE_ARTICLE = 1;
+    const TYPE_QUESTION = 2;
+
     protected $fillable = [
         'site_id',
         'refer_id',
         'refer_type',
-        'summary',
+        'content',
+        'content_title',
         'likes',
         'member_id',
         'ip',
