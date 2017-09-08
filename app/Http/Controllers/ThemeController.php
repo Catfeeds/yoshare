@@ -17,8 +17,7 @@ class ThemeController extends BaseController
     public function index()
     {
         $snippets = config('snippet');
-        $module = Module::find(1);
-        return view('admin.themes.index', compact('snippets', 'module'));
+        return view('admin.themes.index', compact('snippets'));
     }
 
     public function store(ThemeRequest $request)
@@ -58,6 +57,16 @@ class ThemeController extends BaseController
         $theme->delete();
 
         \Session::flash('flash_success', '删除成功');
+    }
+
+    public function module($module_id)
+    {
+        $module = Module::find($module_id);
+        $module['fields'] = $module->fields()->orderBy('index')->get();
+
+        return $this->responseSuccess(
+            $module
+        );
     }
 
     public function getPathNodes($type = 'asset', $path, $extension, $array = [], $module_id = null)
@@ -101,7 +110,6 @@ class ThemeController extends BaseController
         foreach ($dirs as $dir) {
             $nodes[] = [
                 'text' => $dir,
-                'tags' => [0],
                 'extension' => $extension,
                 'path' => $path . DIRECTORY_SEPARATOR . $dir,
                 'nodes' => $this->getPathNodes($type, $path . DIRECTORY_SEPARATOR . $dir, $extension, [], $module_id),
@@ -112,7 +120,11 @@ class ThemeController extends BaseController
         foreach ($files as $file) {
             $tag = null;
             if ($file == 'index.blade.php') {
-                $tag = '列表页';
+                if ($type == 'root') {
+                    $tag = '首页';
+                } else {
+                    $tag = '列表页';
+                }
             } else if ($file == 'category.blade.php') {
                 $tag = '栏目页';
             } else if ($file == 'detail.blade.php') {
@@ -130,29 +142,13 @@ class ThemeController extends BaseController
         return $nodes;
     }
 
-    public function setNodeTag($nodes)
-    {
-        //设置tags
-        for ($i = 0; $i < count($nodes); $i++) {
-            if (isset($nodes[$i]['extension'])) {
-                $nodes[$i]['tags'][0] = count($nodes[$i]['nodes']);
-
-                if (isset($nodes[$i]['nodes'])) {
-                    $nodes[$i]['nodes'] = $this->setNodeTag($nodes[$i]['nodes']);
-                }
-            }
-        }
-
-        return $nodes;
-    }
-
     public function getThemeNodes($theme)
     {
         $nodes = [
             [
                 'text' => 'css',
                 'color' => '#00a47a',
-                'tags' => [0, '样式'],
+                'tags' => ['样式'],
                 'extension' => '.css',
                 'path' => $theme->name . '/css',
                 'nodes' => $this->getPathNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'css', '.css'),
@@ -160,7 +156,7 @@ class ThemeController extends BaseController
             [
                 'text' => 'js',
                 'color' => '#f60',
-                'tags' => [0, '脚本'],
+                'tags' => ['脚本'],
                 'extension' => '.js',
                 'path' => $theme->name . '/js',
                 'nodes' => $this->getPathNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'js', '.js'),
@@ -168,7 +164,7 @@ class ThemeController extends BaseController
             [
                 'text' => 'layouts',
                 'color' => '#08c',
-                'tags' => [0, '布局'],
+                'tags' => ['布局'],
                 'extension' => '.blade.php',
                 'path' => $theme->name . '/layouts',
                 'nodes' => $this->getPathNodes('views', $theme->name . DIRECTORY_SEPARATOR . 'layouts', '.blade.php'),
@@ -181,16 +177,14 @@ class ThemeController extends BaseController
                 'id' => $module->id,
                 'type' => 'module',
                 'text' => $module->path,
-                'tags' => [0, $module->title],
+                'tags' => [$module->title],
                 'extension' => '.blade.php',
                 'path' => $theme->name . DIRECTORY_SEPARATOR . $module->path,
                 'nodes' => $this->getPathNodes('view', $theme->name . DIRECTORY_SEPARATOR . $module->path, '.blade.php', [], $module->id),
             ];
         }
 
-        $nodes = array_merge($nodes, $this->getPathNodes('view', $theme->name, '.blade.php', $nodes));
-
-        $nodes = $this->setNodeTag($nodes);
+        $nodes = array_merge($nodes, $this->getPathNodes('root', $theme->name, '.blade.php', $nodes));
 
         return $nodes;
     }
@@ -206,12 +200,11 @@ class ThemeController extends BaseController
                 'id' => $theme->id,
                 'type' => 'theme',
                 'text' => $theme->name,
-                'tags' => [0, $theme->title],
+                'tags' => [$theme->title],
                 'extension' => '.blade.php',
                 'path' => $theme->name,
                 'nodes' => $this->getThemeNodes($theme)
             ];
-            $node['tags'][0] = count($node['nodes']);
             $nodes[] = $node;
         }
 

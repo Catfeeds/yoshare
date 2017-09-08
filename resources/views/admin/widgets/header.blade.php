@@ -14,6 +14,14 @@
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sitemap"></i> {{ auth()->user()->site->title }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">站点一</a></li>
+                        <li><a href="#">站点二</a></li>
+                        <li><a href="#">站点三</a></li>
+                    </ul>
+                </li>
 
             @include('admin.widgets.message')
 

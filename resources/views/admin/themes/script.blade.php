@@ -36,6 +36,7 @@
                     $('#btn_edit_theme').hide();
                     $('#btn_create_file').hide();
                     $('#btn_remove_file').hide();
+                    $('#link_preview').text('');
 
                     if (typeof(data.id) != 'undefined') {
                         if (data.type == 'module') {
@@ -50,12 +51,21 @@
                         //末端节点
                         $('#btn_remove_file').show();
 
+                        //读取文件内容
                         filePath = data.path;
                         readFile(data.path);
                         editor.setReadOnly(false);
-                        if (typeof(data.module_id) != 'undefined'){
-                            //显示变量列表
-                            showVariables(data.module_id)
+
+
+                        //刷新模块下文件的编辑界面
+                        if (typeof(data.module_id) != 'undefined' && data.module_id > 0) {
+                            refresh(data.module_id, data.text);
+                        }
+
+                        //显示首页地址
+                        if (typeof(data.tags) != 'undefined' && data.tags[0] == '首页'){
+                            $('#link_preview').text('/index.html');
+                            $('#link_preview').attr('href', $('#link_preview').text());
                         }
                     }
                     else {
@@ -186,8 +196,65 @@
         });
     }
 
-    function showVariables(module_id) {
-        console.log(module_id);
+    function refresh(module_id, page) {
+        $.ajax({
+            type: 'get',
+            url: '{{ url('admin/themes/modules') }}' + '/' + module_id,
+            success: function (res) {
+                if (res.code == 200) {
+
+                    //清空
+                    $('#list_var li').remove();
+
+                    //站点
+                    $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$site">站点</a></li>');
+                    $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$site->title">站点->标题</a></li>');
+                    $('#list_var').append('<li><a href="#" class="code" data-code="$site->company">站点->单位</a></li>');
+
+                    if (page == 'index.blade.php') {
+                        //列表页
+                        $('#link_preview').text('/articles/index.html');
+                        $('#link_preview').attr('href', $('#link_preview').text());
+
+                        $('#list_var').append('<li class="divider"></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$module">模块</a></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$module->title">模块->标题</a></li>');
+                        $('#list_var').append('<li class="divider"></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$' + res.data.name.toLowerCase() + 's">' + res.data.title + '(集合)' + '</a></li>');
+                    } else if (page == 'category.blade.php') {
+                        //栏目页
+                        $('#link_preview').text('/articles/category-1.html');
+                        $('#link_preview').attr('href', $('#link_preview').text());
+
+                        $('#list_var').append('<li class="divider"></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$category">栏目</a></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$category->name">栏目->名称</a></li>');
+                        $('#list_var').append('<li class="divider"></li>');
+                        $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$' + res.data.name.toLowerCase() + 's">' + res.data.title + '(集合)' + '</a></li>');
+                    } else if (page == 'detail.blade.php') {
+                        //详情页
+                        $('#link_preview').text('/articles/detail-1.html');
+                        $('#link_preview').attr('href', $('#link_preview').text());
+
+                        $('#list_var').append('<li class="divider"></li>');
+                        for (var i = 0; i < res.data.fields.length; i++) {
+                            $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="' + res.data.name.toLowerCase() + '->' + res.data.fields[i].name + '">' + res.data.title + '->' + res.data.fields[i].title + '</a></li>');
+                        }
+                    }
+
+                    //添加事件
+                    $('.code').click(function () {
+                        editor.insert($(this).data('code'));
+                    });
+                }
+                else {
+                    toastrs('warning', '<b>获取模块信息失败: ' + res.message + '</b>')
+                }
+            },
+            error: function () {
+                toastrs('error', '<b>获取模块信息失败</b>')
+            }
+        });
     }
 
     $('.code').click(function () {

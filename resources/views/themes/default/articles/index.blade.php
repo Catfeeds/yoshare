@@ -11,7 +11,7 @@
     @include('themes.default.layouts.header')
 
     <ul>
-        @foreach($site->categories as $category)
+        @foreach($module->categories as $category)
             <li><a href="{{ "category-$category->id.html" }}">{{ $category->name }}</a></li>
         @endforeach
     </ul>

@@ -35,7 +35,7 @@
                 <div class="col-md-9">
                     <div class="box box-info">
                         <div class="box-header ui-sortable-handle">
-                            <h3 class="box-title"></h3>
+                            <h3 class="box-title margin-l-5"><a href="#" id="link_preview" target="_blank"></a></h3>
                             <div class="box-tools pull-right">
                                 <div class="btn-group" id="btn_create_file">
                                     <button type="button" class="btn btn-info btn-xs margin-t-5" data-toggle="modal" data-target="#modal_file">添加文件</button>
@@ -43,9 +43,9 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">列表页 - index.blade.php</a></li>
-                                        <li><a href="#">栏目页 - category.blade.php</a></li>
-                                        <li><a href="#">详情页 - detail.blade.php</a></li>
+                                        <li><a href="javascript:void(0)">列表页 - index.blade.php</a></li>
+                                        <li><a href="javascript:void(0)">栏目页 - category.blade.php</a></li>
+                                        <li><a href="javascript:void(0)">详情页 - detail.blade.php</a></li>
                                     </ul>
                                 </div>
 
@@ -55,14 +55,7 @@
                                     <button type="button" class="btn btn-info btn-xs margin-r-5 margin-t-5 dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" class="code" data-code="$site">站点</a></li>
-                                        <li><a href="#" class="code" data-code="$site->title">站点-标题</a></li>
-                                        <li><a href="#" class="code" data-code="$site->company">站点-单位</a></li>
-                                        <li class="divider"></li>
-                                        @foreach($module->fields()->orderBy('index')->get() as $field)
-                                            <li><a href="#" class="code" data-code="${{ $module->singular }}->{{ $field->name }}">{{ $module->title . '-' . $field->title }}</a></li>
-                                        @endforeach
+                                    <ul class="dropdown-menu" role="menu" id="list_var">
                                     </ul>
                                 </div>
                                 <div class="btn-group">
@@ -72,12 +65,13 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         @foreach ($snippets as $key => $snippet)
-                                            <li><a href="#" class="code" data-code="{{ $snippet }}">{{ $key }}</a></li>
+                                            <li><a href="javascript:void(0)" class="code" data-code="{{ $snippet }}">{{ $key }}</a></li>
                                         @endforeach
                                         <li class="divider"></li>
                                         <li><a href="http://laravelacademy.org/post/5919.html" target="_blank">参考文档</a></li>
                                     </ul>
-                                </div>                            </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="box-body">
                             @include('admin.layouts.flash')

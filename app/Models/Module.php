@@ -266,6 +266,7 @@ class Module extends Model
             'model_class' => $module->model_class,
             'fa_icon' => $module->fa_icon,
             'groups' => explode(',', $module->groups),
+            'categories' => $module->categories()->orderBy('sort')->get(),
             'columns' => $module->fields->map(function ($field) {
                 return [
                     'id' => $field->id,
