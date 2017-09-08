@@ -11,7 +11,6 @@
         enableEmmet: true
     });
     editor.session.on('change', function (e) {
-        console.log(e);
     });
     editor.$blockScrolling = Infinity;
     editor.commands.addCommand({
@@ -34,23 +33,33 @@
                 showTags: true,
                 data: data,
                 onNodeSelected: function (event, data) {
+                    $('#btn_edit_theme').hide();
+                    $('#btn_create_file').hide();
+                    $('#btn_remove_file').hide();
+
                     if (typeof(data.id) != 'undefined') {
-                        $('#btn_edit_theme').show();
+                        if (data.type == 'module') {
+                            //显示编辑主题按钮
+                            $('#btn_edit_theme').show();
+                        }
                     }
                     else {
-                        $('#btn_edit_theme').hide();
                     }
+
                     if (typeof(data.nodes) == 'undefined') {
-                        $('#btn_create_file').hide();
+                        //末端节点
                         $('#btn_remove_file').show();
 
                         filePath = data.path;
                         readFile(data.path);
                         editor.setReadOnly(false);
+                        if (typeof(data.module_id) != 'undefined'){
+                            //显示变量列表
+                            showVariables(data.module_id)
+                        }
                     }
                     else {
                         $('#btn_create_file').show();
-                        $('#btn_remove_file').hide();
                     }
                 }
             });
@@ -154,7 +163,7 @@
 
     function writeFile(path, data) {
         if (path.length == 0) {
-            toastrs('info', '<b>请选择文件</b>')
+            toastrs('info', '<b>请选择文件</b>');
             return;
         }
         $.ajax({
@@ -176,4 +185,12 @@
             }
         });
     }
+
+    function showVariables(module_id) {
+        console.log(module_id);
+    }
+
+    $('.code').click(function () {
+        editor.insert($(this).data('code'));
+    });
 </script>

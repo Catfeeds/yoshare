@@ -37,7 +37,18 @@
                         <div class="box-header ui-sortable-handle">
                             <h3 class="box-title"></h3>
                             <div class="box-tools pull-right">
-                                <button class="btn btn-success btn-xs margin-r-5 margin-t-5" id="btn_create_file" data-toggle="modal" data-target="#modal_file"><i class="fa fa-plus"></i> 添加文件</button>
+                                <div class="btn-group" id="btn_create_file">
+                                    <button type="button" class="btn btn-info btn-xs margin-t-5" data-toggle="modal" data-target="#modal_file">添加文件</button>
+                                    <button type="button" class="btn btn-info btn-xs margin-r-5 margin-t-5 dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">列表页 - index.blade.php</a></li>
+                                        <li><a href="#">栏目页 - category.blade.php</a></li>
+                                        <li><a href="#">详情页 - detail.blade.php</a></li>
+                                    </ul>
+                                </div>
+
                                 <button class="btn btn-danger btn-xs margin-r-5 margin-t-5" id="btn_remove_file">删除文件</button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info btn-xs margin-t-5">变量列表</button>
@@ -45,13 +56,13 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">站点</a></li>
-                                        <li><a href="#">站点-名称</a></li>
-                                        <li><a href="#">站点-单位名称</a></li>
+                                        <li><a href="#" class="code" data-code="$site">站点</a></li>
+                                        <li><a href="#" class="code" data-code="$site->title">站点-标题</a></li>
+                                        <li><a href="#" class="code" data-code="$site->company">站点-单位</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#">文章</a></li>
-                                        <li><a href="#">文章-标题</a></li>
-                                        <li><a href="#">文章-内容</a></li>
+                                        @foreach($module->fields()->orderBy('index')->get() as $field)
+                                            <li><a href="#" class="code" data-code="${{ $module->singular }}->{{ $field->name }}">{{ $module->title . '-' . $field->title }}</a></li>
+                                        @endforeach
                                     </ul>
                                 </div>
                                 <div class="btn-group">
@@ -60,12 +71,9 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">继承模板</a></li>
-                                        <li><a href="#">显示数据</a></li>
-                                        <li><a href="#">显示原生数据</a></li>
-                                        <li><a href="#">循环语句</a></li>
-                                        <li><a href="#">判断语句</a></li>
-                                        <li><a href="#">包含子视图</a></li>
+                                        @foreach ($snippets as $key => $snippet)
+                                            <li><a href="#" class="code" data-code="{{ $snippet }}">{{ $key }}</a></li>
+                                        @endforeach
                                         <li class="divider"></li>
                                         <li><a href="http://laravelacademy.org/post/5919.html" target="_blank">参考文档</a></li>
                                     </ul>
