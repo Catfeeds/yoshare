@@ -4,23 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Module;
-use App\Models\Question;
+use App\Models\Page;
 use App\Models\Site;
 use Gate;
 use Request;
 
 /**
- * 问答
+ * 页面
  */
-class QuestionController extends Controller
+class PageController extends Controller
 {
-    protected $base_url = '/admin/questions';
-    protected $view_path = 'admin.questions';
+    protected $base_url = '/admin/pages';
+    protected $view_path = 'admin.pages';
     protected $module;
 
     public function __construct()
     {
-        $this->module = Module::transform(Question::MODULE_ID);
+        $this->module = Module::transform(Page::MODULE_ID);
     }
 
     public function show($id)
@@ -31,12 +31,12 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        $question = Question::find($id);
-        if (empty($question)) {
+        $page = Page::find($id);
+        if (empty($page)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $site->theme . '.pages.detail', ['site' => $site, 'page' => $page]);
     }
 
     public function slug($slug)
@@ -47,13 +47,13 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        $question = Question::where('slug', $slug)
+        $page = Page::where('slug', $slug)
             ->first();
-        if (empty($question)) {
+        if (empty($page)) {
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $site->theme . '.pages.detail', ['site' => $site, 'page' => $page]);
     }
 
     public function lists()
@@ -64,16 +64,16 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        $questions = Question::where('state', Question::STATE_PUBLISHED)
+        $pages = Page::where('state', Page::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.questions.index', ['site' => $site, 'module' => $this->module, 'questions' => $questions]);
+        return view('themes.' . $site->theme . '.pages.index', ['site' => $site, 'module' => $this->module, 'pages' => $pages]);
     }
 
     public function index()
     {
-        if (Gate::denies('@question')) {
+        if (Gate::denies('@page')) {
             return abort(403);
         }
 
@@ -82,7 +82,7 @@ class QuestionController extends Controller
 
     public function create()
     {
-        if (Gate::denies('@question-create')) {
+        if (Gate::denies('@page-create')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
@@ -92,14 +92,14 @@ class QuestionController extends Controller
 
     public function edit($id)
     {
-        if (Gate::denies('@question-edit')) {
+        if (Gate::denies('@page-edit')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
 
-        $question = call_user_func([$this->module->model_class, 'find'], $id);
+        $page = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $page, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -134,27 +134,27 @@ class QuestionController extends Controller
 
     public function save($id)
     {
-        $question = Question::find($id);
+        $page = Page::find($id);
 
-        if (empty($question)) {
+        if (empty($page)) {
             return;
         }
 
-        $question->update(Request::all());
+        $page->update(Request::all());
     }
 
     public function sort()
     {
-        return Question::sort();
+        return Page::sort();
     }
 
     public function state()
     {
-        Question::state(request()->all());
+        Page::state(request()->all());
     }
 
     public function table()
     {
-        return Question::table();
+        return Page::table();
     }
 }

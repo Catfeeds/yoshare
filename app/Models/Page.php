@@ -7,9 +7,9 @@ use Request;
 use Response;
 
 
-class Question extends BaseModule
+class Page extends BaseModule
 {
-    const MODULE_ID = 4;
+    const MODULE_ID = 2;
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
@@ -24,18 +24,18 @@ class Question extends BaseModule
     ];
 
     const STATE_PERMISSIONS = [
-        0 => '@question-delete',
-        2 => '@question-cancel',
-        9 => '@question-publish',
+        0 => '@page-delete',
+        2 => '@page-cancel',
+        9 => '@page-publish',
     ];
 
-    protected $table = 'questions';
+    protected $table = 'pages';
 
-    protected $fillable = ['site_id','sort','state','published_at','title'];
+    protected $fillable = ['site_id','title','subtitle','author','source','tags','keywords','summary','image_url','images','video_url','audio_url','content','clicks','published_at','user_id','sort','state'];
 
     protected $dates = ['published_at'];
 
-    protected $entities = [];
+    protected $entities = ['user_id'];
 
     public static function stores($input)
     {

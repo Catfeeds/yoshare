@@ -22,7 +22,7 @@
 
     function titleFormatter(value, row, index) {
         return [
-            '<a href="/admin/questions/' + row.id + '" target="_blank">' + row.title + '</a>',
+            '<a href="/admin/videos/' + row.id + '" target="_blank">' + row.title + '</a>',
         ]
     }
 
@@ -32,7 +32,7 @@
 
     function updateRow(field, row, old, $el) {
         $.ajax({
-            url: '/admin/questions/' + row.id + '/save',
+            url: '/admin/videos/' + row.id + '/save',
             data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks},
             success: function (data, status) {
             },
@@ -51,7 +51,7 @@
             $('#modal_title').text('查看评论');
             $('#window_msg').hide();
 
-            var url = '/admin/questions/comments/' + row.id;
+            var url = '/admin/videos/comments/' + row.id;
             $.ajax({
                 url: url,
                 type: "get",

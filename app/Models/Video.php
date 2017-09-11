@@ -7,9 +7,9 @@ use Request;
 use Response;
 
 
-class Question extends BaseModule
+class Video extends BaseModule
 {
-    const MODULE_ID = 4;
+    const MODULE_ID = 3;
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
@@ -24,16 +24,16 @@ class Question extends BaseModule
     ];
 
     const STATE_PERMISSIONS = [
-        0 => '@question-delete',
-        2 => '@question-cancel',
-        9 => '@question-publish',
+        0 => '@video-delete',
+        2 => '@video-cancel',
+        9 => '@video-publish',
     ];
 
-    protected $table = 'questions';
+    protected $table = 'videos';
 
-    protected $fillable = ['site_id','sort','state','published_at','title'];
+    protected $fillable = ['title','sort','state','site_id'];
 
-    protected $dates = ['published_at'];
+    protected $dates = [];
 
     protected $entities = [];
 
