@@ -31,28 +31,33 @@ class Question extends BaseModule
 
     protected $table = 'questions';
 
-    protected $fillable = ['site_id','sort','state','published_at','title'];
+    protected $fillable = ['category_id','site_id','type','summary','image_url','video_url','member_id','user_id','video_url','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 
     protected $entities = [];
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'refer_id');
+    }
+
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
 
-        $item = static::create($input);
+        $question = static::create($input);
 
-        return $item;
+        return $question;
     }
 
     public static function updates($id, $input)
     {
-        $item = static::find($id);
+        $question = static::find($id);
 
-        $item->update($input);
+        $question->update($input);
 
-        return $item;
+        return $question;
     }
 
     public static function table()
@@ -63,7 +68,7 @@ class Question extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
-        $items = static::with('user')
+        $questions = static::with('user')
             ->filter($filters)
             ->orderBy('sort', 'desc')
             ->skip($offset)
@@ -73,23 +78,23 @@ class Question extends BaseModule
         $ds->total = static::filter($filters)
             ->count();
 
-        $items->transform(function ($item) {
-            $attributes = $item->getAttributes();
-            foreach ($item->entities as $entity) {
+        $questions->transform(function ($question) {
+            $attributes = $question->getAttributes();
+            foreach ($question->entities as $entity) {
                 $entity_map = str_replace('_id', '_name', $entity);
                 $entity = str_replace('_id', '', $entity);
-                $attributes[$entity_map] = empty($item->$entity) ? '' : $item->$entity->name;
+                $attributes[$entity_map] = empty($question->$entity) ? '' : $question->$entity->name;
             }
-            foreach ($item->dates as $date) {
-                $attributes[$date] = empty($item->$date) ? '' : $item->$date->toDateTimeString();
+            foreach ($question->dates as $date) {
+                $attributes[$date] = empty($question->$date) ? '' : $question->$date->toDateTimeString();
             }
-            $attributes['state_name'] = $item->stateName();
-            $attributes['created_at'] = empty($item->created_at) ? '' : $item->created_at->toDateTimeString();
-            $attributes['updated_at'] = empty($item->updated_at) ? '' : $item->updated_at->toDateTimeString();
+            $attributes['state_name'] = $question->stateName();
+            $attributes['created_at'] = empty($question->created_at) ? '' : $question->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($question->updated_at) ? '' : $question->updated_at->toDateTimeString();
             return $attributes;
         });
 
-        $ds->rows = $items;
+        $ds->rows = $questions;
 
         return Response::json($ds);
     }

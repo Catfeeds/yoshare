@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\Question;
 use App\Models\Site;
+use App\Models\Comment;
 use Gate;
 use Request;
+use Response;
+use Auth;
 
 /**
  * 问答
@@ -36,7 +40,7 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $site->theme->name . '.questions.detail', ['site' => $site, 'question' => $question]);
     }
 
     public function slug($slug)
@@ -53,7 +57,7 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $site->theme->name . '.questions.detail', ['site' => $site, 'question' => $question]);
     }
 
     public function lists()
@@ -68,7 +72,7 @@ class QuestionController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme . '.questions.index', ['site' => $site, 'module' => $this->module, 'questions' => $questions]);
+        return view('themes.' . $site->theme->name . '.questions.index', ['site' => $site, 'module' => $this->module, 'questions' => $questions]);
     }
 
     public function index()
@@ -132,6 +136,11 @@ class QuestionController extends Controller
         return redirect($this->base_url);
     }
 
+    public function comment($id)
+    {
+        return view('admin.comments.question', compact('id'));
+    }
+
     public function save($id)
     {
         $question = Question::find($id);
@@ -156,5 +165,38 @@ class QuestionController extends Controller
     public function table()
     {
         return Question::table();
+    }
+
+    public function categories()
+    {
+        return Response::json(Category::tree('', 0, $this->module->id, false));
+    }
+
+    public function reply($id)
+    {
+        $site_id = Auth::user()->site_id;
+        $commentContent = Request::get('content');
+        $question = Question::find($id);
+
+        $comment = $question->comments()->create([
+            'site_id' => $site_id,
+            'refer_id' => $id,
+            'refer_type' => Comment::TYPE_QUESTION,
+            'content' => $commentContent,
+            'ip' => Request::getClientIp(),
+            'state' => Comment::STATE_PASSED,
+            'user_id' => Auth::user()->id,
+        ]);
+
+        if($question){
+            $question->state = Question::STATE_PUBLISHED;
+            $question->save();
+        }
+
+        return Response::json([
+            'status_code' => 200,
+            'message' => 'success',
+            'data' => $id,
+        ]);
     }
 }

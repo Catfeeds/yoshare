@@ -16,8 +16,7 @@ class ThemeController extends BaseController
 
     public function index()
     {
-        $snippets = config('snippet');
-        return view('admin.themes.index', compact('snippets'));
+        return view('admin.themes.index');
     }
 
     public function store(ThemeRequest $request)
@@ -59,17 +58,7 @@ class ThemeController extends BaseController
         \Session::flash('flash_success', '删除成功');
     }
 
-    public function module($module_id)
-    {
-        $module = Module::find($module_id);
-        $module['fields'] = $module->fields()->orderBy('index')->get();
-
-        return $this->responseSuccess(
-            $module
-        );
-    }
-
-    public function getPathNodes($type = 'asset', $path, $extension, $array = [], $module_id = null)
+    public function getNodes($type = 'asset', $path, $extension, $array = [])
     {
         if ($type == 'asset') {
             $fullPath = theme_asset_path($path);
@@ -85,10 +74,6 @@ class ThemeController extends BaseController
         $dirs = [];
         $files = [];
         while ($file = $dir->read()) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-
             //判断当前元素是否已存在
             $exist = array_first($array, function ($node) use ($file) {
                 return $node['text'] == $file;
@@ -97,46 +82,48 @@ class ThemeController extends BaseController
                 continue;
             }
 
-            if (is_file($fullPath . DIRECTORY_SEPARATOR . $file)) {//当前为文件
-                $files[] = $file;
-            } else {//当前为目录
-                $dirs[] = $file;
+            if ($file != '.' && $file != '..') {
+                if (is_file($fullPath . DIRECTORY_SEPARATOR . $file)) {//当前为文件
+                    $files[] = $file;
+                } else {//当前为目录
+                    $dirs[] = $file;
+                }
             }
         }
 
         $nodes = [];
-
-        //目录
         foreach ($dirs as $dir) {
             $nodes[] = [
                 'text' => $dir,
+                'tags' => [0],
                 'extension' => $extension,
                 'path' => $path . DIRECTORY_SEPARATOR . $dir,
-                'nodes' => $this->getPathNodes($type, $path . DIRECTORY_SEPARATOR . $dir, $extension, [], $module_id),
+                'nodes' => $this->getNodes($type, $path . DIRECTORY_SEPARATOR . $dir, $extension),
             ];
         }
 
-        //文件
         foreach ($files as $file) {
-            $tag = null;
-            if ($file == 'index.blade.php') {
-                if ($type == 'root') {
-                    $tag = '首页';
-                } else {
-                    $tag = '列表页';
-                }
-            } else if ($file == 'category.blade.php') {
-                $tag = '栏目页';
-            } else if ($file == 'detail.blade.php') {
-                $tag = '详情页';
-            }
             $nodes[] = [
                 'text' => $file,
-                'tags' => [$tag],
-                'icon' => 'fa fa-file-o',
+                'icon' => 'fa fa-file-code-o',
                 'path' => $path . DIRECTORY_SEPARATOR . $file,
-                'module_id' => $module_id,
             ];
+        }
+
+        return $nodes;
+    }
+
+    public function setNodeTag($nodes)
+    {
+        //设置tags
+        for ($i = 0; $i < count($nodes); $i++) {
+            if (isset($nodes[$i]['extension'])) {
+                $nodes[$i]['tags'][0] = count($nodes[$i]['nodes']);
+
+                if (isset($nodes[$i]['nodes'])) {
+                    $nodes[$i]['nodes'] = $this->setNodeTag($nodes[$i]['nodes']);
+                }
+            }
         }
 
         return $nodes;
@@ -148,43 +135,43 @@ class ThemeController extends BaseController
             [
                 'text' => 'css',
                 'color' => '#00a47a',
-                'tags' => ['样式'],
+                'tags' => [0, '样式'],
                 'extension' => '.css',
                 'path' => $theme->name . '/css',
-                'nodes' => $this->getPathNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'css', '.css'),
+                'nodes' => $this->getNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'css', '.css'),
             ],
             [
                 'text' => 'js',
                 'color' => '#f60',
-                'tags' => ['脚本'],
+                'tags' => [0, '脚本'],
                 'extension' => '.js',
                 'path' => $theme->name . '/js',
-                'nodes' => $this->getPathNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'js', '.js'),
+                'nodes' => $this->getNodes('asset', $theme->name . DIRECTORY_SEPARATOR . 'js', '.js'),
             ],
             [
                 'text' => 'layouts',
                 'color' => '#08c',
-                'tags' => ['布局'],
+                'tags' => [0, '布局'],
                 'extension' => '.blade.php',
                 'path' => $theme->name . '/layouts',
-                'nodes' => $this->getPathNodes('views', $theme->name . DIRECTORY_SEPARATOR . 'layouts', '.blade.php'),
+                'nodes' => $this->getNodes('views', $theme->name . DIRECTORY_SEPARATOR . 'layouts', '.blade.php'),
             ]
         ];
 
         $modules = Module::all();
         foreach ($modules as $module) {
             $nodes[] = [
-                'id' => $module->id,
-                'type' => 'module',
                 'text' => $module->path,
-                'tags' => [$module->title],
+                'tags' => [0, $module->title],
                 'extension' => '.blade.php',
                 'path' => $theme->name . DIRECTORY_SEPARATOR . $module->path,
-                'nodes' => $this->getPathNodes('view', $theme->name . DIRECTORY_SEPARATOR . $module->path, '.blade.php', [], $module->id),
+                'nodes' => $this->getNodes('view', $theme->name . DIRECTORY_SEPARATOR . $module->path, '.blade.php'),
             ];
         }
 
-        $nodes = array_merge($nodes, $this->getPathNodes('root', $theme->name, '.blade.php', $nodes));
+        $nodes = array_merge($nodes, $this->getNodes('view', $theme->name, '.blade.php', $nodes));
+
+        $nodes = $this->setNodeTag($nodes);
 
         return $nodes;
     }
@@ -198,13 +185,13 @@ class ThemeController extends BaseController
         foreach ($themes as $theme) {
             $node = [
                 'id' => $theme->id,
-                'type' => 'theme',
                 'text' => $theme->name,
-                'tags' => [$theme->title],
+                'tags' => [0, $theme->title],
                 'extension' => '.blade.php',
                 'path' => $theme->name,
                 'nodes' => $this->getThemeNodes($theme)
             ];
+            $node['tags'][0] = count($node['nodes']);
             $nodes[] = $node;
         }
 
