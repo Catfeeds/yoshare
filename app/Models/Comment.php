@@ -57,7 +57,7 @@ class Comment extends Model
 
     public function children()
     {
-        return $this->hasMany(static::class, 'parent_id', 'id');
+        return $this->hasMany(static::class, 'refer_id', 'id');
     }
 
     public function stateName()
@@ -83,7 +83,8 @@ class Comment extends Model
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
-            !empty($filters['id']) ? $query->where('refer_id', $filters['id']) : '';
+            !empty($filters['refer_id']) ? $query->where('refer_id', $filters['refer_id']) : '';
+            !empty($filters['refer_type']) ? $query->where('refer_type', urldecode($filters['refer_type'])) : '';
         });
         if (isset($filters['state'])) {
             if (!empty($filters['state'])) {

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
+    const ID_ADMIN = 1;
+
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 

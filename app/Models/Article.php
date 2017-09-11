@@ -9,8 +9,6 @@ use Response;
 
 class Article extends BaseModule
 {
-    const MODULE_ID = 1;
-
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;
@@ -31,7 +29,7 @@ class Article extends BaseModule
 
     protected $table = 'articles';
 
-    protected $fillable = ['category_id','type','title','summary','image_url','content','top','published_at','images','videos','member_id','user_id','sort','state','site_id'];
+    protected $fillable = ['category_id','type','title','summary','image_url','content','top','published_at','images','videos','member_id','user_id','sort','state','site_id','comments','favorites'];
 
     protected $dates = ['published_at'];
 

@@ -21,7 +21,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * SMS日志管理
      */
-    Route::get('sms/log', 'SmsController@index');
+    Route::get('sms/log','SmsController@index');
     Route::get('sms/log/table', 'SmsController@table');
 
     /**
@@ -122,7 +122,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 主题管理
      */
     Route::get('themes/tree', 'ThemeController@tree');
-    Route::get('themes/modules/{module_id}', 'ThemeController@module');
     Route::get('themes/file', 'ThemeController@readFile');
     Route::post('themes/file', 'ThemeController@createFile');
     Route::put('themes/file', 'ThemeController@writeFile');
@@ -133,6 +132,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 栏目管理
      */
     Route::get('categories/tree/', 'CategoryController@tree');
+    Route::get('themes/modules/{module_id}', 'ThemeController@module');
     Route::get('categories/table/{category_id}', 'CategoryController@table');
     Route::get('categories/create/{category_id}', 'CategoryController@create');
     Route::get('categories/{id}/save', 'CategoryController@save');
@@ -148,6 +148,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 评论管理
      */
     Route::get('comments/table', 'CommentController@table');
+    Route::get('comments/replies/{id}', 'CommentController@replies');
+    Route::post('comments/{id}/reply', 'CommentController@reply');
     Route::post('comments/state', 'CommentController@state');
     Route::resource('comments', 'CommentController');
     Route::get('comments/pass/{id}', 'CommentController@pass');
@@ -164,5 +166,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
     Route::post('surveys/state/{state}', 'SurveyController@state');
     Route::resource('surveys', 'SurveyController');
-
 });

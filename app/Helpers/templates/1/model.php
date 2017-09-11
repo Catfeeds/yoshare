@@ -9,8 +9,6 @@ use Response;
 
 class __model__ extends BaseModule
 {
-    const MODULE_ID = __module_id__;
-
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;

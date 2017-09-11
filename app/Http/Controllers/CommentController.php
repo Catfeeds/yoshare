@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Models\Comment;
+use App\Models\DataSource;
+use App\Models\Member;
+use Auth;
 use Gate;
 use Request;
 use Response;
@@ -58,6 +60,51 @@ class CommentController extends Controller
         $comment->state = Comment::STATE_PASSED;
         $comment->save();
         \Session::flash('flash_success', '审核成功');
+    }
+
+    public function replies($refer_id)
+    {
+        $parent = Comment::where('id', $refer_id)->first();
+
+        //查看子评论时用父级ID覆盖
+        $refer_type = $parent->refer_type;
+
+        return view('admin.comments.list', compact('parent', 'refer_id', 'refer_type'));
+    }
+
+    public function reply($id)
+    {
+        $refer_type = urldecode(Request::get('refer_type'));
+        $commentContent = Request::get('content');
+        $parent_id = Request::get('parent_id');
+
+        //获取当前父级评论的模型类型
+
+        //增加评论记录
+        $comment = new Comment();
+
+        $member = Member::find(Member::ID_ADMIN);
+
+        if ($parent_id) {
+            $comment->refer_type = $comment->getMorphClass();
+        } else {
+            $comment->refer_type = $refer_type;
+        }
+
+        $comment->refer_id = $id;
+        $comment->site_id = Auth::user()->site_id;
+        $comment->content = $commentContent;
+        $comment->member_id = $member->id;
+        $comment->ip = Request::getClientIp();
+        $comment->state = Comment::STATE_PASSED;
+
+        $comment->save();
+
+        return Response::json([
+            'status_code' => 200,
+            'message' => 'success',
+            'data' => '',
+        ]);
     }
 
     public function table()

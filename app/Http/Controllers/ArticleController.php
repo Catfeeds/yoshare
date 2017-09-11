@@ -22,7 +22,8 @@ class ArticleController extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(Article::MODULE_ID);
+        $module = Module::where('name', 'Article')->first();
+        $this->module = Module::transform($module->id);
     }
 
     public function show($id)
@@ -150,9 +151,10 @@ class ArticleController extends Controller
         return redirect($this->base_url . '?category_id=' . $article->category_id);
     }
 
-    public function comments($id)
+    public function comments($refer_id)
     {
-        return view('admin.comments.list', compact('id'));
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
     }
 
     public function save($id)

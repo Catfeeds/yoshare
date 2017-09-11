@@ -24,7 +24,6 @@ class CodeBuilder
 
     public function replace($content)
     {
-        $content = str_replace('__module_id__', $this->module->id, $content);
         $content = str_replace('__module_name__', $this->module->name, $content);
         $content = str_replace('__module_title__', $this->module->title, $content);
         $content = str_replace('__module_path__', $this->module->path, $content);

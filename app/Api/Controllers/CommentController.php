@@ -73,18 +73,21 @@ class CommentController extends BaseController
         $id = Request::get('id');
 
         $module = Module::find($type);
-        if(!$module){
+        if (!$module) {
             return $this->responseError('此类型不存在');
         }
 
-        $total = Comment::where('refer_id', $id)
-            ->where('refer_type', $module->model_class)
+        $model = call_user_func([$module->model_class, 'find'], $id);
+
+        if (empty($model)) {
+            return $this->responseError('此ID不存在');
+        }
+
+        $total = $model->comments()
             ->where('state', Comment::STATE_PASSED)
             ->count();
 
-        $comments = Comment::with('member')
-            ->where('refer_id', $id)
-            ->where('refer_type', $module->model_class)
+        $comments = $model->comments()
             ->where('state', Comment::STATE_PASSED)
             ->orderBy('id', 'desc')
             ->forPage($page, $page_size)
@@ -137,7 +140,7 @@ class CommentController extends BaseController
         }
 
         $module = Module::find($type);
-        if(!$module){
+        if (!$module) {
             return $this->responseError('此类型不存在');
         }
 

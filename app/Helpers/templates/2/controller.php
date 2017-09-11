@@ -22,7 +22,8 @@ class __controller__ extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(__module_name__::MODULE_ID);
+        $module = Module::where('name', '__module_name__')->first();
+        $this->module = Module::transform($module->id);
     }
 
     public function show($id)
@@ -150,9 +151,10 @@ class __controller__ extends Controller
         return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
     }
 
-    public function comments($id)
+    public function comments($refer_id)
     {
-        return view('admin.comments.list', compact('id'));
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
     }
 
     public function save($id)

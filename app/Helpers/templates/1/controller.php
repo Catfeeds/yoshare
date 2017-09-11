@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\__module_name__;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
-use App\Models\__module_name__;
 use App\Models\Site;
 use Gate;
 use Request;
@@ -22,7 +22,8 @@ class __controller__ extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(__module_name__::MODULE_ID);
+        $module = Module::where('name', '__module_name__')->first();
+        $this->module = Module::transform($module->id);
     }
 
     public function show($id)
@@ -134,9 +135,10 @@ class __controller__ extends Controller
         return redirect($this->base_url);
     }
 
-    public function comments($id)
+    public function comments($refer_id)
     {
-        return view('admin.comments.list', compact('id'));
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
     }
 
     public function save($id)

@@ -71,7 +71,11 @@ CREATE TABLE `cms_favorites` (
 -- 2017-9-7
 -- -----------
 ALTER TABLE `cms_comments` ADD `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除日期' AFTER `updated_at`;
-
+-- -----------
+-- 2017-9-8
+-- -----------
+ALTER TABLE `cms_comments` ADD INDEX `cms_comments_index_2` (`refer_id`, `refer_type`, `deleted_at`);
+ALTER TABLE `cms_comments` ADD INDEX `cms_comments_index_3` (`refer_id`, `refer_type`, `state`, `deleted_at`);
 
 #问卷表
 CREATE TABLE `cms_surveys` (
