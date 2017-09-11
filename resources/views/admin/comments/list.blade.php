@@ -94,9 +94,9 @@
         'click .remove': function (e, value, row, index) {
             var ids = [row.id];
             $.ajax({
-                url: '/admin/comments/state/' + '{{ \App\Models\Comment::STATE_DELETED }}',
+                url: '/admin/comments/state',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
                 success: function () {
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh');
