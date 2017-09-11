@@ -169,7 +169,7 @@ class QuestionController extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id));
+        return Response::json(Category::tree('', 0, $this->module->id, false));
     }
 
     public function reply($id)
@@ -182,7 +182,6 @@ class QuestionController extends Controller
             'site_id' => $site_id,
             'refer_id' => $id,
             'refer_type' => Comment::TYPE_QUESTION,
-            'content_title' => $question->title,
             'content' => $commentContent,
             'ip' => Request::getClientIp(),
             'state' => Comment::STATE_PASSED,

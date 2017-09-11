@@ -31,7 +31,7 @@ class Question extends BaseModule
 
     protected $table = 'questions';
 
-    protected $fillable = ['title','site_id','image_url','sort','state','published_at'];
+    protected $fillable = ['category_id','site_id','type','summary','image_url','video_url','member_id','user_id','video_url','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 
