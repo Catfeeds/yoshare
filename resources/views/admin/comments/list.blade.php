@@ -149,10 +149,10 @@
 
         $.ajax({
             url: '{{ "/admin/comments/$refer_id/reply" }}',
-            type: 'get',
+            type: 'post',
             data: {
                 'refer_type': '{{ urlencode($refer_type) }}',
-                'parent_id': '{{ isset($parent) ? $parent : ''}}',
+                'parent_id': '{{ isset($parent) ? $parent->id : ''}}',
                 'content': $('#content').val(),
                 '_token': '{{ csrf_token() }}'
             },

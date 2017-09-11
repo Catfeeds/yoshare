@@ -64,10 +64,11 @@ class CommentController extends Controller
 
     public function replies($refer_id)
     {
+        //refer_id成为父级ID
         $parent = Comment::where('id', $refer_id)->first();
 
-        //查看子评论时用父级ID覆盖
-        $refer_type = $parent->refer_type;
+        //查看子评论时用父级的模型类型
+        $refer_type = $parent->getMorphClass();
 
         return view('admin.comments.list', compact('parent', 'refer_id', 'refer_type'));
     }
@@ -77,8 +78,6 @@ class CommentController extends Controller
         $refer_type = urldecode(Request::get('refer_type'));
         $commentContent = Request::get('content');
         $parent_id = Request::get('parent_id');
-
-        //获取当前父级评论的模型类型
 
         //增加评论记录
         $comment = new Comment();
