@@ -143,7 +143,6 @@ class CategoryController extends Controller
 
     public function lists($category_id)
     {
-
         $category = Category::find($category_id);
         if (empty($category)) {
             abort(404);
