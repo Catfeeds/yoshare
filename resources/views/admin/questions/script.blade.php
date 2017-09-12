@@ -12,7 +12,6 @@
                 levels: 4,
                 onNodeSelected: function (event, data) {
                     category_id = data.id;
-                    console.log(category_id);
                     $('#category_id').val(data.id);
                     $('#table').bootstrapTable('refresh');
                 }
@@ -55,7 +54,13 @@
     }
 
     function actionFormatter(value, row, index) {
-        return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
+        html = '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
+        //评论
+        html +='<button class="btn btn-info btn-xs comment" data-toggle="modal" data-target="#modal_comment">' +
+            '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看回答"></i></button>';
+
+        return html;
+
     }
 
     function updateRow(field, row, old, $el) {

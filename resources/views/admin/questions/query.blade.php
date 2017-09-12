@@ -11,6 +11,7 @@
                         <div class="box box-info">
                             <form id="form_query" class="form-horizontal">
                                 <div class="box-body">
+                                    <input type="hidden" id="category_id" name="category_id" value="">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">ID:</label>
                                         <div class="col-sm-4">

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="box box-info">
-            @include('admin.comments.reply')
+
             <div class="box-body">
                 <table id="comment_table" data-toggle="table" style="word-break:break-all;">
                     <thead>
@@ -25,14 +25,14 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <h4 id="admin_replies_title">管理员评论</h4>
+        <h4>回答</h4>
         <div class="box box-info">
             <div class="box-body">
                 <div class="col-sm-12" style="padding: 0px 0px 10px 0px;">
                     {!! Form::textarea('content', null, ['id'=>'content','class' => 'form-control', 'rows' => '4']) !!}
                 </div>
                 <button type="submit" class="btn btn-lg btn-info btn-block center-block submit" onclick="confirm()">
-                    提交
+                    提交回答
                 </button>
             </div>
         </div>
@@ -45,14 +45,13 @@
         url: '/admin/comments/table',
         pagination: true,
         pageNumber: 1,
-        pageSize: 8,
+        pageSize: 15,
         pageList: [10, 25, 50, 100],
         sidePagination: 'server',
         clickToSelect: true,
         striped: true,
         queryParams: function (params) {
-            params.refer_id = '{{ $refer_id }}';
-            params.refer_type = "{{ urlencode($refer_type) }}";
+            params.id = '{{ $id }}';
             params._token = '{{ csrf_token() }}';
             return params;
         },
@@ -92,9 +91,9 @@
         'click .remove': function (e, value, row, index) {
             var ids = [row.id];
             $.ajax({
-                url: '/admin/comments/state',
+                url: '/admin/comments/state/' + '{{ \App\Models\Comment::STATE_DELETED }}',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids},
                 success: function () {
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh');
@@ -104,17 +103,13 @@
             });
         },
         'click .comment': function (e, value, row, index) {
-            $('#replies_title').text('回复列表');
+            $('#replies_title').text('管理员回复列表');
 
-            var url = '/admin/comments/replies/' + row.id;
+            var url = '/admin/comments/' + row.id;
             $.ajax({
                 url: url,
                 type: "get",
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'refer_id': '{{ $refer_id }}',
-                    'refer_type': '{{ urlencode($refer_type) }}'
-                },
+                data: {'_token': '{{ csrf_token() }}'},
                 dataType: 'html',
                 success: function (html) {
                     $('#reply_contents').html(html);
@@ -122,9 +117,6 @@
             });
         }
     };
-    @if(isset($parent))
-             $('#admin_replies_title').text('管理员回复');
-    @endif
 
     function confirm() {
         toastr.options = {
@@ -135,22 +127,20 @@
             'extendedTimeOut': 0,
             'positionClass': 'toast-top-center',
         };
-        toastr['info']('您确定提交吗？&nbsp;&nbsp;&nbsp;<span onclick="commit();" style="text-decoration: underline;">确定</span>');
+        toastr['info']('您确定提交该条回答吗？&nbsp;&nbsp;&nbsp;<span onclick="commit();" style="text-decoration: underline;">确定</span>');
     }
 
     function commit() {
         var content_val = $.trim($('#content').val());
         if (content_val == '') {
-            toastrs('warning', '请输入评论内容，再提交！');
+            toastrs('warning', '请输入回答内容，再提交！');
             return false;
         }
 
         $.ajax({
-            url: '{{ "/admin/comments/$refer_id/reply" }}',
+            url: '{{ "/admin/questions/reply/".$id }}',
             type: 'post',
             data: {
-                'refer_type': '{{ urlencode($refer_type) }}',
-                'parent_id': '{{ isset($parent) ? $parent->id : ''}}',
                 'content': $('#content').val(),
                 '_token': '{{ csrf_token() }}'
             },
@@ -159,7 +149,7 @@
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh', {silent: true});
                     $('#content').val('');
-                    toastrs('success', '评论成功！');
+                    toastrs('success', '回复成功！');
 
                 } else {
                     toastrs('error', data.message);

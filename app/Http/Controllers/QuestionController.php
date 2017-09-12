@@ -136,9 +136,9 @@ class QuestionController extends Controller
         return redirect($this->base_url);
     }
 
-    public function comment($id)
+    public function comments($id)
     {
-        return view('admin.comments.question', compact('id'));
+        return view('admin.questions.comment', compact('id'));
     }
 
     public function save($id)
