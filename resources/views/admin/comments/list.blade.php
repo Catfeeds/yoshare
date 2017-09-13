@@ -122,9 +122,6 @@
             });
         }
     };
-    @if(isset($parent))
-             $('#admin_replies_title').text('管理员回复');
-    @endif
 
     function confirm() {
         toastr.options = {
@@ -150,7 +147,6 @@
             type: 'post',
             data: {
                 'refer_type': '{{ urlencode($refer_type) }}',
-                'parent_id': '{{ isset($parent) ? $parent->id : ''}}',
                 'content': $('#content').val(),
                 '_token': '{{ csrf_token() }}'
             },
