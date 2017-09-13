@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote;
-
-use App\Http\Requests;
-
+use App\Models\DataSource;
 use App\Models\VoteItem;
-use App\DataSource;
-use App\Record;
-use App\Column;
-use Response;
 use Request;
+use Response;
 
 class VoteItemController extends Controller
 {
@@ -30,13 +24,13 @@ class VoteItemController extends Controller
         $items = VoteItem::where('vote_id', $vote_id)->orderBy('id', 'desc')->get();
         $amount = VoteItem::where('vote_id', $vote_id)->sum('amount');
 
-        $items->transform(function ($item) use ($amount){
+        $items->transform(function ($item) use ($amount) {
 
             return [
                 'id' => $item->id,
                 'vote_id' => $item->vote_id,
                 'title' => $item->title,
-                'percent'=>$amount==0?0:round(($item->amount/$amount)*100).'%',
+                'percent' => $amount == 0 ? 0 : round(($item->amount / $amount) * 100) . '%',
                 'amount' => $item->amount,
                 'sort' => $item->sort,
             ];

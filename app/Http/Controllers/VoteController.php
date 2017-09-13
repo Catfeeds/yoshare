@@ -53,7 +53,7 @@ class VoteController extends Controller
     public function store(VoteRequest $request)
     {
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
+        $data['username'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
         $vote = Vote::create($data);
@@ -92,7 +92,7 @@ class VoteController extends Controller
     {
         $vote = Vote::with('items')->find($id);
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
+        $data['username'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
         $vote->update($data);

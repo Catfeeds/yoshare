@@ -193,8 +193,7 @@ class VoteController extends BaseController
         $data->vote_id = $vote_id;
         $data->vote_item_ids = $item_ids;
         $data->avatar_url = $member->avatar_url;
-        $data->member_name = $member->name;
-        $data->nick_name = $member->nick_name;
+        $data->member_id = $member->id;
         $data->ip = Request::getClientIp();
         $data->save();
 
@@ -290,6 +289,7 @@ class VoteController extends BaseController
         if (is_null($vote)) {
             return $this->responseError('投票id不存在!');
         }
+
         try {
             $member = \JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
@@ -298,29 +298,16 @@ class VoteController extends BaseController
 
         switch ($type) {
             case Vote::STATE_DELETED:
-                Vote::find($vote_id)->decrement('likes');
-                $vote = Vote::find($vote_id);
-                $likes = $vote->likes;
-                if ($likes <= 0) {
-                    $likes = 0;
-                    $vote->likes = $likes;
-                    $vote->save();
+                if ($vote->likes > 0) {
+                    $vote->decrement('likes');
                 }
-
                 break;
-
             case Vote::STATE_NORMAL:
-                Vote::find($vote_id)->increment('likes');
-                $vote = Vote::find($vote_id);
-                $likes = $vote->likes;
+                $vote->increment('likes');
                 break;
         }
 
-        return $this->response([
-            'status_code' => 200,
-            'message' => 'success',
-            'likes' => $likes
-        ]);
+        return $this->responseSuccess();
     }
 
 
