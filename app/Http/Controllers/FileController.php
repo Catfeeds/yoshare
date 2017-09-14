@@ -95,8 +95,8 @@ class FileController extends Controller
                     ],
                     'append' => true,
                 ]);
-            } else if (Request::get('type') == 'other') {
-                $url = $this->uploadOther($file);
+            } else if (Request::get('type') == 'file') {
+                $url = $this->uploadFile($file);
 
                 return Response::json([
                     'status_code' => 200,
@@ -189,7 +189,7 @@ class FileController extends Controller
         return $url;
     }
 
-    public function uploadOther($file)
+    public function uploadFile($file)
     {
         $extension = strtolower($file->getClientOriginalExtension());
         if (!in_array($extension, static::ALLOW_EXTENSIONS)){

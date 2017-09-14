@@ -32,9 +32,9 @@ $api->version('v1', function ($api) {
         /**
          * 评论
          */
-        $api->get('comments/create', 'CommentController@create');
+        $api->get('comments', 'CommentController@lists');
+        $api->post('comments/create', 'CommentController@create');
         $api->get('comments/like', 'CommentController@like');
-        $api->get('comments/list', 'CommentController@lists');
 
         /**
          * 收藏

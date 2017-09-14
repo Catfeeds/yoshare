@@ -53,11 +53,6 @@ class __model__ extends BaseModule
         return $__singular__;
     }
 
-    public function files()
-    {
-        return $this->morphMany(File::class, 'refer');
-    }
-
     public static function table()
     {
         $filters = Request::all();

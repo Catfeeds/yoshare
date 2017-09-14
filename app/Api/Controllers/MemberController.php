@@ -19,7 +19,7 @@ class MemberController extends BaseController
      *   summary="会员登录",
      *   tags={"/members 会员"},
      *   @SWG\Parameter(name="member_name", in="query", required=true, description="会员名", type="string"),
-     *   @SWG\Parameter(name="password", in="query", required=true, description="验证码", type="string"),
+     *   @SWG\Parameter(name="password", in="query", required=true, description="密码", type="string"),
      *   @SWG\Response(
      *     response=200,
      *     description="登录成功"

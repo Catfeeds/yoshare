@@ -48,11 +48,11 @@ class CommentController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/comments/list",
+     *   path="/comments",
      *   summary="获取评论列表",
      *   tags={"/comments 评论"},
      *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
-     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
      *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
      *   @SWG\Response(
@@ -67,12 +67,12 @@ class CommentController extends BaseController
      */
     public function lists()
     {
+        $id = Request::get('id');
+        $type = Request::get('type');
         $page_size = Request::get('page_size') ? Request::get('page_size') : 20;
         $page = Request::get('page') ? Request::get('page') : 1;
-        $type = Request::get('type');
-        $id = Request::get('id');
 
-        $module = Module::find($type);
+        $module = Module::findByName($type);
         if (!$module) {
             return $this->responseError('此类型不存在');
         }
@@ -111,7 +111,7 @@ class CommentController extends BaseController
      *   summary="发表评论",
      *   tags={"/comments 评论"},
      *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
-     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="integer"),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="content", in="query", required=true, description="内容", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
@@ -128,7 +128,7 @@ class CommentController extends BaseController
     {
         $id = Request::get('id');
         $type = Request::get('type');
-        $commentContent = Request::get('content');
+        $content = Request::get('content');
 
         try {
             $member = \JWTAuth::parseToken()->authenticate();
@@ -139,7 +139,7 @@ class CommentController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        $module = Module::find($type);
+        $module = Module::findByName($type);
         if (!$module) {
             return $this->responseError('此类型不存在');
         }
@@ -150,24 +150,17 @@ class CommentController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        //增加评论数
-        $model->increment('comments');
-
         //是否免审核
         $option = Option::getValue(Option::COMMENT_REQUIRE_PASS);
 
         //增加评论记录
-        $comment = new Comment();
-        $comment->site_id = $model->site_id;
-        $comment->refer_id = $model->id;
-        $comment->refer_type = $model->getMorphClass();
-        $comment->content = $commentContent;
-        $comment->member_id = $member->id;
-        $comment->ip = get_client_ip();
-        $comment->state = $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED;
-
-        $comment->save();
-
+        $model->comments()->create([
+            'site_id' => $model->site_id,
+            'content' => $content,
+            'ip' => get_client_ip(),
+            'member_id' => $member->id,
+            'state' => $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED
+        ]);
 
         return $this->responseSuccess();
     }

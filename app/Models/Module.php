@@ -78,6 +78,11 @@ class Module extends Model
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
+    public static function findByName($name)
+    {
+        return self::whereRaw("lower(name) = '$name'")->first();
+    }
+
     public static function stores($input)
     {
         $input['state'] = self::STATE_ENABLE;
