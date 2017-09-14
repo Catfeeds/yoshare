@@ -84,6 +84,42 @@ class BaseModule extends Model
         });
     }
 
+    public function follows()
+    {
+        return $this->morphMany(Follow::class, 'refer');
+    }
+
+    public function getFollowCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-follow-$this->id", 1, function () {
+            return $this->follows()->count();
+        });
+    }
+
+    public function like()
+    {
+        return $this->morphMany(Like::class, 'refer');
+    }
+
+    public function getLikeCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-like-$this->id", 1, function () {
+            return $this->like->count;
+        });
+    }
+
+    public function click()
+    {
+        return $this->morphOne(Click::class, 'refer');
+    }
+
+    public function getClickCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-click-$this->id", 1, function () {
+            return $this->click->count;
+        });
+    }
+
     public function setCreatedAt($value)
     {
         $this->attributes['sort'] = strtotime($value);

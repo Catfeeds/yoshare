@@ -25,6 +25,9 @@ class __controller__ extends BaseController
         });
         $attributes['comment_count'] = $__singular__->commentCount;
         $attributes['favorite_count'] = $__singular__->favoriteCount;
+        $attributes['follow_count'] = $__singular__->followCount;
+        $attributes['like_count'] = $__singular__->likeCount;
+        $attributes['click_count'] = $__singular__->clickCount;
         $attributes['created_at'] = empty($__singular__->created_at) ? '' : $__singular__->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($__singular__->updated_at) ? '' : $__singular__->updated_at->toDateTimeString();
         return $attributes;

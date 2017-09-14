@@ -2,38 +2,37 @@
 
 namespace App\Api\Controllers;
 
-use App\Models\Favorite;
+use App\Models\Follow;
 use App\Models\Module;
 use Exception;
 use Request;
 use Cache;
 
-
-class FavoriteController extends BaseController
+class FollowController extends BaseController
 {
-    public function transform($favorite)
+    public function transform($follow)
     {
-        $attributes = $favorite->refer->getAttributes();
-        $attributes['favorite_id'] = $favorite->id;
-        $attributes['images'] = $favorite->refer->images()->transform(function ($item) use ($favorite) {
+        $attributes = $follow->refer->getAttributes();
+        $attributes['follow_id'] = $follow->id;
+        $attributes['images'] = $follow->refer->images()->transform(function ($item) use ($follow) {
             return [
                 'id' => $item->id,
-                'title' => !empty($item->title) ?: $favorite->refer->title,
+                'title' => !empty($item->title) ?: $follow->refer->title,
                 'url' => get_image_url($item->url),
                 'summary' => $item->summary,
             ];
         });
-        foreach ($favorite->refer->getDates() as $date) {
-            $attributes[$date] = empty($favorite->refer->$date) ? '' : $favorite->refer->$date->toDateTimeString();
+        foreach ($follow->refer->getDates() as $date) {
+            $attributes[$date] = empty($follow->refer->$date) ? '' : $follow->refer->$date->toDateTimeString();
         }
         return $attributes;
     }
 
     /**
      * @SWG\Get(
-     *   path="/favorites/list",
-     *   summary="获取收藏列表",
-     *   tags={"/favorites 收藏"},
+     *   path="/follows/list",
+     *   summary="获取我的关注",
+     *   tags={"/follows 关注"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
      *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
@@ -70,7 +69,7 @@ class FavoriteController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $favorites = Favorite::where('site_id', $site_id)
+        $follows = Follow::where('site_id', $site_id)
             ->where('refer_type', $module->model_class)
             ->where('member_id', $member->id)
             ->orderBy('created_at', 'desc')
@@ -78,36 +77,32 @@ class FavoriteController extends BaseController
             ->limit($page_size)
             ->get();
 
-        $favorites = $favorites->filter(function ($favorite) {
-            return $favorite->refer()->exists();
+        $follows = $follows->filter(function ($follow) {
+            return $follow->refer()->exists();
         });
 
-        $favorites->transform(function ($favorite) {
-            return $this->transform($favorite);
+        $follows->transform(function ($follow) {
+            return $this->transform($follow);
         });
 
-        return $this->responseSuccess(array_values($favorites->toArray()));
+        return $this->responseSuccess(array_values($follows->toArray()));
     }
 
     /**
      * @SWG\Post(
-     *   path="/favorites/create",
-     *   summary="添加收藏",
-     *   tags={"/favorites 收藏"},
+     *   path="/follows/create",
+     *   summary="添加关注",
+     *   tags={"/follows 关注"},
      *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
      *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
-     *     description="收藏成功"
+     *     description="查询成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
      *     description="没有找到"
-     *   ),
-     *   @SWG\Response(
-     *     response="405",
-     *     description="收藏数量过多"
      *   )
      * )
      */
@@ -135,36 +130,23 @@ class FavoriteController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        //检查收藏记录数是否过多
-        $count = Favorite::where('refer_type', $module->model_class)
+        $count = Follow::where('refer_type', $module->model_class)
             ->where('member_id', $member->id)
             ->count();
 
         if ($count >= 1000) {
-            return $this->responseError('收藏数量过多');
+            return $this->responseError('关注数量过多');
         }
 
-        //检查总记录数是否过多
-        $count = Favorite::where('refer_type', $module->model_class)
-            ->count();
-
-        if ($count >= 1000 * 1000) {
-            return $this->responseError('收藏数量过多');
-        }
-
-        //判断此收藏是否已存在
-        if (!$model->favorites()->where('member_id', $member->id)->exists()) {
-            //增加收藏数
-            $model->increment('favorites');
-
-            //增加收藏记录
-            $model->favorites()->create([
+        if (!$model->follows()->where('member_id', $member->id)->exists()) {
+            //增加关注记录
+            $model->follows()->create([
                 'site_id' => $model->site_id,
                 'member_id' => $member->id,
             ]);
 
-            //移除收藏数缓存
-            Cache::forget($model->getMorphClass() . "-favorite-$model->id");
+            //移除关注数缓存
+            Cache::forget($model->getMorphClass() . "-follow-$model->id");
         }
 
         return $this->responseSuccess();
@@ -172,52 +154,15 @@ class FavoriteController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/favorites/destroy",
-     *   summary="取消收藏",
-     *   tags={"/favorites 收藏"},
-     *   @SWG\Parameter(name="favorite_ids", in="query", required=true, description="收藏ID", type="array", items={"type": "integer"}),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="收藏成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到"
-     *   )
-     * )
-     */
-    public function destroy()
-    {
-        $favorite_ids = Request::get('favorite_ids');
-
-        try {
-            $member = \JWTAuth::parseToken()->authenticate();
-            if (!$member) {
-                return $this->responseError('无效的token,请重新登录');
-            }
-        } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
-        }
-
-        Favorite::where('member_id', $member->id)
-            ->whereIn('id', explode(',', $favorite_ids))
-            ->delete();
-
-        return $this->responseSuccess();
-    }
-
-    /**
-     * @SWG\Get(
-     *   path="/favorites/delete",
-     *   summary="删除收藏",
-     *   tags={"/favorites 收藏"},
+     *   path="/follows/delete",
+     *   summary="取消关注",
+     *   tags={"/follows 关注"},
      *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="integer"),
      *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
-     *     description="删除成功"
+     *     description="取消成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
@@ -244,13 +189,13 @@ class FavoriteController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $favorite = Favorite::where('refer_id', $id)
+        $follow = Follow::where('refer_id', $id)
             ->where('refer_type', $module->model_class)
             ->where('member_id', $member->id)
             ->first();
 
-        if ($favorite) {
-            $favorite->delete();
+        if ($follow) {
+            $follow->delete();
         }
 
         return $this->responseSuccess();
@@ -258,19 +203,19 @@ class FavoriteController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/favorites/exist",
-     *   summary="是否收藏",
-     *   tags={"/favorites 收藏"},
+     *   path="/follows/exist",
+     *   summary="是否关注",
+     *   tags={"/follows 关注"},
      *   @SWG\Parameter(name="id", in="query", required=true, description="ID", type="string"),
      *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
-     *     description="已收藏"
+     *     description="已关注"
      *   ),
      *   @SWG\Response(
      *     response="404",
-     *     description="未收藏"
+     *     description="未关注"
      *   )
      * )
      */
@@ -293,15 +238,15 @@ class FavoriteController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $favorite = Favorite::where('refer_id', $id)
+        $follow = Follow::where('refer_id', $id)
             ->where('refer_type', $module->model_class)
             ->where('member_id', $member->id)
             ->first();
 
-        if ($favorite) {
+        if ($follow) {
             return $this->responseSuccess();
         } else {
-            return $this->responseError('未收藏');
+            return $this->responseError('未关注');
         }
     }
 }

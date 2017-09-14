@@ -40,10 +40,28 @@ $api->version('v1', function ($api) {
          * 收藏
          */
         $api->get('favorites/list', 'FavoriteController@lists');
-        $api->get('favorites/create', 'FavoriteController@create');
+        $api->post('favorites/create', 'FavoriteController@create');
         $api->get('favorites/destroy', 'FavoriteController@destroy');
         $api->get('favorites/delete', 'FavoriteController@delete');
         $api->get('favorites/exist', 'FavoriteController@exist');
+
+        /**
+         * 关注
+         */
+        $api->get('follows/list', 'FollowController@lists');
+        $api->post('follows/create', 'FollowController@create');
+        $api->get('follows/delete', 'FollowController@delete');
+        $api->get('follows/exist', 'FollowController@exist');
+
+        /**
+         * 点赞
+         */
+        $api->post('likes/create', 'LikeController@create');
+
+        /**
+         * 点击数
+         */
+        $api->post('clicks/create', 'ClickController@create');
 
         /**
          * 会员
