@@ -75,9 +75,13 @@ class SiteController extends BaseController
     public function store(SiteRequest $request)
     {
         $input = Request::all();
-        $input['user_id'] = Auth::user()->id;
-        Site::create($input);
-        \Session::flash('flash_success', '添加成功');
+        $site = new Site();
+        $site = $site->stores($input);
+
+        if (!$site) {
+            redirect()->back()->withInput();
+        }
+
         return redirect('/admin/sites');
     }
 

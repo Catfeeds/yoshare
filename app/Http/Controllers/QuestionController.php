@@ -24,7 +24,8 @@ class QuestionController extends Controller
 
     public function __construct()
     {
-        $this->module = Module::transform(Question::MODULE_ID);
+        $module = Module::where('name', 'Question')->first();
+        $this->module = Module::transform($module->id);
     }
 
     public function show($id)
@@ -103,7 +104,7 @@ class QuestionController extends Controller
 
         $question = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $question->category_id]);
     }
 
     public function store()
@@ -115,10 +116,10 @@ class QuestionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Content::stores($this->module, $input);
+        $question = Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url);
+        return redirect($this->base_url. '?category_id=' . $question->category_id);
     }
 
     public function update($id)

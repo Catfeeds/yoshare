@@ -9,8 +9,6 @@ use Response;
 
 class Question extends BaseModule
 {
-    const MODULE_ID = 4;
-
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;
@@ -31,7 +29,7 @@ class Question extends BaseModule
 
     protected $table = 'questions';
 
-    protected $fillable = ['category_id','site_id','type','summary','image_url','video_url','member_id','user_id','video_url','sort','state','published_at'];
+    protected $fillable = ['category_id','site_id','title','type','summary','image_url','video_url','member_id','user_id','images','videos','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 
@@ -40,6 +38,11 @@ class Question extends BaseModule
     public function comments()
     {
         return $this->hasMany(Comment::class, 'refer_id');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'refer');
     }
 
     public static function stores($input)

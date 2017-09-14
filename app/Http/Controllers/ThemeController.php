@@ -16,7 +16,8 @@ class ThemeController extends BaseController
 
     public function index()
     {
-        return view('admin.themes.index');
+        $snippets = config('snippet');
+        return view('admin.themes.index', compact('snippets'));
     }
 
     public function store(ThemeRequest $request)
