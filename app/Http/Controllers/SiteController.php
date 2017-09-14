@@ -75,8 +75,7 @@ class SiteController extends BaseController
     public function store(SiteRequest $request)
     {
         $input = Request::all();
-        $site = new Site();
-        $site = $site->stores($input);
+        $site = Site::stores($input);
 
         if (!$site) {
             redirect()->back()->withInput();

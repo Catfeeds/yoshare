@@ -40,11 +40,6 @@ class Question extends BaseModule
         return $this->hasMany(Comment::class, 'refer_id');
     }
 
-    public function files()
-    {
-        return $this->morphMany(File::class, 'refer');
-    }
-
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;

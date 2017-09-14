@@ -6,6 +6,7 @@ use App\Node;
 use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Cookie;
 
 class User extends Authenticatable
 {

@@ -53,11 +53,6 @@ class Article extends BaseModule
         return $article;
     }
 
-    public function files()
-    {
-        return $this->morphMany(File::class, 'refer');
-    }
-
     public static function table()
     {
         $filters = Request::all();

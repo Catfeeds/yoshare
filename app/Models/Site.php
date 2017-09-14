@@ -48,15 +48,6 @@ class Site extends Model
         }
     }
 
-    public function getSiteIdAttribute()
-    {
-        if(empty($this->site_id)){
-            return Auth::user()->site_id;
-        }else{
-            return $this->site_id;
-        }
-    }
-
     public function categories()
     {
         return $this->hasMany(Category::class);
@@ -66,13 +57,16 @@ class Site extends Model
     {
         return $this->hasMany(Menu::class);
     }
-    public function stores($input)
+    public static function stores($input)
     {
+        $site_id = Auth::user()->site_id;
+        $input['user_id'] = Auth::user()->id;
+
         $site = self::create($input);
 
         //添加站点时，添加默认菜单
         $menu_content = $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => self::PARENT_ID,
             'name' => '内容管理',
             'url' => '#',
@@ -81,7 +75,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_content->id,
             'name' => '文章管理',
             'url' => '/admin/articles',
@@ -91,7 +85,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_content->id,
             'name' => '单页管理',
             'url' => '/admin/pages',
@@ -101,7 +95,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_content->id,
             'name' => '问答管理',
             'url' => '/admin/questions',
@@ -111,7 +105,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_content->id,
             'name' => '问卷管理',
             'url' => '/admin/surveies',
@@ -120,7 +114,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_content->id,
             'name' => '投票管理',
             'url' => '/admin/votes',
@@ -130,7 +124,7 @@ class Site extends Model
         ]);
 
         $menu_member = $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => self::PARENT_ID,
             'name' => '会员管理',
             'url' => '#',
@@ -139,7 +133,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_member->id,
             'name' => '会员管理',
             'url' => '/admin/members',
@@ -149,7 +143,7 @@ class Site extends Model
         ]);
 
         $menu_log = $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => self::PARENT_ID,
             'name' => '日志查询',
             'url' => '#',
@@ -158,7 +152,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_log->id,
             'name' => '推送日志',
             'url' => '/admin/members',
@@ -168,7 +162,7 @@ class Site extends Model
         ]);
 
         $site->menus()->create([
-            'site_id' => $this->getSiteIdAttribute(),
+            'site_id' => $site_id,
             'parent_id' => $menu_log->id,
             'name' => '短信日志',
             'url' => '/admin/members',
