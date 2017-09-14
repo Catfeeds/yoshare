@@ -53,7 +53,7 @@
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_TEXTAREA)
                                     {!! Form::label($editor->name, $editor->label . ':', ['class' => 'control-label col-sm-1']) !!}
                                     <div class="col-sm-{{ $editor->columns }}">
-                                        {!! Form::textarea('summary', null, ['class' => 'form-control', 'rows' => $editor->rows, $editor->readonly ? 'readonly' : '']) !!}
+                                        {!! Form::textarea($editor->name, null, ['class' => 'form-control', 'rows' => $editor->rows, $editor->readonly ? 'readonly' : '']) !!}
                                     </div>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_IMAGES)
                                     <div class="col-sm-{{ $editor->columns }}">

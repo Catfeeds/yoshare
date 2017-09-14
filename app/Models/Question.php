@@ -81,6 +81,7 @@ class Question extends BaseModule
             foreach ($question->dates as $date) {
                 $attributes[$date] = empty($question->$date) ? '' : $question->$date->toDateTimeString();
             }
+            $attributes['member_name'] = empty($question->member->name) ? $question->user->name : $question->member->name;
             $attributes['state_name'] = $question->stateName();
             $attributes['created_at'] = empty($question->created_at) ? '' : $question->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($question->updated_at) ? '' : $question->updated_at->toDateTimeString();

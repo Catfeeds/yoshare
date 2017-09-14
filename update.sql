@@ -220,10 +220,9 @@ VALUES
 	(3, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:06:32', '2017-09-14 15:06:32');
 
 DELETE FROM `cms_modules` WHERE `id` = 4;
-INSERT INTO `cms_modules` (`name`, `title`, `table_name`, `groups`, `is_lock`, `icon`, `state`, `created_at`, `updated_at`) VALUES
-('Question', '问答', 'questions', '基本信息,图片集,视频集', 0, 'fa-question-circle', 1, '2017-08-29 02:32:25', '2017-09-13 07:16:26');
+INSERT INTO `cms_modules` (`id`, `name`, `title`, `table_name`, `groups`, `is_lock`, `icon`, `state`, `created_at`, `updated_at`) VALUES
+(4, 'Question', '问答', 'questions', '基本信息,图片集,视频集', 0, 'fa-question-circle', 1, '2017-08-29 02:32:25', '2017-09-13 07:16:26');
 
-DELETE FROM `cms_module_fields` WHERE `module_id` = 4;
 INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`)
 VALUES
 	(4, 'id', 'ID', 'ID', 3, '', 0, 0, 0, 0, 1, 0, 1, 0, 1, 30, '', 1, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25'),
@@ -240,4 +239,3 @@ VALUES
 	(4, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25'),
 	(4, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25'),
 	(4, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 1, 98, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25');
-

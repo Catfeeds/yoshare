@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Site;
 use App\Models\User;
+use App\Models\UserSite;
 use Auth;
 use DB;
 use Gate;
@@ -32,8 +33,10 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $sites = Site::getNames();
-        return view('admin.users.create', compact('sites', 'roles'));
+        $sites = Site::all();
+        $sitesName = Site::getNames();
+
+        return view('admin.users.create', compact('sites', 'roles', 'sitesName'));
     }
 
     public function store(UserRequest $request)
@@ -42,10 +45,11 @@ class UserController extends Controller
 
         $input['password'] = bcrypt($input['password']);
         $input['state'] = User::STATE_NORMAL;
+
         $user = User::create($input);
 
         //获取user表的id
-        $id = $user['id'];
+        $id = $user->id;
 
         if (array_key_exists('role_id', $input)) {
             foreach ($input['role_id'] as $role_id) {
@@ -55,7 +59,17 @@ class UserController extends Controller
                 ]);
             }
         }
+
+        if (array_key_exists('site_ids', $input)) {
+            foreach ($input['site_ids'] as $site_id) {
+                UserSite::create([
+                    'site_id' => $site_id,
+                    'user_id' => $id,
+                ]);
+            }
+        }
         \Session::flash('flash_success', '添加成功');
+
         return redirect('/admin/users');
     }
 
@@ -86,9 +100,14 @@ class UserController extends Controller
             ->pluck('role_id')
             ->toArray();
 
-        $sites = Site::getNames();
+        $sitesName = Site::getNames();
+        $sites = Site::all();
 
-        return view('admin.users.edit', compact('user', 'sites', 'roles', 'roleUsers'));
+        $userSites = UserSite::where('user_id', $id)
+            ->pluck('site_id')
+            ->toArray();
+
+        return view('admin.users.edit', compact('user', 'sites', 'roles', 'roleUsers', 'userSites', 'sitesName'));
     }
 
     public function update($id, Request $request)
@@ -117,6 +136,18 @@ class UserController extends Controller
                     'user_id' => $id,
                 ];
                 RoleUser::create($data);
+            }
+        }
+
+        if (array_key_exists('site_ids', $input)) {
+            DB::table('user_sites')->where('user_id', $id)->delete();
+
+            foreach ($input['site_ids'] as $site_id) {
+                $data = [
+                    'site_id' => $site_id,
+                    'user_id' => $id,
+                ];
+                UserSite::create($data);
             }
         }
 
