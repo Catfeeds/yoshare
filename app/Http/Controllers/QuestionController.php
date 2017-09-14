@@ -137,9 +137,10 @@ class QuestionController extends Controller
         return redirect($this->base_url);
     }
 
-    public function comments($id)
+    public function comments($refer_id)
     {
-        return view('admin.questions.comment', compact('id'));
+        $refer_type = $this->module->model_class;
+        return view('admin.questions.comment', compact('refer_id', 'refer_type'));
     }
 
     public function save($id)

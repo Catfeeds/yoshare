@@ -35,11 +35,6 @@ class Question extends BaseModule
 
     protected $entities = [];
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'refer_id');
-    }
-
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
