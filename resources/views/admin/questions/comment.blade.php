@@ -51,7 +51,7 @@
         clickToSelect: true,
         striped: true,
         queryParams: function (params) {
-            params.id = '{{ $id }}';
+            params.id = '{{ $refer_id }}';
             params._token = '{{ csrf_token() }}';
             return params;
         },
@@ -138,9 +138,10 @@
         }
 
         $.ajax({
-            url: '{{ "/admin/questions/reply/".$id }}',
+            url: '{{ "/admin/comments/$refer_id/reply" }}',
             type: 'post',
             data: {
+                'refer_type': '{{ urlencode($refer_type) }}',
                 'content': $('#content').val(),
                 '_token': '{{ csrf_token() }}'
             },
@@ -149,7 +150,7 @@
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh', {silent: true});
                     $('#content').val('');
-                    toastrs('success', '回复成功！');
+                    toastrs('success', '评论成功！');
 
                 } else {
                     toastrs('error', data.message);

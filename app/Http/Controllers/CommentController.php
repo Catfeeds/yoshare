@@ -93,7 +93,7 @@ class CommentController extends Controller
         $comment->refer_id = $id;
         $comment->site_id = Auth::user()->site_id;
         $comment->content = $commentContent;
-        $comment->member_id = $member->id;
+        $comment->user_id = Auth::user()->id;
         $comment->ip = Request::getClientIp();
         $comment->state = Comment::STATE_PASSED;
 
