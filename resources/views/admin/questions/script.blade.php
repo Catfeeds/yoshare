@@ -1,31 +1,4 @@
 <script>
-    var category_id = 0;
-
-    $.ajax({
-        type: 'get',
-        async: false,
-        url: '/admin/questions/categories',
-        success: function (data) {
-            $('#tree').treeview({
-                data: data,
-                searchResultColor: 'white',
-                levels: 4,
-                onNodeSelected: function (event, data) {
-                    category_id = data.id;
-                    $('#category_id').val(data.id);
-                    $('#table').bootstrapTable('refresh');
-                }
-            });
-
-            if (getNodeIndex(parseInt(getQueryString('category_id')), data) >= 0) {
-                $('#tree').treeview('selectNode', [nodeIndex, {silent: false}]);
-            }
-            else{
-                $('#tree').treeview('selectNode', [0, {silent: false}]);
-            }
-        }
-    });
-
     function stateFormatter(value, row, index) {
         var style = 'label-primary';
         switch (row.state_name) {
@@ -54,13 +27,14 @@
     }
 
     function actionFormatter(value, row, index) {
-        html = '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>';
+        //编辑
+        var html ='<button class="btn btn-primary btn-xs edit margin-r-5" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
+
         //评论
         html +='<button class="btn btn-info btn-xs comment" data-toggle="modal" data-target="#modal_comment">' +
-            '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看回答"></i></button>';
+                '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
 
         return html;
-
     }
 
     function updateRow(field, row, old, $el) {

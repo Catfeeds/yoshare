@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
+    const ID_ROOT = 0;
+
     protected $fillable = [
         'site_id',
         'parent_id',

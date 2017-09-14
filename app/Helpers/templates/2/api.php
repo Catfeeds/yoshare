@@ -23,6 +23,8 @@ class __controller__ extends BaseController
                 'summary' => $item->summary,
             ];
         });
+        $attributes['comment_count'] = $__singular__->commentCount;
+        $attributes['favorite_count'] = $__singular__->favoriteCount;
         $attributes['created_at'] = empty($__singular__->created_at) ? '' : $__singular__->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($__singular__->updated_at) ? '' : $__singular__->updated_at->toDateTimeString();
         return $attributes;
@@ -30,7 +32,7 @@ class __controller__ extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/__module_path__/list",
+     *   path="/__module_path__",
      *   summary="获取__module_title__列表",
      *   tags={"/__module_path__ __module_title__"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -54,7 +56,7 @@ class __controller__ extends BaseController
         $page_size = Request::get('page_size') ? Request::get('page_size') : 20;
         $page = Request::get('page') ? Request::get('page') : 1;
 
-        $key = "__module_name__-list-$site_id-$category_id-$page_size-$page";
+        $key = "__singular__-list-$site_id-$category_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page, $category_id) {
             $__plural__ = __model__::with('files')

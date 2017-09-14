@@ -8,7 +8,6 @@ use Auth;
 class Site extends Model
 {
     const ID_DEFAULT = 1;
-    const PARENT_ID = 0;
 
     protected $fillable = [
         'name',
@@ -67,7 +66,7 @@ class Site extends Model
         //添加站点时，添加默认菜单
         $menu_content = $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => self::PARENT_ID,
+            'parent_id' => Menu::ID_ROOT,
             'name' => '内容管理',
             'url' => '#',
             'icon' => 'fa-edit',
@@ -125,7 +124,7 @@ class Site extends Model
 
         $menu_member = $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => self::PARENT_ID,
+            'parent_id' => self::ID_ROOT,
             'name' => '会员管理',
             'url' => '#',
             'icon' => 'fa-user',
@@ -144,7 +143,7 @@ class Site extends Model
 
         $menu_log = $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => self::PARENT_ID,
+            'parent_id' => self::ID_ROOT,
             'name' => '日志查询',
             'url' => '#',
             'icon' => 'fa-calendar',

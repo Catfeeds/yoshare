@@ -23,6 +23,8 @@ class ArticleController extends BaseController
                 'summary' => $item->summary,
             ];
         });
+        $attributes['comment_count'] = $article->commentCount;
+        $attributes['favorite_count'] = $article->favoriteCount;
         $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
         return $attributes;
@@ -30,7 +32,7 @@ class ArticleController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/articles/list",
+     *   path="/articles",
      *   summary="获取文章列表",
      *   tags={"/articles 文章"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -54,7 +56,7 @@ class ArticleController extends BaseController
         $page_size = Request::get('page_size') ? Request::get('page_size') : 20;
         $page = Request::get('page') ? Request::get('page') : 1;
 
-        $key = "Article-list-$site_id-$category_id-$page_size-$page";
+        $key = "article-list-$site_id-$category_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page, $category_id) {
             $articles = Article::with('files')

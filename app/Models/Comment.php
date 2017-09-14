@@ -4,16 +4,21 @@ namespace App\Models;
 
 use Auth;
 use Gate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Comment extends Model
+class Comment extends BaseModule
 {
     use SoftDeletes;
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_PASSED = 9;
+
+    const STATES = [
+        0 => '已删除',
+        1 => '未审核',
+        9 => '已审核',
+    ];
 
     const TYPE_ARTICLE = 1;
     const TYPE_QUESTION = 2;
@@ -29,8 +34,8 @@ class Comment extends Model
         'refer_type',
         'content',
         'likes',
-        'member_id',
         'ip',
+        'member_id',
         'user_id',
         'state',
     ];
@@ -38,46 +43,6 @@ class Comment extends Model
     public function refer()
     {
         return $this->morphTo();
-    }
-
-    public function files()
-    {
-        return $this->morphMany(File::class, 'refer');
-    }
-
-    public function member()
-    {
-        return $this->belongsTo(Member::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function children()
-    {
-        return $this->hasMany(static::class, 'refer_id', 'id');
-    }
-
-    public function stateName()
-    {
-        switch ($this->state) {
-            case static::STATE_NORMAL:
-                return '未审核';
-                break;
-            case static::STATE_PASSED:
-                return '已审核';
-                break;
-            case static::STATE_DELETED:
-                return '已删除';
-                break;
-        }
-    }
-
-    public function scopeOwns($query)
-    {
-        $query->where('site_id', Auth::user()->site_id);
     }
 
     public function scopeFilter($query, $filters)
@@ -91,31 +56,6 @@ class Comment extends Model
                 $query->where('state', $filters['state']);
             } else if ($filters['state'] === strval(static::STATE_DELETED)) {
                 $query->onlyTrashed();
-            }
-        }
-    }
-
-    public static function state($input)
-    {
-        $ids = $input['ids'];
-        $state = $input['state'];
-
-        //判断是否有操作权限
-        $permission = array_key_exists($state, static::STATE_PERMISSIONS) ? static::STATE_PERMISSIONS[$state] : '';
-        if (!empty($permission) && Gate::denies($permission)) {
-            return;
-        }
-
-        $items = static::withTrashed()
-            ->whereIn('id', $ids)
-            ->get();
-        foreach ($items as $item) {
-            $item->state = $state;
-            $item->save();
-            if ($state == static::STATE_DELETED) {
-                $item->delete();
-            } else if ($item->trashed()) {
-                $item->restore();
             }
         }
     }

@@ -29,16 +29,11 @@ class Question extends BaseModule
 
     protected $table = 'questions';
 
-    protected $fillable = ['category_id','site_id','title','type','summary','image_url','video_url','member_id','user_id','images','videos','sort','state','published_at'];
+    protected $fillable = ['site_id','title','content','images','videos','member_id','user_id','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 
-    protected $entities = [];
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'refer_id');
-    }
+    protected $entities = ['member_id','user_id'];
 
     public static function stores($input)
     {

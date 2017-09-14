@@ -108,7 +108,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 字段管理
      */
-    Route::get('modules/fields/table/{module_id}', 'ModuleFieldController@table');
+    Route::get('modules/fields/{module_id}/table', 'ModuleFieldController@table');
+    Route::post('modules/fields/{module_id}/save', 'ModuleFieldController@save');
     Route::resource('modules/fields', 'ModuleFieldController');
 
     /**

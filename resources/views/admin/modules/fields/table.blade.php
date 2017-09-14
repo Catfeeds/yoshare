@@ -21,7 +21,7 @@
     <div id="tab_field" class="tab-pane fade in active padding-t-15">
         <div class="form-group">
             <div class="col-sm-12">
-                <table id="table_field" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
+                <table id="table_field" data-toggle="table" data-url="/admin/modules/fields/{{ $module->id }}/table">
                     <thead>
                     <tr>
                         <th data-field="name" data-width="60">英文名称</th>
@@ -44,7 +44,7 @@
     <div id="tab_column" class="tab-pane fade padding-t-15">
         <div class="form-group">
             <div class="col-sm-12">
-                <table id="table_column" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
+                <table id="table_column" data-toggle="table" data-url="/admin/modules/fields/{{ $module->id }}/table">
                     <thead>
                     <tr>
                         <th data-field="name" data-width="60">英文名称</th>
@@ -66,7 +66,7 @@
     <div id="tab_editor" class="tab-pane fade padding-t-15">
         <div class="form-group">
             <div class="col-sm-12">
-                <table id="table_editor" data-toggle="table" data-url="/admin/modules/fields/table/{{ $module->id }}">
+                <table id="table_editor" data-toggle="table" data-url="/admin/modules/fields/{{ $module->id }}/table">
                     <thead>
                     <tr>
                         <th data-field="name" data-width="60">英文名称</th>

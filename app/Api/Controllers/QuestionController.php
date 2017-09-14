@@ -4,10 +4,7 @@ namespace App\Api\Controllers;
 
 use App\Models\Question;
 use App\Models\File;
-use App\Models\Option;
-use App\Models\Comment;
 use Request;
-use Exception;
 
 class QuestionController extends BaseController
 {
@@ -26,6 +23,8 @@ class QuestionController extends BaseController
                 'summary' => $item->summary,
             ];
         });
+        $attributes['comment_count'] = $question->commentCount;
+        $attributes['favorite_count'] = $question->favoriteCount;
         $attributes['created_at'] = empty($question->created_at) ? '' : $question->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($question->updated_at) ? '' : $question->updated_at->toDateTimeString();
         return $attributes;
@@ -33,7 +32,7 @@ class QuestionController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/questions/list",
+     *   path="/questions",
      *   summary="获取问答列表",
      *   tags={"/questions 问答"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -55,7 +54,7 @@ class QuestionController extends BaseController
         $page_size = Request::get('page_size') ? Request::get('page_size') : 20;
         $page = Request::get('page') ? Request::get('page') : 1;
 
-        $key = "Question-list-$site_id-$page_size-$page";
+        $key = "question-list-$site_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page) {
             $questions = Question::with('files')
@@ -209,62 +208,5 @@ class QuestionController extends BaseController
             $share = 1;
             return view("themes.$theme.questions.detail", compact('site', 'question', 'share'))->__toString();
         });
-    }
-
-    /**
-     * @SWG\Get(
-     *   path="/questions/comments/create",
-     *   summary="发表问答评论",
-     *   tags={"/questions 问答"},
-     *   @SWG\Parameter(name="id", in="query", required=true, description="问答ID", type="string"),
-     *   @SWG\Parameter(name="content", in="query", required=true, description="评论问答", type="string"),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="评论成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到"
-     *   )
-     * )
-     */
-    public function create()
-    {
-        $id = Request::get('id');
-        $commentContent = Request::get('content');
-
-        try {
-            $member = \JWTAuth::parseToken()->authenticate();
-            if (!$member) {
-                return $this->responseError('无效的token,请重新登录');
-            }
-        } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
-        }
-
-        //根据内容类型获取标题
-        $questions = Question::find($id);
-
-        //增加评论数
-        $questions->comments += 1;
-        $questions->save();
-
-        //是否免审核
-        $option = Option::getValue(Option::COMMENT_REQUIRE_PASS);
-
-        //增加评论记录
-        $comment = new Comment();
-        $comment->site_id = $questions->site_id;
-        $comment->refer_id = $questions->id;
-        $comment->refer_type = $questions->getMorphClass();
-        $comment->content = $commentContent;
-        $comment->member_id = $member->id;
-        $comment->ip = get_client_ip();
-        $comment->state = $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED;
-
-        $comment->save();
-
-        return $this->responseSuccess();
     }
 }

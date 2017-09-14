@@ -30,6 +30,11 @@ class BaseModule extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -60,9 +65,23 @@ class BaseModule extends Model
         return $this->morphMany(Comment::class, 'refer');
     }
 
+    public function getCommentCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-comment-$this->id", 1, function () {
+            return $this->comments()->where('state', Comment::STATE_PASSED)->count();
+        });
+    }
+
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'refer');
+    }
+
+    public function getFavoriteCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-favorite-$this->id", 1, function () {
+            return $this->favorites()->count();
+        });
     }
 
     public function setCreatedAt($value)

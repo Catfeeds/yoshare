@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Module;
 use App\Models\Option;
+use Cache;
 use Exception;
 use Request;
 
@@ -161,6 +162,9 @@ class CommentController extends BaseController
             'member_id' => $member->id,
             'state' => $option ? Comment::STATE_NORMAL : Comment::STATE_PASSED
         ]);
+
+        //移除评论数缓存
+        Cache::forget($model->getMorphClass() . "-comment-$model->id");
 
         return $this->responseSuccess();
     }

@@ -15,7 +15,8 @@
     $('#table_field').bootstrapTable({
         onEditableSave: function (field, row, old, $el) {
             $.ajax({
-                url: "/admin/modules/fields/" + row.id + '/save',
+                url: "/admin/modules/fields/save/" + row.id + '/save',
+                method: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'index': row.index},
                 success: function (data, status) {
                 },
@@ -30,6 +31,7 @@
         onEditableSave: function (field, row, old, $el) {
             $.ajax({
                 url: "/admin/modules/fields/" + row.id + '/save',
+                method: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'column_index': row.column_index, 'column_width': row.column_width},
                 success: function (data, status) {
                 },
@@ -44,6 +46,7 @@
         onEditableSave: function (field, row, old, $el) {
             $.ajax({
                 url: "/admin/modules/fields/" + row.id + '/save',
+                method: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'editor_index': row.editor_index, 'editor_rows': row.editor_rows, 'editor_column': row.editor_columns},
                 success: function (data, status) {
                 },

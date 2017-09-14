@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
-use App\Models\Question;
 use App\Models\Site;
-use App\Models\Comment;
 use Gate;
 use Request;
 use Response;
-use Auth;
 
 /**
  * 问答
@@ -104,7 +102,7 @@ class QuestionController extends Controller
 
         $question = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $question->category_id]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -116,10 +114,10 @@ class QuestionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $question = Content::stores($this->module, $input);
+        Content::stores($this->module, $input);
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url. '?category_id=' . $question->category_id);
+        return redirect($this->base_url);
     }
 
     public function update($id)
@@ -137,9 +135,10 @@ class QuestionController extends Controller
         return redirect($this->base_url);
     }
 
-    public function comments($id)
+    public function comments($refer_id)
     {
-        return view('admin.questions.comment', compact('id'));
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
     }
 
     public function save($id)
@@ -170,34 +169,6 @@ class QuestionController extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id, false));
-    }
-
-    public function reply($id)
-    {
-        $site_id = Auth::user()->site_id;
-        $commentContent = Request::get('content');
-        $question = Question::find($id);
-
-        $comment = $question->comments()->create([
-            'site_id' => $site_id,
-            'refer_id' => $id,
-            'refer_type' => Comment::TYPE_QUESTION,
-            'content' => $commentContent,
-            'ip' => Request::getClientIp(),
-            'state' => Comment::STATE_PASSED,
-            'user_id' => Auth::user()->id,
-        ]);
-
-        if($question){
-            $question->state = Question::STATE_PUBLISHED;
-            $question->save();
-        }
-
-        return Response::json([
-            'status_code' => 200,
-            'message' => 'success',
-            'data' => $id,
-        ]);
+        return Response::json(Category::tree('', 0, $this->module->id));
     }
 }
