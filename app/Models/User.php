@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Category::class);
     }
 
+    public function getSiteIdAttribute($value)
+    {
+        return $value;
+    }
+
     public static function getTree($user_id)
     {
         $categories = Category::where('site_id', Auth::user()->site_id)->orderBy('sort')->get();

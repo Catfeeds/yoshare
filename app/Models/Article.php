@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use Request;
 use Response;
+use Auth;
 
 
 class Article extends BaseModule
@@ -59,9 +60,11 @@ class Article extends BaseModule
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
+        $site_id = Auth::user()->site_id;
 
         $ds = new DataSource();
         $articles = static::with('user')
+            ->where('site_id', $site_id)
             ->filter($filters)
             ->orderBy('sort', 'desc')
             ->skip($offset)

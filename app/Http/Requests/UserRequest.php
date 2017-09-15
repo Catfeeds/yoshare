@@ -27,8 +27,8 @@ class UserRequest extends Request
             'name'=>'required|unique:users,name',
             'username' => 'required|unique:users,username',
             'password' => 'required|min:6',
-            'site_id' => 'required|exists:sites,id',
-            'role_id.0'=>'required',
+            'site_ids.0' => 'required|exists:sites,id',
+            'role_id'=>'required',
         ];
     }
 
@@ -41,9 +41,9 @@ class UserRequest extends Request
             'username.unique' => '用户名已存在',
             'password.required' => '密码不能为空',
             'password.min' => '密码长度至少包含6个字符',
-            'site_id.required' => '站点ID不能为空',
+            'site_ids.0.required' => '请选择站点',
             'site_id.exists' => '站点ID不存在，请添加站点ID后再试',
-            'role_id.0.required'=>'请选择角色',
+            'role_id.required'=>'请选择角色',
         ];
     }
 }

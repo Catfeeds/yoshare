@@ -17,9 +17,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sitemap"></i> {{ auth()->user()->site->title }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">站点一</a></li>
-                        <li><a href="#">站点二</a></li>
-                        <li><a href="#">站点三</a></li>
+                        @foreach(\App\Models\UserSite::lists() as $site)
+                        <li><a href="/admin/users/set/site/{{ $site->id }}">{{ $site->title }}</a></li>
+                        @endforeach
                     </ul>
                 </li>
 

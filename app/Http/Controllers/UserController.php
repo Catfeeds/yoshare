@@ -32,11 +32,12 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
         $sites = Site::all();
         $sitesName = Site::getNames();
 
-        return view('admin.users.create', compact('sites', 'roles', 'sitesName'));
+        $roleName = Role::getNames();
+
+        return view('admin.users.create', compact('sites', 'roleName', 'sitesName'));
     }
 
     public function store(UserRequest $request)
@@ -45,6 +46,7 @@ class UserController extends Controller
 
         $input['password'] = bcrypt($input['password']);
         $input['state'] = User::STATE_NORMAL;
+        $input['site_id'] = $input['site_ids'][0];
 
         $user = User::create($input);
 
@@ -52,12 +54,10 @@ class UserController extends Controller
         $id = $user->id;
 
         if (array_key_exists('role_id', $input)) {
-            foreach ($input['role_id'] as $role_id) {
-                RoleUser::create([
-                    'role_id' => $role_id,
-                    'user_id' => $id,
-                ]);
-            }
+            RoleUser::create([
+                'role_id' => $input['role_id'],
+                'user_id' => $id,
+            ]);
         }
 
         if (array_key_exists('site_ids', $input)) {
@@ -95,10 +95,10 @@ class UserController extends Controller
             return redirect('/admin/users');
         }
 
-        $roles = Role::all();
-        $roleUsers = RoleUser::where('user_id', $id)
-            ->pluck('role_id')
-            ->toArray();
+        $roleName = Role::getNames();
+        $role = RoleUser::where('user_id', $id)
+            ->pluck('role_id');
+        $role_id = $role[0];
 
         $sitesName = Site::getNames();
         $sites = Site::all();
@@ -107,7 +107,7 @@ class UserController extends Controller
             ->pluck('site_id')
             ->toArray();
 
-        return view('admin.users.edit', compact('user', 'sites', 'roles', 'roleUsers', 'userSites', 'sitesName'));
+        return view('admin.users.edit', compact('user', 'sites', 'role_id', 'roleName', 'userSites', 'sitesName'));
     }
 
     public function update($id, Request $request)
@@ -130,13 +130,11 @@ class UserController extends Controller
         if (array_key_exists('role_id', $input)) {
             DB::table('role_user')->where('user_id', $id)->delete();
 
-            foreach ($input['role_id'] as $role_id) {
-                $data = [
-                    'role_id' => $role_id,
-                    'user_id' => $id,
-                ];
-                RoleUser::create($data);
-            }
+            $data = [
+                'role_id' => $input['role_id'],
+                'user_id' => $id,
+            ];
+            RoleUser::create($data);
         }
 
         if (array_key_exists('site_ids', $input)) {
@@ -232,5 +230,16 @@ class UserController extends Controller
         $user->save();
 
         return ('<script>alert("修改成功!");window.location.href="/"</script>;');
+    }
+
+    public function setSite($site_id)
+    {
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $data['site_id'] = $site_id;
+
+        $user->update($data);
+        \Session::flash('flash_success', '站点切换成功!');
+        return redirect()->back();
     }
 }
