@@ -30,7 +30,7 @@ class FollowController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/follows/list",
+     *   path="/follows",
      *   summary="获取我的关注",
      *   tags={"/follows 关注"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -138,7 +138,7 @@ class FollowController extends BaseController
             return $this->responseError('关注数量过多');
         }
 
-        if (!$model->follows()->where('member_id', $member->id)->exists()) {
+        if (!$model->follows()->where('member_id', $member->id)->count()) {
             //增加关注记录
             $model->follows()->create([
                 'site_id' => $model->site_id,
@@ -146,7 +146,7 @@ class FollowController extends BaseController
             ]);
 
             //移除关注数缓存
-            Cache::forget($model->getMorphClass() . "-follow-$model->id");
+            Cache::forget(addslashes($model->getMorphClass()) . "-follow-$model->id");
         }
 
         return $this->responseSuccess();

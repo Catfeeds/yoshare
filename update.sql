@@ -248,3 +248,27 @@ CREATE TABLE `cms_user_logs` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- -----------
+-- 2017-9-15
+-- -----------
+CREATE TABLE `cms_likes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) NOT NULL,
+  `refer_id` int(10) unsigned NOT NULL COMMENT '内容ID',
+  `refer_type` varchar(255) DEFAULT NULL,
+  `count` int(10) unsigned NOT NULL COMMENT ' 会员ID',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `cms_clicks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) NOT NULL,
+  `refer_id` int(10) unsigned NOT NULL COMMENT '内容ID',
+  `refer_type` varchar(255) DEFAULT NULL,
+  `count` int(10) unsigned NOT NULL COMMENT ' 会员ID',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1148 DEFAULT CHARSET=utf8;

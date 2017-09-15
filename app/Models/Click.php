@@ -12,6 +12,7 @@ class Click extends Model
         'refer_id',
         'refer_type',
         'count',
+        'ip',
     ];
 
     public function refer()

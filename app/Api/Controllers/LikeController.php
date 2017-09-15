@@ -54,10 +54,7 @@ class LikeController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        $like = $model->like()
-            ->where('site_id', $model->site_id)
-            ->where('refer_type', $module->model_class)
-            ->first();
+        $like = $model->like()->first();
 
         if (!$like) {
             //增加点赞数
@@ -76,7 +73,7 @@ class LikeController extends BaseController
         }
 
         //移除点赞数缓存
-        Cache::forget($model->getMorphClass() . "-like-$model->id");
+        Cache::forget(addslashes($model->getMorphClass()) . "-like-$model->id");
 
         return $this->responseSuccess();
     }

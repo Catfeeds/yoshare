@@ -51,22 +51,17 @@ class ClickController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        $click = $model->click()
-            ->where('site_id', $model->site_id)
-            ->where('refer_type', $module->model_class)
-            ->first();
+        $click = $model->click()->first();
 
         if (!$click) {
-            //增加点赞数
-            $model->$click()->create([
+            $model->click()->create([
                 'site_id' => $model->site_id,
                 'count' => 0,
             ]);
         } else {
             $click->increment('count');
-            //移除点赞数缓存
 
-            Cache::forget($model->getMorphClass() . "-click-$model->id");
+            Cache::forget(addslashes($model->getMorphClass()) . "-click-$model->id");
         }
 
         return $this->responseSuccess();

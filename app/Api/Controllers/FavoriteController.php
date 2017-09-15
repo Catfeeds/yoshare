@@ -4,9 +4,9 @@ namespace App\Api\Controllers;
 
 use App\Models\Favorite;
 use App\Models\Module;
+use Cache;
 use Exception;
 use Request;
-use Cache;
 
 
 class FavoriteController extends BaseController
@@ -31,7 +31,7 @@ class FavoriteController extends BaseController
 
     /**
      * @SWG\Get(
-     *   path="/favorites/list",
+     *   path="/favorites",
      *   summary="获取收藏列表",
      *   tags={"/favorites 收藏"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -153,10 +153,7 @@ class FavoriteController extends BaseController
         }
 
         //判断此收藏是否已存在
-        if (!$model->favorites()->where('member_id', $member->id)->exists()) {
-            //增加收藏数
-            $model->increment('favorites');
-
+        if (!$model->favorites()->where('member_id', $member->id)->count()) {
             //增加收藏记录
             $model->favorites()->create([
                 'site_id' => $model->site_id,
@@ -164,7 +161,7 @@ class FavoriteController extends BaseController
             ]);
 
             //移除收藏数缓存
-            Cache::forget($model->getMorphClass() . "-favorite-$model->id");
+            Cache::forget(addslashes($model->getMorphClass()) . "-favorite-$model->id");
         }
 
         return $this->responseSuccess();
@@ -176,6 +173,7 @@ class FavoriteController extends BaseController
      *   summary="取消收藏",
      *   tags={"/favorites 收藏"},
      *   @SWG\Parameter(name="favorite_ids", in="query", required=true, description="收藏ID", type="array", items={"type": "integer"}),
+     *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
      *     response=200,
@@ -189,7 +187,8 @@ class FavoriteController extends BaseController
      */
     public function destroy()
     {
-        $favorite_ids = Request::get('favorite_ids');
+        $favorite_ids = explode(',', Request::get('favorite_ids'));
+        $type = Request::get('type');
 
         try {
             $member = \JWTAuth::parseToken()->authenticate();
@@ -200,9 +199,23 @@ class FavoriteController extends BaseController
             return $this->responseError('无效的token,请重新登录');
         }
 
-        Favorite::where('member_id', $member->id)
-            ->whereIn('id', explode(',', $favorite_ids))
-            ->delete();
+        $module = Module::findByName($type);
+        if (!$module) {
+            return $this->responseError('此类型不存在');
+        }
+
+        $models = call_user_func([$module->model_class, 'findMany'], $favorite_ids);
+
+        if (!$models->count()) {
+            return $this->responseError('此ID不存在');
+        }
+
+        foreach ($models as $model) {
+            $favorite = $model->favorites()->where('member_id', $member->id)->first();
+            if (!empty($favorite)) {
+                $favorite->delete();
+            }
+        }
 
         return $this->responseSuccess();
     }
@@ -244,13 +257,17 @@ class FavoriteController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $favorite = Favorite::where('refer_id', $id)
-            ->where('refer_type', $module->model_class)
-            ->where('member_id', $member->id)
-            ->first();
+        $model = call_user_func([$module->model_class, 'find'], $id);
+        if (empty($model)) {
+            return $this->responseError('此ID不存在');
+        }
 
-        if ($favorite) {
+        $favorite = $model->favorites()->where('member_id', $member->id)->first();
+        if (!empty($favorite)) {
             $favorite->delete();
+
+            //移除收藏数缓存
+            Cache::forget(addslashes($model->getMorphClass()) . "-favorite-$model->id");
         }
 
         return $this->responseSuccess();

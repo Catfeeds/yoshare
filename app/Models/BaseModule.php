@@ -98,7 +98,7 @@ class BaseModule extends Model
 
     public function like()
     {
-        return $this->morphMany(Like::class, 'refer');
+        return $this->morphOne(Like::class, 'refer');
     }
 
     public function getLikeCountAttribute()
