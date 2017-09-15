@@ -185,12 +185,12 @@ ALTER TABLE `cms_comments` ADD `deleted_at` timestamp NULL DEFAULT NULL COMMENT 
 -- -----------
 -- 2017-9-12
 -- -----------
-CREATE TABLE `cms_user_site` (
+CREATE TABLE `cms_user_sites` (
   `user_id` int(10) NOT NULL,
   `site_id` int(10) NOT NULL,
   PRIMARY KEY (`user_id`,`site_id`) USING BTREE,
   KEY `user_id` (`user_id`),
-  KEY `site_id` (`site_id`);
+  KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------
