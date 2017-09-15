@@ -16,7 +16,7 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
-                            @include('admin.logs.toobar')
+                            @include('admin.logs.toolbar')
                             @include('admin.logs.query')
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>

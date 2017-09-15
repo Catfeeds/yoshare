@@ -178,9 +178,7 @@ CREATE TABLE `cms_questions` (
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   `published_at` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-ALTER TABLE `cms_comments` ADD `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除日期' AFTER `updated_at`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------
 -- 2017-9-12
@@ -192,11 +190,6 @@ CREATE TABLE `cms_user_sites` (
   KEY `user_id` (`user_id`),
   KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- -----------
--- 2017-9-14
--- -----------
-ALTER TABLE `cms_comments` ADD `sort` int(10) NOT NULL COMMENT '序号' AFTER `user_id`;
 
 DELETE FROM `cms_modules` WHERE `id` = 3;
 INSERT INTO `cms_modules` (`id`, `name`, `title`, `table_name`, `groups`, `is_lock`, `icon`, `state`, `created_at`, `updated_at`)
