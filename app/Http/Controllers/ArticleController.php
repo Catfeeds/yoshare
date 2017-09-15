@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLogEvent;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\Site;
+use App\Models\UserLog;
 use Gate;
 use Request;
 use Response;
@@ -132,6 +134,8 @@ class ArticleController extends Controller
 
         $article = Content::stores($this->module, $input);
 
+        event(new UserLogEvent(UserLog::ACTION_CREATE . '文章', $article->id, $this->module->model_class));
+
         \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url . '?category_id=' . $article->category_id);
     }
@@ -146,6 +150,8 @@ class ArticleController extends Controller
         }
 
         $article = Content::updates($this->module, $id, $input);
+
+        event(new UserLogEvent(UserLog::ACTION_UPDATE . '文章', $article->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url . '?category_id=' . $article->category_id);
@@ -175,7 +181,15 @@ class ArticleController extends Controller
 
     public function state()
     {
-        Article::state(request()->all());
+        $input = request()->all();
+        Article::state($input);
+
+        $ids = $input['ids'];
+        $stateName = Article::getStateName($input['state']);
+
+        foreach ($ids as $id) {
+            event(new UserLogEvent('变更' . '文章' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
     }
 
     public function table()

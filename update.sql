@@ -239,3 +239,19 @@ VALUES
 	(4, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25'),
 	(4, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25'),
 	(4, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 1, 98, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-14 15:20:25', '2017-09-14 15:20:25');
+
+-- -----------
+-- 2017-9-14
+-- -----------
+CREATE TABLE `cms_user_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
+  `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型',
+  `action` varchar(40) COLLATE utf8_unicode_ci NOT NULL COMMENT '操作',
+  `ip` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP地址',
+  `user_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '用户ID',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

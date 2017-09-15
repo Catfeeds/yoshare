@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLogEvent;
 use App\Models\__module_name__;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\Site;
+use App\Models\UserLog;
 use Gate;
 use Request;
 use Response;
@@ -132,6 +134,8 @@ class __controller__ extends Controller
 
         $__singular__ = Content::stores($this->module, $input);
 
+        event(new UserLogEvent(UserLog::ACTION_CREATE . '__module_title__', $__singular__->id, $this->module->model_class));
+
         \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
     }
@@ -146,6 +150,8 @@ class __controller__ extends Controller
         }
 
         $__singular__ = Content::updates($this->module, $id, $input);
+
+        event(new UserLogEvent(UserLog::ACTION_UPDATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
@@ -175,7 +181,15 @@ class __controller__ extends Controller
 
     public function state()
     {
-        __module_name__::state(request()->all());
+        $input = request()->all();
+        __module_name__::state($input);
+
+        $ids = $input['ids'];
+        $stateName = __module_name__::getStateName($input['state']);
+
+        foreach ($ids as $id) {
+            event(new UserLogEvent('变更' . '__module_title__' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
     }
 
     public function table()

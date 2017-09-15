@@ -25,6 +25,9 @@ class ArticleController extends BaseController
         });
         $attributes['comment_count'] = $article->commentCount;
         $attributes['favorite_count'] = $article->favoriteCount;
+        $attributes['follow_count'] = $article->followCount;
+        $attributes['like_count'] = $article->likeCount;
+        $attributes['click_count'] = $article->clickCount;
         $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
         return $attributes;

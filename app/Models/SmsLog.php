@@ -15,14 +15,17 @@ class SmsLog extends Model
         'message',
         'state'
     ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
+
     public function scopeOwns($query)
     {
         $query->where('site_id', Auth::user()->site_id);
     }
-   public function site()
-    {
-        return $this->hasOne('App\Models\Site','id', 'site_id');
-    }
+
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
@@ -31,6 +34,7 @@ class SmsLog extends Model
                 ->where('created_at', '<=', $filters['end_date']) : '';
         });
     }
+
     public function stateName()
     {
         switch ($this->state) {
@@ -42,7 +46,5 @@ class SmsLog extends Model
                 break;
         }
     }
-
-
 }
 ?>

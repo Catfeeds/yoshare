@@ -154,6 +154,11 @@ class BaseModule extends Model
         }
     }
 
+    public static function getStateName($state)
+    {
+        return array_key_exists($state, static::STATES) ? static::STATES[$state] : '';
+    }
+
     public static function state($input)
     {
         $ids = $input['ids'];

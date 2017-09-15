@@ -29,7 +29,7 @@ class Article extends BaseModule
 
     protected $table = 'articles';
 
-    protected $fillable = ['category_id','type','title','summary','image_url','content','top','published_at','images','videos','member_id','user_id','sort','state','site_id'];
+    protected $fillable = ['site_id','category_id','type','title','summary','image_url','content','top','images','videos','member_id','user_id','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 

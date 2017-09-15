@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserLogEvent;
 use App\Http\Controllers\Controller;
+use App\Models\UserLog;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Captcha;
@@ -63,6 +65,7 @@ class LoginController extends Controller
             'password' => 'required',
             'captcha' => 'required|captcha',
         ]);
+        event(new UserLogEvent(UserLog::ACTION_LOGIN));
     }
 
     /**
@@ -78,6 +81,8 @@ class LoginController extends Controller
         $request->session()->flush();
 
         $request->session()->regenerate();
+
+        event(new UserLogEvent(UserLog::ACTION_LOGOUT));
 
         return redirect('admin/login');
     }
