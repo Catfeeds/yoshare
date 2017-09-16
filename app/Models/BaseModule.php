@@ -40,6 +40,11 @@ class BaseModule extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getStateNameAttribute()
+    {
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
+    }
+
     public function files()
     {
         return $this->morphMany(File::class, 'refer');
@@ -144,6 +149,9 @@ class BaseModule extends Model
             empty($filters['title']) ?: $query->where('title', 'like', '%' . $filters['title'] . '%');
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
+            empty($filters['user_name']) ?: $query->whereHas('user', function ($query) use ($filters) {
+                $query->where('name', $filters['user_name']);
+            });
         });
         if (isset($filters['state'])) {
             if (!empty($filters['state'])) {

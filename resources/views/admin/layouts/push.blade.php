@@ -68,7 +68,7 @@
                     "tapToDismiss": false,
                     'positionClass': 'toast-bottom-right',
                 };
-                toastr['success']('发送成功！<a href="/push/log">查看推送日志</a>');
+                toastr['success']('发送成功！<a href="/push/logs">查看推送日志</a>');
             },
             error: function () {
                 //发送失败提示

@@ -2,72 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataSource;
+use App\Models\PushLog;
+use App\Models\User;
 use Gate;
 use Request;
-use App\Models\PushLog;
-use App\Models\DataSource;
 use Response;
 
 
 class PushController extends Controller
 {
-    public function __construct()
-    {
-    }
-
-    public function index()
-    {
-    }
-
     public function log()
     {
         if (Gate::denies('@push')) {
             $this->middleware('deny403');
         }
 
-        return view('admin.logs.push');
+        $users = User::pluck('name', 'id')
+            ->toArray();
+        //添加空选项
+        array_unshift($users, '');
+
+        return view('admin.logs.push', compact('users'));
     }
 
-    public function table()
+    public function logTable()
     {
+        $filter = Request::all();
+
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        $state = Request::get('state');
 
-        if (empty($state)) {
-            $logs = PushLog::with('user')
-                ->owns()
-                ->orderBy('id', 'desc')
-                ->skip($offset)
-                ->limit($limit)
-                ->get();
+        $logs = PushLog::with('user')
+            ->owns()
+            ->filter($filter)
+            ->orderBy('id', 'desc')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
 
-            $total = PushLog::owns()
-                ->count();
-        } else {
-            $logs = PushLog::with('user')
-                ->owns()
-                ->where('state', $state)
-                ->orderBy('id', 'desc')
-                ->skip($offset)
-                ->limit($limit)
-                ->get();
-
-            $total = PushLog::owns()
-                ->where('state', $state)
-                ->count();
-        }
+        $total = PushLog::owns()
+            ->filter($filter)
+            ->count();
 
         $logs->transform(function ($log) {
             return [
                 'id' => $log->id,
-                'content_id'=>$log->content_id,
-                'content_type'=>$log->typeName(),
+                'content_id' => $log->content_id,
+                'content_type' => $log->typeName(),
                 'content_title' => $log->content_title,
                 'send_no' => $log->send_no,
                 'msg_id' => $log->msg_id,
-                'username' => $log->user->name,
-                'state_name' => $log->stateName(),
+                'username' => empty($log->user) ? '': $log->user->name,
+                'state_name' => $log->state_name,
                 'state' => $log->state,
                 'created_at' => $log->created_at->toDateTimeString(),
                 'updated_at' => $log->updated_at->toDateTimeString(),

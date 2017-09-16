@@ -3,11 +3,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                推送日志
+                操作日志
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">推送日志</li>
+                <li class="active">操作日志</li>
             </ol>
         </section>
         <section class="content">
@@ -18,24 +18,19 @@
                             @include('admin.layouts.flash')
                             <div class="cb-toolbar"></div>
                             <div class="btn-group margin-bottom pull-right">
-                                <input type="hidden" name="state" id="state" value=""/>
-                                <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
-                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\PushLog::STATE_SUCCESS }}">已发布</button>
-                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\PushLog::STATE_FAILURE }}">已删除</button>
                                 <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" data-toggle="modal" data-target="#modal_query">查询</button>
                             </div>
                             <table id="table" data-toggle="table">
                                 <thead>
                                 <tr>
-                                    <th data-field="state" data-checkbox="true"></th>
-                                    <th data-field="id" data-width="30">ID</th>
-                                    <th data-field="content_type" data-width="60" data-align="center">类型</th>
-                                    <th data-field="content_title" data-formatter="titleFormatter">内容标题</th>
-                                    <th data-field="send_no" data-width="90" data-align="center">send_no</th>
-                                    <th data-field="msg_id" data-width="90" data-align="center">msg_id</th>
-                                    <th data-field="username" data-width="60" data-align="center">操作员</th>
-                                    <th data-field="state_name" data-width="60" data-formatter="stateFormatter" data-align="center">状态</th>
-                                    <th data-field="created_at" data-width="130" data-align="center">推送时间</th>
+                                    <th data-field="id" data-width="90" data-align="center">ID</th>
+                                    <th data-field="site_title" data-width="120" data-align="center">站点</th>
+                                    <th data-field="action">操作</th>
+                                    <th data-field="refer_id" data-width="90" data-align="center">关联ID</th>
+                                    <th data-field="refer_type" data-width="150" data-align="center">关联类型</th>
+                                    <th data-field="ip" data-width="90" data-align="center">IP地址</th>
+                                    <th data-field="user_name" data-width="90" data-align="center">操作员</th>
+                                    <th data-field="created_at" data-width="150" data-align="center">操作时间</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -59,10 +54,15 @@
                             <div class="box box-info">
                                 <form id="form_query" class="form-horizontal">
                                     <div class="box-body">
+
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">操作员:</label>
                                             <div class="col-sm-4">
                                                 {!! Form::select('user_id', $users, 0, ['class' => 'form-control']) !!}
+                                            </div>
+                                            <label class="col-sm-2 control-label">操作:</label>
+                                            <div class="col-sm-4">
+                                                <input id="action" name="action" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -99,7 +99,7 @@
     <script>
         $('#table').bootstrapTable({
             method: 'get',
-            url: '/admin/push/logs/table',
+            url: '/admin/users/logs/table',
             pagination: true,
             pageNumber: 1,
             pageSize: 20,
@@ -116,12 +116,6 @@
                 return object;
             },
         });
-
-        function titleFormatter(value, row, index) {
-            return [
-                '<a href="/admin/contents/' + row.content_id + '" target="_blank">' + value + '</a>',
-            ]
-        }
 
         function stateFormatter(value, row, index) {
             var style = 'label-primary';
@@ -149,19 +143,5 @@
             $('#table').bootstrapTable('selectPage', 1);
             $('#table').bootstrapTable('refresh');
         });
-
-        /* 筛选 */
-        $('.filter').click(function () {
-            var value = $(this).val();
-            $('#state').val(value);
-            $('#table').bootstrapTable('selectPage', 1);
-
-            //改变按钮样式
-            $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
-            $('.filter').addClass('btn-default');
-            $(this).removeClass('btn-default');
-            $(this).addClass($(this).data('active'));
-        });
-
     </script>
 @endsection

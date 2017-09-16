@@ -14,15 +14,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 推送管理
      */
-    Route::get('push/log', 'PushController@log');
-    Route::get('push/log/table', 'PushController@table');
-    Route::resource('push', 'PushController');
+    Route::get('push/logs', 'PushController@log');
+    Route::get('push/logs/table', 'PushController@logTable');
 
     /**
-     * SMS日志管理
+     * 短信管理
      */
-    Route::get('sms/log','SmsController@index');
-    Route::get('sms/log/table', 'SmsController@table');
+    Route::get('sms/logs','SmsController@log');
+    Route::get('sms/logs/table', 'SmsController@logTable');
 
     /**
      * 会员管理
@@ -61,7 +60,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('users/table', 'UserController@table');
     Route::resource('users', 'UserController');
     Route::get('users/{id}/delete', 'UserController@destroy');
-    Route::get('users/set/site/{site_id}', 'UserController@setSite');
 
     /**
      * 角色管理
@@ -128,13 +126,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('themes/file', 'ThemeController@createFile');
     Route::put('themes/file', 'ThemeController@writeFile');
     Route::delete('themes/file', 'ThemeController@removeFile');
+    Route::get('themes/modules/{module_id}', 'ThemeController@module');
     Route::resource('themes', 'ThemeController');
 
     /**
      * 栏目管理
      */
     Route::get('categories/tree/', 'CategoryController@tree');
-    Route::get('themes/modules/{module_id}', 'ThemeController@module');
     Route::get('categories/table/{category_id}', 'CategoryController@table');
     Route::get('categories/create/{category_id}', 'CategoryController@create');
     Route::get('categories/{id}/save', 'CategoryController@save');

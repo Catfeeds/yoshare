@@ -10,6 +10,11 @@ class PushLog extends Model
     const STATE_SUCCESS = 1;
     const STATE_FAILURE = 2;
 
+    const STATES = [
+        1 => '成功',
+        2 => '失败',
+    ];
+
     const TYPE_NEWS = 1;
 
     const IOS_PUSH_PRODUCTION = 1;
@@ -45,6 +50,11 @@ class PushLog extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getStateNameAttribute()
+    {
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
+    }
+
     public function typeName()
     {
         switch ($this->content_type){
@@ -54,21 +64,24 @@ class PushLog extends Model
         }
     }
 
-    public function stateName()
-    {
-        switch ($this->state) {
-            case static::STATE_SUCCESS:
-                return '成功';
-                break;
-            case static::STATE_FAILURE:
-                return '失败';
-                break;
-        }
-    }
-
     public function scopeOwns($query)
     {
         $query->where('site_id', Auth::user()->site_id);
     }
 
+    public function scopeFilter($query, $filters)
+    {
+        $query->where(function ($query) use ($filters) {
+            empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
+            empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
+            empty($filters['user_id']) ?: $query->whereHas('user', function ($query) use ($filters) {
+                $query->where('id', $filters['user_id']);
+            });
+        });
+        if (isset($filters['state'])) {
+            if (!empty($filters['state'])) {
+                $query->where('state', $filters['state']);
+            }
+        }
+    }
 }

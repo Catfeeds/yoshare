@@ -8,7 +8,12 @@ class SmsLog extends Model
 {
     const STATE_SUCCESS = 1;
     const STATE_FAILURE = 2;
-    
+
+    const STATES = [
+        1 => '成功',
+        2 => '失败',
+    ];
+
     protected $fillable = [
         'site_id',
         'mobile',
@@ -29,22 +34,15 @@ class SmsLog extends Model
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
-            !empty($filters['mobile']) ? $query->where('mobile', $filters['mobile']) : '';
-            !empty($filters['start_date']) ? $query->where('created_at', '>=', $filters['start_date'])
-                ->where('created_at', '<=', $filters['end_date']) : '';
+            empty($filters['mobile']) ?: $query->where('mobile', $filters['mobile']);
+            empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
+            empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
         });
     }
 
     public function stateName()
     {
-        switch ($this->state) {
-            case static::STATE_SUCCESS:
-                return '成功';
-                break;
-            case static::STATE_FAILURE:
-                return '失败';
-                break;
-        }
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 }
 ?>

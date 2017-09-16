@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Http\Requests\UserRequest;
+use App\Models\DataSource;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Site;
 use App\Models\User;
+use App\Models\UserLog;
 use App\Models\UserSite;
 use Auth;
 use DB;
@@ -153,7 +154,8 @@ class UserController extends Controller
         return redirect('/admin/users');
     }
 
-    function category($id){
+    function category($id)
+    {
         $user = User::find($id);
 
         $category_ids = $user->categories->pluck('id')->toArray();
@@ -198,6 +200,58 @@ class UserController extends Controller
 
         $ds = new DataSource();
         $ds->data = $users;
+
+        return Response::json($ds);
+    }
+
+    public function log()
+    {
+        if (Gate::denies('@log')) {
+            $this->middleware('deny403');
+        }
+
+        $users = User::pluck('name', 'id')
+            ->toArray();
+        //添加空选项
+        array_unshift($users, '');
+
+        return view('admin.logs.user', compact('users'));
+    }
+
+    public function logTable()
+    {
+        $filters = Request::all();
+
+        $offset = Request::get('offset') ? Request::get('offset') : 0;
+        $limit = Request::get('limit') ? Request::get('limit') : 20;
+
+        $logs = UserLog::with('site', 'user')
+            ->filter($filters)
+            ->orderBy('id', 'desc')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
+
+        $total = UserLog::filter($filters)
+            ->count();
+
+        $logs->transform(function ($log) {
+            return [
+                'id' => $log->id,
+                'site_title' => empty($log->site) ? '' : $log->site->title,
+                'action' => $log->action,
+                'refer_id' => empty($log->refer_id) ? '' : $log->refer_id,
+                'refer_type' => $log->refer_type,
+                'ip' => $log->ip,
+                'user_id' => $log->user_id,
+                'user_name' => empty($log->user) ? '' : $log->user->name,
+                'created_at' => $log->created_at->toDateTimeString(),
+                'updated_at' => $log->updated_at->toDateTimeString(),
+            ];
+        });
+        $ds = New DataSource();
+        $ds->total = $total;
+        $ds->rows = $logs;
 
         return Response::json($ds);
     }

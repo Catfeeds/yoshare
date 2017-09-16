@@ -16,17 +16,18 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
-                            @include('admin.logs.toolbar')
-                            @include('admin.logs.query')
-                            <table id="table" data-toggle="table" style="word-break:break-all;">
+                            <div class="cb-toolbar"></div>
+                            <div class="btn-group margin-bottom pull-right">
+                                <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" data-toggle="modal" data-target="#modal_query">查询</button>
+                            </div>
+                            <table id="table" data-toggle="table">
                                 <thead>
                                 <tr>
-                                    <th data-field="state" data-checkbox="true"></th>
-                                    <th data-field="id" data-width="30">ID</th>
-                                    <th data-field="site_title" data-width="60" data-align="center">站点</th>
+                                    <th data-field="id" data-width="60">ID</th>
+                                    <th data-field="site_title" data-width="120" data-align="center">站点</th>
                                     <th data-field="mobile" data-width="90" data-align="center">手机号</th>
                                     <th data-field="message">信息</th>
-                                    <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
+                                    <th data-field="state_name" data-width="90" data-align="center" data-formatter="stateFormatter">状态</th>
                                     <th data-field="created_at" data-width="150" data-align="center">发送时间</th>
                                 </tr>
                                 </thead>
@@ -38,10 +39,61 @@
         </section>
     </div>
 
+    <div class="modal fade common" id="modal_query" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width:640px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+                    <h4 class="modal-title">请输入查询条件</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box box-info">
+                                <form id="form_query" class="form-horizontal">
+                                    <div class="box-body">
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">手机号:</label>
+                                            <div class="col-sm-4">
+                                                <input id="mobile" name="mobile" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="start_date" class="control-label col-sm-2">开始日期:</label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group date" id="start_date">
+                                                    <input class="form-control" name="start_date" type="text" id="start_date">
+                                                    <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span>
+                                                </div>
+                                            </div>
+                                            <label for="end_date" class="control-label col-sm-2">截止日期:</label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group date" id="end_date">
+                                                    <input class="form-control" name="end_date" type="text" id="end_date">
+                                                    <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button class="btn btn-default" data-dismiss="modal">取消</button>
+                                        <button class="btn btn-info pull-right" id="btn_query" data-dismiss="modal">查询
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#table').bootstrapTable({
             method: 'get',
-            url: '/admin/sms/log/table',
+            url: '/admin/sms/logs/table',
             pagination: true,
             pageNumber: 1,
             pageSize: 20,
@@ -74,6 +126,16 @@
             ].join('');
         }
 
+        $('.date').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: "zh-CN",
+            toolbarPlacement: 'bottom',
+            showClear: true,
+        });
 
+        $('#btn_query').click(function () {
+            $('#table').bootstrapTable('selectPage', 1);
+            $('#table').bootstrapTable('refresh');
+        });
     </script>
 @endsection

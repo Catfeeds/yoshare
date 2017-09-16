@@ -43,6 +43,18 @@ class UserLog extends Model
         $query->where('site_id', Auth::user()->site_id);
     }
 
+    public function scopeFilter($query, $filters)
+    {
+        $query->where(function ($query) use ($filters) {
+            empty($filters['mobile']) ?: $query->where('mobile', $filters['mobile']);
+            empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
+            empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
+            empty($filters['user_id']) ?: $query->whereHas('user', function ($query) use ($filters) {
+                $query->where('id', $filters['user_id']);
+            });
+        });
+    }
+
     public static function record($action, $refer_id = 0, $refer_type = '')
     {
         static::create([

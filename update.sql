@@ -240,7 +240,7 @@ CREATE TABLE `cms_user_logs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
   `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
-  `refer_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '关联类型',
+  `refer_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '关联类型',
   `action` varchar(40) COLLATE utf8_unicode_ci NOT NULL COMMENT '操作',
   `ip` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP地址',
   `user_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '用户ID',
@@ -272,3 +272,35 @@ CREATE TABLE `cms_clicks` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1148 DEFAULT CHARSET=utf8;
+
+
+-- -----------
+-- 2017-9-15
+-- -----------
+DROP TABLE IF EXISTS `cms_menus`;
+CREATE TABLE `cms_menus` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `parent_id` int(10) unsigned NOT NULL COMMENT '上级ID',
+  `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '英文名称',
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '中文名称',
+  `permission` varchar(40) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '权限',
+  `icon` varchar(40) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `sort` int(10) unsigned NOT NULL COMMENT '序号',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `cms_menus` (`id`, `site_id`, `parent_id`, `name`, `url`, `permission`, `icon`, `sort`, `created_at`, `updated_at`)
+VALUES
+	(1, 1, 0, '内容管理', '#', '', 'fa-edit', 0, '2017-08-16 15:42:05', '2017-08-17 16:11:50'),
+	(2, 1, 1, '文章管理', '/admin/articles', '@article', 'fa-file-o', 0, '2017-08-16 15:43:03', '2017-09-04 11:49:26'),
+	(3, 1, 1, '单页管理', '/admin/pages', '', 'fa-file-o', 1, '2017-08-22 16:08:06', '2017-09-04 11:49:26'),
+	(4, 1, 1, '问答管理', '/admin/questions', '@question', 'fa-question-circle', 2, '2017-08-28 15:45:45', '2017-09-15 15:16:13'),
+	(5, 1, 1, '评论管理', '/admin/comments', '@comment', 'fa-comment-o', 3, '2017-08-16 16:52:47', '2017-09-15 15:16:13'),
+	(6, 1, 0, '会员管理', '#', '', 'fa-user', 1, '2017-08-17 16:05:29', '2017-08-17 16:05:57'),
+	(7, 1, 6, '会员管理', '/admin/members', '@member', 'fa-user-o', 0, '2017-08-17 16:05:53', '2017-08-17 16:08:58'),
+	(8, 1, 0, '日志查询', '#', '', 'fa-calendar', 2, '2017-08-18 10:32:04', '2017-08-18 10:33:12'),
+	(9, 1, 8, '操作日志', '/admin/users/logs', '', 'fa-user-o', 0, '2017-09-15 15:16:10', '2017-09-15 15:24:13'),
+	(10, 1, 8, '推送日志', '/admin/push/logs', '', 'fa-envelope-o', 1, '2017-08-18 10:33:10', '2017-09-15 15:24:13'),
+	(11, 1, 8, '短信日志', '/admin/sms/logs', '', 'fa-commenting-o', 2, '2017-09-04 11:49:21', '2017-09-15 15:24:13');
