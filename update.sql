@@ -304,3 +304,15 @@ VALUES
 	(9, 1, 8, '操作日志', '/admin/users/logs', '', 'fa-user-o', 0, '2017-09-15 15:16:10', '2017-09-15 15:24:13'),
 	(10, 1, 8, '推送日志', '/admin/push/logs', '', 'fa-envelope-o', 1, '2017-08-18 10:33:10', '2017-09-15 15:24:13'),
 	(11, 1, 8, '短信日志', '/admin/sms/logs', '', 'fa-commenting-o', 2, '2017-09-04 11:49:21', '2017-09-15 15:24:13');
+
+
+CREATE TABLE `cms_follows` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) NOT NULL,
+  `refer_id` int(10) unsigned NOT NULL COMMENT '内容ID',
+  `refer_type` varchar(255) DEFAULT NULL,
+  `member_id` int(10) unsigned NOT NULL COMMENT ' 会员ID',
+  `created_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
