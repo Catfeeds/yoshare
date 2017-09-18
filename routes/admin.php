@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('users/table', 'UserController@table');
     Route::resource('users', 'UserController');
     Route::get('users/{id}/delete', 'UserController@destroy');
+    Route::get('users/set/site/{site_id}', 'UserController@setSite');
 
     /**
      * 角色管理
