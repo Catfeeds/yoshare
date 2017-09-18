@@ -101,7 +101,7 @@ class BaseModule extends Model
         });
     }
 
-    public function like()
+    public function likes()
     {
         return $this->morphOne(Like::class, 'refer');
     }
@@ -109,12 +109,12 @@ class BaseModule extends Model
     public function getLikeCountAttribute()
     {
         return cache_remember($this->getMorphClass() . "-like-$this->id", 1, function () {
-            $count = array_get($this->like, 'count');
+            $count = array_get($this->likes, 'count');
             return $count ? $count : 0;
         });
     }
 
-    public function click()
+    public function clicks()
     {
         return $this->morphOne(Click::class, 'refer');
     }
@@ -122,7 +122,7 @@ class BaseModule extends Model
     public function getClickCountAttribute()
     {
         return cache_remember($this->getMorphClass() . "-click-$this->id", 1, function () {
-            $count = array_get($this->click, 'count');
+            $count = array_get($this->clicks, 'count');
             return $count ? $count : 0;
         });
     }
