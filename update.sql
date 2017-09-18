@@ -348,3 +348,5 @@ ALTER TABLE `cms_items` ADD  `float2` FLOAT(12,2) NOT NULL COMMENT '浮点数扩
 ALTER TABLE `cms_items` ADD  `float3` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float2`;
 ALTER TABLE `cms_items` ADD  `float4` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float3`;
 ALTER TABLE `cms_items` ADD  `float5` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float4`;
+
+ALTER TABLE `cms_categories` ADD `type` TINYINT(1) NOT NULL COMMENT '栏目类型' AFTER `module_id`;

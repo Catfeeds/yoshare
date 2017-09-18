@@ -81,7 +81,7 @@ class User extends Authenticatable
 
     public static function getTree($user_id)
     {
-        $categories = Category::where('site_id', Auth::user()->site_id)->orderBy('sort')->get();
+        $categories = Category::Owns()->orderBy('sort')->get();
 
         $root = new Node();
         $root->id = 0;

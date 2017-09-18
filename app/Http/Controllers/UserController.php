@@ -179,7 +179,8 @@ class UserController extends Controller
 
     public function table()
     {
-        $users = User::owns()->with('roles')->get();
+        $site = Site::find(Auth::user()->site_id);
+        $users = $site->users()->with('roles')->get();
 
         $names = Site::getNames();
 
