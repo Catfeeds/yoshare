@@ -15,6 +15,7 @@ use DB;
 use Gate;
 use Request;
 use Response;
+use Cookie;
 
 class UserController extends Controller
 {
@@ -293,6 +294,8 @@ class UserController extends Controller
         $data['site_id'] = $site_id;
 
         $user->update($data);
+        Cookie::make('site_id', $site_id, 10);
+
         \Session::flash('flash_success', '站点切换成功!');
         return redirect()->back();
     }

@@ -33,6 +33,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $site_id;
+
     public function stateName()
     {
         switch ($this->state) {
@@ -62,7 +64,13 @@ class User extends Authenticatable
 
     public function getSiteIdAttribute($value)
     {
-        return $value;
+        $site_id = Cookie::get('site_id');
+        if(!empty($site_id)){
+            return $site_id;
+        }else{
+            Cookie::make('site_id', $value, 10);
+            return $value;
+        }
     }
 
     public static function getTree($user_id)
