@@ -109,7 +109,8 @@ class BaseModule extends Model
     public function getLikeCountAttribute()
     {
         return cache_remember($this->getMorphClass() . "-like-$this->id", 1, function () {
-            return array_get($this->like, 'count') ? array_get($this->like, 'count') : 0;
+            $count = array_get($this->like, 'count');
+            return $count ? $count : 0;
         });
     }
 
@@ -121,7 +122,8 @@ class BaseModule extends Model
     public function getClickCountAttribute()
     {
         return cache_remember($this->getMorphClass() . "-click-$this->id", 1, function () {
-            return array_get($this->click, 'count') ? array_get($this->click, 'count') : 0;
+            $count = array_get($this->click, 'count');
+            return $count ? $count : 0;
         });
     }
 
