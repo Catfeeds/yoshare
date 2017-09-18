@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\Question;
-use App\Models\File;
+use App\Models\Item;
 use Request;
 
 class QuestionController extends BaseController
@@ -15,7 +15,7 @@ class QuestionController extends BaseController
     public function transform($question)
     {
         $attributes = $question->getAttributes();
-        $attributes['images'] = $question->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($item) use ($question) {
+        $attributes['images'] = $question->images()->transform(function ($item) use ($question) {
             return [
                 'id' => $item->id,
                 'title' => !empty($item->title) ?: $question->title,
@@ -23,8 +23,11 @@ class QuestionController extends BaseController
                 'summary' => $item->summary,
             ];
         });
-        $attributes['comment_count'] = $question->commentCount;
-        $attributes['favorite_count'] = $question->favoriteCount;
+        $attributes['comment_count'] = $question->comment_count;
+        $attributes['favorite_count'] = $question->favorite_count;
+        $attributes['follow_count'] = $question->follow_count;
+        $attributes['like_count'] = $question->like_count;
+        $attributes['click_count'] = $question->click_count;
         $attributes['created_at'] = empty($question->created_at) ? '' : $question->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($question->updated_at) ? '' : $question->updated_at->toDateTimeString();
         return $attributes;
@@ -57,7 +60,7 @@ class QuestionController extends BaseController
         $key = "question-list-$site_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page) {
-            $questions = Question::with('files')
+            $questions = Question::with('items')
                 ->where('site_id', $site_id)
                 ->where('state', Question::STATE_PUBLISHED)
                 ->orderBy('sort', 'desc')
@@ -99,7 +102,7 @@ class QuestionController extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
         $title = Request::get('title');
 
-        $questions = Question::with('files')
+        $questions = Question::with('items')
             ->where('site_id', $site_id)
             ->where('title', 'like', '%' . $title . '%')
             ->where('state', Question::STATE_PUBLISHED)

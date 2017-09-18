@@ -405,7 +405,7 @@
                 }
             }
         },
-        "/favorites/list": {
+        "/favorites": {
             "get": {
                 "tags": [
                     "/favorites \u6536\u85cf"
@@ -516,6 +516,13 @@
                         "items": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "\u7c7b\u578b",
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "token",
@@ -648,7 +655,7 @@
                 }
             }
         },
-        "/follows/list": {
+        "/follows": {
             "get": {
                 "tags": [
                     "/follows \u5173\u6ce8"

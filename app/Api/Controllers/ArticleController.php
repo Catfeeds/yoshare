@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\Article;
-use App\Models\File;
+use App\Models\Item;
 use Request;
 
 class ArticleController extends BaseController
@@ -15,7 +15,7 @@ class ArticleController extends BaseController
     public function transform($article)
     {
         $attributes = $article->getAttributes();
-        $attributes['images'] = $article->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($item) use ($article) {
+        $attributes['images'] = $article->images()->transform(function ($item) use ($article) {
             return [
                 'id' => $item->id,
                 'title' => !empty($item->title) ?: $article->title,
@@ -23,11 +23,11 @@ class ArticleController extends BaseController
                 'summary' => $item->summary,
             ];
         });
-        $attributes['comment_count'] = $article->commentCount;
-        $attributes['favorite_count'] = $article->favoriteCount;
-        $attributes['follow_count'] = $article->followCount;
-        $attributes['like_count'] = $article->likeCount;
-        $attributes['click_count'] = $article->clickCount;
+        $attributes['comment_count'] = $article->comment_count;
+        $attributes['favorite_count'] = $article->favorite_count;
+        $attributes['follow_count'] = $article->follow_count;
+        $attributes['like_count'] = $article->like_count;
+        $attributes['click_count'] = $article->click_count;
         $attributes['created_at'] = empty($article->created_at) ? '' : $article->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($article->updated_at) ? '' : $article->updated_at->toDateTimeString();
         return $attributes;
@@ -62,7 +62,7 @@ class ArticleController extends BaseController
         $key = "article-list-$site_id-$category_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page, $category_id) {
-            $articles = Article::with('files')
+            $articles = Article::with('items')
                 ->where('site_id', $site_id)
                 ->where('category_id', $category_id)
                 ->where('state', Article::STATE_PUBLISHED)
@@ -105,7 +105,7 @@ class ArticleController extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
         $title = Request::get('title');
 
-        $articles = Article::with('files')
+        $articles = Article::with('items')
             ->where('site_id', $site_id)
             ->where('title', 'like', '%' . $title . '%')
             ->where('state', Article::STATE_PUBLISHED)

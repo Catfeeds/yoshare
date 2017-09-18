@@ -262,6 +262,7 @@ CREATE TABLE `cms_likes` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `cms_clicks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `site_id` int(10) NOT NULL,
@@ -272,7 +273,6 @@ CREATE TABLE `cms_clicks` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1148 DEFAULT CHARSET=utf8;
-
 
 -- -----------
 -- 2017-9-15
@@ -305,7 +305,6 @@ VALUES
 	(10, 1, 8, '推送日志', '/admin/push/logs', '', 'fa-envelope-o', 1, '2017-08-18 10:33:10', '2017-09-15 15:24:13'),
 	(11, 1, 8, '短信日志', '/admin/sms/logs', '', 'fa-commenting-o', 2, '2017-09-04 11:49:21', '2017-09-15 15:24:13');
 
-
 CREATE TABLE `cms_follows` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `site_id` int(10) NOT NULL,
@@ -316,3 +315,36 @@ CREATE TABLE `cms_follows` (
   `updated_at` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------
+-- 2017-9-15
+-- -----------
+ALTER TABLE `cms_files` RENAME `cms_items`;
+
+TRUNCATE TABLE `cms_sites`;
+INSERT INTO `cms_sites` (`id`, `name`, `title`, `company`, `domain`, `directory`, `default_theme_id`, `mobile_theme_id`, `jpush_app_key`, `jpush_app_secret`, `wechat_app_id`, `wechat_secret`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 'nnbwg', '南宁博物馆', '南宁博物馆', 'cms.dev.asia-cloud.com', 'sites/nnbwg', 1, 2, '0', '', '', '', 2, '2016-07-31 16:00:00', '2017-09-13 07:50:36'),
+(2, 'zsgy', '众思高远', '', 'zsgy.dev.asia-cloud.com', 'sites/zsfy', 1, 2, '', '', '', '', 2, '2017-09-16 10:23:03', '2017-09-16 10:23:03');
+
+ALTER TABLE `cms_user_sites` RENAME `cms_site_user`;
+TRUNCATE TABLE cms_site_user;
+INSERT INTO `cms_site_user` (`user_id`, `site_id`)
+VALUES
+	(1, 1),
+	(1, 2);
+
+ALTER TABLE `cms_items` ADD `string1` TEXT NOT NULL COMMENT '字符串扩展字段' AFTER `summary`;
+ALTER TABLE `cms_items` ADD `string2` TEXT NOT NULL COMMENT '字符串扩展字段' AFTER `string1`;
+ALTER TABLE `cms_items` ADD  `string3` TEXT NOT NULL COMMENT '字符串扩展字段' AFTER `string2`;
+ALTER TABLE `cms_items` ADD  `string4` TEXT NOT NULL COMMENT '字符串扩展字段' AFTER `string3`;
+ALTER TABLE `cms_items` ADD  `string5` TEXT NOT NULL COMMENT '字符串扩展字段' AFTER `string4`;
+ALTER TABLE `cms_items` ADD  `integer1` INT(10) NOT NULL COMMENT '整数扩展字段' AFTER `string5`;
+ALTER TABLE `cms_items` ADD  `integer2` INT(10) NOT NULL COMMENT '整数扩展字段' AFTER `integer1`;
+ALTER TABLE `cms_items` ADD  `integer3` INT(10) NOT NULL COMMENT '整数扩展字段' AFTER `integer2`;
+ALTER TABLE `cms_items` ADD  `integer4` INT(10) NOT NULL COMMENT '整数扩展字段' AFTER `integer3`;
+ALTER TABLE `cms_items` ADD  `integer5` INT(10) NOT NULL COMMENT '整数扩展字段' AFTER `integer4`;
+ALTER TABLE `cms_items` ADD  `float1` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `integer5`;
+ALTER TABLE `cms_items` ADD  `float2` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float1`;
+ALTER TABLE `cms_items` ADD  `float3` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float2`;
+ALTER TABLE `cms_items` ADD  `float4` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float3`;
+ALTER TABLE `cms_items` ADD  `float5` FLOAT(12,2) NOT NULL COMMENT '浮点数扩展字段' AFTER `float4`;

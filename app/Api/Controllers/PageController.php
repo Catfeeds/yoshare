@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\Page;
-use App\Models\File;
+use App\Models\Item;
 use Request;
 
 class PageController extends BaseController
@@ -15,7 +15,7 @@ class PageController extends BaseController
     public function transform($page)
     {
         $attributes = $page->getAttributes();
-        $attributes['images'] = $page->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($item) use ($page) {
+        $attributes['images'] = $page->images->transform(function ($item) use ($page) {
             return [
                 'id' => $item->id,
                 'title' => !empty($item->title) ?: $page->title,
@@ -23,11 +23,11 @@ class PageController extends BaseController
                 'summary' => $item->summary,
             ];
         });
-        $attributes['comment_count'] = $page->commentCount;
-        $attributes['favorite_count'] = $page->favoriteCount;
-        $attributes['follow_count'] = $page->followCount;
-        $attributes['like_count'] = $page->likeCount;
-        $attributes['click_count'] = $page->clickCount;
+        $attributes['comment_count'] = $page->comment_count;
+        $attributes['favorite_count'] = $page->favorite_count;
+        $attributes['follow_count'] = $page->follow_count;
+        $attributes['like_count'] = $page->like_count;
+        $attributes['click_count'] = $page->click_count;
         $attributes['created_at'] = empty($page->created_at) ? '' : $page->created_at->toDateTimeString();
         $attributes['updated_at'] = empty($page->updated_at) ? '' : $page->updated_at->toDateTimeString();
         return $attributes;
@@ -60,7 +60,7 @@ class PageController extends BaseController
         $key = "page-list-$site_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page) {
-            $pages = Page::with('files')
+            $pages = Page::with('items')
                 ->where('site_id', $site_id)
                 ->where('state', Page::STATE_PUBLISHED)
                 ->orderBy('sort', 'desc')
@@ -102,7 +102,7 @@ class PageController extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
         $title = Request::get('title');
 
-        $pages = Page::with('files')
+        $pages = Page::with('items')
             ->where('site_id', $site_id)
             ->where('title', 'like', '%' . $title . '%')
             ->where('state', Page::STATE_PUBLISHED)

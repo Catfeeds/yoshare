@@ -65,6 +65,7 @@ class LoginController extends Controller
             'password' => 'required',
             'captcha' => 'required|captcha',
         ]);
+
         event(new UserLogEvent(UserLog::ACTION_LOGIN));
     }
 

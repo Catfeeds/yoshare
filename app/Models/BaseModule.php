@@ -40,29 +40,24 @@ class BaseModule extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getStateNameAttribute()
+    public function items()
     {
-        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
-    }
-
-    public function files()
-    {
-        return $this->morphMany(File::class, 'refer');
+        return $this->morphMany(Item::class, 'refer');
     }
 
     public function images()
     {
-        return $this->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get();
+        return $this->items()->where('type', Item::TYPE_IMAGE)->orderBy('sort')->get();
     }
 
     public function audios()
     {
-        return $this->files()->where('type', File::TYPE_AUDIO)->orderBy('sort')->get();
+        return $this->items()->where('type', Item::TYPE_AUDIO)->orderBy('sort')->get();
     }
 
     public function videos()
     {
-        return $this->files()->where('type', File::TYPE_VIDEO)->orderBy('sort')->get();
+        return $this->items()->where('type', Item::TYPE_VIDEO)->orderBy('sort')->get();
     }
 
     public function comments()
@@ -125,6 +120,11 @@ class BaseModule extends Model
             $count = array_get($this->clicks, 'count');
             return $count ? $count : 0;
         });
+    }
+
+    public function getStateNameAttribute()
+    {
+        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
     public function setCreatedAt($value)

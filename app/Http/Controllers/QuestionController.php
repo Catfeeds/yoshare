@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLogEvent;
 use App\Models\Question;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Module;
 use App\Models\Site;
+use App\Models\UserLog;
 use Gate;
 use Request;
 use Response;
@@ -114,7 +116,9 @@ class QuestionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Content::stores($this->module, $input);
+        $question = Content::stores($this->module, $input);
+
+        event(new UserLogEvent(UserLog::ACTION_CREATE . '问答', $question->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url);
@@ -129,7 +133,9 @@ class QuestionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Content::updates($this->module, $id, $input);
+        $question = Content::updates($this->module, $id, $input);
+
+        event(new UserLogEvent(UserLog::ACTION_UPDATE . '问答', $question->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url);
@@ -159,7 +165,15 @@ class QuestionController extends Controller
 
     public function state()
     {
-        Question::state(request()->all());
+        $input = request()->all();
+        Question::state($input);
+
+        $ids = $input['ids'];
+        $stateName = Question::getStateName($input['state']);
+
+        foreach ($ids as $id) {
+            event(new UserLogEvent('变更' . '问答' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
     }
 
     public function table()

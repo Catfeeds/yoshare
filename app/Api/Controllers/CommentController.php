@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\Comment;
-use App\Models\File;
+use App\Models\Item;
 use App\Models\Module;
 use App\Models\Option;
 use Cache;
@@ -29,7 +29,7 @@ class CommentController extends BaseController
                     'time' => $child->created_at->toDateTimeString(),
                 ];
             }),
-            'images' => $comment->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($file) use ($comment) {
+            'images' => $comment->images()->transform(function ($file) use ($comment) {
                 return [
                     'id' => $file->id,
                     'refer_id' => $file->id,

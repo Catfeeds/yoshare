@@ -15,7 +15,6 @@ use DB;
 use Gate;
 use Request;
 use Response;
-use Cookie;
 
 class UserController extends Controller
 {
@@ -105,7 +104,8 @@ class UserController extends Controller
         $sitesName = Site::getNames();
         $sites = Site::all();
 
-        $userSites = UserSite::where('user_id', $id)
+
+        $userSites = $user->sites()
             ->pluck('site_id')
             ->toArray();
 
@@ -140,14 +140,12 @@ class UserController extends Controller
         }
 
         if (array_key_exists('site_ids', $input)) {
-            DB::table('user_sites')->where('user_id', $id)->delete();
+            $user->sites()->delete();
 
             foreach ($input['site_ids'] as $site_id) {
-                $data = [
+                $user->sites()->create([
                     'site_id' => $site_id,
-                    'user_id' => $id,
-                ];
-                UserSite::create($data);
+                ]);
             }
         }
 
@@ -285,18 +283,5 @@ class UserController extends Controller
         $user->save();
 
         return ('<script>alert("修改成功!");window.location.href="/"</script>;');
-    }
-
-    public function setSite($site_id)
-    {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-        $data['site_id'] = $site_id;
-
-        $user->update($data);
-        Cookie::make('site_id', $site_id, 10);
-
-        \Session::flash('flash_success', '站点切换成功!');
-        return redirect()->back();
     }
 }

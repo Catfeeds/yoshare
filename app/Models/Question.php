@@ -5,7 +5,6 @@ namespace App\Models;
 use Exception;
 use Request;
 use Response;
-use Auth;
 
 
 class Question extends BaseModule
@@ -60,10 +59,9 @@ class Question extends BaseModule
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        $site_id = Auth::user()->site_id;
+
         $ds = new DataSource();
         $questions = static::with('user')
-            ->where('site_id', $site_id)
             ->filter($filters)
             ->orderBy('sort', 'desc')
             ->skip($offset)
@@ -83,7 +81,6 @@ class Question extends BaseModule
             foreach ($question->dates as $date) {
                 $attributes[$date] = empty($question->$date) ? '' : $question->$date->toDateTimeString();
             }
-            $attributes['member_name'] = empty($question->member->name) ? $question->user->name : $question->member->name;
             $attributes['state_name'] = $question->stateName();
             $attributes['created_at'] = empty($question->created_at) ? '' : $question->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($question->updated_at) ? '' : $question->updated_at->toDateTimeString();

@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\__model__;
-use App\Models\File;
+use App\Models\Item;
 use Request;
 
 class __controller__ extends BaseController
@@ -15,7 +15,7 @@ class __controller__ extends BaseController
     public function transform($__singular__)
     {
         $attributes = $__singular__->getAttributes();
-        $attributes['images'] = $__singular__->files()->where('type', File::TYPE_IMAGE)->orderBy('sort')->get()->transform(function ($item) use ($__singular__) {
+        $attributes['images'] = $__singular__->images()->transform(function ($item) use ($__singular__) {
             return [
                 'id' => $item->id,
                 'title' => !empty($item->title) ?: $__singular__->title,
@@ -62,7 +62,7 @@ class __controller__ extends BaseController
         $key = "__singular__-list-$site_id-$category_id-$page_size-$page";
 
         return cache_remember($key, 1, function () use ($site_id, $page_size, $page, $category_id) {
-            $__plural__ = __model__::with('files')
+            $__plural__ = __model__::with('items')
                 ->where('site_id', $site_id)
                 ->where('category_id', $category_id)
                 ->where('state', __model__::STATE_PUBLISHED)
@@ -105,7 +105,7 @@ class __controller__ extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
         $title = Request::get('title');
 
-        $__plural__ = __model__::with('files')
+        $__plural__ = __model__::with('items')
             ->where('site_id', $site_id)
             ->where('title', 'like', '%' . $title . '%')
             ->where('state', __model__::STATE_PUBLISHED)

@@ -6,7 +6,6 @@ use App\Node;
 use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Cookie;
 
 class User extends Authenticatable
 {
@@ -50,9 +49,9 @@ class User extends Authenticatable
         $query->where('site_id', Auth::user()->site_id);
     }
 
-    public function site()
+    public function sites()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsToMany(Site::class);
     }
 
     public function categories()
@@ -60,17 +59,24 @@ class User extends Authenticatable
         return $this->belongsToMany(Category::class);
     }
 
-    public function getSiteIdAttribute()
+    public function getSiteAttribute()
     {
         if (!empty($_COOKIE['site_id'])) {
-            return $_COOKIE['site_id'];
+            $site_id = $_COOKIE['site_id'];
+            $site = Site::find($site_id);
+            if (empty($site)) {
+                $site = $this->sites->first();
+            }
+            return $site;
         } else {
-            $userSite = $this->site()->first();
-            $value = $userSite->site_id;
-            setcookie('site_id', $value);
-
-            return $value;
+            $site = $this->sites->first();
+            return $site;
         }
+    }
+
+    public function getSiteIdAttribute()
+    {
+        return empty($this->site) ? 0 : $this->site->id;
     }
 
     public static function getTree($user_id)
