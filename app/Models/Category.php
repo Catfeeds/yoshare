@@ -32,7 +32,7 @@ class Category extends BaseModule
         'image_url',
         'cover_url',
         'author',
-        'summary',
+        'description',
         'content',
         'likes',
         'state',

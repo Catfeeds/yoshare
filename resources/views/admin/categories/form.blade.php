@@ -54,9 +54,9 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('summary', '摘要:', ['class' => 'control-label col-sm-1']) !!}
+            {!! Form::label('description', '摘要:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-11">
-                {!! Form::textarea('summary', null, ['rows'=>'4','class' => 'form-control']) !!}
+                {!! Form::textarea('description', null, ['rows'=>'4','class' => 'form-control']) !!}
             </div>
         </div>
 
