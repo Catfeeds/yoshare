@@ -11,63 +11,25 @@
         <div class="form-group">
             {!! Form::label('title', '标题:', ['class' => 'control-label col-sm-1']) !!}
             <div class="input-group col-sm-10">
-                {!! Form::text('title', null, ['class' => 'form-control']) !!}
+                <input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"
+                       class="form-control"
+                       style="margin:0 30px 0 15px;"/>
                 <span class="input-group-btn">
-                      <button class="btn btn-primary btn-flat add_option_title" type="button">添加子标题</button>
-                </span>
+                      <button class="btn btn-primary btn-flat add_option_title" type="button" style="margin-left:15px;">添加题目</button>
+                    </span>
+                <span class="input-group-btn">
+                             <button class="btn btn-primary btn-flat add_option" type="button">添加选项</button>
+                    </span>
             </div>
+
         </div>
 
-        @if(isset($sub_title))
-            @foreach($sub_title->titles as $k=>$item)
-                <div class="form-group sub_title" data-id="{{$item->id}}">
-                    <label class="control-label col-sm-1">子标题({{$k+1}}):</label>
-                    <div class="col-sm-11">
-                        <div class="input-group">
-                            <input type="hidden" name="item_sub_id[]" value="{{$item->id}}">
-                            <input type="text" id="item_sub_title{{$k+1}}" class="form-control "
-                                   value="{{$item->title}}"
-                                   name="item_sub_title[]">
-                            <span class="input-group-addon  sub_title_del1">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </span>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="form-group sub_title">
-                <label class="control-label col-sm-1">子标题(1):</label>
-                <div class="col-sm-11">
-                    <div class="input-group">
-                        <input type="text" id="item_sub_title" class="form-control" value="" name="item_sub_title[]">
-                        <span class="input-group-addon sub_title_del2">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </span>
-                    </div>
-                </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">类型:</label>
+            <div class="col-sm-5">
+                {!! Form::select('multiple', \App\Models\Survey::MULTIPLE, null, ['class' => 'form-control']) !!}
             </div>
 
-        @endif
-
-        <div class="form-group">
-            @if(isset($survey))
-                <label class="col-sm-1 control-label">类型:</label>
-                <div class="col-sm-5">
-                    <input type="radio" name="multiple"
-                           @if($survey->multiple==\App\Models\Survey::MULTIPLE_FALSE) value="{{$survey->multiple}}"
-                           checked @endif>单选
-                    <input type="radio" name="multiple"
-                           @if($survey->multiple==\App\Models\Survey::MULTIPLE_TRUE) value="{{$survey->multiple}}"
-                           checked @endif >多选
-                </div>
-            @else
-                <label class="col-sm-1 control-label">类型:</label>
-                <div class="col-sm-5">
-                    <input type="radio" name="multiple" value="{{\App\Models\Survey::MULTIPLE_FALSE}}" checked> 单选
-                    <input type="radio" name="multiple" value="{{\App\Models\Survey::MULTIPLE_TRUE}}">多选
-                </div>
-            @endif
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
                 {!! Form::text('link', null, ['class' => 'form-control']) !!}
@@ -91,37 +53,72 @@
             </div>
         </div>
 
-        @if(isset($survey))
-            @foreach($survey->items as $k=>$item)
-                <div class="form-group file" data-id="{{$item->id}}">
-                    <label class="control-label col-sm-1">选项({{$k+1}}):</label>
+    @if(!empty($survey))
+        @foreach($survey->titles as $title_key=>$sub_title)
+            <!--题目-->
+                <div class="form-group sub_title" data-id="{{$sub_title->id}}">
+                    <label class="control-label col-sm-1">题目({{$title_key+1}}):</label>
                     <div class="col-sm-11">
                         <div class="input-group">
-                            <input type="hidden" name="item_id[]" value="{{$item->id}}">
-                            <input type="text" id="item_title{{$k+1}}" class="form-control " value="{{$item->title}}"
-                                   name="item_title[]">
-                            <span class="input-group-addon   file_del1">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </span>
+                            <input type="hidden" name="sub_title_id[]" value="{{$sub_title->id}}">
+                            <input type="text" id="sub_title{{$title_key+1}}" class="form-control "
+                                   value="{{$sub_title->title}}"
+                                   name="sub_title[]">
+                            <span class="input-group-addon sub_title_del1">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </span>
                         </div>
                     </div>
                 </div>
+
+                @foreach($survey->items as $item_key=>$item)
+                    @if($sub_title->id == $item->survey_title_id)
+                        <div class="form-group file" data-item-id="{{$item->survey_title_id}}">
+                            <label class="control-label col-sm-1">选项:</label>
+                            <div class="col-sm-11">
+                                <div class="input-group">
+                                    <input type="hidden" name="sub_item_id[]" value="{{$item->id."-".$item->title}}">
+
+                                    <input type="text" id="sub_title_item_{{$title_key+1}}" class="form-control"
+                                           value="{{$item->title}}"
+                                           name="sub_title_item_{{$title_key+1}}[]">
+                                    <span class="input-group-addon   file_del1">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             @endforeach
         @else
-            @foreach($default_title as $k=>$item)
-                <div class="form-group file">
-                    <label class="control-label col-sm-1">选项({{$k+1}}):</label>
-                    <div class="col-sm-11">
-                        <div class="input-group">
-                            <input type="text" id="item_title{{$k+1}}" class="form-control"
-                                   value="{{ $item }}" name="item_title[]"/>
-                            <span class="input-group-addon file_del2">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </span>
-                        </div>
+            <div class="form-group sub_title">
+                <label class="control-label col-sm-1">题目(1):</label>
+                <div class="col-sm-11">
+                    <div class="input-group">
+                        <input type="text" id="sub_title" class="form-control" value=""
+                               name="sub_title[]">
+                        <span class="input-group-addon sub_title_del2">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </span>
                     </div>
                 </div>
-            @endforeach
+            </div>
+
+            <div class="form-group file">
+                {{--<label class="control-label col-sm-1">选项(1):</label>--}}
+                <label class="control-label col-sm-1">选项:</label>
+                <div class="col-sm-11">
+                    <div class="input-group">
+                        <input type="text" id="sub_title_item_1" class="form-control" value=""
+                               name="sub_title_item_1[]">
+                        <span class="input-group-addon file_del2">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </span>
+                    </div>
+                </div>
+            </div>
         @endif
 
         <div class="form-group">
@@ -217,26 +214,49 @@
         });
     });
 
-    //增加子标题
+    //增加题目
     $(".add_option_title").click(function () {
         var i = $(".sub_title").size();
-        var n = i + 1;
-        var html =
-            '<div class="form-group sub_title" data-id=file>' +
-            '<label class="col-sm-1 control-label">子标题(' + n + '):</label>' +
-            '<div class="col-sm-11">' +
-            '<div class="input-group">' +
-            '<input type="text" id="item_sub_title" name="item_sub_title[]" class="form-control">' +
-            '<span class="input-group-addon sub_title_del">' +
-            '<span class="glyphicon glyphicon-remove"></span>' +
-            '</span>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
 
-        $(".sub_title:last").after(html);
+        var item = $(".file").size();
 
-        //删除file的个数
+        if (item >= 1) {
+            var i = $(".sub_title").size();
+            var n = i + 1;
+            var html =
+                '<div class="form-group sub_title" data-id=sub_title>' +
+                '<label class="col-sm-1 control-label">题目(' + n + '):</label>' +
+                '<div class="col-sm-11">' +
+                '<div class="input-group">' +
+                '<input type="text" id="sub_title" name="sub_title[]" class="form-control">' +
+                '<span class="input-group-addon sub_title_del">' +
+                '<span class="glyphicon glyphicon-remove"></span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            $(".file:last").after(html);//在选项后边追加
+        } else {
+            var n = i + 1;
+            var html =
+                '<div class="form-group sub_title" data-id=sub_title>' +
+                '<label class="col-sm-1 control-label">题目(' + n + '):</label>' +
+                '<div class="col-sm-11">' +
+                '<div class="input-group">' +
+                '<input type="text" id="sub_title" name="sub_title[]" class="form-control">' +
+                '<span class="input-group-addon sub_title_del">' +
+                '<span class="glyphicon glyphicon-remove"></span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            //在每个题目的最后一个选项后添加.
+            $(".sub_title:last").after(html);
+
+        }
+
+        //删除file的个数  删除题目的时候,要先删除选项.
         $(".sub_title_del").click(function () {
             $(this).parent().parent().parent().remove();
         })
@@ -253,6 +273,71 @@
         $file = $(this).parent().children('.form-control').attr('id');
 
         if ($file == 'item_sub_title1') {
+            $(this).parent().children('.form-control').val('');
+        } else {
+            $(this).parent().parent().parent().remove();
+        }
+    })
+
+
+    //增加选项
+    $(".add_option").click(function () {
+        var title = $(".sub_title").size(); //题目数大于1的时候,选项数就重置
+
+        var i = $(".file").size();
+
+        if (title >= 2) {
+            var i = $(".file").size() - 6; //重置选项数从 标题的个数-1 开始 todo
+            var n = i + 1;
+            var html =
+                '<div class="form-group file" data-id=file>' +
+                '<label class="col-sm-1 control-label">选项:</label>' +
+                '<div class="col-sm-11">' +
+                '<div class="input-group">' +
+                '<input type="text" id="sub_title_item_' + title + '" name="sub_title_item_' + title + '[]" class="form-control">' +
+                '<span class="input-group-addon file_del">' +
+                '<span class="glyphicon glyphicon-remove"></span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            $(".sub_title:last").after(html);
+        } else {
+            var i = $(".file").size();
+            var n = i + 1;
+            var html =
+                '<div class="form-group file" data-id=file>' +
+                '<label class="col-sm-1 control-label">选项:</label>' +
+                '<div class="col-sm-11">' +
+                '<div class="input-group">' +
+                '<input type="text" id="sub_title_item_1" name="sub_title_item_1[]" class="form-control">' +
+                '<span class="input-group-addon file_del">' +
+                '<span class="glyphicon glyphicon-remove"></span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            $(".file:last").after(html); //往选项的下边追加
+        }
+
+        //删除file的个数
+        $(".file_del").click(function () {
+            $(this).parent().parent().parent().remove();
+        })
+        return false;
+    })
+
+    //清空第一个file的内容//新增页面
+    $(".file_del2").click(function () {
+        $("#item_title").val('');
+    })
+
+    //点击删除 //编辑页面原本存在的通过这个删除
+    $('.file_del1').click(function () {
+        $file = $(this).parent().children('.form-control').attr('id');
+
+        if ($file == 'item_title1') {
             $(this).parent().children('.form-control').val('');
         } else {
             $(this).parent().parent().parent().remove();

@@ -20,6 +20,11 @@ class Survey extends Model
     const TOP_FALSE = 0;
     const TOP_TRUE = 1;
 
+    const MULTIPLE = [
+        0 => '单选',
+        1 => '多选',
+    ];
+
     protected $fillable = [
         'site_id',
         'title',

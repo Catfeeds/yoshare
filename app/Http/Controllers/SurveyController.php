@@ -60,7 +60,7 @@ class SurveyController extends Controller
         $data['site_id'] = Auth::user()->site_id;
         $survey = Survey::create($data);
 
-        $title = $data['item_sub_title'];
+        $title = $data['sub_title']; //子题目
 
         if (count($title) != count(array_unique($title))) {
 
@@ -70,8 +70,8 @@ class SurveyController extends Controller
         }
 
         //判断有无item_sub_title然后存入数据库 子标题
-        if (array_key_exists('item_sub_title', $data)) {
-            foreach ($data['item_sub_title'] as $item_sub_title) {
+        if (array_key_exists('sub_title', $data)) {
+            foreach ($data['sub_title'] as $item_sub_title) {
                 $data3 = [
                     'title' => $item_sub_title,
                 ];
@@ -79,7 +79,8 @@ class SurveyController extends Controller
             }
         }
 
-        foreach ($title as $item) {
+        //存储题目的子选项
+        foreach ($title as $k => $item) {
             $title = SurveyTitle::where('title', $item)->where('survey_id', $survey->id)->first();
 
             if (is_null($title)) {
@@ -88,8 +89,8 @@ class SurveyController extends Controller
             $title_id = $title->id;
 
             //判断有无item_title然后存入数据库 子选项
-            if (array_key_exists('item_title', $data)) {
-                foreach ($data['item_title'] as $item_title) {
+            if (array_key_exists('sub_title_item_' . ($k + 1), $data)) {
+                foreach ($data['sub_title_item_' . ($k + 1)] as $item_title) {
                     $data2 = [
                         'title' => $item_title,
                         'survey_title_id' => $title_id
@@ -118,11 +119,12 @@ class SurveyController extends Controller
             return redirect()->back();
         }
 
-        $survey = Survey::with('items')->find($id);
+        $survey = Survey::with('items', 'titles')->find($id);
 
-        $sub_title = Survey::with('titles')->find($id);
+        $sub_title = Survey::with('titles')->find($id); //子标题
+        $sub_item = Survey::with('items')->find($id);  //子选项
 
-        return view('admin.surveys.edit', compact('survey', 'sub_title'));
+        return view('admin.surveys.edit', compact('survey', 'sub_title', 'sub_item'));
     }
 
     public function update(SurveyRequest $request, $id)
@@ -134,67 +136,79 @@ class SurveyController extends Controller
         $data['site_id'] = Auth::user()->site_id;
         $survey->update($data);
 
-        $title = $data['item_sub_title'];
+        $sub_title_name = $data['sub_title'];
 
-        if (count($title) != count(array_unique($title))) {
+        $sub_title_id = $data['sub_title_id'];
+
+        if (count($sub_title_name) != count(array_unique($sub_title_name))) {
             \Session::flash('flash_warning', '子选项标题不能一样！！');
             return redirect()->to($this->getRedirectUrl())->withInput();
         }
 
-        //删除
-        if (array_key_exists('item_id', $data)) {
+        //删除 题目
+        if (array_key_exists('sub_title_id', $data)) {
+            $delete_title_ids = SurveyTitle::where('survey_id', $id)
+                ->whereNotIn('id', $data['sub_title_id'])
+                ->pluck('id');
+            SurveyTitle::destroy($delete_title_ids->toArray());
+        }
+
+        //删除 题目的选项
+        if (array_key_exists('sub_item_id', $data)) {
             $delete_item_ids = SurveyItem::where('survey_id', $id)
-                ->whereNotIn('id', $data['item_id'])
+                ->whereNotIn('id', $data['sub_item_id'])
                 ->pluck('id');
             SurveyItem::destroy($delete_item_ids->toArray());
         }
 
-        //删除子标题
-        if (array_key_exists('item_sub_id', $data)) {
-            $delete_item_ids = SurveyTitle::where('survey_id', $id)
-                ->whereNotIn('id', $data['item_sub_id'])
-                ->pluck('id');
-            SurveyTitle::destroy($delete_item_ids->toArray());
-        }
-        //子标题 更新
-        if (array_key_exists('item_sub_title', $data)) {
-            foreach ($data['item_sub_title'] as $k => $item_sub_title) {
-                if ($item_sub_title == '') {
+
+        //题目 更新
+        if (array_key_exists('sub_title', $data)) {
+            foreach ($data['sub_title'] as $k => $sub_title) {
+                if ($sub_title == '') {
                     continue;
                 }
 
-                $data3 = [
-                    'title' => $item_sub_title,
+                $data_title = [
+                    'title' => $sub_title,
                     'survey_id' => $id
                 ];
                 $item1 = SurveyTitle::where('survey_id', $id)->orderBy('id')->skip($k)->take(1)->first();
 
                 //判断存在就修改，不存在就新增
                 if ($item1) {
-                    $item1->update($data3);
+                    $item1->update($data_title);
                 } else {
-                    SurveyTitle::create($data3);
+                    SurveyTitle::create($data_title);
                 }
             }
         }
 
-        //子选项更新
-        if (array_key_exists('item_title', $data)) {
-            foreach ($data['item_title'] as $k => $item_title) {
-                if ($item_title == '') {
-                    continue;
-                }
-                $data2 = [
-                    'title' => $item_title,
-                    'survey_id' => $id,
-                ];
-                $item = SurveyItem::where('survey_id', $id)->orderBy('id')->skip($k)->take(1)->first();
+        //存储题目的子选项
+        foreach ($sub_title_id as $key => $item) {
+            //判断有无item_title然后存入数据库 子选项
+            if (array_key_exists('sub_title_item_' . ($key + 1), $data)) {
+                foreach ($data['sub_title_item_' . ($key + 1)] as $k => $sub_title_item) {
 
-                //判断存在就修改，不存在就新增
-                if ($item) {
-                    $item->update($data2);
-                } else {
-                    SurveyItem::create($data2);
+                    if ($sub_title_item == '') {
+                        continue;
+                    }
+
+                    $data_item = [
+                        'title' => $sub_title_item,
+                        'survey_id' => $id,
+                        'survey_title_id' => $item
+                    ];
+                    $item1 = SurveyItem::where('survey_title_id', $item)
+                        ->where('survey_id', $id)
+                        ->orderBy('id')->skip($k)->take(1)->first();
+
+                    //判断存在就修改，不存在就新增
+                    if ($item1) {
+                        $item1->update($data_item);
+                    } else {
+                        $survey->items()->create($data_item);
+                    }
                 }
             }
         }
