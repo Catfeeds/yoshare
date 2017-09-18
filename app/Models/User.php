@@ -33,8 +33,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $site_id;
-
     public function stateName()
     {
         switch ($this->state) {
@@ -62,13 +60,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Category::class);
     }
 
-    public function getSiteIdAttribute($value)
+    public function getSiteIdAttribute()
     {
-        $site_id = Cookie::get('site_id');
-        if(!empty($site_id)){
-            return $site_id;
-        }else{
-            Cookie::make('site_id', $value, 10);
+        $value = $_COOKIE['site_id'];
+        if (!empty($value)) {
+            return $value;
+        } else {
+            $userSite = $this->site()->first();
+            $value = $userSite->site_id;
+            setcookie('site_id', $value);
+
             return $value;
         }
     }

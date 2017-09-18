@@ -15,10 +15,10 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sitemap"></i> {{ auth()->user()->site->title }}<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sitemap"></i> {{ \App\Models\Site::find(auth()->user()->site_id)->title }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         @foreach(\App\Models\UserSite::lists() as $site)
-                        <li><a href="/admin/users/set/site/{{ $site->id }}">{{ $site->title }}</a></li>
+                        <li><a href="javascript:void(0);" onclick="setSite({{$site->id}})">{{ $site->title }}</a></li>
                         @endforeach
                     </ul>
                 </li>
@@ -58,3 +58,10 @@
         </div>
     </nav>
 </header>
+<script type="text/javascript">
+    function setSite(value) {
+        document.cookie = "site_id" + "="+ escape (value);
+        location.reload();
+    }
+
+</script>
