@@ -166,4 +166,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
     Route::post('surveys/state/{state}', 'SurveyController@state');
     Route::resource('surveys', 'SurveyController');
+
+    /**
+     * 投票管理
+     */
+    Route::get('votes/items/table/{vote_id}', 'VoteItemController@table');
+    Route::resource('votes/items', 'VoteItemController');
+    Route::get('votes/table','VoteController@table');
+    Route::get('votes/statistic/{vote_id}', 'VoteController@statistic');
+    Route::post('votes/state/{state}', 'VoteController@state');
+    Route::resource('votes','VoteController');
 });

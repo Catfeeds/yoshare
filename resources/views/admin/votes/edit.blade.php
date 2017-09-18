@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('admin.layouts.master')
 
 @section('content')
 
@@ -20,12 +20,12 @@
                         <div class="box box-info">
                             <div class="box-body">
 
-                                @include('errors.list')
+                                @include('admin.errors.list')
 
                                 {!! Form::model($vote,['method' => 'PUT', 'action' => ['\App\Http\Controllers\VoteController@update', $vote->id],
                                 'class' => 'form-horizontal']) !!}
 
-                                @include('votes._form')
+                                @include('admin.votes._form')
 
 
                                 {!! Form::close() !!}

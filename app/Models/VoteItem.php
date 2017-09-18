@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VoteItem extends Model
+class VoteItem extends File
 {
     protected $fillable = [
         'vote_id',
@@ -17,6 +17,10 @@ class VoteItem extends Model
         'state',
         'username',
     ];
+
+    public function getCountAttribute(){
+        return $this->int1;
+    }
 
     public static function sum()
     {

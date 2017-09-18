@@ -392,6 +392,10 @@ class Module extends Model
      */
     public static function migrate($module)
     {
+        $builder = new CodeBuilder($module);
+        //生成permission
+        $builder->appendPermissions();
+
         if (!Schema::hasTable($module->table_name)) {
             Schema::create($module->table_name, function (Blueprint $table) {
                 $table->increments('id');

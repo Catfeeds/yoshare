@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('admin.layouts.master')
 
 @section('content')
 
@@ -20,10 +20,10 @@
                         <div class="box box-info">
                             <div class="box-body">
 
-                                @include('errors.list')
-                                {!! Form::open(['url' => '/votes', 'class' => 'form-horizontal']) !!}
+                                @include('admin.errors.list')
+                                {!! Form::open(['url' => '/admin/votes', 'class' => 'form-horizontal']) !!}
 
-                                @include('votes._form')
+                                @include('admin.votes._form')
 
                                 {!! Form::close() !!}
                             </div>

@@ -189,7 +189,6 @@ class UserController extends Controller
                 'name' => $user->name,
                 'username' => $user->username,
                 'password' => $user->password,
-                'site_name' => $names[$user->site_id],
                 'state_name' => $user->stateName(),
                 'role_name' => $user['relations']['roles']->pluck('name'),
                 'created_at' => $user->created_at->format('Y-m-d H:i:s'),

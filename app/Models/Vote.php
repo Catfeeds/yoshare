@@ -16,6 +16,9 @@ class Vote extends Model
     const TOP_TRUE = 1;
     const TOP_FALSE = 0;
 
+    const LINK_TYPE_NONE = 0;
+    const LINK_TYPE_WEB = 1;
+
     protected $fillable = [
         'site_id',
         'title',
@@ -43,6 +46,14 @@ class Vote extends Model
                 return '已删除';
                 break;
         }
+    }
+
+    public static function getLinkTypes()
+    {
+        return [
+            static::LINK_TYPE_NONE => '无',
+            static::LINK_TYPE_WEB => '网址',
+        ];
     }
 
     public function items()
