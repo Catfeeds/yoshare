@@ -62,9 +62,8 @@ class User extends Authenticatable
 
     public function getSiteIdAttribute()
     {
-        $value = $_COOKIE['site_id'];
-        if (!empty($value)) {
-            return $value;
+        if (!empty($_COOKIE['site_id'])) {
+            return $_COOKIE['site_id'];
         } else {
             $userSite = $this->site()->first();
             $value = $userSite->site_id;
