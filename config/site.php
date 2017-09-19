@@ -2,10 +2,6 @@
 
 return [
     '1' => [
-        'jpush' => [
-            'app_key' => '5891f2f9549ba634488f9a74',
-            'master_secret' => '9376fda52b4dd8525800cb16',
-        ],
         'watermark' => [
             'enabled' => true,
             'path' => 'images/watermark.png'

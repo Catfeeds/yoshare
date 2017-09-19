@@ -15,13 +15,13 @@
     $('#table_field').bootstrapTable({
         onEditableSave: function (field, row, old, $el) {
             $.ajax({
-                url: "/admin/modules/fields/save/" + row.id + '/save',
+                url: "/admin/modules/fields/" + row.id + '/save',
                 method: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'index': row.index},
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    alert('Error');
+                    return toastrs('warning', '保存失败');
                 },
             });
         },
@@ -36,7 +36,7 @@
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    alert('Error');
+                    return toastrs('warning', '保存失败');
                 },
             });
         },
@@ -51,7 +51,7 @@
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    alert('Error');
+                    return toastrs('warning', '保存失败');
                 },
             });
         },

@@ -29,11 +29,11 @@ class Page extends BaseModule
 
     protected $table = 'pages';
 
-    protected $fillable = ['site_id','title','subtitle','author','source','tags','keywords','summary','image_url','images','video_url','audio_url','content','clicks','published_at','user_id','sort','state'];
+    protected $fillable = ['site_id','title','subtitle','author','origin','slug','summary','image_url','video_url','audio_url','images','videos','audios','content','top','member_id','user_id','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 
-    protected $entities = ['user_id'];
+    protected $entities = ['member_id','user_id'];
 
     public static function stores($input)
     {

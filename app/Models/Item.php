@@ -35,9 +35,9 @@ class Item extends Model
         if (!empty($urls)) {
             $urls = explode(',', trim($urls));
 
-            $content->files()->where('type', $type)->delete();
+            $content->items()->where('type', $type)->delete();
             foreach ($urls as $key => $url) {
-                $content->files()->create([
+                $content->items()->create([
                     'type' => $type,
                     'title' => '',
                     'summary' => $summary,

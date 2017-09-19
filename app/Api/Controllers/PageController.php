@@ -15,7 +15,7 @@ class PageController extends BaseController
     public function transform($page)
     {
         $attributes = $page->getAttributes();
-        $attributes['images'] = $page->images->transform(function ($item) use ($page) {
+        $attributes['images'] = $page->images()->transform(function ($item) use ($page) {
             return [
                 'id' => $item->id,
                 'title' => !empty($item->title) ?: $page->title,
