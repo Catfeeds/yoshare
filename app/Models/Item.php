@@ -30,6 +30,27 @@ class Item extends Model
         return $this->morphMany(Item::class, 'refer');
     }
 
+    public function likes()
+    {
+        return $this->morphOne(Like::class, 'refer');
+    }
+
+    public function getLikeCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-like-$this->id", 1, function () {
+            $count = array_get($this->likes, 'count');
+            return $count ? $count : 0;
+        });
+    }
+
+    public function getCountAttribute(){
+        return $this->integer1;
+    }
+
+    public function setCountAttribute($count){
+        $this->attributes['integer1'] = $count;
+    }
+
     public static function sync($type, $content, $urls, $summary = '')
     {
         if (!empty($urls)) {

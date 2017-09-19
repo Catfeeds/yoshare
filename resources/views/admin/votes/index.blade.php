@@ -66,7 +66,7 @@
 
         function titleFormatter(value, row, index) {
             return [
-                '<a href="/admin/votes/' + row.id + '" target="_blank">' + row.title + '</a>',
+                row.title,
             ]
         }
 
@@ -91,11 +91,11 @@
             if (typeof(row_id) == "undefined") {
                 return false;
             }
-            var token = document.getElementsByTagName('meta')['csrf-token'].getAttribute('content');
+            var ids = [row_id];
             $.ajax({
-                type: 'DELETE',
-                data: {'_token': token},
-                url: '/admin/votes/' + row_id,
+                url: '/admin/votes/state',
+                type: 'POST',
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
                 success: function (data) {
                     window.location.href = '/admin/votes';
                 }

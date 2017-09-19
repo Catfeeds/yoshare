@@ -14,48 +14,48 @@ class VoteController extends BaseController
 
     public function transform($vote)
     {
+        $amount = $vote->items->sum('count');
         return [
             'id' => $vote->id,
             'title' => $vote->title,
             'multiple' => $vote->multiple,
             'image_url' => get_image_url($vote->image_url),
             'link' => $vote->link,
-            'description' => $vote->description,
+            'content' => $vote->content,
             'begin_date' => $vote->begin_date,
             'end_date' => $vote->end_date,
             'amount' => $vote->amount,
             'comments' => $vote->comments,
-            'likes' => $vote->likes,
             'is_top' => $vote->is_top,
             'state' => $vote->state,
-            'items' => $vote->items->transform(function ($item) {
+            'items' => $vote->items->transform(function ($item) use($amount) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
-                    'image_url' => get_image_url($item->image_url),
-                    'description' => $item->description,
-                    'amount' => $item->amount,
-                    'percent' => $item->percent,
+                    'url' => get_image_url($item->url),
+                    'count' => $item->count,
+                    'percent' => round(($item->count / $amount) * 100) . '%',
                 ];
             }),
+            'like_count' => $vote->like_count,
         ];
     }
 
     /**
      * @SWG\Get(
-     *   path="/votes/list",
+     *   path="/votes",
      *   summary="获取投票列表",
      *   tags={"/votes 投票"},
-     *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
-     *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
-     *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
+     *   @SWG\Parameter(name="site_id", in="query", required=true, content="站点ID", type="string"),
+     *   @SWG\Parameter(name="page_size", in="query", required=true, content="分页大小", type="integer"),
+     *   @SWG\Parameter(name="page", in="query", required=true, content="分页序号", type="integer"),
      *   @SWG\Response(
      *     response=200,
-     *     description="查询成功"
+     *     content="查询成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
-     *     description="没有找到路由"
+     *     content="没有找到路由"
      *   )
      * )
      */
@@ -92,16 +92,16 @@ class VoteController extends BaseController
      *   path="/votes/slides",
      *   summary="获取投票轮播图",
      *   tags={"/votes 投票"},
-     *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
-     *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
-     *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
+     *   @SWG\Parameter(name="site_id", in="query", required=true, content="站点ID", type="string"),
+     *   @SWG\Parameter(name="page_size", in="query", required=true, content="分页大小", type="integer"),
+     *   @SWG\Parameter(name="page", in="query", required=true, content="分页序号", type="integer"),
      *   @SWG\Response(
      *     response=200,
-     *     description="查询成功"
+     *     content="查询成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
-     *     description="没有找到路由"
+     *     content="没有找到路由"
      *   )
      * )
      */
@@ -139,16 +139,16 @@ class VoteController extends BaseController
      *   path="/votes/create",
      *   summary="提交投票",
      *   tags={"/votes 投票"},
-     *   @SWG\Parameter(name="vote_id", in="query", required=true, description="投票ID", type="string"),
-     *   @SWG\Parameter(name="item_ids", in="query", required=true, description="选项ID", type="array", items={"type": "integer"}),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
+     *   @SWG\Parameter(name="vote_id", in="query", required=true, content="投票ID", type="string"),
+     *   @SWG\Parameter(name="item_ids", in="query", required=true, content="选项ID", type="array", items={"type": "integer"}),
+     *   @SWG\Parameter(name="token", in="query", required=true, content="token", type="string"),
      *   @SWG\Response(
      *     response=200,
-     *     description="投票成功"
+     *     content="投票成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
-     *     description="没有找到"
+     *     content="没有找到"
      *   )
      * )
      */
@@ -211,16 +211,16 @@ class VoteController extends BaseController
      *   path="/votes/detail",
      *   summary="获取投票详情页",
      *   tags={"/votes 投票"},
-     *   @SWG\Parameter(name="id", in="query", required=true, description="投票ID", type="string"),
-     *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
+     *   @SWG\Parameter(name="id", in="query", required=true, content="投票ID", type="string"),
+     *   @SWG\Parameter(name="site_id", in="query", required=true, content="站点ID", type="string"),
+     *   @SWG\Parameter(name="token", in="query", required=true, content="token", type="string"),
      *   @SWG\Response(
      *     response=200,
-     *     description="查询成功"
+     *     content="查询成功"
      *   ),
      *   @SWG\Response(
      *     response="404",
-     *     description="没有找到路由"
+     *     content="没有找到路由"
      *   )
      * )
      */
@@ -259,56 +259,4 @@ class VoteController extends BaseController
             return view("mobile.$site_id.votes.share", compact('vote', 'amount'));
         }
     }
-
-    /**
-     * @SWG\Get(
-     *   path="/votes/likes",
-     *   summary="点赞",
-     *   tags={"/votes 投票"},
-     *   @SWG\Parameter(name="vote_id", in="query", required=true, description="投票ID", type="integer"),
-     *   @SWG\Parameter(name="type", in="query", required=true, description="点赞类型(0:取消点赞,1:点赞)", type="integer"),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="查询成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到路由"
-     *   )
-     * )
-     */
-    public function likes()
-    {
-        $vote_id = Request::get('vote_id');
-
-        $type = Request::get('type');
-
-        $vote = Vote::find($vote_id);
-
-        if (is_null($vote)) {
-            return $this->responseError('投票id不存在!');
-        }
-
-        try {
-            $member = \JWTAuth::parseToken()->authenticate();
-        } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
-        }
-
-        switch ($type) {
-            case Vote::STATE_DELETED:
-                if ($vote->likes > 0) {
-                    $vote->decrement('likes');
-                }
-                break;
-            case Vote::STATE_NORMAL:
-                $vote->increment('likes');
-                break;
-        }
-
-        return $this->responseSuccess();
-    }
-
-
 }

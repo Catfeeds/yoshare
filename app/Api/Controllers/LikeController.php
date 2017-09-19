@@ -54,11 +54,12 @@ class LikeController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        $like = $model->like()->first();
+
+        $like = $model->likes()->first();
 
         if (!$like) {
             //增加点赞数
-            $model->like()->create([
+            $model->likes()->create([
                 'site_id' => $model->site_id,
                 'count' => 0,
             ]);

@@ -172,7 +172,7 @@ class FavoriteController extends BaseController
      *   path="/favorites/destroy",
      *   summary="取消收藏",
      *   tags={"/favorites 收藏"},
-     *   @SWG\Parameter(name="favorite_ids", in="query", required=true, description="收藏ID", type="array", items={"type": "integer"}),
+     *   @SWG\Parameter(name="ids", in="query", required=true, description="ID", type="array", items={"type": "integer"}),
      *   @SWG\Parameter(name="type", in="query", required=true, description="类型", type="string"),
      *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
      *   @SWG\Response(
@@ -187,7 +187,7 @@ class FavoriteController extends BaseController
      */
     public function destroy()
     {
-        $favorite_ids = explode(',', Request::get('favorite_ids'));
+        $ids = explode(',', Request::get('ids'));
         $type = Request::get('type');
 
         try {
@@ -204,7 +204,7 @@ class FavoriteController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $models = call_user_func([$module->model_class, 'findMany'], $favorite_ids);
+        $models = call_user_func([$module->model_class, 'findMany'], $ids);
 
         if (!$models->count()) {
             return $this->responseError('此ID不存在');

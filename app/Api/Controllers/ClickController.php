@@ -51,10 +51,10 @@ class ClickController extends BaseController
             return $this->responseError('此ID不存在');
         }
 
-        $click = $model->click()->first();
+        $click = $model->clicks()->first();
 
         if (!$click) {
-            $model->click()->create([
+            $model->clicks()->create([
                 'site_id' => $model->site_id,
                 'count' => 0,
             ]);

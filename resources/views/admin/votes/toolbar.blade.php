@@ -34,10 +34,10 @@
         }
 
         $.ajax({
-            url: '/admin/votes/state/' + state,
+            url: '/admin/votes/state',
             type: 'POST',
-            data: {'_token': '{{ csrf_token() }}', 'ids': ids},
-            success: function () {
+            data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
+            success: function (data) {
                 window.location.reload();
             }
         });

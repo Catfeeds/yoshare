@@ -12,8 +12,8 @@
                 <tr>
                     <th data-field="id" data-align="center" data-width="45">ID</th>
                     <th data-field="title">标题</th>
-                    <th data-field="amount" data-align="center" data-width="90">投票数</th>
-                    {{--<th data-field="percent" data-align="center" data-width="120">百分比</th>--}}
+                    <th data-field="count" data-align="center" data-width="90" data-editable="true">投票数</th>
+                    <th data-field="percent" data-align="center" data-width="120">百分比</th>
                 </tr>
                 </thead>
             </table>
@@ -25,10 +25,11 @@
     (function () {
         $('#table').bootstrapTable({
             onEditableSave: function (field, row, old, $el) {
+                row._token = '{{ csrf_token() }}';
                 $.ajax({
                     type: "put",
                     url: "/admin/votes/items/" + row.id,
-                    data: {'_token': '{{ csrf_token() }}', 'initial_amount': row.initial_amount},
+                    data: row,
                     success: function (data, status) {
                         $('#table').bootstrapTable('refresh');
                     },

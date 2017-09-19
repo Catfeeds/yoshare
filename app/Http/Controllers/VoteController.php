@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Http\Requests\VoteRequest;
+use App\Models\DataSource;
+use App\Models\Item;
 use App\Models\Vote;
-use App\Models\VoteItem;
 use Auth;
 use Gate;
 use Request;
@@ -28,19 +28,6 @@ class VoteController extends Controller
         return view('admin.votes.index');
     }
 
-    public function destroy($id)
-    {
-        if (Gate::denies('@vote-delete')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return;
-        }
-
-        $vote = Vote::find($id);
-        $vote->state = Vote::STATE_DELETED;
-        $vote->save();
-        \Session::flash('flash_success', '删除成功');
-    }
-
     public function create()
     {
         if (Gate::denies('@vote-create')) {
@@ -54,31 +41,32 @@ class VoteController extends Controller
     public function store(VoteRequest $request)
     {
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
+        $data['user_id'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
         $vote = Vote::create($data);
 
-        //判断有无item_title然后存入数据库
         if (array_key_exists('item_title', $data)) {
             foreach ($data['item_title'] as $k => $item_title) {
                 $data2 = [
+                    'type' => Item::TYPE_IMAGE,
                     'title' => $item_title,
-                    'image_url' => $data['item_url'][$k],
-                    'image_urls' => $data['image_urls'][$k],
-                    'description' => $data['descriptions'][$k],
+                    'url' => $data['item_url'][$k],
+                    'sort' => $k,
                 ];
                 $vote->items()->create($data2);
             }
         }
-        return redirect(route('admin.votes.index'))->with('flash_success', '新增成功！');
+        return redirect('/admin/votes')->with('flash_success', '新增成功！');
     }
 
     public function show($id)
     {
-        $site_id = Auth::user()->site_id;
         $vote = Vote::find($id);
-        return view("mobile.$site_id.admin.votes.share", compact('vote'));
+        $site = $vote->site;
+        $theme = $site->mobile_theme->name;
+
+        return view("themes.$theme.votes.share", compact('vote', 'site'));
     }
 
     public function edit($id)
@@ -96,57 +84,43 @@ class VoteController extends Controller
     {
         $vote = Vote::with('items')->find($id);
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
+        $data['user_id'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
 
-        if($data['link_type'] == Vote::LINK_TYPE_NONE){
+        if ($data['link_type'] == Vote::LINK_TYPE_NONE) {
             $data['link'] = '';
         }
 
         $vote->update($data);
 
-        //删除
         if (array_key_exists('item_id', $data)) {
-            $delete_item_ids = VoteItem::where('vote_id', $id)
-                ->whereNotIn('id', $data['item_id'])
-                ->pluck('id');
-
-            VoteItem::destroy($delete_item_ids->toArray());
+            $vote->items()->delete();
         }
         if (array_key_exists('item_title', $data)) {
             foreach ($data['item_title'] as $k => $item_title) {
                 if ($item_title == '' && $data['item_url'][$k] == '') {
                     continue;
                 }
-                $data2 = [
-                    'title' => $item_title,
-                    'vote_id' => $id,
-                    'image_url' => $data['item_url'][$k],
-                    'image_urls' => $data['image_urls'][$k],
-                    'description' => $data['descriptions'][$k],
-                ];
 
-                $item = VoteItem::where('vote_id', $id)->orderBy('id')->skip($k)->take(1)->first();
+                $data2 = [
+                    'type' => Item::TYPE_IMAGE,
+                    'title' => $item_title,
+                    'url' => $data['item_url'][$k],
+                    'sort' => $k,
+                ];
+                $item = $vote->items()->orderBy('id')->skip($k)->take(1)->first();
 
                 //判断存在就修改，不存在就新增
                 if ($item) {
                     $item->update($data2);
                 } else {
-                    VoteItem::create($data2);
+                    $vote->items()->create($data2);
                 }
             }
         }
-        return redirect(route('admin.votes.index'))->with('item', $item)->with('flash_success', '编辑成功！');
+        return redirect('/admin/votes')->with('item', $item)->with('flash_success', '编辑成功！');
     }
-
-
-    public function statistic($id)
-    {
-        $vote = Vote::find($id);
-        return view('admin.votes.show', compact('vote'));
-    }
-
 
     public function table()
     {
@@ -185,36 +159,8 @@ class VoteController extends Controller
         return Response::json($ds);
     }
 
-    public function state($state)
+    public function state()
     {
-        $ids = Request::get('ids');
-
-        switch ($state) {
-            case Vote::STATE_DELETED:
-                if (Gate::denies('@vote-delete')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '删除';
-                break;
-            default:
-                \Session::flash('flash_warning', '操作错误!');
-                return;
-        }
-
-        foreach ($ids as $id) {
-            $article = Vote::find($id);
-
-            if ($article == null) {
-                \Session::flash('flash_warning', '无此记录!');
-                return;
-            }
-
-            $article->state = $state;
-            $article->save();
-        }
-
-        \Session::flash('flash_success', $state_name . '成功!');
+        Vote::state(request()->all());
     }
-
 }

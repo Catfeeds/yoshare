@@ -16,12 +16,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::get('push/logs', 'PushController@log');
     Route::get('push/logs/table', 'PushController@logTable');
-    Route::get('push/send', 'PushController@send');
 
     /**
      * 短信管理
      */
-    Route::get('sms/logs', 'SmsController@log');
+    Route::get('sms/logs','SmsController@log');
     Route::get('sms/logs/table', 'SmsController@logTable');
 
     /**
@@ -175,6 +174,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('votes/items', 'VoteItemController');
     Route::get('votes/table', 'VoteController@table');
     Route::get('votes/statistic/{vote_id}', 'VoteController@statistic');
-    Route::post('votes/state/{state}', 'VoteController@state');
-    Route::resource('votes', 'VoteController');
+    Route::post('votes/state', 'VoteController@state');
+    Route::resource('votes','VoteController');
 });
