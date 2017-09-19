@@ -28,11 +28,14 @@
 
     function actionFormatter(value, row, index) {
         //编辑
-        var html ='<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
+        var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
 
         //评论
-        html +='<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment">' +
-                '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+        html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+
+        //推送
+        html += '<button class="btn btn-info btn-xs margin-r-5 push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>' +
+
 
         return html;
     }
