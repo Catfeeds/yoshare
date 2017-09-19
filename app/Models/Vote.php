@@ -57,6 +57,13 @@ class Vote extends Item
         return $this->morphMany(Comment::class, 'refer');
     }
 
+    public function getCommentCountAttribute()
+    {
+        return cache_remember($this->getMorphClass() . "-comment-$this->id", 1, function () {
+            return $this->comments()->where('state', Comment::STATE_PASSED)->count();
+        });
+    }
+
     public function likes()
     {
         return $this->morphOne(Like::class, 'refer');

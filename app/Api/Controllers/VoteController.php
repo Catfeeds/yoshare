@@ -25,7 +25,6 @@ class VoteController extends BaseController
             'begin_date' => $vote->begin_date,
             'end_date' => $vote->end_date,
             'amount' => $vote->amount,
-            'comments' => $vote->comments,
             'is_top' => $vote->is_top,
             'state' => $vote->state,
             'items' => $vote->items->transform(function ($item) use($amount) {
@@ -38,6 +37,7 @@ class VoteController extends BaseController
                 ];
             }),
             'like_count' => $vote->like_count,
+            'comment_count' => $vote->comment_count,
         ];
     }
 
