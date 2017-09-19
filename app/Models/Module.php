@@ -410,26 +410,24 @@ class Module extends Model
     public static function migrate($module)
     {
         //判断权限是否已存在
-        if (Permission::where('name', '@' . $module->singular)->exists()) {
-            return;
-        }
+        if (!Permission::where('name', '@' . $module->singular)->exists()) {
+            //添加权限
+            Permission::insert([
+                ['name' => '@' . $module->singular, 'description' => $module->title, 'sort' => '1'],
+                ['name' => '@' . $module->singular . '-create', 'description' => $module->title . '-添加', 'sort' => '2'],
+                ['name' => '@' . $module->singular . '-edit', 'description' => $module->title . '-编辑', 'sort' => '3'],
+                ['name' => '@' . $module->singular . '-delete', 'description' => $module->title . '-删除', 'sort' => '4'],
+                ['name' => '@' . $module->singular . '-publish', 'description' => $module->title . '-发布', 'sort' => '5'],
+                ['name' => '@' . $module->singular . '-cancel', 'description' => $module->title . '-撤回', 'sort' => '6'],
+                ['name' => '@' . $module->singular . '-sort', 'description' => $module->title . '-排序', 'sort' => '7'],
+            ]);
 
-        //添加权限
-        Permission::insert([
-            ['name' => '@' . $module->singular, 'description' => $module->title, 'sort' => '1'],
-            ['name' => '@' . $module->singular . '-create', 'description' => $module->title . '-添加', 'sort' => '2'],
-            ['name' => '@' . $module->singular . '-edit', 'description' => $module->title . '-编辑', 'sort' => '3'],
-            ['name' => '@' . $module->singular . '-delete', 'description' => $module->title . '-删除', 'sort' => '4'],
-            ['name' => '@' . $module->singular . '-publish', 'description' => $module->title . '-发布', 'sort' => '5'],
-            ['name' => '@' . $module->singular . '-cancel', 'description' => $module->title . '-撤回', 'sort' => '6'],
-            ['name' => '@' . $module->singular . '-sort', 'description' => $module->title . '-排序', 'sort' => '7'],
-        ]);
-
-        if (!Schema::hasTable($module->table_name)) {
-            Schema::create($module->table_name, function (Blueprint $table) {
-                $table->increments('id');
-                $table->timestamps();
-            });
+            if (!Schema::hasTable($module->table_name)) {
+                Schema::create($module->table_name, function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->timestamps();
+                });
+            }
         }
 
         //删除字段
