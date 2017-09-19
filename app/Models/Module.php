@@ -95,10 +95,10 @@ class Module extends Model
             'label' => 'ID',
             'type' => ModuleField::TYPE_INTEGER,
             'system' => 1,
-            'index' => 0,
+            'index' => 1,
             'column_show' => 1,
             'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
-            'column_width' => 30,
+            'column_width' => 45,
             'column_index' => 1,
         ]);
 
@@ -108,7 +108,24 @@ class Module extends Model
             'label' => '站点',
             'type' => ModuleField::TYPE_INTEGER,
             'system' => 1,
-            'index' => 1,
+            'index' => 2,
+        ]);
+
+        $module->fields()->create([
+            'name' => 'title',
+            'title' => '标题',
+            'label' => '标题',
+            'type' => ModuleField::TEXT,
+            'system' => 1,
+            'index' => 3,
+            'column_show' => 1,
+            'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
+            'column_index' => 2,
+            'editor_show' => 1,
+            'editor_type' => ModuleField::EDITOR_TYPE_TEXT,
+            'editor_columns' => 11,
+            'editor_group' => '基本信息',
+            'editor_index' => 1,
         ]);
 
         $module->fields()->create([
@@ -392,9 +409,21 @@ class Module extends Model
      */
     public static function migrate($module)
     {
-        $builder = new CodeBuilder($module);
-        //生成permission
-        $builder->appendPermissions();
+        //判断权限是否已存在
+        if (Permission::where('name', '@' . $module->singular)->exists()) {
+            return;
+        }
+
+        //添加权限
+        Permission::insert([
+            ['name' => '@' . $module->singular, 'description' => $module->title, 'sort' => '1'],
+            ['name' => '@' . $module->singular . '-create', 'description' => $module->title . '-添加', 'sort' => '2'],
+            ['name' => '@' . $module->singular . '-edit', 'description' => $module->title . '-编辑', 'sort' => '3'],
+            ['name' => '@' . $module->singular . '-delete', 'description' => $module->title . '-删除', 'sort' => '4'],
+            ['name' => '@' . $module->singular . '-publish', 'description' => $module->title . '-发布', 'sort' => '5'],
+            ['name' => '@' . $module->singular . '-cancel', 'description' => $module->title . '-撤回', 'sort' => '6'],
+            ['name' => '@' . $module->singular . '-sort', 'description' => $module->title . '-排序', 'sort' => '7'],
+        ]);
 
         if (!Schema::hasTable($module->table_name)) {
             Schema::create($module->table_name, function (Blueprint $table) {
@@ -508,9 +537,6 @@ class Module extends Model
 
         //生成route
         $builder->appendRoutes();
-
-        //生成permission
-        $builder->appendPermissions();
 
         //生成api文档
         Swagger::make();

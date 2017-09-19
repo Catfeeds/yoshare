@@ -22,6 +22,7 @@
                             @include('admin.questions.toolbar')
                             @include('admin.questions.query')
                             @include('admin.contents.table')
+                            @include('admin.contents.push')
                             @include('admin.contents.script')
                             @include('admin.questions.script')
                         </div>

@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\__module_name__;
 use App\Models\Category;
-use App\Models\Content;
+use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use Auth;
 use Gate;
 use Request;
 use Response;
@@ -76,6 +77,22 @@ class __controller__ extends Controller
         return view('themes.' . $site->theme->name . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
+    public function category($category_id)
+    {
+        $category = Category::find($category_id);
+        if (empty($category)) {
+            return abort(404);
+        }
+
+        $__plural__ = __module_name__::where('category_id', $category_id)
+            ->where('state', __module_name__::STATE_PUBLISHED)
+            ->orderBy('top', 'desc')
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        return view('themes.' . $category->site->theme->name . '.__module_path__.category', ['site' => $category->site, 'category' => $category, '__plural__' => $__plural__]);
+    }
+
     public function index()
     {
         if (Gate::denies('@__permission__')) {
@@ -104,24 +121,42 @@ class __controller__ extends Controller
 
         $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $__singular__->category_id]);
     }
 
     public function store()
     {
         $input = Request::all();
+        $input['site_id'] = Auth::user()->site_id;
+        $input['user_id'] = Auth::user()->id;
 
         $validator = Module::validate($this->module, $input);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $__singular__ = Content::stores($this->module, $input);
+        $__singular__ = __module_name__::stores($input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($__singular__)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $__singular__, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $__singular__, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $__singular__, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url);
+        return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
     }
 
     public function update($id)
@@ -133,12 +168,28 @@ class __controller__ extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $__singular__ = Content::updates($this->module, $id, $input);
+        $__singular__ = __module_name__::updates($id, $input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($__singular__)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $__singular__, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $__singular__, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $__singular__, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->base_url);
+        return redirect($this->base_url . '?category_id=' . $__singular__->category_id);
     }
 
     public function comments($refer_id)
@@ -183,6 +234,6 @@ class __controller__ extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id));
+        return Response::json(Category::tree('', 0, $this->module->id, false));
     }
 }

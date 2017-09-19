@@ -20,17 +20,17 @@
                             <div class="btn-group margin-bottom pull-right">
                                 <input type="hidden" name="state" id="state" value=""/>
                                 <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
-                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\PushLog::STATE_SUCCESS }}">已发布</button>
-                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\PushLog::STATE_FAILURE }}">已删除</button>
+                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\PushLog::STATE_SUCCESS }}">成功</button>
+                                <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\PushLog::STATE_FAILURE }}">失败</button>
                                 <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" data-toggle="modal" data-target="#modal_query">查询</button>
                             </div>
                             <table id="table" data-toggle="table">
                                 <thead>
                                 <tr>
-                                    <th data-field="state" data-checkbox="true"></th>
-                                    <th data-field="id" data-width="30">ID</th>
-                                    <th data-field="content_type" data-width="60" data-align="center">类型</th>
-                                    <th data-field="content_title" data-formatter="titleFormatter">内容标题</th>
+                                    <th data-field="id" data-width="45" data-align="center">ID</th>
+                                    <th data-field="refer_id" data-width="60" data-align="center" data-align="center">关联ID</th>
+                                    <th data-field="refer_type" data-width="90" data-align="center">关联类型</th>
+                                    <th data-field="title">标题</th>
                                     <th data-field="send_no" data-width="90" data-align="center">send_no</th>
                                     <th data-field="msg_id" data-width="90" data-align="center">msg_id</th>
                                     <th data-field="username" data-width="60" data-align="center">操作员</th>
@@ -116,12 +116,6 @@
                 return object;
             },
         });
-
-        function titleFormatter(value, row, index) {
-            return [
-                '<a href="/admin/contents/' + row.content_id + '" target="_blank">' + value + '</a>',
-            ]
-        }
 
         function stateFormatter(value, row, index) {
             var style = 'label-primary';

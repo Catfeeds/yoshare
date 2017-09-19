@@ -30,6 +30,7 @@
                             @include('admin.articles.toolbar')
                             @include('admin.articles.query')
                             @include('admin.contents.table')
+                            @include('admin.contents.push')
                             @include('admin.contents.script')
                             @include('admin.articles.script')
                         </div>

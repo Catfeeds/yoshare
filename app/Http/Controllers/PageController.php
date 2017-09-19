@@ -6,6 +6,7 @@ use App\Events\UserLogEvent;
 use App\Models\Page;
 use App\Models\Category;
 use App\Models\Content;
+use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
@@ -110,13 +111,31 @@ class PageController extends Controller
     public function store()
     {
         $input = Request::all();
+        $input['site_id'] = Auth::user()->site_id;
+        $input['user_id'] = Auth::user()->id;
 
         $validator = Module::validate($this->module, $input);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $page = Content::stores($this->module, $input);
+        $page = Page::stores($input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($page)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '页面', $page->id, $this->module->model_class));
 
@@ -133,7 +152,23 @@ class PageController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $page = Content::updates($this->module, $id, $input);
+        $page = Page::updates($id, $input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($page)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '页面', $page->id, $this->module->model_class));
 

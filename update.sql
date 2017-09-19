@@ -411,3 +411,23 @@ VALUES
 	(2, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-06-21 00:00:00'),
 	(2, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-06-21 00:00:00'),
 	(2, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 0, 98, 1, 0, 2, 120, '', 3, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-06-21 00:00:00');
+
+DROP TABLE IF EXISTS `cms_push_logs`;
+CREATE TABLE `cms_push_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
+  `refer_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '关联类型',
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '标题',
+  `url` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'URL',
+  `send_no` int(11) unsigned NOT NULL COMMENT '推送序号',
+  `msg_id` int(11) unsigned NOT NULL COMMENT '消息ID',
+  `err_msg` text COLLATE utf8_unicode_ci NOT NULL COMMENT '错误消息',
+  `user_id` int(10) unsigned NOT NULL COMMENT '操作员ID',
+  `state` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY (`site_id`),
+  KEY (`refer_id`, `refer_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

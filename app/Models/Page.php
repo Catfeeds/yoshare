@@ -29,7 +29,7 @@ class Page extends BaseModule
 
     protected $table = 'pages';
 
-    protected $fillable = ['site_id','title','subtitle','author','origin','slug','summary','image_url','video_url','audio_url','images','videos','audios','content','top','member_id','user_id','sort','state','published_at'];
+    protected $fillable = ['site_id','title','subtitle','author','origin','slug','summary','image_url','video_url','audio_url','images','videos','content','top','member_id','user_id','sort','state','published_at'];
 
     protected $dates = ['published_at'];
 

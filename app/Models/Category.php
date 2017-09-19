@@ -17,6 +17,11 @@ class Category extends BaseModule
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
 
+    const LINK_TYPES = [
+        0 => '无',
+        1 => '网址',
+    ];
+
     const ID_FAQ = 4;
 
     protected $fillable = [

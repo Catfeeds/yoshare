@@ -9,9 +9,16 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box box-info">
-                            <form id="form_push" action="/articles/push" method="post" class="form-horizontal">
-                                {!! Form::hidden('id', null, ['id' => 'id', 'class' => 'form-control']) !!}
+                            <form id="form_push" method="post" class="form-horizontal">
+                                {!! Form::hidden('module_id', $module->id, ['id' => 'module_id', 'class' => 'form-control']) !!}
+                                {!! Form::hidden('push_id', null, ['id' => 'push_id', 'class' => 'form-control']) !!}
                                 <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">标题:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="push_title" name="push_title">
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">iOS:</label>
                                         <div class="col-sm-4">
@@ -48,10 +55,10 @@
 <script>
     $('#btn_send').click(function () {
         var params = $('#form_push input,#form_push select').serializeArray();
-        var str = $.param(params);
+        var query = $.param(params);
 
         $.ajax({
-            url: '/articles/push?' + str,
+            url: '/admin/push/send?' + query,
             type: 'get',
             data: {'_token': '{{ csrf_token() }}'},
             success: function (data) {
@@ -68,7 +75,7 @@
                     "tapToDismiss": false,
                     'positionClass': 'toast-bottom-right',
                 };
-                toastr['success']('发送成功！<a href="/push/log">查看推送日志</a>');
+                toastr['success']('发送成功！<a href="/admin/push/logs">查看推送日志</a>');
             },
             error: function () {
                 //发送失败提示

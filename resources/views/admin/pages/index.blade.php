@@ -22,6 +22,7 @@
                             @include('admin.pages.toolbar')
                             @include('admin.pages.query')
                             @include('admin.contents.table')
+                            @include('admin.contents.push')
                             @include('admin.contents.script')
                             @include('admin.pages.script')
                         </div>

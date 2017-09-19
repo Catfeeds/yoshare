@@ -34,8 +34,7 @@
         html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
 
         //推送
-        html += '<button class="btn btn-info btn-xs margin-r-5 push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>' +
-
+        html += '<button class="btn btn-info btn-xs margin-r-5 push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
 
         return html;
     }
@@ -74,7 +73,8 @@
         },
 
         'click .push': function (e, value, row, index) {
-            $('#id').val(row.id);
+            $('#push_id').val(row.id);
+            $('#push_title').val(row.title);
         }
     };
 

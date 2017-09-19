@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class PushLog extends Model
 {
@@ -14,8 +14,6 @@ class PushLog extends Model
         1 => '成功',
         2 => '失败',
     ];
-
-    const TYPE_NEWS = 1;
 
     const IOS_PUSH_PRODUCTION = 1;
     const IOS_PUSH_DEVELOPMENT = 2;
@@ -33,16 +31,16 @@ class PushLog extends Model
     ];
 
     protected $fillable = [
-        'content_id',
-        'content_type',
-        'content_title',
-        'state',
         'site_id',
+        'refer_id',
+        'refer_type',
+        'title',
         'url',
         'send_no',
         'msg_id',
         'err_msg',
         'user_id',
+        'state',
     ];
 
     public function user()
@@ -53,15 +51,6 @@ class PushLog extends Model
     public function getStateNameAttribute()
     {
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
-    }
-
-    public function typeName()
-    {
-        switch ($this->content_type){
-            case static::TYPE_NEWS:
-                return '新闻';
-                break;
-        }
     }
 
     public function scopeOwns($query)

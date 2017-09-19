@@ -3,12 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\ModuleField;
-use App\Models\Permission;
 
 class CodeBuilder
 {
     private $module;
-    private $template_path;
+    private $stub_path;
 
     public function __construct($module)
     {
@@ -16,9 +15,9 @@ class CodeBuilder
 
         //判断此模块是否有栏目字段
         if ($this->module->fields()->where('name', 'category_id')->count() > 0) {
-            $this->template_path = __DIR__ . '/templates/2/';
+            $this->stub_path = __DIR__ . '/stubs/2/';
         } else {
-            $this->template_path = __DIR__ . '/templates/1/';
+            $this->stub_path = __DIR__ . '/stubs/1/';
         }
     }
 
@@ -39,7 +38,7 @@ class CodeBuilder
 
     public function createModel()
     {
-        $content = file_get_contents($this->template_path . 'model.php');
+        $content = file_get_contents($this->stub_path . 'model.php');
 
         $content = static::replace($content);
 
@@ -67,7 +66,7 @@ class CodeBuilder
 
     public function createController()
     {
-        $content = file_get_contents($this->template_path . 'controller.php');
+        $content = file_get_contents($this->stub_path . 'controller.php');
 
         $content = static::replace($content);
 
@@ -76,7 +75,7 @@ class CodeBuilder
 
     public function createApi()
     {
-        $content = file_get_contents($this->template_path . 'api.php');
+        $content = file_get_contents($this->stub_path . 'api.php');
 
         $content = static::replace($content);
 
@@ -89,28 +88,28 @@ class CodeBuilder
         @mkdir(base_path('resources/views/admin/' . $this->module->path), 0755, true);
 
         //index.php
-        $content = file_get_contents($this->template_path . 'views/index.blade.php');
+        $content = file_get_contents($this->stub_path . 'views/index.blade.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('resources/views/admin/' . $this->module->path . '/index.blade.php'), $content);
 
         //query.php
-        $content = file_get_contents($this->template_path . 'views/query.blade.php');
+        $content = file_get_contents($this->stub_path . 'views/query.blade.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('resources/views/admin/' . $this->module->path . '/query.blade.php'), $content);
 
         //script.php
-        $content = file_get_contents($this->template_path . 'views/script.blade.php');
+        $content = file_get_contents($this->stub_path . 'views/script.blade.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('resources/views/admin/' . $this->module->path . '/script.blade.php'), $content);
 
         //toolbar.php
-        $content = file_get_contents($this->template_path . 'views/toolbar.blade.php');
+        $content = file_get_contents($this->stub_path . 'views/toolbar.blade.php');
 
         $content = static::replace($content);
 
@@ -123,44 +122,24 @@ class CodeBuilder
         @mkdir(base_path('routes/modules/' . $this->module->path), 0755, true);
 
         //web.php
-        $content = file_get_contents($this->template_path . 'routes/web.php');
+        $content = file_get_contents($this->stub_path . 'routes/web.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('routes/modules/' . $this->module->path . '/web.php'), $content);
 
         //admin.php
-        $content = file_get_contents($this->template_path . 'routes/admin.php');
+        $content = file_get_contents($this->stub_path . 'routes/admin.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('routes/modules/' . $this->module->path . '/admin.php'), $content);
 
         //api.php
-        $content = file_get_contents($this->template_path . 'routes/api.php');
+        $content = file_get_contents($this->stub_path . 'routes/api.php');
 
         $content = static::replace($content);
 
         file_put_contents(base_path('routes/modules/' . $this->module->path . '/api.php'), $content);
-    }
-
-    public function appendPermissions()
-    {
-        $module_name = $this->module->singular;
-
-        //判断权限是否已存在
-        if (Permission::where('name', '@' . $module_name)->exists()) {
-            return;
-        }
-
-        Permission::insert([
-            ['name' => '@' . $module_name, 'description' => $this->module->title, 'sort' => '1'],
-            ['name' => '@' . $module_name . '-create', 'description' => $this->module->title . '-添加', 'sort' => '2'],
-            ['name' => '@' . $module_name . '-edit', 'description' => $this->module->title . '-编辑', 'sort' => '3'],
-            ['name' => '@' . $module_name . '-delete', 'description' => $this->module->title . '-删除', 'sort' => '4'],
-            ['name' => '@' . $module_name . '-publish', 'description' => $this->module->title . '-发布', 'sort' => '5'],
-            ['name' => '@' . $module_name . '-cancel', 'description' => $this->module->title . '-撤回', 'sort' => '6'],
-            ['name' => '@' . $module_name . '-sort', 'description' => $this->module->title . '-排序', 'sort' => '7'],
-        ]);
     }
 }

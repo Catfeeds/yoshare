@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Content;
+use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use Auth;
 use Gate;
 use Request;
 use Response;
@@ -126,13 +127,31 @@ class ArticleController extends Controller
     public function store()
     {
         $input = Request::all();
+        $input['site_id'] = Auth::user()->site_id;
+        $input['user_id'] = Auth::user()->id;
 
         $validator = Module::validate($this->module, $input);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $article = Content::stores($this->module, $input);
+        $article = Article::stores($input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($article)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $article, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $article, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $article, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '文章', $article->id, $this->module->model_class));
 
@@ -149,7 +168,23 @@ class ArticleController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $article = Content::updates($this->module, $id, $input);
+        $article = Article::updates($id, $input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($article)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $article, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $article, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $article, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '文章', $article->id, $this->module->model_class));
 

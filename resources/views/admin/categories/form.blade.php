@@ -48,7 +48,7 @@
         <div class="form-group">
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-3">
-                {!! Form::select('link_type', \App\Models\Content::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
+                {!! Form::select('link_type', \App\Models\Category::LINK_TYPES, null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
             <div class="col-sm-8" id="link"></div>
         </div>
@@ -209,9 +209,9 @@
     });
 
     function showLink(type, is_edit) {
-        if (type == '{{\App\Models\Content::LINK_TYPE_NONE}}') {
+        if (type == '{{\App\Models\Category::LINK_TYPE_NONE}}') {
             $('#link').html('');
-        } else if (type == '{{\App\Models\Content::LINK_TYPE_WEB}}') {
+        } else if (type == '{{\App\Models\Category::LINK_TYPE_WEB}}') {
             $('#link').html('{!! Form::text('link', null, ['class' => 'form-control','id'=>'text']) !!}');
             if (is_edit == true) {
                 $('#text').val('');

@@ -20,7 +20,7 @@
             if (getNodeIndex(parseInt(getQueryString('category_id')), data) >= 0) {
                 $('#tree').treeview('selectNode', [nodeIndex, {silent: false}]);
             }
-            else{
+            else {
                 $('#tree').treeview('selectNode', [0, {silent: false}]);
             }
         }
@@ -55,11 +55,13 @@
 
     function actionFormatter(value, row, index) {
         //编辑
-        html ='<button class="btn btn-primary btn-xs edit margin-r-5" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
+        var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
 
         //评论
-        html +='<button class="btn btn-info btn-xs comment" data-toggle="modal" data-target="#modal_comment">' +
-                '<i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+        html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+
+        //推送
+        html += '<button class="btn btn-info btn-xs margin-r-5 push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
 
         return html;
     }
@@ -95,6 +97,11 @@
                     $('#contents').html(html);
                 }
             });
+        },
+
+        'click .push': function (e, value, row, index) {
+            $('#push_id').val(row.id);
+            $('#push_title').val(row.title);
         }
     };
 
