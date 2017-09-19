@@ -22,6 +22,7 @@
                             @include('admin.__module_path__.toolbar')
                             @include('admin.__module_path__.query')
                             @include('admin.contents.table')
+                            @include('admin.contents.push')
                             @include('admin.contents.script')
                             @include('admin.__module_path__.script')
                         </div>
