@@ -19,30 +19,24 @@
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-sm margin-r-5" id="create"
-                                        onclick="javascript:window.location.href='/apps/create'">新增
+                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
+                                        onclick="javascript:window.location.href='/admin/apps/create'">添加应用
                                 </button>
                             </div>
 
                             <table data-toggle="table"
                                    data-url="apps/table"
                                    data-pagination="true"
-                                   data-search="true"
-                                   data-show-refresh="true"
-                                   data-show-toggle="true"
-                                   data-show-columns="true"
                                    data-toolbar="#toolbar">
                                 <thead>
                                 <tr>
-                                    <th data-field="id">ID</th>
-                                    <th data-field="name">名称</th>
-                                    <th data-field="android_version">安卓版本号</th>
-                                    <th data-field="android_force" data-width="60" data-formatter="androidForceFormatter">安卓强制更新</th>
-                                    <th data-field="ios_version">ios版本号</th>
-                                    <th data-field="ios_force" data-width="60" data-formatter="iosForceFormatter">ios强制更新</th>
-                                    <th data-field="created_at" data-width="120">创建时间</th>
-                                    <th data-field="updated_at" data-width="120">更新时间</th>
-                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-width="100">操作</th>
+                                    <th data-field="id" data-align="center" data-width="30" >ID</th>
+                                    <th data-field="name" data-width="300">名称</th>
+                                    <th data-field="android_version" data-align="center" data-width="200">安卓版本号</th>
+                                    <th data-field="android_force" data-align="center" data-width="60" data-formatter="androidForceFormatter">安卓强制更新</th>
+                                    <th data-field="ios_version" data-align="center" data-width="200">ios版本号</th>
+                                    <th data-field="ios_force" data-align="center" data-width="60" data-formatter="iosForceFormatter">ios强制更新</th>
+                                    <th data-field="action"  data-align="center" data-formatter="actionFormatter" data-events="actionEvents" data-width="100">操作</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -60,7 +54,7 @@
             var html = '';
             if(row.android_force != false){
                 style = 'label-success';
-                html = '是';
+                html = '<i class="fa fa-check"></i>';
             }0
             return [
                 '<span class="label ' + style + '">' + html + '</span>',
@@ -72,7 +66,7 @@
             var html = '';
             if(row.ios_force != false){
                 style = 'label-success';
-                html = '是';
+                html = '<i class="fa fa-check"></i>';
             }
             return [
                 '<span class="label ' + style + '">' + html + '</span>',

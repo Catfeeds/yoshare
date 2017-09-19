@@ -22,7 +22,7 @@
                         <div class="box-body">
                             @include('admin.errors.list')
 
-                            {!! Form::open(['url' => '//admin/apps','class' => 'form-horizontal']) !!}
+                            {!! Form::open(['url' => '/admin/apps','class' => 'form-horizontal']) !!}
 
                             @include('admin.apps._form', ['submitButtonText' => '添加应用'])
 

@@ -12,21 +12,21 @@
 <div id="tabContents" class="tab-content">
     <div id="tabHome" class="tab-pane fade in active padding-t-15">
         <div class="form-group">
-            {!! Form::label('name', '名称:',['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('name', '名称:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-10">
                 {!! Form::text('name', null, ['class' => 'form-control']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            {!! Form::label('logo_url', 'logo地址:', ['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('logo_url', 'logo地址:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-10">
                 {!! Form::text('logo_url', null, ['class' => 'form-control']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            <label for="logo_file" class="control-label col-sm-2">上传logo:</label>
+            <label for="logo_file" class="control-label col-sm-1">上传logo:</label>
             <div class="col-sm-10">
                 <input id="logo_file" name="image_file" type="file" class="file" data-preview-file-type="text"
                        data-upload-url="/admin/files/upload?type=image">
@@ -36,25 +36,25 @@
 
     <div id="tabAndroid" class="tab-pane fade padding-t-15">
         <div class="form-group">
-            {!! Form::label('android_version', '版本号:',['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('android_version', '版本号:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-4">
                 {!! Form::text('android_version', null, ['class' => 'form-control']) !!}
             </div>
-            {!! Form::label('android_force', '强制更新:',['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('android_force', '强制更新:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-4">
                 {!! Form::select('android_force',['否','是'], isset($apps) ?  $apps->android_force : 0 ,['class' => 'form-control col-sm-2']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            {!! Form::label('android_url', '程序下载地址:', ['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('android_url', '程序下载地址:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-10">
                 {!! Form::text('android_url', null, ['class' => 'form-control']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            <label for="other_file" class="control-label col-sm-2">上传程序:</label>
+            <label for="other_file" class="control-label col-sm-1">上传程序:</label>
             <div class="col-sm-10">
                 <input id="android_other_file" name="other_file" type="file" class="file"
                        data-upload-url="/admin/files/upload?type=other" data-show-preview="false">
@@ -64,18 +64,18 @@
 
     <div id="tabIos" class="tab-pane fade padding-t-15">
         <div class="form-group">
-            {!! Form::label('ios_version', '版本号:',['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('ios_version', '版本号:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-4">
                 {!! Form::text('ios_version', null, ['class' => 'form-control']) !!}
             </div>
-            {!! Form::label('ios_force', '强制更新:',['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('ios_force', '强制更新:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-4">
                 {!! Form::select('ios_force',['否','是'], isset($apps) ?  $apps->ios_force : 0 ,['class' => 'form-control col-sm-2']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            {!! Form::label('ios_url', '程序下载地址:', ['class' => 'control-label col-sm-2']) !!}
+            {!! Form::label('ios_url', '程序下载地址:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-10">
                 {!! Form::text('ios_url', null, ['class' => 'form-control']) !!}
             </div>
@@ -84,7 +84,7 @@
 </div>
 
 <div class="box-footer">
-    <a href="/apps">
+    <a href="/admin/apps">
         <button type="button" class="btn btn-default">取　消</button>
     </a>
     <button type="submit" class="btn btn-info pull-right" id="submit">确　定</button>
