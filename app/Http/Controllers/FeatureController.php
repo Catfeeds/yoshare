@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\Feature;
 use App\Models\Category;
-use App\Models\Content;
+use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use Auth;
 use Gate;
 use Request;
 use Response;
@@ -126,13 +127,31 @@ class FeatureController extends Controller
     public function store()
     {
         $input = Request::all();
+        $input['site_id'] = Auth::user()->site_id;
+        $input['user_id'] = Auth::user()->id;
 
         $validator = Module::validate($this->module, $input);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $feature = Content::stores($this->module, $input);
+        $feature = Feature::stores($input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($feature)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $feature, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $feature, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $feature, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '专题', $feature->id, $this->module->model_class));
 
@@ -149,7 +168,23 @@ class FeatureController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $feature = Content::updates($this->module, $id, $input);
+        $feature = Feature::updates($id, $input);
+
+        //保存图片集、音频集、视频集
+        if (!empty($feature)) {
+            if (isset($input['images'])) {
+                Item::sync(Item::TYPE_IMAGE, $feature, $input['images']);
+
+            }
+
+            if (isset($input['audios'])) {
+                Item::sync(Item::TYPE_AUDIO, $feature, $input['audios']);
+            }
+
+            if (isset($input['videos'])) {
+                Item::sync(Item::TYPE_VIDEO, $feature, $input['videos']);
+            }
+        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '专题', $feature->id, $this->module->model_class));
 

@@ -28,7 +28,7 @@ CREATE TABLE `cms_sms_logs`(
 ALTER TABLE `cms_sms_logs` ADD `state`  TINYINT(1) NOT NULL COMMENT '状态:1成功 2失败' AFTER `message`;
 
 -- -----------
--- 2017-9-5
+-- 2017-7-5
 -- -----------
 DROP TABLE IF EXISTS `cms_comments`;
 CREATE TABLE `cms_comments` (
@@ -432,107 +432,70 @@ CREATE TABLE `cms_push_logs` (
   KEY (`refer_id`, `refer_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- -----------
+-- 2017-9-20
+-- -----------
+
 ALTER TABLE `cms_categories` ADD `type` TINYINT(1) NOT NULL COMMENT '栏目类型' AFTER `module_id`;
 
+ALTER TABLE `cms_permissions` ADD `group` int(10) NOT NULL COMMENT '分组' AFTER `description`;
+
 CREATE TABLE `cms_features` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `site_id` int(11) NOT NULL COMMENT '站点ID',
   `category_id` int(11) NOT NULL COMMENT '栏目ID',
   `type` int(11) NOT NULL COMMENT '类型',
-  `title` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
-  `summary` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '摘要',
-  `image_url` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '缩略图',
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',
+  `title` text NOT NULL COMMENT '标题',
+  `subtitle` text NOT NULL COMMENT '副标题',
+  `link_type` int(11) NOT NULL COMMENT '外链类型',
+  `link` text NOT NULL COMMENT '外链',
+  `author` text NOT NULL COMMENT '作者',
+  `origin` text NOT NULL COMMENT '内容来源',
+  `keywords` text NOT NULL COMMENT '关键字',
+  `summary` text NOT NULL COMMENT '摘要',
+  `image_url` text NOT NULL COMMENT '缩略图',
+  `video_url` text NOT NULL COMMENT '视频',
+  `images` text NOT NULL COMMENT '图片集',
+  `videos` text NOT NULL COMMENT '视频集',
+  `content` text NOT NULL COMMENT '正文',
   `top` int(11) NOT NULL COMMENT '是否置顶',
-  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
-  `images` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '图片集',
-  `videos` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '视频',
   `member_id` int(11) NOT NULL COMMENT '会员ID',
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `sort` int(11) NOT NULL COMMENT '序号',
   `state` int(11) NOT NULL COMMENT '状态',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
-  `site_id` int(11) NOT NULL COMMENT '站点ID',
+  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cms_permissions`;
-CREATE TABLE `cms_permissions` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `groups` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '分组',
-  `sort` int(10) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `permissions_name_unique` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `cms_modules` VALUES ('7', 'Feature', '专题', 'features', '专题管理', '0', 'fa-archive', '1', '2017-09-20 16:55:26', '2017-09-20 17:04:20');
 
---
--- 转存表中的数据 `cms_permissions`
---
-
-INSERT INTO `cms_permissions` (`id`, `name`, `description`, `groups`, `sort`, `created_at`, `updated_at`) VALUES
-(1, '@option', '系统设置', '@option', 1, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(2, '@dictionary', '字典设置', '@dictionary', 2, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(3, '@site', '站点设置', '@site', 3, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(4, '@app', '应用管理', '@option', 4, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(5, '@user', '用户管理', '@option', 5, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(6, '@role', '角色管理', '@option', 6, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(7, '@category', '栏目管理', '@site', 7, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(8, '@article', '文章管理', '@article', 8, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(9, '@comment', '评论管理', '@comment', 9, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(10, '@member', '会员管理', '@member', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(11, '@log', '日志查询', '@log', 10, '2016-09-28 00:00:00', '2016-09-28 00:00:00'),
-(31, '@comment-delete', '评论管理-删除', '@comment', 2, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(32, '@comment-pass', '评论管理-审核', '@comment', 1, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(41, '@article-create', '文章管理-新增', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(42, '@article-edit', '文章管理-编辑', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(43, '@article-publish', '文章管理-发布', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(44, '@article-cancel', '文章管理-撤搞', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(45, '@article-delete', '文章管理-删除', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(46, '@article-copy', '文章管理-复制', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(47, '@article-sort', '文章管理-排序', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(48, '@article-top', '文章管理-置顶', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(49, '@article-tag', '文章管理-标记', '@article', 0, '2016-11-16 16:00:00', '2016-11-16 16:00:00'),
-(50, '@article-push', '文章管理-推送', '@article', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(100, '@member-create', '会员管理-添加', '@member', 0, '2016-11-06 16:00:00', '2016-11-02 16:00:00'),
-(101, '@member-edit', '会员管理-编辑', '@member', 0, '2016-11-06 16:00:00', '2016-11-02 16:00:00'),
-(145, '@push', '推送管理', '@log', 0, '2016-11-16 16:00:00', '2016-11-16 16:00:00'),
-(146, '@module', '模块管理', '@log', 11, '2017-02-15 16:00:00', '2017-02-15 16:00:00'),
-(175, '@page-sort', '单页-排序', '@page', 7, NULL, NULL),
-(174, '@page-cancel', '单页-撤回', '@page', 6, NULL, NULL),
-(172, '@page-delete', '单页-删除', '@page', 4, NULL, NULL),
-(173, '@page-publish', '单页-发布', '@page', 5, NULL, NULL),
-(171, '@page-edit', '单页-编辑', '@page', 3, NULL, NULL),
-(170, '@page-create', '单页-添加', '@page', 2, NULL, NULL),
-(169, '@page', '单页', '@page', 1, NULL, NULL),
-(12, '@menu', '菜单管理', '@option', 0, '2017-02-15 16:00:00', '2017-02-15 16:00:00'),
-(13, '@theme', '主题管理', '@site', 0, '2017-02-15 16:00:00', '2017-02-15 16:00:00'),
-(176, '@video', '视频', '@video', 1, NULL, NULL),
-(177, '@video-create', '视频-添加', '@video', 2, NULL, NULL),
-(178, '@video-edit', '视频-编辑', '@video', 3, NULL, NULL),
-(179, '@video-delete', '视频-删除', '@video', 4, NULL, NULL),
-(180, '@video-publish', '视频-发布', '@video', 5, NULL, NULL),
-(181, '@video-cancel', '视频-撤回', '@video', 6, NULL, NULL),
-(182, '@video-sort', '视频-排序', '@video', 7, NULL, NULL),
-(183, '@question', '问答', '@question', 1, NULL, NULL),
-(184, '@question-create', '问答-添加', '@question', 2, NULL, NULL),
-(185, '@question-edit', '问答-编辑', '@question', 3, NULL, NULL),
-(186, '@question-delete', '问答-删除', '@question', 4, NULL, NULL),
-(187, '@question-publish', '问答-发布', '@question', 5, NULL, NULL),
-(188, '@question-cancel', '问答-撤回', '@question', 6, NULL, NULL),
-(189, '@question-sort', '问答-排序', '@question', 7, NULL, NULL),
-(190, '@feature', '专题管理', '@feature', 8, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(191, '@feature-create', '专题管理-新增', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(192, '@feature-edit', '专题管理-编辑', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(193, '@feature-publish', '专题管理-发布', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(194, '@feature-cancel', '专题管理-撤搞', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(195, '@feature-delete', '专题管理-删除', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(196, '@feature-copy', '专题管理-复制', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(197, '@feature-sort', '专题管理-排序', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(198, '@feature-top', '专题管理-置顶', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00'),
-(199, '@feature-tag', '专题管理-标记', '@feature', 0, '2016-11-16 16:00:00', '2016-11-16 16:00:00'),
-(200, '@feature-push', '专题管理-推送', '@feature', 0, '2016-06-30 00:00:00', '2016-06-30 00:00:00');
+INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`) VALUES
+(7, 'top', '是否置顶', '是否置顶', 3, '0', 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'content', '正文', '正文', 6, '', 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, '', 0, 1, 0, 6, '', 40, 12, '正文', 14, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'videos', '视频集', '视频集', 13, '', 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, '', 0, 1, 0, 13, '', 1, 11, '视频集', 13, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'images', '图片集', '图片集', 11, '', 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, '', 0, 1, 0, 11, '', 1, 11, '图片集', 12, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'video_url', '视频', '视频', 10, '', 0, 0, 0, 0, 0, 14, 0, 0, 1, 0, '', 0, 1, 0, 10, '', 1, 11, '基本信息', 11, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'image_url', '缩略图', '缩略图', 8, '', 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, '', 0, 1, 0, 8, '', 1, 11, '基本信息', 10, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'id', 'ID', 'ID', 3, '', 0, 0, 0, 0, 1, 1, 1, 0, 1, 30, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'site_id', '站点ID', '站点', 3, '', 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'category_id', '栏目ID', '栏目', 3, '', 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'type', '类型', '类型', 3, '', 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, '', 0, 1, 0, 3, '小图,多图,大图', 1, 2, '基本信息', 3, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'title', '标题', '标题', 1, '', 1, 0, 0, 0, 0, 5, 1, 0, 1, 300, '', 2, 1, 0, 1, '', 1, 11, '基本信息', 1, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'subtitle', '副标题', '副标题', 1, '', 0, 0, 0, 0, 0, 6, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 11, '基本信息', 2, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'link_type', '外链类型', '外链类型', 3, '', 0, 0, 0, 0, 0, 7, 0, 0, 1, 0, '', 0, 1, 0, 3, '页面,栏目', 1, 2, '基本信息', 4, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'link', '外链', '外链', 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 5, '基本信息', 5, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'author', '作者', '作者', 1, '', 0, 0, 0, 0, 0, 9, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 2, '基本信息', 6, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'origin', '内容来源', '内容来源', 1, '', 0, 0, 0, 0, 0, 10, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 2, '基本信息', 7, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'keywords', '关键字', '关键字', 1, '', 0, 0, 0, 0, 0, 11, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 5, '基本信息', 8, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'summary', '摘要', '摘要', 1, '', 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, '', 0, 1, 0, 2, '', 4, 11, '基本信息', 9, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'member_id', '会员ID', '会员', 7, '', 0, 0, 0, 0, 0, 91, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'user_id', '用户ID', '操作员', 7, '', 0, 0, 0, 0, 0, 92, 1, 0, 2, 45, '', 4, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'sort', '序号', '序号', 3, '0', 0, 0, 0, 0, 0, 93, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'state', '状态', '状态', 3, '1', 0, 0, 0, 0, 0, 94, 1, 0, 2, 45, 'stateFormatter', 5, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'created_at', '创建时间', '创建时间', 5, '', 0, 0, 0, 0, 1, 95, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
+(7, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 0, 98, 1, 0, 2, 120, '', 3, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29');

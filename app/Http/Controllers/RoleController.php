@@ -7,6 +7,7 @@ use App\Http\Requests\RoleRequest;
 use App\Models\Permission;
 use App\Models\PermissionRole;
 use App\Models\Role;
+use App\Models\User;
 use Gate;
 use Request;
 use Response;
