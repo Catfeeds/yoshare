@@ -72,15 +72,9 @@
         @if(isset($vote))
             <div class="form-group">
                 <label class="col-sm-1 control-label">投票类型</label>
-                <div class="col-sm-9 control-label">
-                    <div class="pull-left">
-                        <input type="radio" name="multiple" class="radios"
-                               @if($vote->multiple==\App\Models\Vote::MULTIPLE_FALSE) value="{{$vote->multiple}}"
-                               checked
-                               @else value="{{\App\Models\Vote::MULTIPLE_FALSE}}" @endif> 单选&nbsp;&nbsp;
-                        <input type="radio" name="multiple" class="radios"
-                               @if($vote->multiple==\App\Models\Vote::MULTIPLE_TRUE) value="{{$vote->multiple}}" checked
-                               @else value="{{\App\Models\Vote::MULTIPLE_TRUE}}" @endif> 多选
+                <div class="col-sm-9">
+                    <div class="pull-left col-sm-2 no-padding">
+                        {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -91,12 +85,9 @@
         @else
             <div class="form-group">
                 <label class="col-sm-1 control-label">投票类型</label>
-                <div class="col-sm-9 control-label">
-                    <div class="pull-left">
-                        <input type="radio" name="multiple" class="radios" value="{{\App\Models\Vote::MULTIPLE_FALSE}}"
-                               checked> 单选&nbsp;&nbsp;
-                        <input type="radio" name="multiple" class="radios" value="{{\App\Models\Vote::MULTIPLE_TRUE}}">
-                        多选
+                <div class="col-sm-9">
+                    <div class="pull-left col-sm-2 no-padding">
+                        {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -105,7 +96,6 @@
                 </div>
             </div>
         @endif
-
         <div class="edit_file1">
             @if(isset($vote))
                 @foreach($vote->items as $k=>$item)
@@ -114,7 +104,8 @@
                             <div class="input-group">
                                 <ul id="tabs{{$k+1}}" class="nav nav-tabs">
                                     <li class="active">
-                                        <a href="#tabHome{{$k+1}}" data-toggle="tab">基本信息</a>
+                                        <a href="#tabHome{{$k+1}}" data-toggle="tab"><label
+                                                    class="no-margin">投票选项({{$k+1}})</label></a>
                                     </li>
                                 </ul>
                                 <span class="input-group-addon files_del"
@@ -123,33 +114,37 @@
                             </div>
                             <div id="tabItems{{$k+1}}" class="tab-content">
                                 <div id="tabHome{{$k+1}}" class="tab-pane fade in active padding-t-15">
-                                    <div class="form-group">
-                                        <input type="hidden" name="item_id[]" value="{{$item->id}}">
-                                        <label class="control-label col-sm-1">投票选项({{$k+1}}):</label>
-                                        <div class="col-sm-11">
-                                            <input type="text" id="item_title{{$k+1}}" class="form-control "
-                                                   value="{{$item->title}}"
-                                                   name="item_title[]">
+                                    <div class="col-sm-7 pull-left" style="width:65%;padding-left: 0;">
+                                        <div class="form-group">
+                                            <input type="hidden" name="item_id[]" value="{{$item->id}}">
+                                            <div class="col-sm-12">
+                                                <input type="text" id="item_title{{$k+1}}" class="form-control "
+                                                       value="{{$item->title}}"
+                                                       name="item_title[]" placeholder="输入标题">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <textarea name="summaries[]"
+                                                          id="summary{{$k+1}}">{{ $item->summary }}</textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group" data-id="{{$item->id}}">
-                                        <label class="control-label col-sm-1">选项图片地址({{$k+1}}):</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" id="item_url{{$k+1}}" class="form-control pull-left"
-                                                   value="{{$item->url}}"
-                                                   name="item_url[]" style="width: 85%;">
-                                            <button type="button" class="btn btn-success pull-right" data-toggle="modal"
-                                                    data-target="#img_preview" id="this_preview{{$k+1}}"
-                                                    style="width: 14%;">预览
-                                            </button>
+                                    <div class="col-sm-5 pull-right" data-id="{{$item->id}}"
+                                         style="width:35%;padding-right: 0;">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" id="item_url{{$k+1}}" class="form-control pull-left"
+                                                       value="{{$item->url}}"
+                                                       name="item_url[]" placeholder="图片地址">
+                                            </div>
                                         </div>
-
-                                        <label for="item_file" class="control-label col-sm-1">投票选项图片({{$k+1}}):</label>
-                                        <div class=" col-sm-5">
-                                            <input id="items_file{{$k+1}}" name="item_file" type="file" class="file"
-                                                   data-preview-file-type="text"
-                                                   data-upload-url="/admin/files/upload?type=image"
-                                                   data-show-preview="false">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input id="items_file{{$k+1}}" name="item_file" type="file" class="file"
+                                                       data-preview-file-type="text"
+                                                       data-upload-url="/admin/files/upload?type=image">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +156,7 @@
                         var image_items = [];
 
                         if (this_url == null || this_url.length > 0) {
-                            image_items = ['<img height="240" src="' + this_url + '">'];
+                            image_items = ['<img height="240" src="' + this_url + '" class="thumb">'];
                         }
 
                         $('#items_file' + '{{$k+1}}').fileinput({
@@ -170,21 +165,23 @@
                             allowedFileExtensions: ['jpg', 'gif', 'png'],
                             initialPreview: image_items,
                             maxFileSize: 10240,
+                            initialPreviewConfig: [{key: 1}],
+                            deleteUrl: '/admin/files/delete?_token={{csrf_token()}}',
                             browseClass: 'btn btn-success',
                             browseIcon: '<i class=\"glyphicon glyphicon-picture\"></i>',
                             removeClass: "btn btn-danger",
                             removeIcon: '<i class=\"glyphicon glyphicon-trash\"></i>',
                             uploadClass: "btn btn-info",
                             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
-                        });
-
-                        $('#items_file' + '{{$k+1}}').on('fileuploaded', function (event, data) {
+                        }).on('fileuploaded', function (event, data) {
                             $('#item_url' + '{{$k+1}}').val(data.response.data);
+                        }).on('filedeleted', function (event, key) {
+                            $('#item_url' + '{{$k+1}}').val('');
                         });
 
-                        $('#this_preview' + '{{$k+1}}').click(function () {
-                            var url = $('#item_url' + '{{$k+1}}').val();
-                            imgPreview(url);
+                        CKEDITOR.replace('summary{{$k+1}}', {
+                            height: 220,
+                            filebrowserUploadUrl: '{{ url('admin/files/upload') }}?_token={{csrf_token()}}',
                         });
                     </script>
                 @endforeach
@@ -199,6 +196,18 @@
     </button>
 </div>
 
+<style>
+    .kv-file-content .thumb, .kv-file-content .file-preview-image {
+        height: 135px !important;
+    }
+
+    .file-zoom-content .thumb {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
 <script>
     $(function () {
         $('#begin_date').datetimepicker({
@@ -233,15 +242,6 @@
       showLink('{{ $vote->link_type }}', false);
     @endif
 
-    function toastrs(message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-bottom-right',
-        };
-        toastr['warning'](message);
-        return false;
-    }
-
     //上传图片
     var image_url = $('#image_url').val();
     var images = [];
@@ -275,27 +275,23 @@
         var n = i + 1;
         i++;
 
-        var html = '<div class="file1 box box-success"><div class="box-body">' +
-                '<div class="input-group"><ul id="tabs" class="nav nav-tabs">' +
-                '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">基本信息</a></li>' +
-                '</ul>' +
+        var html = '<div class="file1 box box-success">' +
+                '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
+                '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
+                '<label class="no-margin">投票选项(' + n + ')</label></a></li></ul>' +
                 '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
                 '<span class="glyphicon glyphicon-remove"></span></span></div>' +
                 '<div id="tabItems' + n + '" class="tab-content">' +
                 '<div id="tabHome' + n + '" class="tab-pane fade in active padding-t-15">' +
-                '<div class="form-group">' +
-                '<label class="control-label col-sm-1">投票选项(' + n + '):</label>' +
-                '<div class="col-sm-11">' +
-                '<input type="text" id="item_title' + n + '" class="form-control" name="item_title[]">' +
-                '</div></div>' +
-                '<div class="form-group"><label class="control-label col-sm-1">选项图片地址(' + n + '):</label>' +
-                '<div class="col-sm-5">' +
-                '<input type="text" name="item_url[]" value="" class="form-control pull-left"  id="item_url' + n + '"  style="width: 85%;">' +
-                '<button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#img_preview" id="this_preview' + n + '" style="width: 14%;">预览 </button></div>' +
-                '<label for="item_file" class="control-label col-sm-1">上传选项图片(' + n + '):</label>' +
-                '<div class=" col-sm-5">' +
-                '<input id="item_file' + n + '" name="item_file" type="file" class="file " data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image" data-show-preview="false"> ' +
-                '</div></div></div></div></div></div>';
+                '<div class="col-sm-7 pull-left" style="width:65%;padding-left: 0;">' +
+                '<div class="form-group"><div class="col-sm-12">' +
+                '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title[]" placeholder="输入标题"></div></div>' +
+                '<div class="form-group"><div class="col-sm-12"><textarea name="summaries[]" id="summary' + n + '"></textarea></div></div></div> ' +
+                '<div class="col-sm-5 pull-right" style="width:35%;padding-right: 0;"><div class="form-group"><div class="col-sm-12"> ' +
+                '<input type="text" id="item_url' + n + '" class="form-control pull-left" value="" name="item_url[]" placeholder="图片地址"></div></div> ' +
+                '<div class="form-group"><div class="col-sm-12">' +
+                '<input id="item_file' + n + '" name="item_file" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image"></div></div></div></div></div></div></div>'
+
         $(".edit_file1").append(html);
 
         var this_url = $('#item_url' + n).val();
@@ -325,11 +321,10 @@
             $('#item_url' + n).val('');
         });
 
-        $('#this_preview' + n).click(function () {
-            var url = $('#item_url' + n).val();
-            imgPreview(url);
-        });
-
+        CKEDITOR.replace('summary' + n, {
+            height: 220,
+            filebrowserUploadUrl: '{{ url('admin/files/upload') }}?_token={{csrf_token()}}',
+        })
     }
 
     @if(!isset($vote))
@@ -342,7 +337,7 @@
             var files = $(this).fileinput('getFileStack');
 
             if (files.length > 0) {
-                return ret = toastrs('请先上传文件!');
+                return ret = toastrs('warning', '请先上传文件!');
             }
         });
         return ret;
@@ -351,13 +346,9 @@
     $('#tabItems').delegate('.files_del', 'click', function () {
         var cur_num = $(".file1").length;
         if (cur_num < 2) {
-            return toastrs('投票选项最少有一个');
+            return toastrs('warning', '投票选项最少有一个');
         } else {
             $(this).parents('div.file1').remove();
         }
     })
-
-    function imgPreview(url) {
-        $('#contents').html('<img src="' + url + '" />');
-    }
 </script>

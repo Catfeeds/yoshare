@@ -61,7 +61,7 @@ class LikeController extends BaseController
             //增加点赞数
             $model->likes()->create([
                 'site_id' => $model->site_id,
-                'count' => 0,
+                'count' => 1,
             ]);
         }else{
             if ($flag) {

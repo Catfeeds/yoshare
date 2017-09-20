@@ -58,7 +58,6 @@ $api->version('v1', function ($api) {
          * 投票
          */
         $api->get('votes', 'VoteController@lists');
-        $api->get('votes/slides', 'VoteController@slides');
         $api->post('votes/create', 'VoteController@create');
         $api->get('votes/detail', 'VoteController@detail');
 

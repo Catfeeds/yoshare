@@ -16,6 +16,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::get('push/logs', 'PushController@log');
     Route::get('push/logs/table', 'PushController@logTable');
+    Route::get('push/send', 'PushController@send');
 
     /**
      * 短信管理

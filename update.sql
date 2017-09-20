@@ -28,7 +28,7 @@ CREATE TABLE `cms_sms_logs`(
 ALTER TABLE `cms_sms_logs` ADD `state`  TINYINT(1) NOT NULL COMMENT '状态:1成功 2失败' AFTER `message`;
 
 -- -----------
--- 2017-7-5
+-- 2017-9-5
 -- -----------
 DROP TABLE IF EXISTS `cms_comments`;
 CREATE TABLE `cms_comments` (
@@ -499,3 +499,9 @@ INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, 
 (7, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
 (7, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
 (7, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 0, 98, 1, 0, 2, 120, '', 3, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29');
+
+
+-- -----------
+-- 2017-9-20
+-- -----------
+ALTER TABLE `cms_comments` DROP `likes`;

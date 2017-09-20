@@ -14,7 +14,7 @@ class VoteData extends Model
         'comment',
         'person_name',
         'person_mobile',
-        'member_name',
+        'member_id',
         'IP',
     ];
 }

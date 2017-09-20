@@ -2,39 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class VoteItem extends Model
+class VoteItem extends Item
 {
-    protected $fillable = [
-        'vote_id',
-        'title',
-        'image_url',
-        'description',
-        'amount',
-        'percent',
-        'amount',
-        'state',
-        'username',
-    ];
+    protected $table = 'items';
 
-    public static function sum()
-    {
-        $amount= VoteItem::sum('amount');
-        return $amount;
+    public function getCountAttribute(){
+        return $this->integer1;
     }
 
-    public static function getList($vote_id)
-    {
-        $vote_items = VoteItem::where('vote_id', $vote_id)
-            ->orderBy('sort')
-            ->get();
-
-        return $vote_items;
-    }
-
-    public function vote()
-    {
-        return $this->belongsTo(Vote::class);
+    public function setCountAttribute($count){
+        $this->attributes['integer1'] = $count;
     }
 }

@@ -56,7 +56,7 @@ class ClickController extends BaseController
         if (!$click) {
             $model->clicks()->create([
                 'site_id' => $model->site_id,
-                'count' => 0,
+                'count' => 1,
             ]);
         } else {
             $click->increment('count');

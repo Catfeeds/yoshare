@@ -6,7 +6,7 @@ use Auth;
 use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Vote extends Item
+class Vote extends BaseModule
 {
     use SoftDeletes;
 
@@ -31,6 +31,11 @@ class Vote extends Item
         1 => '正常',
     ];
 
+    const MULTIPLES = [
+        0 => '单选',
+        1 => '多选',
+    ];
+
     protected $fillable = [
         'site_id',
         'title',
@@ -52,21 +57,9 @@ class Vote extends Item
         return $this->belongsTo(Site::class);
     }
 
-    public function comments()
+    public function items()
     {
-        return $this->morphMany(Comment::class, 'refer');
-    }
-
-    public function getCommentCountAttribute()
-    {
-        return cache_remember($this->getMorphClass() . "-comment-$this->id", 1, function () {
-            return $this->comments()->where('state', Comment::STATE_PASSED)->count();
-        });
-    }
-
-    public function likes()
-    {
-        return $this->morphOne(Like::class, 'refer');
+        return $this->morphMany(VoteItem::class, 'refer');
     }
 
     public function data()

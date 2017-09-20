@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataSource;
-use App\Models\Item;
 use App\Models\Vote;
+use App\Models\VoteItem;
 use Request;
 use Response;
 
@@ -18,7 +18,7 @@ class VoteItemController extends Controller
     public function update($id)
     {
         $input = Request::all();
-        $item = Item::find($id);
+        $item = VoteItem::find($id);
         $item->count = $input['count'];
 
         if ($item == null) {
@@ -30,7 +30,6 @@ class VoteItemController extends Controller
     public function table($vote_id)
     {
         $vote = Vote::find($vote_id);
-
         $items = $vote->items()->orderBy('id', 'desc')->get();
         $amount = $vote->items->sum('count');
 

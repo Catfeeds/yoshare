@@ -46,17 +46,17 @@ class VoteController extends Controller
         $data['site_id'] = Auth::user()->site_id;
         $vote = Vote::create($data);
 
-        if (array_key_exists('item_title', $data)) {
-            foreach ($data['item_title'] as $k => $item_title) {
-                $data2 = [
-                    'type' => Item::TYPE_IMAGE,
-                    'title' => $item_title,
-                    'url' => $data['item_url'][$k],
-                    'sort' => $k,
-                ];
-                $vote->items()->create($data2);
-            }
+        foreach ($data['item_title'] as $k => $item_title) {
+            $data2 = [
+                'type' => Item::TYPE_IMAGE,
+                'title' => $item_title,
+                'url' => $data['item_url'][$k],
+                'summary' => $data['summaries'][$k],
+                'sort' => $k,
+            ];
+            $vote->items()->create($data2);
         }
+
         return redirect('/admin/votes')->with('flash_success', '新增成功！');
     }
 
@@ -94,19 +94,15 @@ class VoteController extends Controller
 
         $vote->update($data);
 
-        if (array_key_exists('item_id', $data)) {
-            $vote->items()->delete();
-        }
-        if (array_key_exists('item_title', $data)) {
-            foreach ($data['item_title'] as $k => $item_title) {
-                if ($item_title == '' && $data['item_url'][$k] == '') {
-                    continue;
-                }
+        $vote->items()->whereNotIn('id', $data['item_id'])->delete();
 
+        foreach ($data['item_title'] as $k => $item_title) {
+            if (!empty(trim($item_title)) || !empty(trim($data['item_url'][$k]))) {
                 $data2 = [
                     'type' => Item::TYPE_IMAGE,
                     'title' => $item_title,
                     'url' => $data['item_url'][$k],
+                    'summary' => $data['summaries'][$k],
                     'sort' => $k,
                 ];
                 $item = $vote->items()->orderBy('id')->skip($k)->take(1)->first();
@@ -119,6 +115,7 @@ class VoteController extends Controller
                 }
             }
         }
+
         return redirect('/admin/votes')->with('item', $item)->with('flash_success', '编辑成功！');
     }
 
