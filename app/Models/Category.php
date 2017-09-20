@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
-class Category extends BaseModule
+class Category extends Model
 {
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
@@ -58,11 +59,6 @@ class Category extends BaseModule
     public function module()
     {
         return $this->belongsTo(Module::class, 'module_id');
-    }
-
-    public function contents()
-    {
-        return $this->hasMany(Content::class);
     }
 
     public function scopeOwns($query)
