@@ -102,7 +102,7 @@
                 url: '/admin/categories/' + row_id + '/delete',
                 data: {'_token': '{{ csrf_token() }}'},
                 success: function (data) {
-                    window.location.href = '/admin/categories';
+                    window.location.reload();
                 }
             });
         });

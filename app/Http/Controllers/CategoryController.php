@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use App\Models\Content;
 use App\Models\DataSource;
 use App\Models\Module;
 use DB;
@@ -118,16 +117,13 @@ class CategoryController extends Controller
             return;
         }
 
-        $child = Category::where('parent_id', $id)
-            ->first();
-        if (!empty($child)) {
+        if ($category->children()->count() > 0) {
             \Session::flash('flash_warning', '此栏目有子栏目,不允许删除该栏目');
             return;
         }
 
-        $content = Content::where('category_id', $id)
-            ->first();
-        if (!empty($content)) {
+        $query = call_user_func([$category->module->model_class, 'where'], 'category_id', $id);
+        if ($query->count() > 0) {
             \Session::flash('flash_warning', '此栏目已有内容,不允许删除该栏目');
             return;
         }
