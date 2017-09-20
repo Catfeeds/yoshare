@@ -28,7 +28,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::orderBy('id')->get();
+        $permissions = Permission::orderBy('groups')->orderBy('id', 'asc')->get();
         return view('admin.roles.create', compact('permissions'));
     }
 
@@ -73,7 +73,7 @@ class RoleController extends Controller
             return redirect('/admin/roles');
         }
 
-        $permissions = Permission::orderBy('id')->get();
+        $permissions = Permission::orderBy('groups')->orderBy('id', 'asc')->get();
         $perms = PermissionRole::where('role_id', $id)
                 ->pluck('permission_id')
                 ->toArray();
@@ -105,14 +105,18 @@ class RoleController extends Controller
     public function table()
     {
         $roles = Role::all();
+        $names = User::getNames();
 
+        foreach($roles as $role){
+            foreach($role->users as $user){
+                $role->role_users .= $names[$user->pivot->user_id].'　';
+            }
+        }
         $roles->transform(function ($role) {
             return [
                 'id' => $role->id,
                 'name' => $role->name,
-                'description' => $role->description,
-                'created_at' => $role->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $role->updated_at->format('Y-m-d H:i:s'),
+                'role_users' => $role->role_users,
             ];
         });
 

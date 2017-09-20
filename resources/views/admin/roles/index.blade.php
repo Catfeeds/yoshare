@@ -27,24 +27,19 @@
                             <table data-toggle="table"
                                    data-url="roles/table"
                                    data-pagination="true"
-                                   data-search="true"
-                                   data-show-refresh="true"
-                                   data-show-toggle="true"
-                                   data-show-columns="true"
                                    data-toolbar="#toolbar">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-width="30">ID</th>
                                     <th data-field="name" data-width="120">角色名称</th>
-                                    <th data-field="description">描述</th>
-                                    <th data-field="created_at" data-width="120">创建时间</th>
-                                    <th data-field="updated_at" data-width="120">更新时间</th>
-                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents"
+                                    <th data-field="role_users">关联用户</th>
+                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center"
                                         data-width="100">操作
                                     </th>
                                 </tr>
                                 </thead>
                             </table>
+
                         </div>
                     </div>
                 </div>

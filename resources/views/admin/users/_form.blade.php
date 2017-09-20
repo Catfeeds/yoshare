@@ -14,11 +14,9 @@
     <div class="col-sm-5">
         {!! Form::password($password, ['class' => 'form-control']) !!}
     </div>
-    {!! Form::label('role_id', '角色选择:',['class' => 'control-label col-sm-1']) !!}
-    <div class="col-sm-5" style="padding-left: 0">
-        <div class="col-sm-5">
-            {!! Form::select('role_id', $roleName, isset($role_id) ? $role_id : '',['class' => 'form-control col-sm-1']) !!}
-        </div>
+    {!! Form::label('role_id', '选择角色:',['class' => 'control-label col-sm-1']) !!}
+    <div class="col-sm-5">
+        {!! Form::select('role_id', $roleName, isset($role_id) ? $role_id : '',['class' => 'form-control']) !!}
     </div>
 </div>
 

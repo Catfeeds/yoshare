@@ -7,6 +7,17 @@ use Request;
 
 class CategoryController extends BaseController
 {
+    public function transform($category)
+    {
+        $attributes = $category->getAttributes();
+
+        $attributes['name'] = $category->name;
+        $attributes['title'] = $category->title;
+        $attributes['content'] = $category->content;
+
+        return $attributes;
+    }
+
     /**
      * @SWG\Get(
      *   path="/categories/list",
@@ -88,4 +99,37 @@ class CategoryController extends BaseController
             return view('mobile.categories.detail', compact('category'))->__toString();
         });
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/categories/info",
+     *   summary="获取栏目信息",
+     *   tags={"/categories 栏目"},
+     *   @SWG\Parameter(name="id", in="query", required=true, description="栏目ID", type="string"),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="查询成功"
+     *   ),
+     *   @SWG\Response(
+     *     response="404",
+     *     description="没有找到"
+     *   )
+     * )
+     */
+    public function info()
+    {
+        $id = Request::get('id');
+
+        $key = "Category-info-$id";
+
+        return cache_remember($key, 1, function () use ($id) {
+            $category = Category::find($id);
+            if (empty($category)) {
+                return $this->responseFail('此ID不存在');
+            }
+
+            return $this->responseSuccess($this->transform($category));
+        });
+    }
+
 }

@@ -102,6 +102,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('modules/{id}/save', 'ModuleController@save');
     Route::get('modules/{id}/migrate', 'ModuleController@migrate');
     Route::get('modules/{id}/generate', 'ModuleController@generate');
+    Route::post('modules/copy', 'ModuleController@copy');
     Route::resource('modules', 'ModuleController');
 
     /**

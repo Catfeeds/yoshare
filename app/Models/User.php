@@ -79,9 +79,19 @@ class User extends Authenticatable
         return empty($this->site) ? 0 : $this->site->id;
     }
 
+    public static function getNames()
+    {
+        $users = self::all();
+        $names = [];
+        foreach ($users as $user) {
+            $names[$user->id] = $user->name;
+        }
+        return $names;
+    }
+
     public static function getTree($user_id)
     {
-        $categories = Category::where('site_id', Auth::user()->site_id)->orderBy('sort')->get();
+        $categories = Category::owns()->orderBy('sort')->get();
 
         $root = new Node();
         $root->id = 0;

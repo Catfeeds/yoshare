@@ -13,30 +13,29 @@
 </div>
 
 
-<div class="form-group">
-    <label for="role" class="control-label col-sm-2">关联权限</label>
-    <div class="col-sm-10">
-        @if(isset($perms))
-            <div class="checkbox">
-                @foreach($permissions as $permission)
-                    <label>
-                        <input type="checkbox" {{ in_array($permission->id, $perms) ? 'checked' : '' }} name="permission_id[]"
-                               value="{{$permission->id}}">{{$permission->description}}
-                    </label>
-                @endforeach
-            </div>
+<div class="col-sm-10">
+    @if(isset($perms))
+        <div class="checkbox">
+            @foreach($permissions as $key=>$permission)
+                @if($permissions[$key]->groups == $permissions[$key]->name)
+                    <br/>
+                @endif
+                <label>
+                    <input type="checkbox" {{ in_array($permission->id, $perms) ? 'checked' : '' }} name="permission_id[]"
+                           value="{{$permission->id}}">{{$permission->description}}
+                </label>
+            @endforeach
+        </div>
 
-        @else
-            <div class="checkbox">
-                @foreach($permissions as $permission)
-                    <label>
-                        <input type="checkbox" name="permission_id[]" value="{{$permission->id}}">{{$permission->description}}
-                    </label>
-                @endforeach
-            </div>
-        @endif
-    </div>
-
+    @else
+        <div class="checkbox">
+            @foreach($permissions as $key=>$permission)
+                <label>
+                    <input type="checkbox" name="permission_id[]" value="{{$permission->id}}">{{$permission->description}}
+                </label>
+            @endforeach
+        </div>
+    @endif
 </div>
 
 <div class="box-footer">

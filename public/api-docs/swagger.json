@@ -274,6 +274,31 @@
                 }
             }
         },
+        "/categories/info": {
+            "get": {
+                "tags": [
+                    "/categories \u680f\u76ee"
+                ],
+                "summary": "\u83b7\u53d6\u680f\u76ee\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u680f\u76eeID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/clicks/create": {
             "post": {
                 "tags": [

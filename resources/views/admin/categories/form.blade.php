@@ -50,7 +50,11 @@
             <div class="col-sm-3">
                 {!! Form::select('link_type', \App\Models\Category::LINK_TYPES, null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
-            <div class="col-sm-8" id="link"></div>
+            {!! Form::label('type', '类型:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-3">
+                {!! Form::select('type', \App\Models\Category::getTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
+            </div>
+            <div class="col-sm-3" id="link"></div>
         </div>
 
         <div class="form-group">

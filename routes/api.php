@@ -28,6 +28,7 @@ $api->version('v1', function ($api) {
         $api->get('categories/owns', 'CategoryController@owns');
         $api->get('categories/detail', 'CategoryController@detail');
         $api->get('categories/buy', 'CategoryController@buy');
+        $api->get('categories/info', 'CategoryController@info');
 
         /**
          * 评论

@@ -140,13 +140,8 @@ class UserController extends Controller
         }
 
         if (array_key_exists('site_ids', $input)) {
-            $user->sites()->delete();
-
-            foreach ($input['site_ids'] as $site_id) {
-                $user->sites()->create([
-                    'site_id' => $site_id,
-                ]);
-            }
+            $user->sites()->detach();
+            $user->sites()->sync($input['site_ids']);
         }
 
         \Session::flash('flash_success', '修改成功!');
@@ -179,9 +174,15 @@ class UserController extends Controller
 
     public function table()
     {
-        $users = User::owns()->with('roles')->get();
+        $site = Auth::user()->site;
+        $users = $site->users()->with('roles')->get();
 
         $names = Site::getNames();
+        foreach ($users as $user){
+            foreach ($user->sites as $site){
+                $user->site_name .= $names[$site->pivot->site_id].'　';
+            }
+        }
 
         $users->transform(function ($user) use ($names) {
             return [
@@ -189,6 +190,7 @@ class UserController extends Controller
                 'name' => $user->name,
                 'username' => $user->username,
                 'password' => $user->password,
+                'site_name' => $user->site_name,
                 'state_name' => $user->stateName(),
                 'role_name' => $user['relations']['roles']->pluck('name'),
                 'created_at' => $user->created_at->format('Y-m-d H:i:s'),

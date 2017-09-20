@@ -26,6 +26,7 @@ class Category extends BaseModule
 
     protected $fillable = [
         'site_id',
+        'type',
         'code',
         'name',
         'parent_id',
@@ -72,6 +73,14 @@ class Category extends BaseModule
             $category_ids = Auth::user()->categories->pluck('id')->toArray();
             $query->where('site_id', Auth::user()->site_id)->whereIn('id', $category_ids);
         }
+    }
+
+    public static function getTypes()
+    {
+        return [
+            static::CATEGORY_TYPE_COLUMN => '栏目',
+            static::CATEGORY_TYPE_FEATURE => '专题'
+        ];
     }
 
     public function stateName()
