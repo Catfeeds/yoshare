@@ -47,14 +47,13 @@ class VoteController extends Controller
         $vote = Vote::create($data);
 
         foreach ($data['item_title'] as $k => $item_title) {
-            $data2 = [
+            $vote->items()->create([
                 'type' => Item::TYPE_IMAGE,
                 'title' => $item_title,
                 'url' => $data['item_url'][$k],
-                'summary' => $data['summaries'][$k],
+                'summary' => $data['summary'][$k],
                 'sort' => $k,
-            ];
-            $vote->items()->create($data2);
+            ]);
         }
 
         return redirect('/admin/votes')->with('flash_success', '新增成功！');
@@ -98,20 +97,24 @@ class VoteController extends Controller
 
         foreach ($data['item_title'] as $k => $item_title) {
             if (!empty(trim($item_title)) || !empty(trim($data['item_url'][$k]))) {
-                $data2 = [
-                    'type' => Item::TYPE_IMAGE,
-                    'title' => $item_title,
-                    'url' => $data['item_url'][$k],
-                    'summary' => $data['summaries'][$k],
-                    'sort' => $k,
-                ];
-                $item = $vote->items()->orderBy('id')->skip($k)->take(1)->first();
+                $item = $vote->items()->where('id', $data['item_id'][$k])->first();
 
-                //判断存在就修改，不存在就新增
                 if ($item) {
-                    $item->update($data2);
+                    $item->update([
+                        'type' => Item::TYPE_IMAGE,
+                        'title' => $item_title,
+                        'url' => $data['item_url'][$k],
+                        'summary' => $data['summary'][$k],
+                        'sort' => $k,
+                    ]);
                 } else {
-                    $vote->items()->create($data2);
+                    $vote->items()->create([
+                        'type' => Item::TYPE_IMAGE,
+                        'title' => $item_title,
+                        'url' => $data['item_url'][$k],
+                        'summary' => $data['summary'][$k],
+                        'sort' => $k,
+                    ]);
                 }
             }
         }

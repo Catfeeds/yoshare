@@ -125,7 +125,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <textarea name="summaries[]"
+                                                <textarea name="summary[]"
                                                           id="summary{{$k+1}}">{{ $item->summary }}</textarea>
                                             </div>
                                         </div>
@@ -286,7 +286,7 @@
                 '<div class="col-sm-7 pull-left" style="width:65%;padding-left: 0;">' +
                 '<div class="form-group"><div class="col-sm-12">' +
                 '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title[]" placeholder="输入标题"></div></div>' +
-                '<div class="form-group"><div class="col-sm-12"><textarea name="summaries[]" id="summary' + n + '"></textarea></div></div></div> ' +
+                '<div class="form-group"><div class="col-sm-12"><textarea name="summary[]" id="summary' + n + '"></textarea></div></div></div> ' +
                 '<div class="col-sm-5 pull-right" style="width:35%;padding-right: 0;"><div class="form-group"><div class="col-sm-12"> ' +
                 '<input type="text" id="item_url' + n + '" class="form-control pull-left" value="" name="item_url[]" placeholder="图片地址"></div></div> ' +
                 '<div class="form-group"><div class="col-sm-12">' +
