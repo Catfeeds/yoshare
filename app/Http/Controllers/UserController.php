@@ -9,7 +9,7 @@ use App\Models\RoleUser;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\UserLog;
-use App\Models\UserSite;
+use App\Models\SiteUser;
 use Auth;
 use DB;
 use Gate;
@@ -47,7 +47,6 @@ class UserController extends Controller
 
         $input['password'] = bcrypt($input['password']);
         $input['state'] = User::STATE_NORMAL;
-        $input['site_id'] = $input['site_ids'][0];
 
         $user = User::create($input);
 
@@ -63,7 +62,7 @@ class UserController extends Controller
 
         if (array_key_exists('site_ids', $input)) {
             foreach ($input['site_ids'] as $site_id) {
-                UserSite::create([
+                SiteUser::create([
                     'site_id' => $site_id,
                     'user_id' => $id,
                 ]);
