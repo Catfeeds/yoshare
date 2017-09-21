@@ -97,18 +97,17 @@ class VoteController extends Controller
 
         foreach ($data['item_title'] as $k => $item_title) {
             if (!empty(trim($item_title)) || !empty(trim($data['item_url'][$k]))) {
-                $item = $vote->items()->where('id', $data['item_id'][$k])->first();
-
-                if ($item) {
-                    $item->update([
+                if (!isset($data['item_id'][$k])) {
+                    $vote->items()->create([
                         'type' => Item::TYPE_IMAGE,
                         'title' => $item_title,
                         'url' => $data['item_url'][$k],
                         'summary' => $data['summary'][$k],
                         'sort' => $k,
                     ]);
-                } else {
-                    $vote->items()->create([
+                }else{
+                    $item = $vote->items()->where('id', $data['item_id'][$k])->first();
+                    $item->update([
                         'type' => Item::TYPE_IMAGE,
                         'title' => $item_title,
                         'url' => $data['item_url'][$k],
