@@ -6,7 +6,6 @@ use Exception;
 use Request;
 use Response;
 
-
 class __model__ extends BaseModule
 {
     const STATE_DELETED = 0;

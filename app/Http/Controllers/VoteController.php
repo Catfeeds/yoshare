@@ -3,20 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VoteRequest;
-use App\Models\DataSource;
 use App\Models\Item;
 use App\Models\Vote;
 use Auth;
+use Carbon\Carbon;
 use Gate;
-use Request;
-use Response;
-
 
 class VoteController extends Controller
 {
     public function __construct()
     {
-
     }
 
     public function index()
@@ -44,6 +40,7 @@ class VoteController extends Controller
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
+        $data['sort'] = Carbon::now();
         $vote = Vote::create($data);
 
         foreach ($data['item_title'] as $k => $item_title) {
@@ -105,7 +102,7 @@ class VoteController extends Controller
                         'summary' => $data['summary'][$k],
                         'sort' => $k,
                     ]);
-                }else{
+                } else {
                     $item = $vote->items()->where('id', $data['item_id'][$k])->first();
                     $item->update([
                         'type' => Item::TYPE_IMAGE,
@@ -123,39 +120,12 @@ class VoteController extends Controller
 
     public function table()
     {
-        $filters = Request::all();
-        $offset = Request::get('offset') ? Request::get('offset') : 0;
-        $limit = Request::get('limit') ? Request::get('limit') : 20;
+        return Vote::table();
+    }
 
-        $votes = Vote::owns()
-            ->filter($filters)
-            ->orderBy('created_at', 'desc')
-            ->skip($offset)
-            ->limit($limit)
-            ->get();
-
-        $total = Vote::owns()
-            ->filter($filters)
-            ->count();
-
-        $votes->transform(function ($vote) {
-            return [
-                'id' => $vote->id,
-                'title' => $vote->title,
-                'amount' => $vote->amount,
-                'state_name' => $vote->stateName(),
-                'begin_date' => $vote->begin_date,
-                'end_date' => $vote->end_date,
-                'created_at' => $vote->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $vote->updated_at->format('Y-m-d H:i:s'),
-            ];
-        });
-
-        $ds = New DataSource();
-        $ds->rows = $votes;
-        $ds->total = $total;
-
-        return Response::json($ds);
+    public function sort()
+    {
+        return Vote::sort();
     }
 
     public function state()

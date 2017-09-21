@@ -15,28 +15,33 @@
 
         <section class="content">
             <div class="row">
-                <div class="box box-info">
-                    <div class="box-body">
-                        @include('admin.layouts.flash')
-                        @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                        @include('admin.votes.toolbar')
-                        @include('admin.layouts.modal', ['id' => 'modal_count'])
-                        <table id="table" data-toggle="table">
-                            <thead>
-                            <tr class="parent">
-                                <th data-field="state" data-checkbox="true"></th>
-                                <th data-field="id" data-align="center" data-width="30">ID</th>
-                                <th data-field="title" data-formatter="titleFormatter">标题</th>
-                                <th data-field="amount" data-align="center" data-width="30">参与人数</th>
-                                <th data-field="begin_date" data-align="center" data-width="120">投票开始日期</th>
-                                <th data-field="end_date" data-align="center" data-width="120">投票截止日期</th>
-                                <th data-field="state_name" data-align="center" data-width="60" data-formatter="stateFormatter">状态</th>
-                                <th data-field="created_at" data-align="center" data-width="120">发表时间</th>
-                                <th data-field="action" data-align="center" data-width="150" data-formatter="actionFormatter" data-events="actionEvents">管理操作
-                                </th>
-                            </tr>
-                            </thead>
-                        </table>
+                <div class="col-xs-12">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            @include('admin.layouts.flash')
+                            @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
+                            @include('admin.votes.toolbar')
+                            @include('admin.layouts.modal', ['id' => 'modal_count'])
+                            <table id="table" data-toggle="table">
+                                <thead>
+                                <tr class="parent">
+                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="id" data-align="center" data-width="30">ID</th>
+                                    <th data-field="title" data-formatter="titleFormatter">标题</th>
+                                    <th data-field="amount" data-align="center" data-width="30">参与人数</th>
+                                    <th data-field="begin_date" data-align="center" data-width="120">投票开始日期</th>
+                                    <th data-field="end_date" data-align="center" data-width="120">投票截止日期</th>
+                                    <th data-field="state_name" data-align="center" data-width="60"
+                                        data-formatter="stateFormatter">状态
+                                    </th>
+                                    <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
+                                    <th data-field="action" data-align="center" data-width="150"
+                                        data-formatter="actionFormatter" data-events="actionEvents">管理操作
+                                    </th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,6 +52,29 @@
 
 @section('js')
     <script>
+        /* 启动排序 */
+        $('#btn_sort').click(function () {
+            if ($('#btn_sort').hasClass('active')) {
+                $('#btn_sort').removeClass('active');
+                $('#btn_sort').text('排序');
+                $('#table tbody').sortable('disable');
+                $('#table tbody').enableSelection();
+                toastrs('info', '<b>已禁用排序功能</b>')
+            }
+            else {
+                $('#btn_sort').addClass('active');
+                $('#btn_sort').text('排序(已启用)');
+                $('#table tbody').sortable('enable');
+                $('#table tbody').disableSelection();
+                toastrs('info', '<b>已启用排序功能</b>')
+            }
+        });
+
+        /* 表格 */
+        var place_index;
+        var select_index;
+        var original_y;
+        var move_down = 1;
         $('#table').bootstrapTable({
             method: 'get',
             url: '/admin/votes/table',
@@ -57,6 +85,50 @@
             sidePagination: 'server',
             clickToSelect: true,
             striped: true,
+            onLoadSuccess: function (data) {
+                $('#modal_query').modal('hide');
+                $('#table tbody').sortable({
+                    cursor: 'move',
+                    axis: 'y',
+                    revert: true,
+                    start: function (e, ui) {
+                        select_index = ui.item.attr('data-index');
+                        original_y = e.pageY;
+                    },
+                    sort: function (e, ui) {
+                        if (e.pageY > original_y) {
+                            place_index = $(this).find('tr').filter('.ui-sortable-placeholder').prev('tr').attr('data-index');
+                            move_down = 1;
+                        }
+                        else {
+                            place_index = $(this).find('tr').filter('.ui-sortable-placeholder').next('tr').attr('data-index');
+                            move_down = 0;
+                        }
+                    },
+                    update: function (e, ui) {
+                        var select_id = data.rows[select_index].id;
+                        var place_id = data.rows[place_index].id;
+
+                        if (select_id == place_id) {
+                            return;
+                        }
+
+                        $.ajax({
+                            url: '/admin/votes/sort',
+                            type: 'get',
+                            async: true,
+                            data: {select_id: select_id, place_id: place_id, move_down: move_down},
+                            success: function (data) {
+                                if (data.status_code != 200) {
+                                    $('#table tbody').sortable('cancel');
+                                    $('#table').bootstrapTable('refresh');
+                                }
+                            },
+                        });
+                    }
+                });
+                $('#table tbody').sortable('disable');
+            },
             queryParams: function (params) {
                 params.state = $('#state').val();
                 params._token = '{{ csrf_token() }}';
@@ -81,8 +153,6 @@
                 '<a class="count" href="javascript:void(0)"><button class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal_count">统计</button></a>',
                 '<span> </span>',
                 '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' data-toggle="modal" data-target="#modal">删除</button></a>',
-
-
             ].join('');
         }
 
@@ -97,7 +167,8 @@
                 type: 'POST',
                 data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
                 success: function (data) {
-                    window.location.href = '/admin/votes';
+                    $('#modal').modal('hide');
+                    $('#table').bootstrapTable('refresh');
                 }
             });
         });
@@ -135,10 +206,15 @@
         function stateFormatter(value, row, index) {
             var style = 'label-primary';
             switch (row.state_name) {
-                case '正常':
+                case '未发布':
+                    style = 'label-primary';
+                    break;
+                case '已发布':
                     style = 'label-success';
                     break;
-
+                case '已撤回':
+                    style = 'label-warning';
+                    break;
                 case '已删除':
                     style = 'label-danger';
                     break;

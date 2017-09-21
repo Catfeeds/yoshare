@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Auth;
+use Exception;
 use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Response;
+use Request;
 
 class Vote extends BaseModule
 {
@@ -12,6 +15,8 @@ class Vote extends BaseModule
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
+    const STATE_CANCELED = 2;
+    const STATE_PUBLISHED = 9;
 
     const MULTIPLE_FALSE = 0;
     const MULTIPLE_TRUE = 1;
@@ -22,13 +27,17 @@ class Vote extends BaseModule
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
 
-    const STATE_PERMISSIONS = [
-        0 => '@vote-delete',
-    ];
-
     const STATES = [
         0 => '已删除',
-        1 => '正常',
+        1 => '未发布',
+        2 => '已撤回',
+        9 => '已发布',
+    ];
+
+    const STATE_PERMISSIONS = [
+        0 => '@vote-delete',
+        2 => '@article-cancel',
+        9 => '@article-publish',
     ];
 
     const MULTIPLES = [
@@ -47,15 +56,14 @@ class Vote extends BaseModule
         'begin_date',
         'end_date',
         'amount',
+        'sort',
         'state',
         'member_id',
         'user_id',
+        'published_at',
     ];
 
-    public function site()
-    {
-        return $this->belongsTo(Site::class);
-    }
+    protected $dates = ['published_at'];
 
     public function items()
     {
@@ -67,22 +75,12 @@ class Vote extends BaseModule
         return $this->hasMany(VoteData::class);
     }
 
-    public function stateName()
-    {
-        return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
-    }
-
     public static function getLinkTypes()
     {
         return [
             static::LINK_TYPE_NONE => '无',
             static::LINK_TYPE_WEB => '网址',
         ];
-    }
-
-    public function scopeOwns($query)
-    {
-        $query->where('site_id', Auth::user()->site_id);
     }
 
     /**
@@ -107,29 +105,87 @@ class Vote extends BaseModule
         }
     }
 
-    public static function state($input)
+    public static function table()
     {
-        $ids = $input['ids'];
-        $state = $input['state'];
+        $filters = Request::all();
+        $offset = Request::get('offset') ? Request::get('offset') : 0;
+        $limit = Request::get('limit') ? Request::get('limit') : 20;
 
-        //判断是否有操作权限
-        $permission = array_key_exists($state, static::STATE_PERMISSIONS) ? static::STATE_PERMISSIONS[$state] : '';
-        if (!empty($permission) && Gate::denies($permission)) {
-            return;
-        }
-
-        $items = static::withTrashed()
-            ->whereIn('id', $ids)
+        $votes = static::owns()
+            ->filter($filters)
+            ->orderBy('sort', 'desc')
+            ->skip($offset)
+            ->limit($limit)
             ->get();
-        foreach ($items as $item) {
-            $item->state = $state;
-            $item->save();
-            if ($state == static::STATE_DELETED) {
-                $item->delete();
-            } else if ($item->trashed()) {
-                $item->restore();
+
+        $total = static::owns()
+            ->filter($filters)
+            ->count();
+
+        $votes->transform(function ($vote) {
+            $attributes = $vote->getAttributes();
+            foreach ($vote->getDates() as $date) {
+                $attributes[$date] = empty($vote->$date) ? '' : $vote->$date->toDateTimeString();
             }
-        }
+            $attributes['state_name'] = $vote->stateName();
+            return $attributes;
+        });
+
+        $ds = New DataSource();
+        $ds->rows = $votes;
+        $ds->total = $total;
+
+        return Response::json($ds);
     }
 
+    /**
+     * 排序
+     */
+    public static function sort()
+    {
+        $select_id = request('select_id');
+        $place_id = request('place_id');
+        $move_down = request('move_down');
+
+        $select = self::find($select_id);
+        $place = self::find($place_id);
+
+        if (empty($select) || empty($place)) {
+            return Response::json([
+                'status_code' => 404,
+                'message' => 'ID不存在',
+            ]);
+        }
+
+        try {
+            if ($move_down) {
+                //下移
+                $select->sort = $place->sort - 1;
+                //减小最近100条记录的排序值
+                self::where('sort', '<', $place->sort)
+                    ->orderBy('sort', 'desc')
+                    ->limit(100)
+                    ->decrement('sort');
+            } else {
+                //上移
+                $select->sort = $place->sort + 1;
+                //增大最近100条记录的排序值
+                self::where('sort', '>', $place->sort)
+                    ->orderBy('sort', 'asc')
+                    ->limit(100)
+                    ->increment('sort');
+            }
+        } catch (Exception $e) {
+            return Response::json([
+                'status_code' => 500,
+                'message' => $e->getMessage(),
+            ]);
+        }
+        $select->save();
+
+        return Response::json([
+            'status_code' => 200,
+            'message' => 'success',
+        ]);
+    }
 }

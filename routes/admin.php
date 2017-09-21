@@ -174,6 +174,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      */
     Route::get('votes/items/table/{vote_id}', 'VoteItemController@table');
     Route::resource('votes/items', 'VoteItemController');
+    Route::get('votes/sort', 'VoteController@sort');
     Route::get('votes/table', 'VoteController@table');
     Route::get('votes/statistic/{vote_id}', 'VoteController@statistic');
     Route::post('votes/state', 'VoteController@state');

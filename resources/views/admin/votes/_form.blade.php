@@ -17,15 +17,19 @@
                 {!! Form::text('title', null, ['class' => 'form-control']) !!}
             </div>
         </div>
-
         <div class="form-group">
+            <label class="col-sm-1 control-label">投票类型</label>
+            <div class="col-sm-5">
+                <div class="pull-left col-sm-3 no-padding">
+                    {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-1">
                 {!! Form::select('link_type', \App\Models\Vote::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
             <div class="col-sm-4" id="link"></div>
         </div>
-
         <div class="form-group">
             {!! Form::label('begin_date', '开始日期:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
@@ -42,14 +46,12 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             {!! Form::label('image_url', '图片地址:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-11">
                 {!! Form::text('image_url', null, ['class' => 'form-control']) !!}
             </div>
         </div>
-
         <div class="form-group">
             <label for="image_file" class="control-label col-sm-1">上传图片:</label>
             <div class=" col-sm-11">
@@ -69,13 +71,7 @@
 
     <div id="tabItems" class="tab-pane fade padding-t-15">
         <div class="form-group">
-            <label class="col-sm-1 control-label">投票类型</label>
-            <div class="col-sm-9">
-                <div class="pull-left col-sm-2 no-padding">
-                    {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
-                </div>
-            </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2 pull-right">
                 <button type='button' class="btn btn-success btn-flat pull-right" onclick="appendFile()">投票选项 ＋
                 </button>
             </div>
@@ -98,7 +94,7 @@
                             </div>
                             <div id="tabItems{{$k+1}}" class="tab-content">
                                 <div id="tabHome{{$k+1}}" class="tab-pane fade in active padding-t-15">
-                                    <div class="col-sm-7 pull-left" style="width:65%;padding-left: 0;">
+                                    <div class="col-sm-6 pull-left" style="padding-left: 0;">
                                         <div class="form-group">
                                             <input type="hidden" name="item_id[]" value="{{$item->id}}">
                                             <div class="col-sm-12">
@@ -109,13 +105,15 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <textarea name="summary[]"
-                                                          id="summary{{$k+1}}">{{ $item->summary }}</textarea>
+                                                <textarea name="summary[]" class="col-sm-12 form-control" rows="13"
+                                                          placeholder="输入描述"
+                                                          id="summary{{$k+1}}"
+                                                          style="min-height: 284px;">{{ $item->summary }}</textarea>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 pull-right" data-id="{{$item->id}}"
-                                         style="width:35%;padding-right: 0;">
+                                    <div class="col-sm-6 pull-right" data-id="{{$item->id}}"
+                                         style="padding-right: 0;">
                                         <div class="form-group">
                                             <div class="col-sm-12">
                                                 <input type="text" id="item_url{{$k+1}}" class="form-control pull-left"
@@ -162,11 +160,6 @@
                         }).on('filedeleted', function (event, key) {
                             $('#item_url' + '{{$k+1}}').val('');
                         });
-
-                        CKEDITOR.replace('summary{{$k+1}}', {
-                            height: 220,
-                            filebrowserUploadUrl: '{{ url('admin/files/upload') }}?_token={{csrf_token()}}',
-                        });
                     </script>
                 @endforeach
             @endif
@@ -180,18 +173,6 @@
     </button>
 </div>
 
-<style>
-    .kv-file-content .thumb, .kv-file-content .file-preview-image {
-        height: 135px !important;
-    }
-
-    .file-zoom-content .thumb {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 100%;
-    }
-</style>
 <script>
     $(function () {
         $('#begin_date').datetimepicker({
@@ -223,10 +204,9 @@
     }
 
     @if(isset($vote))
-      showLink('{{ $vote->link_type }}', false);
+        showLink('{{ $vote->link_type }}', false);
     @endif
 
-    //上传图片
     var image_url = $('#image_url').val();
     var images = [];
 
@@ -253,7 +233,6 @@
         $('#image_url').val('');
     });
 
-    //增加文件
     var i = $(".file1").length;
     function appendFile() {
         var n = i + 1;
@@ -267,11 +246,12 @@
                 '<span class="glyphicon glyphicon-remove"></span></span></div>' +
                 '<div id="tabItems' + n + '" class="tab-content">' +
                 '<div id="tabHome' + n + '" class="tab-pane fade in active padding-t-15">' +
-                '<div class="col-sm-7 pull-left" style="width:65%;padding-left: 0;">' +
+                '<div class="col-sm-6 pull-left" style="padding-left: 0;">' +
                 '<div class="form-group"><div class="col-sm-12">' +
                 '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title[]" placeholder="输入标题"></div></div>' +
-                '<div class="form-group"><div class="col-sm-12"><textarea name="summary[]" id="summary' + n + '"></textarea></div></div></div> ' +
-                '<div class="col-sm-5 pull-right" style="width:35%;padding-right: 0;"><div class="form-group"><div class="col-sm-12"> ' +
+                '<div class="form-group"><div class="col-sm-12">' +
+                '<textarea name="summary[]" class="col-sm-12 form-control" rows="13" placeholder="输入描述" id="summary' + n + '" style="min-height: 284px;"></textarea></div></div></div> ' +
+                '<div class="col-sm-6 pull-right" style="padding-right: 0;"><div class="form-group"><div class="col-sm-12"> ' +
                 '<input type="text" id="item_url' + n + '" class="form-control pull-left" value="" name="item_url[]" placeholder="图片地址"></div></div> ' +
                 '<div class="form-group"><div class="col-sm-12">' +
                 '<input id="item_file' + n + '" name="item_file" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image"></div></div></div></div></div></div></div>'
@@ -304,11 +284,6 @@
         }).on('filedeleted', function (event, key) {
             $('#item_url' + n).val('');
         });
-
-        CKEDITOR.replace('summary' + n, {
-            height: 220,
-            filebrowserUploadUrl: '{{ url('admin/files/upload') }}?_token={{csrf_token()}}',
-        })
     }
 
     @if(!isset($vote))

@@ -14,7 +14,6 @@
         </section>
 
         <section class="content">
-            <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box box-info">
@@ -26,12 +25,11 @@
                                 @include('admin.votes._form')
 
                                 {!! Form::close() !!}
+
                             </div>
                         </div>
                     </div>
                 </div>
-
-            </section>
         </section>
 
 

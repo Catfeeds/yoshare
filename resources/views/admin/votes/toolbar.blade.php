@@ -1,18 +1,20 @@
 <div class="cb-toolbar">操作:</div>
 <div class="btn-group margin-bottom">
-    <input type="hidden" name="state" id="state" value="" />
-    <button class="btn btn-success btn-xs margin-r-5" id="create" onclick="create()">新增</button>
-    <button class="btn btn-danger btn-xs margin-r-5" id="delete"
-            value="{{ \App\Models\Vote::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal"
-            data-target="#modal">删除</button>
+    <input type="hidden" name="state" id="state" value=""/>
+    <button class="btn btn-primary btn-xs margin-r-5" id="create" onclick="create()">新增</button>
+    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \App\Models\Vote::STATE_PUBLISHED }}">发布</button>
+    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \App\Models\Vote::STATE_CANCELED }}">撤回</button>
+    <button class="btn btn-danger btn-xs margin-r-5" id="delete" value="{{ \App\Models\Vote::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal" data-target="#modal">删除</button>
+    <button class="btn btn-default btn-xs margin-r-5" id="btn_sort">排序</button>
 </div>
 <div class="btn-group margin-bottom pull-right">
-    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" id="" value="">全部</button>
-    <button type="button" class="btn btn-primary btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Vote::STATE_NORMAL }}">正常</button>
-    <button type="button" class="btn btn-danger btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Vote::STATE_DELETED }}">已删除</button>
+    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \App\Models\Article::STATE_NORMAL }}">未发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\Article::STATE_PUBLISHED }}">已发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \App\Models\Article::STATE_CANCELED }}">已撤回</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\Article::STATE_DELETED }}">已删除</button>
 </div>
+
 <script>
     /* 新增 */
     function create() {
@@ -38,7 +40,8 @@
             type: 'POST',
             data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
             success: function (data) {
-                window.location.reload();
+                $('#modal').modal('hide');
+                $('#table').bootstrapTable('refresh');
             }
         });
     });
@@ -56,7 +59,7 @@
     }
 
     /* 操作 */
-    $('.action').click(function () {
+    $('.state').click(function () {
         var state = $(this).val();
         var rows = $('#table').bootstrapTable('getSelections');
 
@@ -66,11 +69,11 @@
         }
         if (ids.length > 0) {
             $.ajax({
-                url: '/admin/votes/state/' + state,
+                url: '/admin/votes/state',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
                 success: function () {
-                    window.location.reload();
+                    $('#table').bootstrapTable('refresh');
                 }
             });
         }
@@ -78,13 +81,14 @@
 
     /* 筛选 */
     $('.filter').click(function () {
-        $('#state').val($(this).val());
+        var value = $(this).val();
+        $('#state').val(value);
         $('#table').bootstrapTable('selectPage', 1);
-        $('#table').bootstrapTable('refresh', {
-            query: {
-                state: $(this).val(),
-                _token: '{{ csrf_token() }}'
-            }
-        });
+
+        //改变按钮样式
+        $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.filter').addClass('btn-default');
+        $(this).removeClass('btn-default');
+        $(this).addClass($(this).data('active'));
     });
 </script>
