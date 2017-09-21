@@ -234,6 +234,6 @@ class FeatureController extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id, false));
+        return Response::json(Feature::tree('', 0, $this->module->id, true));
     }
 }

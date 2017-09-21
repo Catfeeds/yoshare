@@ -5,7 +5,7 @@ namespace App\Models;
 use Exception;
 use Request;
 use Response;
-
+use Carbon\Carbon;
 
 class Feature extends BaseModule
 {
@@ -29,11 +29,11 @@ class Feature extends BaseModule
 
     protected $table = 'features';
 
-    protected $fillable = ['site_id','category_id','type','title','subtitle','link_type','link','author','origin','keywords','summary','image_url','video_url','images','videos','content','top','member_id','user_id','sort','state','published_at'];
+    protected $fillable = ['site_id', 'category_id', 'type', 'title', 'subtitle', 'link_type', 'link', 'author', 'origin', 'keywords', 'summary', 'image_url', 'video_url', 'images', 'videos', 'content', 'top', 'member_id', 'user_id', 'sort', 'state', 'published_at'];
 
     protected $dates = ['published_at'];
 
-    protected $entities = ['member_id','user_id'];
+    protected $entities = ['member_id', 'user_id'];
 
     public static function stores($input)
     {
@@ -142,5 +142,62 @@ class Feature extends BaseModule
             'status_code' => 200,
             'message' => 'success',
         ]);
+    }
+
+    public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true)
+    {
+        $categories = Category::owns()
+            ->where(function ($query) use ($state) {
+                if (!empty($state)) {
+                    $query->where('state', $state);
+                }
+            })
+            ->where(function ($query) use ($module_id) {
+                if (!empty($module_id)) {
+                    $query->where('module_id', $module_id);
+                }
+            })
+            ->orderBy('sort')
+            ->get();
+
+        $parents = Category::where('module_id', $module_id)->get();
+
+        foreach ($parents as $parent) {
+            if (empty($parent)) {
+                $root = new Node();
+                $root->id = $parent->id;
+                $root->text = '所有栏目';
+            } else {
+                $root = new Node();
+                $root->id = $parent->id;
+
+                $root->text = date('Ym', strtotime($parent->created_at));
+            }
+            static::getNodes($root, $categories);
+            $arr[] = $root;
+        }
+
+        if ($show_parent) {
+            return $arr;
+        } else {
+            return $root->nodes;
+        }
+
+    }
+
+    public static function getNodes($parent, $categories)
+    {
+        foreach ($categories as $category) {
+            $time = date('Ym', strtotime($category->created_at));
+
+            if ($time == $parent->text) {
+                $node = new Node();
+                $node->id = $category->id;
+                $node->text = $category->name;
+
+                $parent->nodes[] = $node;
+                static::getNodes($node, $categories);
+            }
+        }
     }
 }
