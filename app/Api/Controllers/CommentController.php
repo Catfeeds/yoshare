@@ -164,7 +164,7 @@ class CommentController extends BaseController
         ]);
 
         //移除评论数缓存
-        Cache::forget($model->getMorphClass() . "-comment-$model->id");
+        Cache::forget($model->getTable() . "-comment-$model->id");
 
         return $this->responseSuccess();
     }

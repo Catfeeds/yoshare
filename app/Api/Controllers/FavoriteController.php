@@ -161,7 +161,7 @@ class FavoriteController extends BaseController
             ]);
 
             //移除收藏数缓存
-            Cache::forget(addslashes($model->getMorphClass()) . "-favorite-$model->id");
+            Cache::forget($model->getTable() . "-favorite-$model->id");
         }
 
         return $this->responseSuccess();
@@ -267,7 +267,7 @@ class FavoriteController extends BaseController
             $favorite->delete();
 
             //移除收藏数缓存
-            Cache::forget(addslashes($model->getMorphClass()) . "-favorite-$model->id");
+            Cache::forget($model->getTable() . "-favorite-$model->id");
         }
 
         return $this->responseSuccess();
