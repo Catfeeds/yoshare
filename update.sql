@@ -505,3 +505,63 @@ INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, 
 -- 2017-9-20
 -- -----------
 ALTER TABLE `cms_comments` DROP `likes`;
+-- -----------
+-- 2017-9-21
+-- -----------
+CREATE TABLE `cms_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(11) NOT NULL COMMENT '站点ID',
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `multiple` int(11) NOT NULL COMMENT '类型(1:单选,2:多选)',
+  `image_url` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '缩略图',
+  `link_type` int(11) NOT NULL COMMENT '外链类型',
+  `link` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '外链',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',
+  `begin_date` timestamp NULL DEFAULT NULL COMMENT '投票开始日期',
+  `end_date` timestamp NULL DEFAULT NULL COMMENT '投票截止日期',
+  `amount` int(11) NOT NULL COMMENT '参与人数',
+  `member_id` int(11) NOT NULL COMMENT '会员ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `sort` int(11) NOT NULL COMMENT '序号',
+  `state` int(11) NOT NULL COMMENT '状态',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `cms_vote_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vote_id` int(10) unsigned NOT NULL COMMENT '投票ID',
+  `vote_item_ids` text COLLATE utf8_unicode_ci NOT NULL COMMENT '选项IDS',
+  `person_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '姓名',
+  `person_mobile` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '手机号',
+  `member_id` int(10) NOT NULL COMMENT '会员名',
+  `ip` char(15) COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vote_id` (`vote_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `cms_modules`(`name`,`title`,`table_name`,`groups`,`is_lock`,`icon`,`state`,`created_at`,`updated_at`) VALUES ('Vote', '投票', 'votes', '基本信息,正文,图片集', '1', 'fa-tasks', '1', '2017-09-13 15:32:10', '2017-09-13 15:33:17');
+SET @module_id = @@IDENTITY;
+INSERT INTO `cms_module_fields`(`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`) VALUES
+(@module_id, 'id', 'ID', 'ID', '3', '', '0', '0', '0', '0', '1', '0', '1', '0', '1', '30', '', '1', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'site_id', '站点ID', '站点', '3', '', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'member_id', '会员ID', '会员', '7', '', '0', '0', '0', '0', '1', '91', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'user_id', '用户ID', '用户', '7', '', '0', '0', '0', '0', '1', '92', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'sort', '序号', '序号', '3', '', '0', '0', '0', '0', '1', '93', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'state', '状态', '状态', '3', '', '0', '0', '0', '0', '1', '94', '1', '0', '2', '45', 'stateFormatter', '9', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'created_at', '创建时间', '创建时间', '5', '', '0', '0', '0', '0', '1', '95', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'updated_at', '修改时间', '修改时间', '5', '', '0', '0', '0', '0', '1', '96', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-13 15:32:10', '2017-09-13 15:32:10'),
+(@module_id, 'end_date', '投票截止日期', '投票截止日期', '5', '', '1', '0', '0', '0', '0', '9', '1', '0', '2', '120', '', '0', '1', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-18 15:58:36', '2017-09-18 15:58:36'),
+(@module_id, 'title', '标题', '标题', '1', '', '1', '0', '0', '0', '0', '2', '1', '0', '1', '300', '', '0', '0', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 14:55:15', '2017-09-18 14:55:15'),
+(@module_id, 'multiple', '类型(0:单选,1:多选)', '类型', '3', '1', '0', '0', '0', '0', '0', '3', '0', '0', '1', '0', '', '0', '0', '0', '3', '单选,多选', '1', '11', '基本信息', '0', '2017-09-18 15:10:48', '2017-09-19 11:01:08'),
+(@module_id, 'image_url', '缩略图', '缩略图', '8', '', '0', '0', '0', '0', '0', '6', '0', '0', '1', '0', '', '0', '1', '0', '8', '', '1', '11', '基本信息', '0', '2017-09-18 15:23:11', '2017-09-18 15:23:11'),
+(@module_id, 'link', '外链', '外链', '1', '', '0', '0', '0', '0', '0', '5', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 15:33:00', '2017-09-18 15:33:00'),
+(@module_id, 'content', '正文', '正文', '6', '', '0', '0', '0', '0', '0', '7', '0', '0', '1', '0', '', '0', '1', '0', '6', '', '40', '11', '正文', '0', '2017-09-18 15:50:32', '2017-09-18 15:50:32'),
+(@module_id, 'begin_date', '投票开始日期', '投票开始日期', '5', '', '1', '0', '0', '0', '0', '8', '1', '0', '2', '120', '', '0', '1', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-18 15:55:42', '2017-09-18 15:58:45'),
+(@module_id, 'amount', '参与人数', '参与人数', '3', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 16:04:52', '2017-09-18 16:04:52'),
+(@module_id, 'link_type', '外链类型', '外链类型', '3', '', '0', '0', '0', '0', '0', '4', '0', '0', '1', '0', '', '0', '1', '0', '3', '', '1', '11', '基本信息', '0', '2017-09-19 11:53:13', '2017-09-19 11:53:39'),
+(@module_id, 'deleted_at', '删除时间', '删除时间', '5', '', '0', '0', '0', '0', '0', '97', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-19 14:10:11', '2017-09-19 14:10:26');
