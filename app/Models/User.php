@@ -14,20 +14,10 @@ class User extends Authenticatable
     const STATE_CANCEL = 0;
     const STATE_NORMAL = 1;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'username', 'password', 'state', 'site_id'
+        'name', 'username', 'password', 'state'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];

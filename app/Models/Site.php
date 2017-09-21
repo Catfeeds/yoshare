@@ -174,16 +174,6 @@ class Site extends Model
         return true;
     }
 
-    public static function getNames()
-    {
-        $sites = Site::all();
-        $names = [];
-        foreach ($sites as $site) {
-            $names[$site->id] = $site->title;
-        }
-        return $names;
-    }
-
     public static function getThemes()
     {
         $theme = Theme::all();

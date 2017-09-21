@@ -16,31 +16,22 @@
     </div>
     {!! Form::label('role_id', '选择角色:',['class' => 'control-label col-sm-1']) !!}
     <div class="col-sm-5">
-        {!! Form::select('role_id', $roleName, isset($role_id) ? $role_id : '',['class' => 'form-control']) !!}
+        {!! Form::select('role_id', $roles, isset($user) ? $user->roles()->first()->id : '',['class' => 'form-control']) !!}
     </div>
 </div>
 
 <div class="form-group">
     <label for="role" class="control-label col-sm-1">选择站点</label>
     <div class="col-sm-5">
-        @if(isset($userSites))
-            <div class="checkbox">
-                @foreach($sites as $site)
-                    <label>
-                        <input type="checkbox" {{ in_array($site->id, $userSites) ? 'checked' : '' }} name="site_ids[]"
-                               value="{{$site->id}}"> {{$site->title}}
-                    </label>
-                @endforeach
-            </div>
-        @else
-            <div class="checkbox">
-                @foreach($sites as $site)
-                    <label>
-                        <input type="checkbox" name="site_ids[]" value="{{$site->id}}"> {{$site->title}}
-                    </label>
-                @endforeach
-            </div>
-        @endif
+        <div class="checkbox">
+            @foreach($sites as $site)
+                <label>
+                    <input type="checkbox"
+                           {{ isset($user) ? ($user->sites()->where('id', $site->id)->exists() ? 'checked' : '') : '' }} name="site_ids[]"
+                           value="{{$site->id}}"> {{$site->title}}
+                </label>
+            @endforeach
+        </div>
     </div>
 </div>
 

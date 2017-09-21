@@ -54,19 +54,12 @@
     </div>
     <script>
         function actionFormatter(value, row, index) {
-            var disabled_del = '';
-            switch (row.state_name) {
-                case '已注销':
-                    disabled_del = 'disabled="disabled"';
-                    break;
-            }
-
             return [
                 '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',
                 '<span> </span>',
                 '<a class="category" href="javascript:void(0)"><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal_category">栏目</button></a>',
                 '<span> </span>',
-                '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' data-toggle="modal" data-target="#modal">注销</button></a>',
+                '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + (row.state_name == '已注销' ? 'disabled="disabled"' : '') + ' data-toggle="modal" data-target="#modal">注销</button></a>',
             ].join('');
         }
 

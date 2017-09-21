@@ -79,5 +79,6 @@
         url = url.replace(/\b\/create\?[\s\S]*\b/, ''); // articles/create?category_id=1
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li').addClass('active');  //二级链接高亮
         $('ul.treeview-menu>li').find('a[href="' + url + '"]').closest('li.treeview').addClass('active');  //一级链接高亮
+        $('ul.treeview-menu>li').find('a[href="' + url + '"]').parent().addClass('active'); //单独一级高亮
     });
 </script>

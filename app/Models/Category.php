@@ -71,14 +71,6 @@ class Category extends Model
         }
     }
 
-    public static function getTypes()
-    {
-        return [
-            static::CATEGORY_TYPE_COLUMN => '栏目',
-            static::CATEGORY_TYPE_FEATURE => '专题'
-        ];
-    }
-
     public function stateName()
     {
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';

@@ -9,7 +9,7 @@ use App\Models\RoleUser;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\UserLog;
-use App\Models\SiteUser;
+use App\Models\UserSite;
 use Auth;
 use DB;
 use Gate;
@@ -33,12 +33,10 @@ class UserController extends Controller
 
     public function create()
     {
+        $roles = User::pluck('name', 'id')->toArray();
         $sites = Site::all();
-        $sitesName = Site::getNames();
 
-        $roleName = Role::getNames();
-
-        return view('admin.users.create', compact('sites', 'roleName', 'sitesName'));
+        return view('admin.users.create', compact('sites', 'roles'));
     }
 
     public function store(UserRequest $request)
@@ -48,28 +46,23 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
         $input['state'] = User::STATE_NORMAL;
 
-        $user = User::create($input);
+        DB::beginTransaction();
+        try {
+            $user = User::create($input);
 
-        //获取user表的id
-        $id = $user->id;
+            //关联角色
+            $user->roles()->sync([$input['role_id']]);
 
-        if (array_key_exists('role_id', $input)) {
-            RoleUser::create([
-                'role_id' => $input['role_id'],
-                'user_id' => $id,
-            ]);
+            //关联站点
+            $user->sites()->sync($input['site_ids']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        } finally {
+            DB::commit();
         }
 
-        if (array_key_exists('site_ids', $input)) {
-            foreach ($input['site_ids'] as $site_id) {
-                SiteUser::create([
-                    'site_id' => $site_id,
-                    'user_id' => $id,
-                ]);
-            }
-        }
         \Session::flash('flash_success', '添加成功');
-
         return redirect('/admin/users');
     }
 
@@ -95,20 +88,10 @@ class UserController extends Controller
             return redirect('/admin/users');
         }
 
-        $roleName = Role::getNames();
-        $role = RoleUser::where('user_id', $id)
-            ->pluck('role_id');
-        $role_id = $role[0];
-
-        $sitesName = Site::getNames();
+        $roles = User::pluck('name', 'id')->toArray();
         $sites = Site::all();
 
-
-        $userSites = $user->sites()
-            ->pluck('site_id')
-            ->toArray();
-
-        return view('admin.users.edit', compact('user', 'sites', 'role_id', 'roleName', 'userSites', 'sitesName'));
+        return view('admin.users.edit', compact('user', 'sites', 'roles'));
     }
 
     public function update($id, Request $request)
@@ -126,21 +109,20 @@ class UserController extends Controller
             $input['password'] = bcrypt($input['new_password']);
         }
 
-        $user->update($input);
+        DB::beginTransaction();
+        try {
+            $user->update($input);
 
-        if (array_key_exists('role_id', $input)) {
-            DB::table('role_user')->where('user_id', $id)->delete();
+            //关联角色
+            $user->roles()->sync([$input['role_id']]);
 
-            $data = [
-                'role_id' => $input['role_id'],
-                'user_id' => $id,
-            ];
-            RoleUser::create($data);
-        }
-
-        if (array_key_exists('site_ids', $input)) {
-            $user->sites()->detach();
+            //关联站点
             $user->sites()->sync($input['site_ids']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        } finally {
+            DB::commit();
         }
 
         \Session::flash('flash_success', '修改成功!');
@@ -174,24 +156,17 @@ class UserController extends Controller
     public function table()
     {
         $site = Auth::user()->site;
-        $users = $site->users()->with('roles')->get();
+        $users = $site->users()->with('roles', 'sites')->get();
 
-        $names = Site::getNames();
-        foreach ($users as $user){
-            foreach ($user->sites as $site){
-                $user->site_name .= $names[$site->pivot->site_id].'　';
-            }
-        }
-
-        $users->transform(function ($user) use ($names) {
+        $users->transform(function ($user) {
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
                 'password' => $user->password,
-                'site_name' => $user->site_name,
+                'site_name' => implode(', ', $user->sites()->pluck('title')->toArray()),
                 'state_name' => $user->stateName(),
-                'role_name' => $user['relations']['roles']->pluck('name'),
+                'role_name' => $user->roles()->first()->name,
                 'created_at' => $user->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
             ];

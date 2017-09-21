@@ -22,14 +22,4 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class);
     }
-
-    public static function getNames()
-    {
-        $roles = Role::all();
-        $names = [];
-        foreach ($roles as $role) {
-            $names[$role->id] = $role->name;
-        }
-        return $names;
-    }
 }
