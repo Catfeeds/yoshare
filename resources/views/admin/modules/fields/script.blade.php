@@ -1,12 +1,4 @@
 <script>
-    function booleanFormatter(value, row, index) {
-        if (value == 1) {
-            return '<i class="fa fa-check"></i>';
-        } else {
-            return '';
-        }
-    }
-
     function actionFormatter(value, row, index) {
         return '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button><span> </span>' +
             '<button class="btn btn-danger btn-xs remove modal_remove" data-toggle="modal" data-placement="top" title="删除" data-target="#modal"><i class="fa fa-trash"></i></button><span> </span>';
