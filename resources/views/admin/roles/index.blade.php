@@ -4,12 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                用户管理
+                角色管理
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="#">系统管理</a></li>
-                <li class="active">用户管理</li>
+                <li class="active">角色管理</li>
             </ol>
         </section>
         <section class="content">
@@ -18,106 +17,65 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
-                            @include('admin.layouts.confirm', ['message' => '您确认注销该条信息吗？'])
-
-                            <div id="toolbar" class="btn-group margin-b-5">
-                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
-                                        onclick="javascript:window.location.href='/admin/users/create'">新增用户
+                            @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
+                            <div id="toolbar" class="btn-group">
+                                <button class="btn btn-primary btn-sm margin-r-5" id="create"
+                                        onclick="javascript:window.location.href='/admin/roles/create'">新增
                                 </button>
                             </div>
 
                             <table data-toggle="table"
-                                   data-url="users/table"
+                                   data-url="roles/table"
                                    data-pagination="true"
                                    data-toolbar="#toolbar">
                                 <thead>
                                 <tr>
-                                    <th data-field="id" data-align="center">ID</th>
-                                    <th data-field="username">用户名</th>
-                                    <th data-field="name">姓名</th>
-                                    <th data-field="role_name">角色</th>
-                                    <th data-field="site_name">站点</th>
-                                    <th data-field="state_name" data-width="60" data-align="center"
-                                        data-formatter="stateFormatter">状态
-                                    </th>
-                                    <th data-field="action" data-width="150" data-formatter="actionFormatter"
-                                        data-events="actionEvents" data-align="center">操作
+                                    <th data-field="id" data-width="30">ID</th>
+                                    <th data-field="name" data-width="120">角色名称</th>
+                                    <th data-field="role_users">关联用户</th>
+                                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center"
+                                        data-width="100">操作
                                     </th>
                                 </tr>
                                 </thead>
                             </table>
+
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+
     </div>
     <script>
         function actionFormatter(value, row, index) {
-            var disabled_del = '';
-            switch (row.state_name) {
-                case '已注销':
-                    disabled_del = 'disabled="disabled"';
-                    break;
-            }
-
             return [
                 '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',
                 '<span> </span>',
-                '<a class="category" href="javascript:void(0)"><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal_category">栏目</button></a>',
-                '<span> </span>',
-                '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' data-toggle="modal" data-target="#modal">注销</button></a>',
+                '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal">删除</button></a>',
             ].join('');
         }
 
         $("#modal_remove").click(function () {
             var row_id = $(this).data('id');
-
             $.ajax({
-                type: 'get',
+                url: '/admin/roles/' + row_id + '/delete',
                 data: {'_token': '{{ csrf_token() }}'},
-                url: '/admin/users/' + row_id + '/delete',
                 success: function (data) {
-                    window.location.href = '/admin/users';
+                    window.location.href = '/admin/roles';
                 }
             });
         });
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
-                window.location.href = '/admin/users/' + row.id + '/edit';
+                window.location.href = '/admin/roles/' + row.id + '/edit';
             },
+
             'click .remove': function (e, value, row, index) {
                 $('#modal_remove').data('id', row.id);
             },
-            'click .category': function (e, value, row, index) {
-                $('#modal_title').html('栏目权限');
-                $('#modal_tree').data('id', row.id);
-
-                $.ajax({
-                    type: 'POST',
-                    data: {'_token': '{{ csrf_token() }}'},
-                    url: '/admin/users/category/' + row.id,
-                    success: function (category_ids) {
-                        getTrees(row.id, category_ids);
-                    }
-                });
-            },
         };
-
-        function stateFormatter(value, row, index) {
-            var style = 'label-primary';
-            switch (row.state_name) {
-                case '正常':
-                    style = 'label-success';
-                    break;
-                case '已注销':
-                    style = 'label-danger';
-                    break;
-            }
-            return [
-                '<span class="label ' + style + '">' + row.state_name + '</span>',
-            ].join('');
-        }
     </script>
 @endsection
