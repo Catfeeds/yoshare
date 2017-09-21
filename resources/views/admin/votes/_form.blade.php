@@ -69,33 +69,18 @@
     </div>
 
     <div id="tabItems" class="tab-pane fade padding-t-15">
-        @if(isset($vote))
-            <div class="form-group">
-                <label class="col-sm-1 control-label">投票类型</label>
-                <div class="col-sm-9">
-                    <div class="pull-left col-sm-2 no-padding">
-                        {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <button type='button' class="btn btn-success btn-flat pull-right" onclick="appendFile()">投票选项 ＋
-                    </button>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">投票类型</label>
+            <div class="col-sm-9">
+                <div class="pull-left col-sm-2 no-padding">
+                    {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
                 </div>
             </div>
-        @else
-            <div class="form-group">
-                <label class="col-sm-1 control-label">投票类型</label>
-                <div class="col-sm-9">
-                    <div class="pull-left col-sm-2 no-padding">
-                        {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <button type='button' class="btn btn-success btn-flat pull-right" onclick="appendFile()">投票选项 ＋
-                    </button>
-                </div>
+            <div class="col-sm-2">
+                <button type='button' class="btn btn-success btn-flat pull-right" onclick="appendFile()">投票选项 ＋
+                </button>
             </div>
-        @endif
+        </div>
         <div class="edit_file1">
             @if(isset($vote))
                 @foreach($vote->items as $k=>$item)
