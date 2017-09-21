@@ -9,7 +9,6 @@
         <a href="#tabItems" data-toggle="tab">投票选项</a>
     </li>
 </ul>
-@include('admin.layouts.modal', ['id' => 'img_preview'])
 <div id="tabContents" class="tab-content">
     <div id="tabHome" class="tab-pane fade in active padding-t-15">
         <div class="form-group">
