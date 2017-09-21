@@ -61,7 +61,7 @@ class ClickController extends BaseController
         } else {
             $click->increment('count');
 
-            Cache::forget(addslashes($model->getMorphClass()) . "-click-$model->id");
+            Cache::forget($model->getTable() . "-click-$model->id");
         }
 
         return $this->responseSuccess();

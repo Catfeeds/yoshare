@@ -146,7 +146,7 @@ class FollowController extends BaseController
             ]);
 
             //移除关注数缓存
-            Cache::forget(addslashes($model->getMorphClass()) . "-follow-$model->id");
+            Cache::forget($model->getTable() . "-follow-$model->id");
         }
 
         return $this->responseSuccess();
@@ -189,13 +189,17 @@ class FollowController extends BaseController
             return $this->responseError('此类型不存在');
         }
 
-        $follow = Follow::where('refer_id', $id)
-            ->where('refer_type', $module->model_class)
-            ->where('member_id', $member->id)
-            ->first();
+        $model = call_user_func([$module->model_class, 'find'], $id);
+        if (empty($model)) {
+            return $this->responseError('此ID不存在');
+        }
 
-        if ($follow) {
+        $follow = $model->follows()->where('member_id', $member->id)->first();
+        if (!empty($follow)) {
             $follow->delete();
+
+            //移除收藏数缓存
+            Cache::forget($model->getTable() . "-follow-$model->id");
         }
 
         return $this->responseSuccess();

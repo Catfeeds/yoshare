@@ -67,7 +67,7 @@ class BaseModule extends Model
 
     public function getCommentCountAttribute()
     {
-        return cache_remember($this->getMorphClass() . "-comment-$this->id", 1, function () {
+        return cache_remember($this->getTable() . "-comment-$this->id", 1, function () {
             return $this->comments()->where('state', Comment::STATE_PASSED)->count();
         });
     }
@@ -79,7 +79,7 @@ class BaseModule extends Model
 
     public function getFavoriteCountAttribute()
     {
-        return cache_remember($this->getMorphClass() . "-favorite-$this->id", 1, function () {
+        return cache_remember($this->getTable() . "-favorite-$this->id", 1, function () {
             return $this->favorites()->count();
         });
     }
@@ -91,7 +91,7 @@ class BaseModule extends Model
 
     public function getFollowCountAttribute()
     {
-        return cache_remember($this->getMorphClass() . "-follow-$this->id", 1, function () {
+        return cache_remember($this->getTable() . "-follow-$this->id", 1, function () {
             return $this->follows()->count();
         });
     }
@@ -103,7 +103,7 @@ class BaseModule extends Model
 
     public function getLikeCountAttribute()
     {
-        return cache_remember($this->getMorphClass() . "-like-$this->id", 1, function () {
+        return cache_remember($this->getTable() . "-like-$this->id", 1, function () {
             $count = array_get($this->likes, 'count');
             return $count ? $count : 0;
         });
@@ -116,7 +116,7 @@ class BaseModule extends Model
 
     public function getClickCountAttribute()
     {
-        return cache_remember($this->getMorphClass() . "-click-$this->id", 1, function () {
+        return cache_remember($this->getTable() . "-click-$this->id", 1, function () {
             $count = array_get($this->clicks, 'count');
             return $count ? $count : 0;
         });

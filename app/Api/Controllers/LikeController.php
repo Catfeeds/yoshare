@@ -74,7 +74,7 @@ class LikeController extends BaseController
         }
 
         //移除点赞数缓存
-        Cache::forget(addslashes($model->getMorphClass()) . "-like-$model->id");
+        Cache::forget($model->getTable() . "-like-$model->id");
 
         return $this->responseSuccess();
     }
