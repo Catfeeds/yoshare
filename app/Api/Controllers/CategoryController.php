@@ -11,8 +11,8 @@ class CategoryController extends BaseController
     {
         $attributes = $category->getAttributes();
 
-        $attributes['name'] = $category->name;
-        $attributes['title'] = $category->title;
+        $attributes['image_url'] = get_image_url($category->image_url);
+        $attributes['cover_url'] = get_image_url($category->image_url);
         $attributes['content'] = $category->content;
 
         return $attributes;
@@ -53,19 +53,7 @@ class CategoryController extends BaseController
             ->get();
 
         $categories->transform(function ($category) {
-            return [
-                'id' => $category->id,
-                'name' => $category->name,
-                'title' => $category->title,
-                'subtitle' => $category->subtitle,
-                'link_type' => $category->link_type,
-                'link' => $category->link,
-                'image_url' => get_image_url($category->image_url),
-                'cover_url' => get_image_url($category->image_url),
-                'author' => $category->author,
-                'desc' => $category->description,
-                'likes' => $category->likes,
-            ];
+            return $this->transform($category);
         });
 
         return $this->responseSuccess($categories);

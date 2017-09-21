@@ -33,11 +33,11 @@
                                     <th data-field="name" data-width="300">名称</th>
                                     <th data-field="android_version" data-align="center" data-width="120">安卓版本号</th>
                                     <th data-field="android_force" data-align="center" data-width="120"
-                                        data-formatter="androidForceFormatter">安卓强制更新
+                                        data-formatter="booleanFormatter">安卓强制更新
                                     </th>
                                     <th data-field="ios_version" data-align="center" data-width="120">ios版本号</th>
                                     <th data-field="ios_force" data-align="center" data-width="120"
-                                        data-formatter="iosForceFormatter">ios强制更新
+                                        data-formatter="booleanFormatter">ios强制更新
                                     </th>
                                     <th data-field="action" data-align="center" data-formatter="actionFormatter"
                                         data-events="actionEvents" data-width="100">操作
@@ -54,25 +54,6 @@
     </div>
 
     <script>
-        function androidForceFormatter(value, row, index) {
-            var html = '';
-            if (row.android_force != false) {
-                html = '<i class="fa fa-check"></i>';
-            }
-            return [
-                '<span>' + html + '</span>',
-            ].join('');
-        }
-
-        function iosForceFormatter(value, row, index) {
-            if (row.ios_force != false) {
-                html = '<i class="fa fa-check"></i>';
-            }
-            return [
-                '<span>' + html + '</span>',
-            ].join('');
-        }
-
         function actionFormatter(value, row, index) {
             return [
                 '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',

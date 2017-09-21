@@ -24,10 +24,8 @@ $api->version('v1', function ($api) {
         /**
          * 栏目
          */
-        $api->get('categories/list', 'CategoryController@lists');
-        $api->get('categories/owns', 'CategoryController@owns');
+        $api->get('categories', 'CategoryController@lists');
         $api->get('categories/detail', 'CategoryController@detail');
-        $api->get('categories/buy', 'CategoryController@buy');
         $api->get('categories/info', 'CategoryController@info');
 
         /**

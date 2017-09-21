@@ -46,3 +46,8 @@ function getNodeIndex(id, data) {
     }
     return -1;
 }
+
+function booleanFormatter(value, row, index) {
+    return value ? '<i class="fa fa-check"></i>' : '';
+}
+
