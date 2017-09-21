@@ -565,3 +565,12 @@ INSERT INTO `cms_module_fields`(`module_id`, `name`, `title`, `label`, `type`, `
 (@module_id, 'amount', '参与人数', '参与人数', '3', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 16:04:52', '2017-09-18 16:04:52'),
 (@module_id, 'link_type', '外链类型', '外链类型', '3', '', '0', '0', '0', '0', '0', '4', '0', '0', '1', '0', '', '0', '1', '0', '3', '', '1', '11', '基本信息', '0', '2017-09-19 11:53:13', '2017-09-19 11:53:39'),
 (@module_id, 'deleted_at', '删除时间', '删除时间', '5', '', '0', '0', '0', '0', '0', '97', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-19 14:10:11', '2017-09-19 14:10:26');
+
+
+INSERT INTO `cms_permissions` VALUES ('190', '@vote', '投票', '1', null, null);
+INSERT INTO `cms_permissions` VALUES ('191', '@vote-create', '投票-添加', '2', null, null);
+INSERT INTO `cms_permissions` VALUES ('192', '@vote-edit', '投票-编辑', '3', null, null);
+INSERT INTO `cms_permissions` VALUES ('193', '@vote-delete', '投票-删除', '4', null, null);
+INSERT INTO `cms_permissions` VALUES ('194', '@vote-publish', '投票-发布', '5', null, null);
+INSERT INTO `cms_permissions` VALUES ('195', '@vote-cancel', '投票-撤回', '6', null, null);
+INSERT INTO `cms_permissions` VALUES ('196', '@vote-sort', '投票-排序', '7', null, null);
