@@ -3,23 +3,19 @@
     <div class="col-sm-5">
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
     </div>
-</div>
-
-<div class="form-group">
-    {!! Form::label('description', '描述:', ['class' => 'control-label col-sm-1']) !!}
-    <div class="col-sm-10">
-        {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
+    {!! Form::label('description', '备注:', ['class' => 'control-label col-sm-1']) !!}
+    <div class="col-sm-5">
+        {!! Form::text('description', null, ['class' => 'form-control']) !!}
     </div>
 </div>
 
-
 <div class="form-group">
-    <label for="role" class="control-label col-sm-1">关联权限</label>
-    <div class="col-sm-10">
+    <label for="role" class="control-label col-sm-1">关联权限:</label>
+    <div class="col-sm-11">
         @if(isset($perms))
             <div class="checkbox">
                 @foreach($permissions as $key=>$permission)
-                    <br class="{{$loop->index}}-perm" />
+                    <br class="{{$loop->index}}-perm" style="display: none"/>
                     <label>
                         <input type="checkbox" {{ in_array($permission['id'], $perms) ? 'checked' : '' }} name="permission_id[]"
                                value="{{$permission['id']}}">{{$permission['description']}}
@@ -30,7 +26,7 @@
         @else
             <div class="checkbox">
                 @foreach($permissions as $key=>$permission)
-                    <br class="{{$loop->index}}-perm" />
+                    <br class="{{$loop->index}}-perm" style="display: none" />
                     <label>
                         <input type="checkbox" name="permission_id[]" value="{{$permission['id']}}">{{$permission['description']}}
                     </label>
@@ -62,7 +58,7 @@
             var p = $('.'+i+'-group').val();
             var n = $('.'+(i+1)+'-group').val();
             console.log(p+'-'+n);
-            if( parseInt(p) != parseInt(n) ){
+            if( parseInt(p) != parseInt(n)){
                 $('.'+(i+1)+'-perm').css('display', 'block');
             }else{
                 $('.'+(i+1)+'-perm').css('display', 'none');

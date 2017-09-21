@@ -18,18 +18,11 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
+                            @include('admin.users.toolbar')
                             @include('admin.layouts.confirm', ['message' => '您确认注销该条信息吗？'])
 
-                            <div id="toolbar" class="btn-group margin-b-5">
-                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
-                                        onclick="javascript:window.location.href='/admin/users/create'">新增用户
-                                </button>
-                            </div>
-
                             <table data-toggle="table"
-                                   data-url="users/table"
-                                   data-pagination="true"
-                                   data-toolbar="#toolbar">
+                                   data-url="users/table">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-align="center">ID</th>

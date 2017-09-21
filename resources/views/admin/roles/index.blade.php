@@ -17,24 +17,18 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
+                            @include('admin.roles.toolbar')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                            <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-sm margin-r-5" id="create"
-                                        onclick="javascript:window.location.href='/admin/roles/create'">新增
-                                </button>
-                            </div>
 
                             <table data-toggle="table"
-                                   data-url="roles/table"
-                                   data-pagination="true"
-                                   data-toolbar="#toolbar">
+                                   data-url="roles/table">
                                 <thead>
                                 <tr>
-                                    <th data-field="id" data-width="30">ID</th>
-                                    <th data-field="name" data-width="120">角色名称</th>
+                                    <th data-field="id" data-align="center">ID</th>
+                                    <th data-field="name" data-width="120" data-align="center">角色名称</th>
                                     <th data-field="role_users">关联用户</th>
                                     <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center"
-                                        data-width="100">操作
+                                        data-width="150">操作
                                     </th>
                                 </tr>
                                 </thead>
