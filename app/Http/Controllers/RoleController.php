@@ -18,6 +18,17 @@ class RoleController extends Controller
     {
     }
 
+    public function transform($permission)
+    {
+        $attributes = $permission->getAttributes();
+
+        $attributes['id'] = $permission->id;
+        $attributes['description'] = $permission->description;
+        $attributes['group'] = $permission->group;
+
+        return $attributes;
+    }
+
     public function index()
     {
         if (Gate::denies('@role')) {
@@ -29,8 +40,14 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::orderBy('groups')->orderBy('id', 'asc')->get();
-        return view('admin.roles.create', compact('permissions'));
+        $permissions = Permission::orderBy('group')->orderBy('id', 'asc')->get();
+        $count = Permission::count();
+
+        $permissions = $permissions->transform(function ($permission) {
+            return $this->transform($permission);
+        });
+
+        return view('admin.roles.create', compact('permissions', 'count'));
     }
 
     public function store(RoleRequest $request)
@@ -74,12 +91,17 @@ class RoleController extends Controller
             return redirect('/admin/roles');
         }
 
-        $permissions = Permission::orderBy('groups')->orderBy('id', 'asc')->get();
-        $perms = PermissionRole::where('role_id', $id)
-                ->pluck('permission_id')
-                ->toArray();
+        $permissions = Permission::orderBy('group')->orderBy('id', 'asc')->get();
+        $count = Permission::count();
+        $permissions = $permissions->transform(function ($permission) {
+            return $this->transform($permission);
+        });
 
-        return view('admin.roles.edit', compact('role', 'permissions', 'perms'));
+        $perms = PermissionRole::where('role_id', $id)
+            ->pluck('permission_id')
+            ->toArray();
+
+        return view('admin.roles.edit', compact('role', 'permissions', 'perms', 'count'));
     }
 
     public function update($id, Request $request)

@@ -19,23 +19,20 @@
                         <div class="box-body">
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认注销该条信息吗？'])
-                            @include('admin.users.tree', ['id' => 'modal_category'])
-                            <div id="toolbar" class="btn-group">
-                                <button class="btn btn-primary btn-sm margin-r-5" id="create"
-                                        onclick="javascript:window.location.href='/admin/users/create'">新增
+
+                            <div id="toolbar" class="btn-group margin-b-5">
+                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
+                                        onclick="javascript:window.location.href='/admin/users/create'">新增用户
                                 </button>
                             </div>
 
                             <table data-toggle="table"
                                    data-url="users/table"
                                    data-pagination="true"
-                                   data-search="true"
-                                   data-show-refresh="true"
-                                   data-show-toggle="true"
-                                   data-show-columns="true"
                                    data-toolbar="#toolbar">
                                 <thead>
                                 <tr>
+                                    <th data-field="id" data-align="center">ID</th>
                                     <th data-field="username">用户名</th>
                                     <th data-field="name">姓名</th>
                                     <th data-field="role_name">角色</th>
@@ -44,7 +41,7 @@
                                         data-formatter="stateFormatter">状态
                                     </th>
                                     <th data-field="action" data-width="150" data-formatter="actionFormatter"
-                                        data-events="actionEvents">操作
+                                        data-events="actionEvents" data-align="center">操作
                                     </th>
                                 </tr>
                                 </thead>
