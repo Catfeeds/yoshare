@@ -53,11 +53,13 @@
             format: 'YYYY/MM/DD HH:mm',
             locale: 'zh-cn'
         });
+        //获取所有权限的数量
         var count = '{{$count}}';
+        //循环所有权限的分组值
         for(i=0; i<parseInt(count); i++){
             var p = $('.'+i+'-group').val();
             var n = $('.'+(i+1)+'-group').val();
-            console.log(p+'-'+n);
+            //获取当前权限分组值与下一权限的分组值，判断是否换行符是否需要显示，以达到分组展示的目的。
             if( parseInt(p) != parseInt(n)){
                 $('.'+(i+1)+'-perm').css('display', 'block');
             }else{
