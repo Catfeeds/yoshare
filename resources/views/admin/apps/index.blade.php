@@ -65,6 +65,7 @@
         }
 
         function iosForceFormatter(value, row, index) {
+            var html = '';
             if (row.ios_force != false) {
                 html = '<i class="fa fa-check"></i>';
             }
