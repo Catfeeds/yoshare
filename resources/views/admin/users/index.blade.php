@@ -18,11 +18,18 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
-                            @include('admin.users.toolbar')
+                            @include('admin.roles.toolbar')
                             @include('admin.layouts.confirm', ['message' => '您确认注销该条信息吗？'])
+                            @include('admin.users.tree', ['id' => 'modal_category'])
+                            <div id="toolbar" class="btn-group margin-b-5">
+                                <button class="btn btn-primary btn-xs margin-r-5 margin-b-5" id="create"
+                                        onclick="javascript:window.location.href='/admin/users/create'">新增用户
+                                </button>
+                            </div>
 
                             <table data-toggle="table"
-                                   data-url="users/table">
+                                   data-url="users/table"
+                                   data-pagination="true">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-align="center">ID</th>
@@ -77,8 +84,7 @@
                 $('#modal_remove').data('id', row.id);
             },
             'click .category': function (e, value, row, index) {
-                $('#modal_title').html('栏目权限');
-                $('#modal_tree').data('id', row.id);
+                $('#btn_tree_submit').data('id', row.id);
 
                 $.ajax({
                     type: 'POST',
