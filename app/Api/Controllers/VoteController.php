@@ -68,10 +68,9 @@ class VoteController extends BaseController
         //获取结束日期大于等于当前日期的记录
         $votes = Vote::with('items')
             ->where('site_id', $site_id)
-            ->where('state', Vote::STATE_NORMAL)
+            ->where('state', Vote::STATE_PUBLISHED)
             ->where('end_date', '>=', Carbon::now())
-            ->orderBy('created_at', 'desc')
-            ->orderBy('id', 'desc')
+            ->orderBy('sort', 'desc')
             ->skip(($page - 1) * $page_size)
             ->limit($page_size)
             ->get();
