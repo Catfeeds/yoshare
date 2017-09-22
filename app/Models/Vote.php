@@ -36,8 +36,8 @@ class Vote extends BaseModule
 
     const STATE_PERMISSIONS = [
         0 => '@vote-delete',
-        2 => '@article-cancel',
-        9 => '@article-publish',
+        2 => '@vote-cancel',
+        9 => '@vote-publish',
     ];
 
     const MULTIPLES = [
