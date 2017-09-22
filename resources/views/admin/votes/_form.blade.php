@@ -188,7 +188,7 @@
     $(document).ready(function () {
         CKEDITOR.replace('content', {
             height: 300,
-            filebrowserUploadUrl: '{{ url('/admin/files/upload') }}?_token={{csrf_token()}}',
+            filebrowserUploadUrl: '{{ url('/admin/files/upload?type=image') }}?_token={{csrf_token()}}',
         });
     });
 

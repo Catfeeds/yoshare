@@ -199,6 +199,13 @@ class __controller__ extends Controller
         return __module_name__::sort();
     }
 
+    public function top($id)
+    {
+        $article = Article::find($id);
+        $article->top = !$article->top;
+        $article->save();
+    }
+
     public function state()
     {
         $input = request()->all();

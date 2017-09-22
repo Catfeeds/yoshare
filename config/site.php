@@ -29,6 +29,6 @@ return [
         'video_path' => '/uploads/videos',
         'audio_path' => '/uploads/audios',
         'image_path' => '/uploads/images',
-        'other_path' => '/uploads/others',
+        'file_path' => '/uploads/files',
     ],
 ];

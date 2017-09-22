@@ -59,8 +59,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('users/tree/{id}', 'UserController@tree');
     Route::post('users/grant/{id}', 'UserController@grant');
     Route::get('users/table', 'UserController@table');
-    Route::resource('users', 'UserController');
+    Route::get('users/logs', 'UserController@log');
+    Route::get('users/logs/table', 'UserController@logTable');
     Route::get('users/{id}/delete', 'UserController@destroy');
+    Route::resource('users', 'UserController');
 
     /**
      * 角色管理

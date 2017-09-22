@@ -21,14 +21,16 @@
     }
 
     function titleFormatter(value, row, index) {
-        return [
-            '<a href="/admin/__module_path__/' + row.id + '" target="_blank">' + row.title + '</a>',
-        ]
+        return '<a href="/__module_path__/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+            (row.top ? '<span class="label label-success pull-right">置顶</span>' : '')
     }
 
     function actionFormatter(value, row, index) {
         //编辑
         var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
+
+        //置顶
+        html += '<button class="btn btn-primary btn-xs margin-r-5 top" data-toggle="tooltip" data-placement="top" title="' + (row.top ? '取消置顶' : '置顶') + '"><i class="fa ' + (row.top ? 'fa-chevron-circle-down' : 'fa-chevron-circle-up') + '"></i></button>';
 
         //评论
         html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
@@ -42,6 +44,7 @@
     function updateRow(field, row, old, $el) {
         $.ajax({
             url: '/admin/__module_path__/' + row.id + '/save',
+            type: 'post',
             data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks},
             success: function (data, status) {
             },
@@ -54,6 +57,20 @@
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             window.location.href = '{{ $base_url }}/' + row.id + '/edit';
+        },
+
+        'click .top': function (e, value, row, index) {
+            $.ajax({
+                url: '/admin/__module_path__/' + row.id + '/top',
+                type: 'post',
+                data: {'_token': '{{ csrf_token() }}'},
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {
+                    toast('error', '操作失败');
+                }
+            })
         },
 
         'click .comment': function (e, value, row, index) {

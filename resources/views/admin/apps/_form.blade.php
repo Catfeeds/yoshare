@@ -57,7 +57,7 @@
             <label for="other_file" class="control-label col-sm-1">上传程序:</label>
             <div class="col-sm-11">
                 <input id="android_other_file" name="other_file" type="file" class="file"
-                       data-upload-url="/admin/files/upload?type=other" data-show-preview="false">
+                       data-upload-url="/admin/files/upload?type=file" data-show-preview="false">
             </div>
         </div>
     </div>
@@ -147,14 +147,5 @@
         if (other_file.length > 0) {
             return toastrs('请先上传文件!')
         }
-    })
-
-    function toastrs(message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-bottom-right',
-        };
-        toastr['warning'](message);
-        return false;
-    }
+    });
 </script>

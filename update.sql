@@ -520,7 +520,6 @@ CREATE TABLE `cms_votes` (
   `begin_date` timestamp NULL DEFAULT NULL COMMENT '投票开始日期',
   `end_date` timestamp NULL DEFAULT NULL COMMENT '投票截止日期',
   `amount` int(11) NOT NULL COMMENT '参与人数',
-  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
   `member_id` int(11) NOT NULL COMMENT '会员ID',
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `sort` int(11) NOT NULL COMMENT '序号',
@@ -528,6 +527,7 @@ CREATE TABLE `cms_votes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -565,8 +565,8 @@ INSERT INTO `cms_module_fields`(`module_id`, `name`, `title`, `label`, `type`, `
 (@module_id, 'begin_date', '投票开始日期', '投票开始日期', '5', '', '1', '0', '0', '0', '0', '8', '1', '0', '2', '120', '', '0', '1', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-18 15:55:42', '2017-09-18 15:58:45'),
 (@module_id, 'amount', '参与人数', '参与人数', '3', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 16:04:52', '2017-09-18 16:04:52'),
 (@module_id, 'link_type', '外链类型', '外链类型', '3', '', '0', '0', '0', '0', '0', '4', '0', '0', '1', '0', '', '0', '1', '0', '3', '', '1', '11', '基本信息', '0', '2017-09-19 11:53:13', '2017-09-19 11:53:39'),
-(@module_id, 'deleted_at', '删除时间', '删除时间', '5', '', '0', '0', '0', '0', '0', '97', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-19 14:10:11', '2017-09-19 14:10:26');
-(@module_id, 'published_at', '发布时间', '发布时间', '5', '', '0', '0', '0', '0', '0', '11', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-21 18:59:12', '2017-09-21 18:59:12');
+(@module_id, 'deleted_at', '删除时间', '删除时间', '5', '', '0', '0', '0', '0', '0', '97', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-19 14:10:11', '2017-09-19 14:10:26'),
+(@module_id, 'published_at', '发布时间', '发布时间', '5', '', '0', '0', '0', '0', '0', '98', '0', '0', '1', '0', '', '0', '0', '0', '5', '', '1', '11', '基本信息', '0', '2017-09-21 18:59:12', '2017-09-21 18:59:12');
 
 INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote', '投票', '1', null, null);
 INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote-create', '投票-添加', '2', null, null);
@@ -579,7 +579,7 @@ INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `upda
 -- -----------
 -- 2017-9-22
 -- -----------
-INSERT INTO `cms`.`cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-推荐', '0', '5', NULL, NULL);
+INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-推荐', '0', '5', NULL, NULL);
 
 INSERT INTO `cms_permissions` ( `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES
 ('@feature', '专题管理', 4, 8, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),

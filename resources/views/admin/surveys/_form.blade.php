@@ -377,7 +377,7 @@
         CKEDITOR.replace('description', {
             extraPlugins: 'uploadimage,image2',
             height: 900,
-            filebrowserUploadUrl: '{{ url('/admin/files/upload') }}?_token={{ csrf_token()}}',
+            filebrowserUploadUrl: '{{ url('/admin/files/upload?type=image') }}?_token={{ csrf_token()}}',
             contentsCss: [CKEDITOR.basePath + 'contents.css', '/css/admin/app.css'],
             image2_alignClasses: ['image-align-left', 'image-align-center', 'image-align-right'],
             image2_disableResizer: true

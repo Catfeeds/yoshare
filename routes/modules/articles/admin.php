@@ -9,6 +9,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('articles/sort', 'ArticleController@sort');
     Route::get('articles/comments/{id}','ArticleController@comments');
     Route::get('articles/categories', 'ArticleController@categories');
-    Route::get('articles/{id}/save', 'ArticleController@save');
+    Route::post('articles/{id}/save', 'ArticleController@save');
+    Route::post('articles/{id}/top', 'ArticleController@top');
     Route::resource('articles', 'ArticleController');
 });

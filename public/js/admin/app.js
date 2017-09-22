@@ -21,7 +21,7 @@ function getQueryString(name) {
     return null;
 }
 
-function toastrs(style, message) {
+function toast(style, message) {
     toastr.options = {
         'closeButton': true,
         'positionClass': 'toast-bottom-right',

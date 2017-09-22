@@ -214,6 +214,13 @@ class ArticleController extends Controller
         return Article::sort();
     }
 
+    public function top($id)
+    {
+        $article = Article::find($id);
+        $article->top = !$article->top;
+        $article->save();
+    }
+
     public function state()
     {
         $input = request()->all();
