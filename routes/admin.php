@@ -166,7 +166,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('surveys/table', 'SurveyController@table');
     Route::post('surveys/top', 'SurveyController@top');
     Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
-    Route::post('surveys/state/{state}', 'SurveyController@state');
+    Route::post('surveys/state', 'SurveyController@state');
     Route::resource('surveys', 'SurveyController');
 
     /**

@@ -157,7 +157,7 @@ class Survey extends BaseModule
                 $item->restore();
             }
         }
-        \Session::flash('flash_success', static::STATE_DELETED . '成功!');
+        \Session::flash('flash_success', '删除成功!');
     }
 
 //    public function items()
