@@ -6,7 +6,6 @@ use App\Http\Requests\VoteRequest;
 use App\Models\Item;
 use App\Models\Vote;
 use Auth;
-use Carbon\Carbon;
 use Gate;
 
 class VoteController extends Controller
@@ -40,7 +39,6 @@ class VoteController extends Controller
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Vote::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
-        $data['sort'] = Carbon::now();
         $vote = Vote::create($data);
 
         foreach ($data['item_title'] as $k => $item_title) {

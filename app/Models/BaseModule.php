@@ -129,7 +129,7 @@ class BaseModule extends Model
 
     public function setCreatedAt($value)
     {
-        if(array_get($this->attributes,'sort')){
+        if (in_array('sort', $this->fillable)) {
             $this->attributes['sort'] = strtotime($value);
         }
         return parent::setCreatedAt($value);
