@@ -34,6 +34,8 @@
                                     </th>
                                     <th data-field="begin_date" data-width="120" data-align="center">问卷开始时间</th>
                                     <th data-field="end_date" data-width="120" data-align="center">问卷结束时间</th>
+
+                                    <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
                                     <th data-field="action" data-align="center" data-width="200"
                                         data-formatter="actionFormatter" data-events="actionEvents">管理操作
                                     </th>
@@ -62,6 +64,51 @@
             sidePagination: 'server',
             clickToSelect: true,
             striped: true,
+
+            onLoadSuccess: function (data) {
+                $('#modal_query').modal('hide');
+                $('#table tbody').sortable({
+                    cursor: 'move',
+                    axis: 'y',
+                    revert: true,
+                    start: function (e, ui) {
+                        select_index = ui.item.attr('data-index');
+                        original_y = e.pageY;
+                    },
+                    sort: function (e, ui) {
+                        if (e.pageY > original_y) {
+                            place_index = $(this).find('tr').filter('.ui-sortable-placeholder').prev('tr').attr('data-index');
+                            move_down = 1;
+                        }
+                        else {
+                            place_index = $(this).find('tr').filter('.ui-sortable-placeholder').next('tr').attr('data-index');
+                            move_down = 0;
+                        }
+                    },
+                    update: function (e, ui) {
+                        var select_id = data.rows[select_index].id;
+                        var place_id = data.rows[place_index].id;
+
+                        if (select_id == place_id) {
+                            return;
+                        }
+
+                        $.ajax({
+                            url: '/admin/surveys/sort',
+                            type: 'get',
+                            async: true,
+                            data: {select_id: select_id, place_id: place_id, move_down: move_down},
+                            success: function (data) {
+                                if (data.status_code != 200) {
+                                    $('#table tbody').sortable('cancel');
+                                    $('#table').bootstrapTable('refresh');
+                                }
+                            },
+                        });
+                    }
+                });
+                $('#table tbody').sortable('disable');
+            },
             queryParams: function (params) {
                 var object = $('#forms input').serializeObject();
                 object['state'] = $('#state').val();
@@ -86,8 +133,14 @@
         function stateFormatter(value, row, index) {
             var style = 'label-primary';
             switch (row.state_name) {
-                case '正常':
+                case '未发布':
+                    style = 'label-primary';
+                    break;
+                case '已发布':
                     style = 'label-success';
+                    break;
+                case '已撤回':
+                    style = 'label-warning';
                     break;
                 case '已删除':
                     style = 'label-danger';
@@ -101,7 +154,7 @@
         function titleFormatter(value, row, index) {
             if (row.is_top == 1) {
                 return [
-                    '<span class="label label-primary">推荐</span><span> </span><a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
+                    '<span class="label label-success">置顶</span><span> </span><a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
                 ]
             }
             else {
@@ -122,16 +175,18 @@
                 '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>' +
                 '<span> </span>';
             if (row.is_top == 0) {
-                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-arrow-up"></i></button>';
+                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="置顶"><i class="fa fa-chevron-circle-down"></i></button>';
             } else {
-                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="取消推荐"><i class="fa fa-arrow-down"></i></button>';
+                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="取消置顶"><i class="fa fa-chevron-circle-down"></i></button>';
             }
             html +=
                 '<span> </span>' +
                 '<button class="btn btn-info btn-xs count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-envelope"></i></button>';
-            html +=
-                '<span> </span>' +
-                '<button class="btn btn-danger btn-xs remove" data-toggle="modal" data-target="#modal"  title="删除"><i class="fa fa-trash"></i></button>';
+            if (row.state != '{{ App\Models\Survey::STATE_DELETED}}') {
+                html +=
+                    '<span> </span>' +
+                    '<button class="btn btn-danger btn-xs remove" data-toggle="modal" data-target="#modal"  title="删除"><i class="fa fa-trash"></i></button>';
+            }
             return html;
         }
 

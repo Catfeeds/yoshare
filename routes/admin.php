@@ -169,6 +169,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('surveys/top', 'SurveyController@top');
     Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
     Route::post('surveys/state', 'SurveyController@state');
+    Route::get('surveys/sort', 'SurveyController@sort');
     Route::resource('surveys', 'SurveyController');
 
     /**

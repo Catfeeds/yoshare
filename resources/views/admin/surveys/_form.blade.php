@@ -30,15 +30,16 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-1 control-label">类型:</label>
+            <label class="col-sm-1 control-label">问卷类型:</label>
             <div class="col-sm-5">
                 {!! Form::select('multiple', \App\Models\Survey::MULTIPLE, null, ['class' => 'form-control']) !!}
             </div>
 
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
-            <div class="col-sm-5">
-                {!! Form::text('link', null, ['class' => 'form-control']) !!}
+            <div class="col-sm-1">
+                {!! Form::select('link_type', \App\Models\Survey::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
+            <div class="col-sm-4" id="link"></div>
         </div>
 
         <div class="form-group">
@@ -145,50 +146,50 @@
     <div id="tabTitle" class="tab-pane fade padding-t-15">
 
         {{--<div class="col-sm-6">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '标题:', ['class' => 'control-label col-sm-2']) !!}--}}
-                {{--<div class="input-group col-sm-10">--}}
-                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
-                           {{--class="form-control"--}}
-                           {{--style="margin:0 30px 0 15px;"/>--}}
-                    {{--<span class="input-group-btn">--}}
-                             {{--<button class="btn btn-primary btn-flat add_option" type="button">添加选项</button>--}}
-                    {{--</span>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '标题:', ['class' => 'control-label col-sm-2']) !!}--}}
+        {{--<div class="input-group col-sm-10">--}}
+        {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+        {{--class="form-control"--}}
+        {{--style="margin:0 30px 0 15px;"/>--}}
+        {{--<span class="input-group-btn">--}}
+        {{--<button class="btn btn-primary btn-flat add_option" type="button">添加选项</button>--}}
+        {{--</span>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '标题描述:', ['class' => 'control-label col-sm-2']) !!}--}}
-                {{--<div class="input-group col-sm-10">--}}
-                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
-                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '标题描述:', ['class' => 'control-label col-sm-2']) !!}--}}
+        {{--<div class="input-group col-sm-10">--}}
+        {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+        {{--style="margin:0 30px 0 15px;"></textarea>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
 
         {{--</div>--}}
 
         {{--<div class="col-sm-6 form-group">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title_url', '图片地址:', ['class' => 'control-label col-sm-2']) !!}--}}
-                {{--<div class="col-sm-10">--}}
-                    {{--{!! Form::text('', null, ['class' => 'form-control']) !!}--}}
-                    {{--<input type="text" class="form-control title_url">--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="form-group">--}}
-                {{--<label for="image_title" class="control-label col-sm-2">上传图片:</label>--}}
-                {{--<div class="col-sm-10">--}}
-                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
-                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title_url', '图片地址:', ['class' => 'control-label col-sm-2']) !!}--}}
+        {{--<div class="col-sm-10">--}}
+        {{--{!! Form::text('', null, ['class' => 'form-control']) !!}--}}
+        {{--<input type="text" class="form-control title_url">--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--<label for="image_title" class="control-label col-sm-2">上传图片:</label>--}}
+        {{--<div class="col-sm-10">--}}
+        {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+        {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+        {{--</div>--}}
+        {{--</div>--}}
         {{--</div>--}}
 
         <div class="form-group">
             {!! Form::label('title_url', '图片地址:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-11">
-{{--                {!! Form::text('', null, ['class' => 'form-control']) !!}--}}
+                {{--                {!! Form::text('', null, ['class' => 'form-control']) !!}--}}
                 <input type="text" class="form-control title_url">
             </div>
         </div>
@@ -201,78 +202,78 @@
         </div>
 
         {{--<div class="col-sm-3">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="input-group col-sm-8">--}}
-                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
-                           {{--class="form-control"--}}
-                           {{--style="margin:0 30px 0 15px;"/>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="input-group col-sm-8">--}}
+        {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+        {{--class="form-control"--}}
+        {{--style="margin:0 30px 0 15px;"/>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="input-group col-sm-8">--}}
-                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
-                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="input-group col-sm-8">--}}
+        {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+        {{--style="margin:0 30px 0 15px;"></textarea>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
 
         {{--</div>--}}
 
         {{--<div class="col-sm-3 form-group">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title_url_1', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="col-sm-9">--}}
-                    {{--<input type="text" class="form-control title_url_1">--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="form-group">--}}
-                {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
-                {{--<div class="col-sm-12">--}}
-                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
-                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title_url_1', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="col-sm-9">--}}
+        {{--<input type="text" class="form-control title_url_1">--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
+        {{--<div class="col-sm-12">--}}
+        {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+        {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+        {{--</div>--}}
+        {{--</div>--}}
         {{--</div>--}}
         {{--</div>--}}
 
         {{--<div class="col-sm-3">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="input-group col-sm-8">--}}
-                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
-                           {{--class="form-control"--}}
-                           {{--style="margin:0 30px 0 15px;"/>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="input-group col-sm-8">--}}
+        {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+        {{--class="form-control"--}}
+        {{--style="margin:0 30px 0 15px;"/>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="input-group col-sm-8">--}}
-                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
-                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="input-group col-sm-8">--}}
+        {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+        {{--style="margin:0 30px 0 15px;"></textarea>--}}
+        {{--</div>--}}
+        {{--</div>--}}
 
 
         {{--</div>--}}
 
         {{--<div class="col-sm-3 form-group">--}}
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('title_url_2', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
-                {{--<div class="col-sm-9">--}}
-                    {{--<input type="text" class="form-control title_url_2">--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="form-group">--}}
-                {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
-                {{--<div class="col-sm-9">--}}
-                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
-                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--{!! Form::label('title_url_2', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
+        {{--<div class="col-sm-9">--}}
+        {{--<input type="text" class="form-control title_url_2">--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--<div class="form-group">--}}
+        {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
+        {{--<div class="col-sm-9">--}}
+        {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+        {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+        {{--</div>--}}
+        {{--</div>--}}
         {{--</div>--}}
 
     </div>
@@ -303,6 +304,21 @@
             locale: 'zh-cn'
         });
     });
+
+    function showLink(type, is_edit) {
+        if (type == '{{\App\Models\Survey::LINK_TYPE_NONE}}') {
+            $('#link').html('');
+        } else if (type == '{{\App\Models\Survey::LINK_TYPE_WEB}}') {
+            $('#link').html('{!! Form::text('link', null, ['class' => 'form-control','id'=>'text']) !!}');
+            if (is_edit == true) {
+                $('#text').val('');
+            }
+        }
+    }
+
+    @if(isset($survey))
+        showLink('{{ $survey->link_type }}', false);
+    @endif
 
     //上传图片
     var image_url = $('#image_url').val();

@@ -14,6 +14,8 @@ class Survey extends BaseModule
 
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
+    const STATE_CANCELED = 2;
+    const STATE_PUBLISHED = 9;
 
     const MULTIPLE_FALSE = 0;
     const MULTIPLE_TRUE = 1;
@@ -21,9 +23,14 @@ class Survey extends BaseModule
     const TOP_FALSE = 0;
     const TOP_TRUE = 1;
 
+    const LINK_TYPE_NONE = 0;
+    const LINK_TYPE_WEB = 1;
+
     const STATES = [
         0 => '已删除',
-        1 => '正常',
+        1 => '未发布',
+        2 => '已撤回',
+        9 => '已发布',
     ];
 
     const MULTIPLE = [
@@ -33,6 +40,8 @@ class Survey extends BaseModule
 
     const STATE_PERMISSIONS = [
         0 => '@survey-delete',
+        2 => '@vote-cancel',
+        9 => '@vote-publish',
     ];
 
 
@@ -48,22 +57,40 @@ class Survey extends BaseModule
         'begin_date',
         'end_date',
         'username',
-        'is_top',
         'multiple',
         'link',
-        'sort'
+        'link_type',
+        'sort',
+        'published_at',
+        'is_top'
     ];
+
+    protected $dates = ['published_at'];
 
     public function stateName()
     {
         switch ($this->state) {
             case static::STATE_NORMAL:
-                return '正常';
+                return '未发布';
+                break;
+            case static::STATE_CANCELED:
+                return '已撤回';
+                break;
+            case static::STATE_PUBLISHED:
+                return '已发布';
                 break;
             case static::STATE_DELETED:
                 return '已删除';
                 break;
         }
+    }
+
+    public static function getLinkTypes()
+    {
+        return [
+            static::LINK_TYPE_NONE => '无',
+            static::LINK_TYPE_WEB => '网址',
+        ];
     }
 
     /**
@@ -75,7 +102,7 @@ class Survey extends BaseModule
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
-            empty($filters['recommend']) ?: $query->where('is_top', $filters['recommend']);
+            empty($filters['top']) ?: $query->where('is_top', $filters['top']);
             empty($filters['title']) ?: $query->where('title', 'like', '%' . $filters['title'] . '%');
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
@@ -99,8 +126,7 @@ class Survey extends BaseModule
 
         $surveys = Survey::where('site_id', $site_id)
             ->filter($filter)
-            ->orderBy('is_top', 'desc')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
             ->get();
@@ -109,22 +135,13 @@ class Survey extends BaseModule
             ->filter($filter)
             ->count();
 
-
-        $surveys->transform(function ($item) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'description' => $item->description,
-                'image_url' => $item->image_url,
-                'amount' => $item->amount,
-                'state_name' => $item->stateName(),
-                'ip' => $item->ip,
-                'is_top' => $item->is_top,
-                'begin_date' => $item->begin_date,
-                'end_date' => $item->end_date,
-                'created_at' => $item->created_at->toDateTimeString(),
-                'updated_at' => $item->updated_at->toDateTimeString(),
-            ];
+        $surveys->transform(function ($survey) {
+            $attributes = $survey->getAttributes();
+            foreach ($survey->getDates() as $date) {
+                $attributes[$date] = empty($survey->$date) ? '' : $survey->$date->toDateTimeString();
+            }
+            $attributes['state_name'] = $survey->stateName();
+            return $attributes;
         });
 
         $ds = new DataSource();
@@ -134,30 +151,55 @@ class Survey extends BaseModule
 
     }
 
-    public static function state($input)
+    /**
+     * 排序
+     */
+    public static function sort()
     {
-        $ids = $input['ids'];
-        $state = $input['state'];
+        $select_id = request('select_id');
+        $place_id = request('place_id');
+        $move_down = request('move_down');
 
-        //判断是否有操作权限
-        $permission = array_key_exists($state, static::STATE_PERMISSIONS) ? static::STATE_PERMISSIONS[$state] : '';
-        if (!empty($permission) && Gate::denies($permission)) {
-            return;
+        $select = self::find($select_id);
+        $place = self::find($place_id);
+
+        if (empty($select) || empty($place)) {
+            return Response::json([
+                'status_code' => 404,
+                'message' => 'ID不存在',
+            ]);
         }
 
-        $items = static::withTrashed()
-            ->whereIn('id', $ids)
-            ->get();
-        foreach ($items as $item) {
-            $item->state = $state;
-            $item->save();
-            if ($state == static::STATE_DELETED) {
-                $item->delete();
-            } else if ($item->trashed()) {
-                $item->restore();
+        try {
+            if ($move_down) {
+                //下移
+                $select->sort = $place->sort - 1;
+                //减小最近100条记录的排序值
+                self::where('sort', '<', $place->sort)
+                    ->orderBy('sort', 'desc')
+                    ->limit(100)
+                    ->decrement('sort');
+            } else {
+                //上移
+                $select->sort = $place->sort + 1;
+                //增大最近100条记录的排序值
+                self::where('sort', '>', $place->sort)
+                    ->orderBy('sort', 'asc')
+                    ->limit(100)
+                    ->increment('sort');
             }
+        } catch (Exception $e) {
+            return Response::json([
+                'status_code' => 500,
+                'message' => $e->getMessage(),
+            ]);
         }
-        \Session::flash('flash_success', '删除成功!');
+        $select->save();
+
+        return Response::json([
+            'status_code' => 200,
+            'message' => 'success',
+        ]);
     }
 
 //    public function items()

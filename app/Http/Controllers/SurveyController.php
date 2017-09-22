@@ -7,6 +7,7 @@ use App\Models\Survey;
 use App\Models\SurveyItem;
 use App\Models\SurveyTitle;
 use Auth;
+use Carbon\Carbon;
 use Gate;
 
 class SurveyController extends Controller
@@ -58,6 +59,7 @@ class SurveyController extends Controller
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
+        $data['sort'] = Carbon::now();
         $survey = Survey::create($data);
 
         $title = $data['sub_title']; //子题目
@@ -226,6 +228,11 @@ class SurveyController extends Controller
         Survey::state(request()->all());
     }
 
+    public function sort()
+    {
+        return Survey::sort();
+    }
+
     public function statistic($id)
     {
         $survey = Survey::find($id);
@@ -240,16 +247,17 @@ class SurveyController extends Controller
         }
 
         $survey = Survey::find(request()->get('id'));
+
         if ($survey->is_top == Survey::TOP_TRUE) {
             $survey->is_top = Survey::TOP_FALSE;
             $survey->updated_at = date('Y-m-d H:i:s');
             $survey->save();
-            \Session::flash('flash_success', '取消推荐成功');
+            \Session::flash('flash_success', '取消置顶成功');
         } else {
             $survey->is_top = Survey::TOP_TRUE;
             $survey->updated_at = date('Y-m-d H:i:s');
             $survey->save();
-            \Session::flash('flash_success', '推荐成功');
+            \Session::flash('flash_success', '置顶成功');
         }
     }
 }

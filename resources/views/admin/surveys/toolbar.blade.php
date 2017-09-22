@@ -2,19 +2,28 @@
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
     <button class="btn btn-primary btn-xs margin-r-5 " id="create" onclick="create()">新增</button>
-    <button class="btn btn-danger btn-xs margin-r-5 " id="delete"
-            value="{{ \App\Models\Survey::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal"
-            data-target="#modal">删除
+    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \App\Models\Survey::STATE_PUBLISHED }}">发布
     </button>
+    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \App\Models\Survey::STATE_CANCELED }}">撤回</button>
+    <button class="btn btn-danger btn-xs margin-r-5 " id="delete" value="{{ \App\Models\Survey::STATE_DELETED }}"
+            onclick="modalRemove()" data-toggle="modal" data-target="#modal">删除
+    </button>
+    <button class="btn btn-default btn-xs margin-r-5" id="btn_sort">排序</button>
 </div>
 <div class="btn-group margin-bottom pull-right">
     <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" id="" value="">全部
     </button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Survey::STATE_NORMAL }}" data-active="btn-success">正常
+    <button type="button" class="btn btn-default btn-xs margin-r-5  top"
+            value="{{ \App\Models\Survey::TOP_TRUE }}" title="置顶" data-active="btn-primary">置顶
     </button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter recommend"
-            value="{{ \App\Models\Survey::TOP_TRUE }}" title="推荐到轮播图" data-active="btn-primary">推荐
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary"
+            value="{{ \App\Models\Survey::STATE_NORMAL }}">未发布
+    </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success"
+            value="{{ \App\Models\Survey::STATE_PUBLISHED }}">已发布
+    </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning"
+            value="{{ \App\Models\Survey::STATE_CANCELED }}">已撤回
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
             value="{{ \App\Models\Survey::STATE_DELETED }}" data-active="btn-danger">已删除
@@ -103,22 +112,23 @@
         }
     }
 
-    /* 操作 */
-    $('.action').click(function () {
+    /* 修改状态 */
+    $('.state').click(function () {
         var state = $(this).val();
         var rows = $('#table').bootstrapTable('getSelections');
 
-        var ids = new Array();
+        var ids = [];
         for (var i = 0; i < rows.length; i++) {
             ids[ids.length] = rows[i].id;
         }
+
         if (ids.length > 0) {
             $.ajax({
-                url: '/surveys/state/' + state,
+                url: '/admin/surveys/state',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
                 success: function () {
-                    window.location.reload();
+                    $('#table').bootstrapTable('refresh');
                 }
             });
         }
@@ -126,7 +136,6 @@
 
     $('.filter').click(function () {
         $('#state').val($(this).val());
-        $('#table').bootstrapTable('selectPage', 1);
         $('#table').bootstrapTable('refresh', {
             query: {
                 state: $(this).val(),
@@ -142,12 +151,18 @@
     });
 
     /* 筛选推荐 */
-    $('.recommend').click(function () {
+    $('.top').click(function () {
         var object = $('#forms input').serializeObject();
-        object['recommend'] = $('.recommend').val();
+        object['top'] = $('.top').val();
         object['_token'] = '{{ csrf_token() }}';
         $('#table').bootstrapTable('selectPage', 1);
         $('#table').bootstrapTable('refresh', {query: object});
+
+        //改变按钮样式
+        $('.top').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.top').addClass('btn-default');
+        $(this).removeClass('btn-default');
+        $(this).addClass($(this).data('active'));
     });
 
     function openOrClose(id_name_str) {
@@ -164,5 +179,23 @@
         locale: "zh-CN",
         toolbarPlacement: 'bottom',
         showClear: true,
+    });
+
+    /* 启动排序 */
+    $('#btn_sort').click(function () {
+        if ($('#btn_sort').hasClass('active')) {
+            $('#btn_sort').removeClass('active');
+            $('#btn_sort').text('排序');
+            $('#table tbody').sortable('disable');
+            $('#table tbody').enableSelection();
+            toastrs('info', '<b>已禁用排序功能</b>')
+        }
+        else {
+            $('#btn_sort').addClass('active');
+            $('#btn_sort').text('排序(已启用)');
+            $('#table tbody').sortable('enable');
+            $('#table tbody').disableSelection();
+            toastrs('info', '<b>已启用排序功能</b>')
+        }
     });
 </script>

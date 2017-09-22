@@ -579,7 +579,7 @@ INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `upda
 -- -----------
 -- 2017-9-22
 -- -----------
-INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-推荐', '0', '5', NULL, NULL);
+INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-置顶', '0', '5', NULL, NULL);
 
 INSERT INTO `cms_permissions` ( `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES
 ('@feature', '专题管理', 4, 8, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
