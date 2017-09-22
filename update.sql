@@ -575,3 +575,8 @@ INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `upda
 INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote-publish', '投票-发布', '5', null, null);
 INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote-cancel', '投票-撤回', '6', null, null);
 INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote-sort', '投票-排序', '7', null, null);
+
+-- -----------
+-- 2017-9-22
+-- -----------
+INSERT INTO `cms`.`cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-推荐', '0', '5', NULL, NULL);

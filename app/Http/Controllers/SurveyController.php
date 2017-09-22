@@ -8,7 +8,6 @@ use App\Models\SurveyItem;
 use App\Models\SurveyTitle;
 use Auth;
 use Gate;
-use Request;
 
 class SurveyController extends Controller
 {
@@ -56,6 +55,7 @@ class SurveyController extends Controller
     {
         $data = $request->all();
         $data['username'] = Auth::user()->name;
+        $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
         $survey = Survey::create($data);
@@ -221,36 +221,9 @@ class SurveyController extends Controller
         return Survey::table();
     }
 
-    public function state($state)
+    public function state()
     {
-        $ids = Request::get('ids');
-
-        switch ($state) {
-            case Survey::STATE_DELETED:
-                if (Gate::denies('@survey-delete')) {
-                    \Session::flash('flash_warning', '无此操作权限');
-                    return;
-                }
-                $state_name = '已删除';
-                break;
-            default:
-                \Session::flash('flash_warning', '操作错误!');
-                return;
-        }
-
-        foreach ($ids as $id) {
-            $survey = Survey::find($id);
-
-            if ($survey == null) {
-                \Session::flash('flash_warning', '无此记录!');
-                return;
-            }
-
-            $survey->state = $state;
-            $survey->save();
-        }
-
-        \Session::flash('flash_success', $state_name . '成功!');
+        Survey::state(request()->all());
     }
 
     public function statistic($id)
@@ -259,21 +232,21 @@ class SurveyController extends Controller
         return view('admin.surveys.show', compact('survey'));
     }
 
-    public function top($id)
+    public function top()
     {
         if (Gate::denies('@survey-top')) {
             \Session::flash('flash_warning', '无此操作权限');
             return;
         }
 
-        $survey = Survey::find($id);
-        if ($survey->is_top == 1) {
-            $survey->is_top = 0;
+        $survey = Survey::find(request()->get('id'));
+        if ($survey->is_top == Survey::TOP_TRUE) {
+            $survey->is_top = Survey::TOP_FALSE;
             $survey->updated_at = date('Y-m-d H:i:s');
             $survey->save();
             \Session::flash('flash_success', '取消推荐成功');
         } else {
-            $survey->is_top = 1;
+            $survey->is_top = Survey::TOP_TRUE;
             $survey->updated_at = date('Y-m-d H:i:s');
             $survey->save();
             \Session::flash('flash_success', '推荐成功');

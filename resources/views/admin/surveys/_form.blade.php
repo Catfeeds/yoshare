@@ -3,10 +3,15 @@
         <a href="#tabHome" data-toggle="tab">基本信息</a>
     </li>
     <li>
+        <a href="#tabTitle" data-toggle="tab">题目</a>
+    </li>
+    <li>
         <a href="#tabContent" data-toggle="tab">正文</a>
     </li>
+
 </ul>
 <div id="tabContents" class="tab-content">
+
     <div id="tabHome" class="tab-pane fade in active padding-t-15">
         <div class="form-group">
             {!! Form::label('title', '标题:', ['class' => 'control-label col-sm-1']) !!}
@@ -137,6 +142,141 @@
         </div>
     </div>
 
+    <div id="tabTitle" class="tab-pane fade padding-t-15">
+
+        {{--<div class="col-sm-6">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '标题:', ['class' => 'control-label col-sm-2']) !!}--}}
+                {{--<div class="input-group col-sm-10">--}}
+                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+                           {{--class="form-control"--}}
+                           {{--style="margin:0 30px 0 15px;"/>--}}
+                    {{--<span class="input-group-btn">--}}
+                             {{--<button class="btn btn-primary btn-flat add_option" type="button">添加选项</button>--}}
+                    {{--</span>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '标题描述:', ['class' => 'control-label col-sm-2']) !!}--}}
+                {{--<div class="input-group col-sm-10">--}}
+                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+
+        {{--</div>--}}
+
+        {{--<div class="col-sm-6 form-group">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title_url', '图片地址:', ['class' => 'control-label col-sm-2']) !!}--}}
+                {{--<div class="col-sm-10">--}}
+                    {{--{!! Form::text('', null, ['class' => 'form-control']) !!}--}}
+                    {{--<input type="text" class="form-control title_url">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="form-group">--}}
+                {{--<label for="image_title" class="control-label col-sm-2">上传图片:</label>--}}
+                {{--<div class="col-sm-10">--}}
+                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+
+        <div class="form-group">
+            {!! Form::label('title_url', '图片地址:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-11">
+{{--                {!! Form::text('', null, ['class' => 'form-control']) !!}--}}
+                <input type="text" class="form-control title_url">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="image_title" class="control-label col-sm-1">上传图片:</label>
+            <div class="col-sm-11">
+                <input class="image_title" name="image_title" type="file" data-preview-file-type="text"
+                       data-upload-url="/admin/files/upload?type=image"/>
+            </div>
+        </div>
+
+        {{--<div class="col-sm-3">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="input-group col-sm-8">--}}
+                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+                           {{--class="form-control"--}}
+                           {{--style="margin:0 30px 0 15px;"/>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="input-group col-sm-8">--}}
+                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+
+        {{--</div>--}}
+
+        {{--<div class="col-sm-3 form-group">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title_url_1', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="col-sm-9">--}}
+                    {{--<input type="text" class="form-control title_url_1">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="form-group">--}}
+                {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
+                {{--<div class="col-sm-12">--}}
+                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+        {{--</div>--}}
+
+        {{--<div class="col-sm-3">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '选项标题:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="input-group col-sm-8">--}}
+                    {{--<input type="text" name="title" id="title" value="{{ !empty($survey)? $survey->title :'' }}"--}}
+                           {{--class="form-control"--}}
+                           {{--style="margin:0 30px 0 15px;"/>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title', '选项描述:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="input-group col-sm-8">--}}
+                    {{--<textarea class="form-control" name="" id="" cols="10" rows="10"--}}
+                              {{--style="margin:0 30px 0 15px;"></textarea>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+
+        {{--</div>--}}
+
+        {{--<div class="col-sm-3 form-group">--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('title_url_2', '图片地址:', ['class' => 'control-label col-sm-3']) !!}--}}
+                {{--<div class="col-sm-9">--}}
+                    {{--<input type="text" class="form-control title_url_2">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="form-group">--}}
+                {{--<label for="image_title" class="control-label col-sm-3">上传图片:</label>--}}
+                {{--<div class="col-sm-9">--}}
+                    {{--<input class="image_title" name="image_title" type="file" data-preview-file-type="text"--}}
+                           {{--data-upload-url="/admin/files/upload?type=image"/>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+
+    </div>
+
     <div id="tabContent" class="tab-pane fade padding-t-15">
         <div class="form-group">
             <div class="col-sm-12">
@@ -144,6 +284,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="box-footer">
@@ -166,9 +307,15 @@
     //上传图片
     var image_url = $('#image_url').val();
     var images = [];
+    var title_url = $('.title_url').val();
+    var title_images = [];
 
     if (image_url == null || image_url.length > 0) {
         images = ['<img height="240" src="' + $('#image_url').val() + '">'];
+    }
+
+    if (title_url == null || title_url.length > 0) {
+        title_images = ['<img height="240" src="' + $('.title_url').val() + '">'];
     }
 
     $('#image_file').fileinput({
@@ -186,6 +333,36 @@
         $('#image_url').val(data.response.data);
     });
 
+    $('.image_title').fileinput({
+        language: 'zh',
+        uploadExtraData: {_token: '{{ csrf_token() }}'},
+        allowedFileExtensions: ['jpg', 'gif', 'png'],
+        initialPreview: title_images,
+        maxFileSize: 10240,
+        resizeImage: true,
+        maxImageWidth: 640,
+        maxImageHeight: 960,
+    });
+
+    $('.image_title').on('fileuploaded', function (event, data) {
+        $('#string1').val(data.response.data);
+    });
+
+
+    $('.submit').click(function () {
+        var image_file = $('#image_file').fileinput('getFileStack');
+        if (image_file.length > 0) {
+            return toastrs('请先上传图片!');
+        }
+    });
+
+    $('.submit').click(function () {
+        var image_title = $('.image_title').fileinput('getFileStack');
+        if (image_title.length > 0) {
+            return toastrs('请先上传图片!');
+        }
+    });
+
     //提示上传图片
     function toastrs(message) {
         toastr.options = {
@@ -195,13 +372,6 @@
         toastr['warning'](message);
         return false;
     }
-
-    $('.submit').click(function () {
-        var image_file = $('#image_file').fileinput('getFileStack');
-        if (image_file.length > 0) {
-            return toastrs('请先上传图片!');
-        }
-    })
 
     $(document).ready(function () {
         CKEDITOR.replace('description', {

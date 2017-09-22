@@ -4,11 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                问卷
+                问卷管理
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">问卷</li>
+                <li class="active">问卷管理</li>
             </ol>
         </section>
         <section class="content">
@@ -76,7 +76,6 @@
 
         });
 
-
         function thumbFormatter(value, row, index) {
             var thumb_html = '<img src="' + row.image_url + '" width="120">';
             return [
@@ -102,7 +101,7 @@
         function titleFormatter(value, row, index) {
             if (row.is_top == 1) {
                 return [
-                    '<span class="label label-success">推荐</span><span> </span><a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
+                    '<span class="label label-primary">推荐</span><span> </span><a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
                 ]
             }
             else {
@@ -122,15 +121,19 @@
             html =
                 '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>' +
                 '<span> </span>';
+            if (row.is_top == 0) {
+                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-arrow-up"></i></button>';
+            } else {
+                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="取消推荐"><i class="fa fa-arrow-down"></i></button>';
+            }
             html +=
                 '<span> </span>' +
-                '<button class="btn btn-info btn-xs count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-envelope"></i></button>' +
+                '<button class="btn btn-info btn-xs count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-envelope"></i></button>';
+            html +=
                 '<span> </span>' +
                 '<button class="btn btn-danger btn-xs remove" data-toggle="modal" data-target="#modal"  title="删除"><i class="fa fa-trash"></i></button>';
-
             return html;
         }
-
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
@@ -153,6 +156,17 @@
                     }
                 });
             },
+            'click .top': function (e, value, row, index) {
+                $.ajax({
+                    url: '/admin/surveys/top',
+                    type: 'POST',
+                    data: {'_token': '{{ csrf_token() }}', 'id': row.id},
+                    success: function (data) {
+//                        window.location.reload();
+                        window.location.href = '/admin/surveys';
+                    }
+                })
+            },
 
             'click .remove': function (e, value, row, index) {
                 remove_open = true;
@@ -167,15 +181,16 @@
             if (typeof(row_id) == "undefined") {
                 return false;
             }
-            var token = document.getElementsByTagName('meta')['csrf-token'].getAttribute('content');
+            var ids = [row_id];
             $.ajax({
-                type: 'DELETE',
-                data: {'_token': token},
-                url: '/admin/surveys/' + row_id,
+                url: '/admin/surveys/state',
+                type: 'POST',
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Survey::STATE_DELETED }}'},
                 success: function (data) {
                     window.location.href = '/admin/surveys';
                 }
             });
+
         });
     </script>
 

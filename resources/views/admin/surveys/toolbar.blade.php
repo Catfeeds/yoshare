@@ -1,19 +1,23 @@
 <div class="cb-toolbar">操作:</div>
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
-    <button class="btn btn-success btn-xs margin-r-5" id="create" onclick="create()">新增</button>
-    <button class="btn btn-danger btn-xs margin-r-5" id="delete"
+    <button class="btn btn-primary btn-xs margin-r-5 " id="create" onclick="create()">新增</button>
+    <button class="btn btn-danger btn-xs margin-r-5 " id="delete"
             value="{{ \App\Models\Survey::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal"
             data-target="#modal">删除
     </button>
 </div>
 <div class="btn-group margin-bottom pull-right">
-    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" id="" value="">全部</button>
-    <button type="button" class="btn btn-primary btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Survey::STATE_NORMAL }}">正常
+    <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" id="" value="">全部
     </button>
-    <button type="button" class="btn btn-danger btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Survey::STATE_DELETED }}">已删除
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
+            value="{{ \App\Models\Survey::STATE_NORMAL }}" data-active="btn-success">正常
+    </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter recommend"
+            value="{{ \App\Models\Survey::TOP_TRUE }}" title="推荐到轮播图" data-active="btn-primary">推荐
+    </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
+            value="{{ \App\Models\Survey::STATE_DELETED }}" data-active="btn-danger">已删除
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" onclick="openOrClose('forms')">查询
     </button>
@@ -78,9 +82,9 @@
         }
 
         $.ajax({
-            url: '/admin/surveys/state/' + state,
+            url: '/admin/surveys/state',
             type: 'POST',
-            data: {'_token': '{{ csrf_token() }}', 'ids': ids},
+            data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Survey::STATE_DELETED }}'},
             success: function () {
                 window.location.reload();
             }
@@ -120,7 +124,6 @@
         }
     });
 
-    /* 筛选 */
     $('.filter').click(function () {
         $('#state').val($(this).val());
         $('#table').bootstrapTable('selectPage', 1);
@@ -130,6 +133,12 @@
                 _token: '{{ csrf_token() }}'
             }
         });
+
+        //改变按钮样式
+        $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.filter').addClass('btn-default');
+        $(this).removeClass('btn-default');
+        $(this).addClass($(this).data('active'));
     });
 
     /* 筛选推荐 */

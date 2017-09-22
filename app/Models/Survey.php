@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Auth;
-use Illuminate\Database\Eloquent\Model;
+use Gate;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
-use App\Models\DataSource;
 use Response;
 
-class Survey extends Model
+class Survey extends BaseModule
 {
-    const STATE_DELETED = 0;
+    use SoftDeletes;
 
+    const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
 
     const MULTIPLE_FALSE = 0;
@@ -20,10 +21,20 @@ class Survey extends Model
     const TOP_FALSE = 0;
     const TOP_TRUE = 1;
 
+    const STATES = [
+        0 => '已删除',
+        1 => '正常',
+    ];
+
     const MULTIPLE = [
         0 => '单选',
         1 => '多选',
     ];
+
+    const STATE_PERMISSIONS = [
+        0 => '@survey-delete',
+    ];
+
 
     protected $fillable = [
         'site_id',
@@ -33,7 +44,6 @@ class Survey extends Model
         'description',
         'ip',
         'state',
-        'amount',
         'member_id',
         'begin_date',
         'end_date',
@@ -70,8 +80,12 @@ class Survey extends Model
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
         });
-        if (isset($filters['state']) && $filters['state'] != '') {
-            $query->where('state', $filters['state']);
+        if (isset($filters['state'])) {
+            if (!empty($filters['state'])) {
+                $query->where('state', $filters['state']);
+            } else if ($filters['state'] === strval(static::STATE_DELETED)) {
+                $query->onlyTrashed();
+            }
         }
     }
 
@@ -85,7 +99,7 @@ class Survey extends Model
 
         $surveys = Survey::where('site_id', $site_id)
             ->filter($filter)
-            ->orderBy('is_top','desc')
+            ->orderBy('is_top', 'desc')
             ->orderBy('created_at', 'desc')
             ->skip($offset)
             ->limit($limit)
@@ -120,10 +134,36 @@ class Survey extends Model
 
     }
 
-    public function items()
+    public static function state($input)
     {
-        return $this->hasMany(SurveyItem::class);
+        $ids = $input['ids'];
+        $state = $input['state'];
+
+        //判断是否有操作权限
+        $permission = array_key_exists($state, static::STATE_PERMISSIONS) ? static::STATE_PERMISSIONS[$state] : '';
+        if (!empty($permission) && Gate::denies($permission)) {
+            return;
+        }
+
+        $items = static::withTrashed()
+            ->whereIn('id', $ids)
+            ->get();
+        foreach ($items as $item) {
+            $item->state = $state;
+            $item->save();
+            if ($state == static::STATE_DELETED) {
+                $item->delete();
+            } else if ($item->trashed()) {
+                $item->restore();
+            }
+        }
+        \Session::flash('flash_success', static::STATE_DELETED . '成功!');
     }
+
+//    public function items()
+//    {
+//        return $this->hasMany(SurveyItem::class);
+//    }
 
     public function data()
     {
@@ -138,5 +178,16 @@ class Survey extends Model
     public function member()
     {
         return $this->hasOne(Member::class, 'id', 'member_id');
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
+
+    public function items()
+    {
+        return $this->morphMany(Item::class, 'refer');
+
     }
 }
