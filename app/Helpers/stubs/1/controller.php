@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\__module_name__;
 use App\Models\Category;
-use App\Models\Content;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;

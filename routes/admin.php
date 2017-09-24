@@ -10,7 +10,6 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     Route::get('/', 'AdminController@index');
-    Route::get('/statistics', 'AdminController@statistics');
 
     /**
      * 推送管理

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\Question;
 use App\Models\Category;
-use App\Models\Content;
 use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;

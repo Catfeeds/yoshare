@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\Content;
+use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Support\ServiceProvider;
+use Queue;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Queue::after(function (JobProcessed $event) {
+            // $event->connectionName
+            // $event->job
+            // $event->job->payload()
+            \Log::debug('任务完成: ' . $event->connectionName);
+        });
     }
 
     /**

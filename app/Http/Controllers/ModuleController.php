@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleRequest;
-use App\Models\Content;
 use App\Models\Module;
 use Gate;
 use Request;

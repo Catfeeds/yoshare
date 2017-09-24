@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Session;
-
 class AdminController extends Controller
 {
     public function __construct()
@@ -13,11 +11,6 @@ class AdminController extends Controller
     public function index()
     {
         return redirect('/admin/articles');
-    }
-
-    public function statistics()
-    {
-        return view('admin.statistic');
     }
 
     public function login()

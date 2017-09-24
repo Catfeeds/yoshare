@@ -26,10 +26,11 @@
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-align="center" data-width="45">ID</th>
-                                    <th data-field="name">英文名称</th>
+                                    <th data-field="name" data-width="90">英文名称</th>
                                     <th data-field="title">标题</th>
                                     <th data-field="domain" data-width="200">域名</th>
                                     <th data-field="directory" data-width="200">目录</th>
+                                    <th data-field="user_name" data-align="center" data-width="90">操作员</th>
                                     <th data-field="updated_at" data-align="center" data-width="120">更新时间</th>
                                     <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents" data-align="center" data-width="100">操作</th>
                                 </tr>
