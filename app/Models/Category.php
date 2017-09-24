@@ -15,7 +15,7 @@ class Category extends Model
         0 => '已禁用',
     ];
 
-    const CATEGORY_PARENT_ID = 0;
+    const ID_ROOT = 0;
 
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;

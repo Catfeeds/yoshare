@@ -99,8 +99,9 @@
         sidePagination: 'server',
         clickToSelect: true,
         striped: true,
-
         onLoadSuccess: function (data) {
+            $('#btn_sort').removeClass('active');
+            $('#btn_sort').text('排序');
             $('#modal_query').modal('hide');
             $('#table tbody').sortable({
                 cursor: 'move',

@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\UserLogEvent;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
 use Auth;
+use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
@@ -120,6 +120,10 @@ class ArticleController extends Controller
         }
 
         $article = call_user_func([$this->module->model_class, 'find'], $id);
+        $article->images = null;
+        $article->videos = null;
+        $article->audios = null;
+        $article->tags = $article->tags()->pluck('name')->toArray();
 
         return view('admin.contents.edit', ['module' => $this->module, 'content' => $article, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $article->category_id]);
     }
@@ -137,22 +141,6 @@ class ArticleController extends Controller
 
         $article = Article::stores($input);
 
-        //保存图片集、音频集、视频集
-        if (!empty($article)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $article, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $article, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $article, $input['videos']);
-            }
-        }
-
         event(new UserLogEvent(UserLog::ACTION_CREATE . '文章', $article->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
@@ -169,22 +157,6 @@ class ArticleController extends Controller
         }
 
         $article = Article::updates($id, $input);
-
-        //保存图片集、音频集、视频集
-        if (!empty($article)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $article, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $article, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $article, $input['videos']);
-            }
-        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '文章', $article->id, $this->module->model_class));
 
@@ -219,6 +191,20 @@ class ArticleController extends Controller
         $article = Article::find($id);
         $article->top = !$article->top;
         $article->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $article = Article::find($id);
+        if ($article->tags()->where('name', $tag)->exists()) {
+            $article->tags()->where('name', $tag)->delete();
+        } else {
+            $article->tags()->create([
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
     }
 
     public function state()

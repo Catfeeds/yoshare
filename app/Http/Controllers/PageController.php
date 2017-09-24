@@ -10,6 +10,8 @@ use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use Auth;
+use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
@@ -104,6 +106,10 @@ class PageController extends Controller
         }
 
         $page = call_user_func([$this->module->model_class, 'find'], $id);
+        $page->images = null;
+        $page->videos = null;
+        $page->audios = null;
+        $page->tags = $page->tags()->pluck('name')->toArray();
 
         return view('admin.contents.edit', ['module' => $this->module, 'content' => $page, 'base_url' => $this->base_url]);
     }
@@ -121,22 +127,6 @@ class PageController extends Controller
 
         $page = Page::stores($input);
 
-        //保存图片集、音频集、视频集
-        if (!empty($page)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
-            }
-        }
-
         event(new UserLogEvent(UserLog::ACTION_CREATE . '页面', $page->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
@@ -153,22 +143,6 @@ class PageController extends Controller
         }
 
         $page = Page::updates($id, $input);
-
-        //保存图片集、音频集、视频集
-        if (!empty($page)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
-            }
-        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '页面', $page->id, $this->module->model_class));
 
@@ -196,6 +170,27 @@ class PageController extends Controller
     public function sort()
     {
         return Page::sort();
+    }
+
+    public function top($id)
+    {
+        $page = Page::find($id);
+        $page->top = !$page->top;
+        $page->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $page = Page::find($id);
+        if ($page->tags()->where('name', $tag)->exists()) {
+            $page->tags()->where('name', $tag)->delete();
+        } else {
+            $page->tags()->create([
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
     }
 
     public function state()

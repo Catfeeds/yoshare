@@ -21,20 +21,26 @@
     }
 
     function titleFormatter(value, row, index) {
-        return [
-            '<a href="/admin/pages/' + row.id + '" target="_blank">' + row.title + '</a>',
-        ]
+        return '<a href="/pages/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+            (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '') +
+            (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
     }
 
     function actionFormatter(value, row, index) {
         //编辑
         var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
 
+        //置顶
+        html += '<button class="btn btn-primary btn-xs margin-r-5 top" data-toggle="tooltip" data-placement="top" title="' + (row.top ? '取消置顶' : '置顶') + '"><i class="fa ' + (row.top ? 'fa-chevron-circle-down' : 'fa-chevron-circle-up') + '"></i></button>';
+
+        //推荐
+        html += '<button class="btn btn-primary btn-xs margin-r-5 tag" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-hand-o-right"></i></button>';
+
         //评论
         html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
 
         //推送
-        html += '<button class="btn btn-info btn-xs margin-r-5 push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
+        html += '<button class="btn btn-info btn-xs push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
 
         return html;
     }
@@ -42,6 +48,7 @@
     function updateRow(field, row, old, $el) {
         $.ajax({
             url: '/admin/pages/' + row.id + '/save',
+            type: 'post',
             data: {'_token': '{{ csrf_token() }}', 'clicks': row.clicks},
             success: function (data, status) {
             },
@@ -54,6 +61,34 @@
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             window.location.href = '{{ $base_url }}/' + row.id + '/edit';
+        },
+
+        'click .top': function (e, value, row, index) {
+            $.ajax({
+                url: '/admin/pages/' + row.id + '/top',
+                type: 'post',
+                data: {'_token': '{{ csrf_token() }}'},
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {
+                    toast('error', '操作失败');
+                }
+            })
+        },
+
+        'click .tag': function (e, value, row, index) {
+            $.ajax({
+                url: '/admin/pages/' + row.id + '/tag',
+                type: 'post',
+                data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {
+                    toast('error', '操作失败');
+                }
+            })
         },
 
         'click .comment': function (e, value, row, index) {
@@ -85,14 +120,14 @@
             $('#btn_sort').text('排序');
             $('#table tbody').sortable('disable');
             $('#table tbody').enableSelection();
-            toastrs('info', '<b>已禁用排序功能</b>')
+            toast('info', '<b>已禁用排序功能</b>')
         }
         else {
             $('#btn_sort').addClass('active');
             $('#btn_sort').text('排序(已启用)');
             $('#table tbody').sortable('enable');
             $('#table tbody').disableSelection();
-            toastrs('info', '<b>已启用排序功能</b>')
+            toast('info', '<b>已启用排序功能</b>')
         }
     });
 </script>

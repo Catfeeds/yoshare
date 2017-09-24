@@ -6,11 +6,11 @@ use App\Events\UserLogEvent;
 use App\Models\__module_name__;
 use App\Models\Category;
 use App\Models\Content;
-use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
 use Auth;
+use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
@@ -105,6 +105,10 @@ class __controller__ extends Controller
         }
 
         $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
+        $__singular__->images = null;
+        $__singular__->videos = null;
+        $__singular__->audios = null;
+        $__singular__->tags = $__singular__->tags()->pluck('name')->toArray();
 
         return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url]);
     }
@@ -122,22 +126,6 @@ class __controller__ extends Controller
 
         $__singular__ = __module_name__::stores($input);
 
-        //保存图片集、音频集、视频集
-        if (!empty($__singular__)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $__singular__, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $__singular__, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $__singular__, $input['videos']);
-            }
-        }
-
         event(new UserLogEvent(UserLog::ACTION_CREATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
@@ -154,22 +142,6 @@ class __controller__ extends Controller
         }
 
         $__singular__ = __module_name__::updates($id, $input);
-
-        //保存图片集、音频集、视频集
-        if (!empty($__singular__)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $__singular__, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $__singular__, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $__singular__, $input['videos']);
-            }
-        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
@@ -201,9 +173,23 @@ class __controller__ extends Controller
 
     public function top($id)
     {
-        $article = Article::find($id);
-        $article->top = !$article->top;
-        $article->save();
+        $__singular__ = __module_name__::find($id);
+        $__singular__->top = !$__singular__->top;
+        $__singular__->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $__singular__ = __module_name__::find($id);
+        if ($__singular__->tags()->where('name', $tag)->exists()) {
+            $__singular__->tags()->where('name', $tag)->delete();
+        } else {
+            $__singular__->tags()->create([
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
     }
 
     public function state()

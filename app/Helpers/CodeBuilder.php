@@ -49,17 +49,23 @@ class CodeBuilder
             if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
             }
+            //日期
             if ($field->type == ModuleField::TYPE_DATETIME) {
                 $dates[] = '\'' . $field->name . '\'';
-            } else if ($field->type == ModuleField::TYPE_ENTITY) {
+            }
+            //实体
+            if ($field->type == ModuleField::TYPE_ENTITY) {
                 $entities[] = '\'' . $field->name . '\'';
             }
-            $fillable[] = '\'' . $field->name . '\'';
+            //填充
+            if (!in_array($field->type, [ModuleField::TYPE_IMAGES, ModuleField::TYPE_AUDIOS, ModuleField::TYPE_VIDEOS, ModuleField::TYPE_TAGS])) {
+                $fillable[] = '\'' . $field->name . '\'';
+            }
         }
 
-        $content = str_replace('__fillable__', implode(',', $fillable), $content);
-        $content = str_replace('__dates__', implode(',', $dates), $content);
-        $content = str_replace('__entities__', implode(',', $entities), $content);
+        $content = str_replace('__fillable__', implode(', ', $fillable), $content);
+        $content = str_replace('__dates__', implode(', ', $dates), $content);
+        $content = str_replace('__entities__', implode(', ', $entities), $content);
 
         file_put_contents(base_path('app/Models/' . $this->module->model_name . '.php'), $content);
     }

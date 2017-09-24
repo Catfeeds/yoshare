@@ -10,5 +10,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('__module_path__/comments/{id}','__controller__@comments');
     Route::post('__module_path__/{id}/save', '__controller__@save');
     Route::post('__module_path__/{id}/top', '__controller__@top');
+    Route::post('__module_path__/{id}/tag', '__controller__@tag');
     Route::resource('__module_path__', '__controller__');
 });

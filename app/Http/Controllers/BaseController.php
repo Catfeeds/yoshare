@@ -2,21 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
 use Dingo\Api\Routing\Helpers;
 use Response;
 
-/**
- * @SWG\Swagger(
- *     schemes={"http","https"},
- *     basePath="/api",
- *     @SWG\Info(
- *         version="1.0.0",
- *         title="AMS API v1",
- *         termsOfService="",
- *     ),
- * )
- */
 class BaseController extends Controller
 {
     use Helpers;

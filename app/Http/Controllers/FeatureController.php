@@ -236,7 +236,7 @@ class FeatureController extends Controller
     public function columnTable($category_id = 0, $time = 0)
     {
         if (!empty($time)) {
-            $category_id = Category::CATEGORY_PARENT_ID;
+            $category_id = Category::ID_ROOT;
             $firstday = date('Y-m-d', strtotime($time . '01'));
             $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
 

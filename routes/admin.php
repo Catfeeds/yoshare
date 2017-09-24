@@ -160,6 +160,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('comments/{id}/delete', 'CommentController@destroy');
 
     /**
+     * 标签管理
+     */
+
+    Route::get('tags/table', 'TagController@table');
+    Route::get('tags/tree', 'TagController@tree');
+    Route::get('tags/sort', 'TagController@sort');
+    Route::resource('tags', 'TagController');
+
+    /**
      * 问卷管理
      */
     Route::get('survey/items/table/{survey_id}', 'SurveyItemController@table');

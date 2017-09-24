@@ -11,5 +11,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('__module_path__/categories', '__controller__@categories');
     Route::post('__module_path__/{id}/save', '__controller__@save');
     Route::post('__module_path__/{id}/top', '__controller__@top');
+    Route::post('__module_path__/{id}/tag', '__controller__@tag');
     Route::resource('__module_path__', '__controller__');
 });

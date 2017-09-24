@@ -19,6 +19,7 @@ class ModuleField extends Model
     const TYPE_IMAGES = 11;
     const TYPE_AUDIOS = 12;
     const TYPE_VIDEOS = 13;
+    const TYPE_TAGS = 14;
 
     const TYPES = [
         1 => '文本',
@@ -34,6 +35,7 @@ class ModuleField extends Model
         11 => '图片集',
         12 => '音频集',
         13 => '视频集',
+        14 => '标签',
     ];
 
     const EDITOR_TYPE_TEXT = 1;
@@ -49,6 +51,7 @@ class ModuleField extends Model
     const EDITOR_TYPE_IMAGES = 11;
     const EDITOR_TYPE_AUDIOS = 12;
     const EDITOR_TYPE_VIDEOS = 13;
+    const EDITOR_TYPE_TAGS = 14;
 
     const EDITOR_TYPES = [
         1 => '文本',
@@ -64,6 +67,7 @@ class ModuleField extends Model
         11 => '图片集',
         12 => '音频集',
         13 => '视频集',
+        14 => '标签',
     ];
 
     const COLUMN_ALIGN_LEFT = 1;

@@ -595,3 +595,5 @@ INSERT INTO `cms_permissions` ( `name`, `description`, `group`, `sort`, `created
 ('@feature-push', '专题管理-推送', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
 ('@feature-column', '专题管理-栏目', 4, 0, '2017-09-21 16:00:00', '2017-09-21 16:00:00'),
 ('@feature-content', '专题管理-文章', 4, 0, '2017-09-21 16:00:00', '2017-09-21 16:00:00');
+
+INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@tag', '标签', '0', '6', NULL, NULL);

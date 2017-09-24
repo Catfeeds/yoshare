@@ -8,6 +8,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('pages/state', 'PageController@state');
     Route::get('pages/sort', 'PageController@sort');
     Route::get('pages/comments/{id}','PageController@comments');
-    Route::get('pages/{id}/save', 'PageController@save');
+    Route::post('pages/{id}/save', 'PageController@save');
+    Route::post('pages/{id}/top', 'PageController@top');
+    Route::post('pages/{id}/tag', 'PageController@tag');
     Route::resource('pages', 'PageController');
 });

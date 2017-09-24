@@ -21,7 +21,7 @@
 
                             @include('admin.errors.list')
 
-                            {!! Form::model($content,['id' => 'form', 'method' => 'PUT', 'url' => $base_url . '/' . $content->id, 'class' => 'form-horizontal']) !!}
+                            {!! Form::model($content, ['id' => 'form', 'method' => 'PUT', 'url' => $base_url . '/' . $content->id, 'class' => 'form-horizontal']) !!}
 
                             @include('admin.contents.form')
 

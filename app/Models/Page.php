@@ -29,17 +29,38 @@ class Page extends BaseModule
 
     protected $table = 'pages';
 
-    protected $fillable = ['site_id','title','subtitle','author','origin','slug','summary','image_url','video_url','audio_url','images','videos','content','top','member_id','user_id','sort','state','published_at'];
+    protected $fillable = ['site_id', 'title', 'subtitle', 'author', 'origin', 'slug', 'summary', 'image_url', 'video_url', 'audio_url', 'content', 'top', 'member_id', 'user_id', 'sort', 'state', 'published_at'];
 
     protected $dates = ['published_at'];
 
-    protected $entities = ['member_id','user_id'];
+    protected $entities = ['member_id', 'user_id'];
 
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
 
         $page = static::create($input);
+
+        //保存图片集
+        if (isset($input['images'])) {
+            Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
+
+        }
+
+        //保存音频集
+        if (isset($input['audios'])) {
+            Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
+        }
+
+        //保存视频集
+        if (isset($input['videos'])) {
+            Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
+        }
+
+        //保存标签
+        if (isset($input['tags'])) {
+            Tag::sync($page, $input['tags']);
+        }
 
         return $page;
     }
@@ -49,6 +70,27 @@ class Page extends BaseModule
         $page = static::find($id);
 
         $page->update($input);
+
+        //保存图片集
+        if (isset($input['images'])) {
+            Item::sync(Item::TYPE_IMAGE, $page, $input['images']);
+
+        }
+
+        //保存音频集
+        if (isset($input['audios'])) {
+            Item::sync(Item::TYPE_AUDIO, $page, $input['audios']);
+        }
+
+        //保存视频集
+        if (isset($input['videos'])) {
+            Item::sync(Item::TYPE_VIDEO, $page, $input['videos']);
+        }
+
+        //保存标签
+        if (isset($input['tags'])) {
+            Tag::sync($page, $input['tags']);
+        }
 
         return $page;
     }
@@ -63,6 +105,7 @@ class Page extends BaseModule
         $ds = new DataSource();
         $pages = static::with('user')
             ->filter($filters)
+            ->orderBy('top', 'desc')
             ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
@@ -73,14 +116,19 @@ class Page extends BaseModule
 
         $pages->transform(function ($page) {
             $attributes = $page->getAttributes();
+
+            //实体类型
             foreach ($page->entities as $entity) {
                 $entity_map = str_replace('_id', '_name', $entity);
                 $entity = str_replace('_id', '', $entity);
                 $attributes[$entity_map] = empty($page->$entity) ? '' : $page->$entity->name;
             }
+
+            //日期类型
             foreach ($page->dates as $date) {
                 $attributes[$date] = empty($page->$date) ? '' : $page->$date->toDateTimeString();
             }
+            $attributes['tags'] = implode(',', $page->tags()->pluck('name')->toArray());
             $attributes['state_name'] = $page->stateName();
             $attributes['created_at'] = empty($page->created_at) ? '' : $page->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($page->updated_at) ? '' : $page->updated_at->toDateTimeString();
@@ -91,7 +139,6 @@ class Page extends BaseModule
 
         return Response::json($ds);
     }
-
 
     /**
      * 排序
@@ -112,23 +159,36 @@ class Page extends BaseModule
             ]);
         }
 
+        if ($select->top && !$place->top) {
+            return Response::json([
+                'status_code' => 404,
+                'message' => '置顶记录不允许移至普通位置',
+            ]);
+        }
+
+        if (!$select->top && $place->top) {
+            return Response::json([
+                'status_code' => 404,
+                'message' => '普通记录不允许移至置顶位置',
+            ]);
+        }
+
+        $sort = $place->sort;
         try {
             if ($move_down) {
                 //下移
-                $select->sort = $place->sort - 1;
-                //减小最近100条记录的排序值
-                self::where('sort', '<', $place->sort)
-                    ->orderBy('sort', 'desc')
-                    ->limit(100)
-                    ->decrement('sort');
+                //增加移动区间的排序值
+                self::owns()
+                    ->where('sort', '>=', $place->sort)
+                    ->where('sort', '<', $select->sort)
+                    ->increment('sort');
             } else {
                 //上移
-                $select->sort = $place->sort + 1;
-                //增大最近100条记录的排序值
-                self::where('sort', '>', $place->sort)
-                    ->orderBy('sort', 'asc')
-                    ->limit(100)
-                    ->increment('sort');
+                //减少移动区间的排序值
+                self::owns()
+                    ->where('sort', '>', $select->sort)
+                    ->where('sort', '<=', $place->sort)
+                    ->decrement('sort');
             }
         } catch (Exception $e) {
             return Response::json([
@@ -136,6 +196,7 @@ class Page extends BaseModule
                 'message' => $e->getMessage(),
             ]);
         }
+        $select->sort = $sort;
         $select->save();
 
         return Response::json([

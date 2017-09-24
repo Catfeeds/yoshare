@@ -40,6 +40,11 @@ class BaseModule extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function tags()
+    {
+        return $this->morphMany(Tag::class, 'refer');
+    }
+
     public function items()
     {
         return $this->morphMany(Item::class, 'refer');
