@@ -18,7 +18,6 @@
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.flash')
-                            @include('admin.roles.toolbar')
                             @include('admin.layouts.confirm', ['message' => '您确认注销该条信息吗？'])
                             @include('admin.users.tree', ['id' => 'modal_category'])
                             <div id="toolbar" class="btn-group margin-b-5">

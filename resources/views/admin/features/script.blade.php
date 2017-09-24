@@ -12,15 +12,16 @@
                 levels: 4,
                 onNodeSelected: function (event, data) {
                     category_id = data.id;
+                    time = data.time;
                     $('#category_id').val(data.id);
+                    $('#time').val(data.time);
                     $('#table').bootstrapTable('refresh');
                 }
             });
 
             if (getNodeIndex(parseInt(getQueryString('category_id')), data) >= 0) {
                 $('#tree').treeview('selectNode', [nodeIndex, {silent: false}]);
-            }
-            else {
+            }else {
                 $('#tree').treeview('selectNode', [0, {silent: false}]);
             }
         }

@@ -34,8 +34,8 @@ class CategoryController extends Controller
         $modules = Module::where('state', Module::STATE_ENABLE)
             ->pluck('title', 'id')
             ->toArray();
-
-        return view('admin.categories.create', compact('category_id', 'modules'));
+        $type = Category::TYPE_COLUMN;
+        return view('admin.categories.create', compact('category_id', 'modules', 'type'));
     }
 
     public function store(CategoryRequest $request)
@@ -55,7 +55,12 @@ class CategoryController extends Controller
 
         Category::create($input);
 
-        $url = '/admin/categories?category_id=' . $category_id;
+        if ($input['type'] == Category::TYPE_COLUMN) {
+            $url = '/admin/categories?category_id=' . $category_id;
+        } else {
+            $url = '/admin/features/column?category_id=' . $category_id;
+        }
+
         \Session::flash('flash_success', '添加成功');
         return redirect($url);
     }
@@ -73,7 +78,8 @@ class CategoryController extends Controller
             ->pluck('title', 'id')
             ->toArray();
 
-        return view('admin.categories.edit', compact('category', 'modules'));
+        $type = Category::TYPE_COLUMN;
+        return view('admin.categories.edit', compact('category', 'modules', 'type'));
     }
 
 
@@ -94,7 +100,14 @@ class CategoryController extends Controller
         $category_id = $category->parent_id > 0 ? $category->parent_id : $category->id;
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/categories?category_id=' . $category_id);
+
+        if ($input['type'] == Category::TYPE_COLUMN) {
+            $url = '/admin/categories?category_id=' . $category_id;
+        } else {
+            $url = '/admin/features/column?category_id=' . $category_id;
+        }
+
+        return redirect($url);
     }
 
     public function save($id)
@@ -134,7 +147,7 @@ class CategoryController extends Controller
 
     public function tree()
     {
-        return Response::json(Category::tree('', 0));
+        return Response::json(Category::tree('', Category::CATEGORY_PARENT_ID));
     }
 
     public function lists($category_id)
@@ -150,6 +163,7 @@ class CategoryController extends Controller
     {
         $categories = Category::owns()
             ->where('parent_id', $category_id)
+            ->where('type', Category::TYPE_COLUMN)
             ->orderBy('sort')
             ->get();
 

@@ -160,21 +160,27 @@ class Feature extends BaseModule
             ->orderBy('sort')
             ->get();
 
-        $parents = Category::where('module_id', $module_id)->get();
-
+        $parents = Category::where('module_id', $module_id)
+            ->where('type', Category::TYPE_FEATURE)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $arr = [];
         foreach ($parents as $parent) {
             if (empty($parent)) {
                 $root = new Node();
-                $root->id = $parent->id;
                 $root->text = '所有栏目';
             } else {
                 $root = new Node();
-                $root->id = $parent->id;
-
+                $root->id = 0;
+                $root->time = date('Ym', strtotime($parent->created_at));
                 $root->text = date('Ym', strtotime($parent->created_at));
             }
             static::getNodes($root, $categories);
-            $arr[] = $root;
+
+            if(in_array($root, $arr) == false){
+                $arr[] = $root;
+            }
+
         }
 
         if ($show_parent) {
@@ -194,6 +200,7 @@ class Feature extends BaseModule
                 $node = new Node();
                 $node->id = $category->id;
                 $node->text = $category->name;
+                $node->time = date('Ymd', strtotime($category->created_at));
 
                 $parent->nodes[] = $node;
                 static::getNodes($node, $categories);

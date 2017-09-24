@@ -32,6 +32,7 @@ function toast(style, message) {
 
 var nodeIndex = 0;
 function getNodeIndex(id, data) {
+
     for (var i = 0; i < data.length; i++) {
         if (data[i].id == id) {
             return i;
@@ -39,6 +40,23 @@ function getNodeIndex(id, data) {
         nodeIndex++;
         if (data[i].nodes != null && data[i].nodes.length > 0) {
             var ret = getNodeIndex(id, data[i].nodes);
+            if (ret >= 0) {
+                return nodeIndex;
+            }
+        }
+    }
+    return -1;
+}
+
+function getTimeIndex(a, data) {
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].time == a) {
+            return i;
+        }
+        nodeIndex++;
+        if (data[i].nodes != null && data[i].nodes.length > 0) {
+            var ret = getTimeIndex(a, data[i].nodes);
             if (ret >= 0) {
                 return nodeIndex;
             }

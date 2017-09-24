@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use App\Models\DataSource;
 use Auth;
 use Gate;
 use Request;
@@ -232,8 +233,103 @@ class FeatureController extends Controller
         return Feature::table();
     }
 
+    public function columnTable($category_id = 0, $time = 0)
+    {
+        if (!empty($time)) {
+            $category_id = Category::CATEGORY_PARENT_ID;
+            $firstday = date('Y-m-d', strtotime($time . '01'));
+            $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
+
+            $categories = Category::owns()
+                ->where('created_at', '<', $lastday)
+                ->where('created_at', '>', $firstday)
+                ->where('parent_id', $category_id)
+                ->where('type', Category::TYPE_FEATURE)
+                ->orderBy('sort')
+                ->get();
+        } else {
+            $first = Category::where('type', Category::TYPE_FEATURE)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            $time = date('Ym', strtotime($first->created_at));
+            $firstday = date('Y-m-d', strtotime($time . '01'));
+            $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
+
+            $categories = Category::owns()
+                ->where('created_at', '<', $lastday)
+                ->where('created_at', '>', $firstday)
+                ->where('parent_id', $category_id)
+                ->where('type', Category::TYPE_FEATURE)
+                ->orderBy('sort')
+                ->get();
+        }
+
+        $categories->transform(function ($category) {
+            return [
+                'id' => $category->id,
+                'code' => $category->code,
+                'name' => $category->name,
+                'module_title' => $category->module->title,
+                'likes' => $category->likes,
+                'parent_id' => $category->parent_id,
+                'slug' => $category->slug,
+                'desc' => $category->description,
+                'state_name' => $category->stateName(),
+                'sort' => $category->sort,
+            ];
+        });
+
+        $ds = new DataSource();
+        $ds->data = $categories;
+
+        return Response::json($ds);
+    }
+
     public function categories()
     {
         return Response::json(Feature::tree('', 0, $this->module->id, true));
+    }
+
+    public function column()
+    {
+        if (Gate::denies('@feature-column')) {
+            $this->middleware('deny403');
+        }
+
+        //获取当前栏目ID
+        $category_id = Request::get('category_id') ?: 0;
+        $time = Request::get('time') ?: null;
+
+        return view('admin.features.column', compact('category_id', 'time'));
+    }
+
+    public function columnCreate($category_id)
+    {
+        $modules = Module::where('state', Module::STATE_ENABLE)
+            ->where('name', 'Feature')
+            ->pluck('title', 'id')
+            ->toArray();
+
+        $type = Category::TYPE_FEATURE;
+
+        return view('admin.features.create', compact('category_id', 'modules', 'type'));
+    }
+
+    public function columnEdit($id)
+    {
+        $category = Category::find($id);
+
+        if (empty($category)) {
+            \Session::flash('flash_warning', '无此记录');
+
+            return redirect('/admin/features');
+        }
+        $modules = Module::where('state', Module::STATE_ENABLE)
+            ->pluck('title', 'id')
+            ->toArray();
+
+        $type = Category::TYPE_FEATURE;
+
+        return view('admin.features.edit', compact('category', 'modules', 'type'));
     }
 }
