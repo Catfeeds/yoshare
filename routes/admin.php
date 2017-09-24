@@ -81,7 +81,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 数据字典
      */
-    Route::get('dictionaries/table', 'DictionaryController@table');
+    Route::get('dictionaries/tree/', 'DictionaryController@tree');
+    Route::get('dictionaries/table/{parent_id}', 'DictionaryController@table');
+    Route::get('dictionaries/create/{parent_id}', 'DictionaryController@create');
+    Route::get('dictionaries/{id}/save', 'DictionaryController@save');
     Route::resource('dictionaries', 'DictionaryController');
     Route::get('dictionaries/{id}/delete', 'DictionaryController@destroy');
 

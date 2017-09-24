@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Http\Requests\DictionaryRequest;
+use App\Models\DataSource;
 use App\Models\Dictionary;
-use App\Models\User;
-use App\Models\Site;
-use Gate;
 use Auth;
+use Gate;
 use Request;
 use Response;
+use DB;
 
 class DictionaryController extends Controller
 {
@@ -24,79 +23,87 @@ class DictionaryController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('admin.dictionaries.show');
+        $parent_id = Request::get('parent_id') ?: 0;
+
+        return view('admin.dictionaries.index', compact('parent_id'));
     }
 
-    public function edit($id)
+    public function create($parent_id)
     {
-        $dictionary = Dictionary::find($id);
-
-        if ($dictionary == null) {
-
-            \Session::flash('flash_warning', '无此记录');
-            return redirect('/admin/dictionaries');
-        }
-
-        $user = User::find($id);
-
-        return view('admin.dictionaries.edit', compact('dictionary','user'));
-    }
-
-    public function update($id, Request $request)
-    {
-        $dictionaries = Dictionary::find($id);
-
-        if ($dictionaries == null) {
-            \Session::flash('flash_warning', '无此记录');
-            return redirect()->to($this->getRedirectUrl())
-                ->withInput($request->input());
-        }
-        $dictionaries->update(Request::all());
-
-        \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/dictionaries');
-    }
-
-    public function destroy($id)
-    {
-        $dictionary = Dictionary::find($id);
-        if ($dictionary == null) {
-            \Session::flash('flash_warning', '无此记录');
-            return;
-        }
-        $dictionary->delete();
-        \Session::flash('flash_success', '删除成功');
-    }
-
-    public function create()
-    {
-        return view('admin.dictionaries.create');
+        return view('admin.dictionaries.create', compact('parent_id'));
     }
 
     public function store(DictionaryRequest $request)
     {
         $input = Request::all();
-        $input['site_id'] = Auth::user()->site_id;
+        $parent_id = $input['parent_id'];
+
+        $sort = Dictionary::select(DB::raw('max(sort) as max'))
+            ->where('parent_id', '=', $parent_id)
+            ->first()->max;
+
+        $sort += 1;
+
+        $input['sort'] = $sort;
+        $input['parent_id'] = $parent_id;
+        $input['site_id'] = \Auth::user()->site_id;
+
         Dictionary::create($input);
+
+        $url = '/admin/dictionaries?parent_id=' . $parent_id;
         \Session::flash('flash_success', '添加成功');
-        return redirect('/admin/dictionaries');
+        return redirect($url);
     }
 
-    public function table()
+
+    public function edit($id)
+    {
+
+    }
+
+    public function update($id, Request $request)
+    {
+
+    }
+
+    public function save($id)
+    {
+        $dictionary = Dictionary::find($id);
+
+        if ($dictionary == null) {
+            return;
+        }
+
+        $dictionary->update(Request::all());
+    }
+
+    public function destroy($id)
+    {
+        $dictionary = Dictionary::find($id);
+        $dictionary->delete();
+    }
+
+    public function tree()
+    {
+        return Response::json(Dictionary::tree('', 0, false));
+    }
+
+    public function table($parent_id)
     {
         $dictionaries = Dictionary::owns()
-                        ->get();
+            ->where('parent_id', $parent_id)
+            ->orderBy('sort')
+            ->get();
 
-        $names = Site::getNames();
-
-        $dictionaries->transform(function ($dictionary) use ($names) {
+        $dictionaries->transform(function ($dictionary) {
             return [
                 'id' => $dictionary->id,
+                'site_id' => $dictionary->site->title,
+                'parent_id' => $dictionary->parent_id,
                 'code' => $dictionary->code,
                 'name' => $dictionary->name,
                 'value' => $dictionary->value,
-                'site_id' => $names[$dictionary->site_id],
-                'created_at' => $dictionary->created_at->format('Y-m-d H:i:s'),
+                'sort' => $dictionary->sort,
             ];
         });
 
@@ -105,4 +112,5 @@ class DictionaryController extends Controller
 
         return Response::json($ds);
     }
+
 }
