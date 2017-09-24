@@ -55,11 +55,7 @@ class CategoryController extends Controller
 
         Category::create($input);
 
-        if ($input['type'] == Category::TYPE_COLUMN) {
-            $url = '/admin/categories?category_id=' . $category_id;
-        } else {
-            $url = '/admin/features/column?category_id=' . $category_id;
-        }
+        $url = '/admin/categories?category_id=' . $category_id;
 
         \Session::flash('flash_success', '添加成功');
         return redirect($url);
@@ -101,11 +97,7 @@ class CategoryController extends Controller
 
         \Session::flash('flash_success', '修改成功!');
 
-        if ($input['type'] == Category::TYPE_COLUMN) {
-            $url = '/admin/categories?category_id=' . $category_id;
-        } else {
-            $url = '/admin/features/column?category_id=' . $category_id;
-        }
+        $url = '/admin/categories?category_id=' . $category_id;
 
         return redirect($url);
     }

@@ -15,6 +15,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('features/{id}/save', 'FeatureController@save');
     Route::get('features/column', 'FeatureController@column');
     Route::get('features/column/create/{category_id}', 'FeatureController@columnCreate');
+    Route::post('features/column', 'FeatureController@columnStore');
+    Route::PATCH('features/column/{id}', 'FeatureController@columnUpdate');
     Route::get('features/column/{id}/edit', 'FeatureController@columnEdit');
     Route::resource('features', 'FeatureController');
 });

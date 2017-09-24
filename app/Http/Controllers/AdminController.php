@@ -15,6 +15,11 @@ class AdminController extends Controller
         return redirect('/admin/articles');
     }
 
+    public function statistics()
+    {
+        return view('admin.statistic');
+    }
+
     public function login()
     {
         return view('admin.login');

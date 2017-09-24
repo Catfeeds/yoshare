@@ -21,7 +21,7 @@
                         <div class="box-body">
                             @include('admin.errors.list')
 
-                            {!! Form::open(['url' => '/admin/categories', 'class' => 'form-horizontal']) !!}
+                            {!! Form::open(['url' => '/admin/features/column', 'class' => 'form-horizontal']) !!}
 
                             <input type="hidden" name="category_id" value="{{ $category_id }}" id="category_id">
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Feature;
 use App\Models\Category;
 use App\Models\Item;
@@ -10,6 +11,7 @@ use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
 use App\Models\DataSource;
+use DB;
 use Auth;
 use Gate;
 use Request;
@@ -236,14 +238,14 @@ class FeatureController extends Controller
     public function columnTable($category_id = 0, $time = 0)
     {
         if (!empty($time)) {
-            $category_id = Category::ID_ROOT;
+
             $firstday = date('Y-m-d', strtotime($time . '01'));
             $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
 
             $categories = Category::owns()
                 ->where('created_at', '<', $lastday)
                 ->where('created_at', '>', $firstday)
-                ->where('parent_id', $category_id)
+                ->where('parent_id', Category::ID_ROOT)
                 ->where('type', Category::TYPE_FEATURE)
                 ->orderBy('sort')
                 ->get();
@@ -251,6 +253,7 @@ class FeatureController extends Controller
             $first = Category::where('type', Category::TYPE_FEATURE)
                 ->orderBy('created_at', 'desc')
                 ->first();
+
             $time = date('Ym', strtotime($first->created_at));
             $firstday = date('Y-m-d', strtotime($time . '01'));
             $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
@@ -331,5 +334,52 @@ class FeatureController extends Controller
         $type = Category::TYPE_FEATURE;
 
         return view('admin.features.edit', compact('category', 'modules', 'type'));
+    }
+
+
+    public function columnStore(CategoryRequest $request)
+    {
+        $input = Request::all();
+        $category_id = $input['category_id'];
+
+        $sort = Category::select(DB::raw('max(sort) as max'))
+            ->where('parent_id', '=', $category_id)
+            ->first()->max;
+
+        $sort += 1;
+
+        $input['sort'] = $sort;
+        $input['parent_id'] = $category_id;
+        $input['site_id'] = \Auth::user()->site_id;
+
+        $category = Category::create($input);
+
+        $time = date('Ym', strtotime($category->created_at));
+        $url = '/admin/features/column?time=' . $time;
+
+        \Session::flash('flash_success', '添加成功');
+        return redirect($url);
+    }
+
+    public function columnUpdate($id, CategoryRequest $request)
+    {
+        $category = Category::find($id);
+
+        if ($category == null) {
+            \Session::flash('flash_warning', '无此记录');
+            return redirect()->to($this->getRedirectUrl())
+                ->withInput($request->input());
+        }
+
+        $input = Request::all();
+
+        $category->update($input);
+
+        \Session::flash('flash_success', '修改成功!');
+
+        $time = date('Ym', strtotime($category->created_at));
+        $url = '/admin/features/column?time=' . $time;
+
+        return redirect($url);
     }
 }

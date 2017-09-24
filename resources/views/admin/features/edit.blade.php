@@ -21,7 +21,7 @@
                         <div class="box-body">
                             @include('admin.errors.list')
 
-                            {!! Form::model($category,['method' => 'PATCH', 'action' => ['CategoryController@update', $category->id],'class' => 'form-horizontal']) !!}
+                            {!! Form::model($category,['method' => 'PATCH', 'action' => ['FeatureController@columnUpdate', $category->id],'class' => 'form-horizontal']) !!}
 
                             @include('admin.features.form')
 
