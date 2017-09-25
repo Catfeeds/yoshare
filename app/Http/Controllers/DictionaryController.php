@@ -109,7 +109,7 @@ class DictionaryController extends Controller
         $dictionaries->transform(function ($dictionary) {
             return [
                 'id' => $dictionary->id,
-                'site_id' => $dictionary->site->title,
+                'site_name' => $dictionary->site->title,
                 'parent_id' => $dictionary->parent_id,
                 'code' => $dictionary->code,
                 'name' => $dictionary->name,

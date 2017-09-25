@@ -6,7 +6,7 @@
         <th data-field="code">编码</th>
         <th data-field="name">名称</th>
         <th data-field="value" data-editable="true">值</th>
-        <th data-field="site_id" data-align="center" data-width="115">站点</th>
+        <th data-field="site_name" data-align="center" data-width="115">站点</th>
         <th data-field="sort" data-align="center" data-width="60" data-editable="true">序号
         </th>
         <th data-field="action" data-align="center" data-width="70"

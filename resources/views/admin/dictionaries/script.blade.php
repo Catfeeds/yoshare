@@ -55,8 +55,7 @@
             url: '/admin/dictionaries/' + row_id + '/delete',
             data: {'_token': '{{ csrf_token() }}'},
             success: function (data) {
-                $('#modal').modal('hide');
-                $('#table').bootstrapTable('refresh');
+                window.location.reload();
             }
         });
     });
