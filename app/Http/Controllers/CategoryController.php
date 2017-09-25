@@ -34,8 +34,7 @@ class CategoryController extends Controller
         $modules = Module::where('state', Module::STATE_ENABLE)
             ->pluck('title', 'id')
             ->toArray();
-        $type = Category::TYPE_COLUMN;
-        return view('admin.categories.create', compact('category_id', 'modules', 'type'));
+        return view('admin.categories.create', compact('category_id', 'modules'));
     }
 
     public function store(CategoryRequest $request)
@@ -74,8 +73,7 @@ class CategoryController extends Controller
             ->pluck('title', 'id')
             ->toArray();
 
-        $type = Category::TYPE_COLUMN;
-        return view('admin.categories.edit', compact('category', 'modules', 'type'));
+        return view('admin.categories.edit', compact('category', 'modules'));
     }
 
 
@@ -155,7 +153,6 @@ class CategoryController extends Controller
     {
         $categories = Category::owns()
             ->where('parent_id', $category_id)
-            ->where('type', Category::TYPE_COLUMN)
             ->orderBy('sort')
             ->get();
 

@@ -20,9 +20,6 @@ class Category extends Model
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
 
-    const TYPE_COLUMN = 0;
-    const TYPE_FEATURE = 1;
-    
     const LINK_TYPES = [
         0 => '无',
         1 => '网址',
@@ -81,7 +78,7 @@ class Category extends Model
         return array_key_exists($this->state, static::STATES) ? static::STATES[$this->state] : '';
     }
 
-    public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true, $type = self::TYPE_COLUMN)
+    public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true)
     {
         $categories = Category::owns()
             ->where(function ($query) use ($state) {
@@ -94,7 +91,6 @@ class Category extends Model
                     $query->where('module_id', $module_id);
                 }
             })
-            ->where('type', $type)
             ->orderBy('sort')
             ->get();
 

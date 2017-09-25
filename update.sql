@@ -437,69 +437,7 @@ CREATE TABLE `cms_push_logs` (
 -- -----------
 
 ALTER TABLE `cms_categories` ADD `type` TINYINT(1) NOT NULL COMMENT '栏目类型' AFTER `module_id`;
-
 ALTER TABLE `cms_permissions` ADD `group` int(10) NOT NULL COMMENT '分组' AFTER `description`;
-
-CREATE TABLE `cms_features` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL COMMENT '站点ID',
-  `category_id` int(11) NOT NULL COMMENT '栏目ID',
-  `type` int(11) NOT NULL COMMENT '类型',
-  `title` text NOT NULL COMMENT '标题',
-  `subtitle` text NOT NULL COMMENT '副标题',
-  `link_type` int(11) NOT NULL COMMENT '外链类型',
-  `link` text NOT NULL COMMENT '外链',
-  `author` text NOT NULL COMMENT '作者',
-  `origin` text NOT NULL COMMENT '内容来源',
-  `keywords` text NOT NULL COMMENT '关键字',
-  `summary` text NOT NULL COMMENT '摘要',
-  `image_url` text NOT NULL COMMENT '缩略图',
-  `video_url` text NOT NULL COMMENT '视频',
-  `images` text NOT NULL COMMENT '图片集',
-  `videos` text NOT NULL COMMENT '视频集',
-  `content` text NOT NULL COMMENT '正文',
-  `top` int(11) NOT NULL COMMENT '是否置顶',
-  `member_id` int(11) NOT NULL COMMENT '会员ID',
-  `user_id` int(11) NOT NULL COMMENT '用户ID',
-  `sort` int(11) NOT NULL COMMENT '序号',
-  `state` int(11) NOT NULL COMMENT '状态',
-  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
-  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
-  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `cms_modules` VALUES ('7', 'Feature', '专题', 'features', '专题管理', '0', 'fa-archive', '1', '2017-09-20 16:55:26', '2017-09-20 17:04:20');
-
-INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`) VALUES
-(7, 'top', '是否置顶', '是否置顶', 3, '0', 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'content', '正文', '正文', 6, '', 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, '', 0, 1, 0, 6, '', 40, 12, '正文', 14, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'videos', '视频集', '视频集', 13, '', 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, '', 0, 1, 0, 13, '', 1, 11, '视频集', 13, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'images', '图片集', '图片集', 11, '', 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, '', 0, 1, 0, 11, '', 1, 11, '图片集', 12, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'video_url', '视频', '视频', 10, '', 0, 0, 0, 0, 0, 14, 0, 0, 1, 0, '', 0, 1, 0, 10, '', 1, 11, '基本信息', 11, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'image_url', '缩略图', '缩略图', 8, '', 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, '', 0, 1, 0, 8, '', 1, 11, '基本信息', 10, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'id', 'ID', 'ID', 3, '', 0, 0, 0, 0, 1, 1, 1, 0, 1, 30, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'site_id', '站点ID', '站点', 3, '', 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'category_id', '栏目ID', '栏目', 3, '', 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'type', '类型', '类型', 3, '', 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, '', 0, 1, 0, 3, '小图,多图,大图', 1, 2, '基本信息', 3, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'title', '标题', '标题', 1, '', 1, 0, 0, 0, 0, 5, 1, 0, 1, 300, '', 2, 1, 0, 1, '', 1, 11, '基本信息', 1, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'subtitle', '副标题', '副标题', 1, '', 0, 0, 0, 0, 0, 6, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 11, '基本信息', 2, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'link_type', '外链类型', '外链类型', 3, '', 0, 0, 0, 0, 0, 7, 0, 0, 1, 0, '', 0, 1, 0, 3, '页面,栏目', 1, 2, '基本信息', 4, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'link', '外链', '外链', 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 5, '基本信息', 5, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'author', '作者', '作者', 1, '', 0, 0, 0, 0, 0, 9, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 2, '基本信息', 6, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'origin', '内容来源', '内容来源', 1, '', 0, 0, 0, 0, 0, 10, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 2, '基本信息', 7, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'keywords', '关键字', '关键字', 1, '', 0, 0, 0, 0, 0, 11, 0, 0, 1, 0, '', 0, 1, 0, 1, '', 1, 5, '基本信息', 8, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'summary', '摘要', '摘要', 1, '', 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, '', 0, 1, 0, 2, '', 4, 11, '基本信息', 9, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'member_id', '会员ID', '会员', 7, '', 0, 0, 0, 0, 0, 91, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'user_id', '用户ID', '操作员', 7, '', 0, 0, 0, 0, 0, 92, 1, 0, 2, 45, '', 4, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'sort', '序号', '序号', 3, '0', 0, 0, 0, 0, 0, 93, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'state', '状态', '状态', 3, '1', 0, 0, 0, 0, 0, 94, 1, 0, 2, 45, 'stateFormatter', 5, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'created_at', '创建时间', '创建时间', 5, '', 0, 0, 0, 0, 1, 95, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'updated_at', '修改时间', '修改时间', 5, '', 0, 0, 0, 0, 1, 96, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'deleted_at', '删除时间', '删除时间', 5, '', 0, 0, 0, 0, 1, 97, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29'),
-(7, 'published_at', '发布时间', '发布时间', 5, '', 0, 0, 0, 0, 0, 98, 1, 0, 2, 120, '', 3, 0, 0, 0, '', 0, 0, '', 0, '2017-09-20 08:45:29', '2017-09-20 08:45:29');
-
 
 -- -----------
 -- 2017-9-20
@@ -580,20 +518,22 @@ INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `upda
 -- 2017-9-22
 -- -----------
 INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-置顶', '0', '5', NULL, NULL);
-
-INSERT INTO `cms_permissions` ( `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES
-('@feature', '专题管理', 4, 8, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-create', '专题管理-新增', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-edit', '专题管理-编辑', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-publish', '专题管理-发布', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-cancel', '专题管理-撤搞', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-delete', '专题管理-删除', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-copy', '专题管理-复制', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-sort', '专题管理-排序', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-top', '专题管理-置顶', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-tag', '专题管理-标记', 4, 0, '2016-11-16 08:00:00', '2016-11-16 08:00:00'),
-('@feature-push', '专题管理-推送', 4, 0, '2016-06-29 16:00:00', '2016-06-29 16:00:00'),
-('@feature-column', '专题管理-栏目', 4, 0, '2017-09-21 16:00:00', '2017-09-21 16:00:00'),
-('@feature-content', '专题管理-文章', 4, 0, '2017-09-21 16:00:00', '2017-09-21 16:00:00');
-
 INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@tag', '标签', '0', '6', NULL, NULL);
+
+-- -----------
+-- 2017-9-24
+-- -----------
+CREATE TABLE `cms_tags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) NOT NULL COMMENT '站点ID',
+  `refer_id` int(10) unsigned NOT NULL COMMENT '关联ID',
+  `refer_type` varchar(255) NOT NULL DEFAULT '' COMMENT '关联类型',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '名称',
+  `sort` int(10) NOT NULL COMMENT '序号',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY (`sort`),
+  KEY (`name`),
+  KEY (`refer_id`, `refer_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

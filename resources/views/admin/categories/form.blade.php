@@ -8,7 +8,6 @@
 </ul>
 <div id="tabContents" class="tab-content">
     <div id="tabHome" class="tab-pane fade in active padding-t-15">
-        <input type="hidden" id="type" name="type" value="{{ $type }}">
         <div class="form-group">
             {!! Form::label('name', '栏目名称:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-11">
