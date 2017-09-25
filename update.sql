@@ -537,3 +537,19 @@ CREATE TABLE `cms_tags` (
   KEY (`name`),
   KEY (`refer_id`, `refer_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- -----------
+-- 2017-9-25
+-- -----------
+CREATE TABLE `cms_dictionaries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点id',
+  `parent_id` int(10) unsigned NOT NULL COMMENT '上级ID',
+  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` text COLLATE utf8_unicode_ci NOT NULL,
+  `sort` int(10) unsigned DEFAULT NULL COMMENT '序号',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_id` (`site_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
