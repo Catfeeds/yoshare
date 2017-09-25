@@ -20,6 +20,8 @@
 </div>
 
 <div class="box-footer">
-    <button type="button" class="btn btn-default" onclick="window.history.back();">取　消</button>
+    <a href="/admin/dictionaries">
+        <button type="button" class="btn btn-default">取　消</button>
+    </a>
     <button type="submit" class="btn btn-info pull-right">确　定</button>
 </div>

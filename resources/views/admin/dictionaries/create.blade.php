@@ -4,12 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                字典管理
+                新增字典
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="#">系统管理</a></li>
-                <li><a href="/activities">字典管理</a></li>
+                <li><a href="/dictionaries">字典管理</a></li>
                 <li class="active">新增</li>
             </ol>
         </section>
@@ -20,15 +19,15 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-body">
-
-                            {!! Form::open(['url' => '/admin/dictionaries','class' => 'form-horizontal']) !!}
-
-                            @include('admin.dictionaries._form', ['submitButtonText' => '添加字典'])
-
-                            {!! Form::close() !!}
-
                             @include('admin.errors.list')
 
+                            {!! Form::open(['url' => '/admin/dictionaries', 'class' => 'form-horizontal']) !!}
+
+                            <input type="hidden" name="parent_id" value="{{ $parent_id }}" id="parent_id">
+
+                            @include('admin.dictionaries.form')
+
+                            {!! Form::close() !!}
 
                         </div>
                     </div><!-- /.box -->
@@ -36,5 +35,4 @@
             </div>   <!-- /.row -->
         </section>
     </div>
-
 @endsection

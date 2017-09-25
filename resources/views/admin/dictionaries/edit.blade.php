@@ -1,6 +1,7 @@
-@extends('admin.layouts.master')
+@extends('layouts.master')
 
 @section('content')
+
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
@@ -21,13 +22,13 @@
                     <div class="box box-info">
                         <div class="box-body">
 
-                            {!! Form::model($dictionary,['method' => 'PATCH', 'class' => 'form-horizontal','action' => ['DictionaryController@update', $dictionary->id]]) !!}
+                            {!! Form::model($dictionary,['method' => 'PATCH', 'class' => 'form-horizontal','action' => ['\App\Http\Controllers\DictionaryController@update', $dictionary->id]]) !!}
 
-                            @include('admin.dictionaries._form', ['submitButtonText' => '更新字典'])
+                            @include('dictionary._form', ['submitButtonText' => '更新字典'])
 
                             {!! Form::close() !!}
 
-                            @include('admin.errors.list')
+                            @include('errors.list')
 
                         </div>
                     </div><!-- /.box -->
