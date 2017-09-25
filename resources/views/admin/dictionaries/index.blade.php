@@ -22,16 +22,11 @@
                 </div>
                 <div class="col-md-9">
                     <div class="box box-info">
-                        <div class="box-header">
-                            <button class="btn btn-primary btn-xs margin-r-5 margin-t-5" id="btn_create"
-                                    data-toggle="modal" data-target="#modal_form">新增字典
-                            </button>
-                        </div>
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
+                            @include('admin.dictionaries.toolbar')
                             @include('admin.dictionaries.form')
-                            @include('admin.layouts.modal', ['id' => 'modal_create'])
                             @include('admin.dictionaries.table')
                             @include('admin.dictionaries.script')
                         </div>
@@ -40,7 +35,4 @@
             </div>
         </section>
     </div>
-    <script>
-
-    </script>
 @endsection
