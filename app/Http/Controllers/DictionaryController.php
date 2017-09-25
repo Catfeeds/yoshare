@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DictionaryRequest;
 use App\Models\DataSource;
 use App\Models\Dictionary;
-use Auth;
 use Gate;
 use Request;
 use Response;
-use DB;
 
 class DictionaryController extends Controller
 {
@@ -35,35 +33,48 @@ class DictionaryController extends Controller
 
     public function store(DictionaryRequest $request)
     {
-        $input = Request::all();
-        $parent_id = $input['parent_id'];
+        $input = $request->all();
 
-        $sort = Dictionary::select(DB::raw('max(sort) as max'))
-            ->where('parent_id', '=', $parent_id)
-            ->first()->max;
-
+        $sort = Dictionary::where('parent_id', '=', $input['parent_id'])->max('sort');
         $sort += 1;
 
         $input['sort'] = $sort;
-        $input['parent_id'] = $parent_id;
         $input['site_id'] = \Auth::user()->site_id;
 
         Dictionary::create($input);
 
-        $url = '/admin/dictionaries?parent_id=' . $parent_id;
         \Session::flash('flash_success', '添加成功');
-        return redirect($url);
+        return redirect('/admin/dictionaries?parent_id=' . $input['parent_id']);
     }
 
 
     public function edit($id)
     {
+        $dictionary = Dictionary::find($id);
 
+        if (empty($dictionary)) {
+            \Session::flash('flash_warning', '无此记录');
+
+            return redirect('/admin/dictionaries');
+        }
+
+        return view('admin.dictionaries.edit', compact('dictionary'));
     }
 
-    public function update($id, Request $request)
+    public function update($id, DictionaryRequest $request)
     {
+        $input = $request->all();
 
+        $dictionary = Dictionary::find($id);
+
+        if ($dictionary == null) {
+            \Session::flash('flash_warning', '无此记录');
+            redirect()->back()->withInput();
+        }
+        $dictionary->update($input);
+
+        \Session::flash('flash_success', '修改成功!');
+        return redirect('/admin/dictionaries?parent_id=' . $input['parent_id']);
     }
 
     public function save($id)

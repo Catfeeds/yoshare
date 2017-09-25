@@ -23,13 +23,14 @@
                 <div class="col-md-9">
                     <div class="box box-info">
                         <div class="box-header">
-                            <button class="btn btn-primary btn-xs margin-r-5 margin-t-5"
-                                    onclick="window.location.href='/admin/dictionaries/create/{{ $parent_id }}';"> 新增字典
+                            <button class="btn btn-primary btn-xs margin-r-5 margin-t-5" id="btn_create"
+                                    data-toggle="modal" data-target="#modal_form">新增字典
                             </button>
                         </div>
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
+                            @include('admin.dictionaries.form')
                             @include('admin.layouts.modal', ['id' => 'modal_create'])
                             <table id="table"
                                    data-toggle="table"
@@ -99,7 +100,7 @@
 
         function actionFormatter(value, row, index) {
             return [
-                '<button class="btn btn-primary btn-xs edit" data-toggle="modal" data-target="#modal_edit">' +
+                '<button class="btn btn-primary btn-xs edit" data-toggle="modal" data-target="#modal_form">' +
                 '<i class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="编辑" ></i></button>',
                 '<span> </span>',
                 '<button class="btn btn-danger btn-xs remove" data-toggle="modal" data-target="#modal"><i class="fa fa-trash"></i></button>'
@@ -119,11 +120,23 @@
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
-                //window.location.href = '/admin/dictionaries/' + row.id + '/edit';
+                $('#form').attr('action', '/admin/dictionaries/' + row.id);
+                $('#method').val('PUT');
+                $('#code').val(row.code);
+                $('#name').val(row.name);
+                $('#value').val(row.value);
             },
             'click .remove': function (e, value, row, index) {
                 $('#modal_remove').data('id', row.id);
             },
         };
+
+        $('#btn_create').click(function () {
+            $('#form').attr('action', '/admin/dictionaries');
+            $('#method').val('POST');
+            $('#code').val('');
+            $('#name').val('');
+            $('#value').val('');
+        });
     </script>
 @endsection

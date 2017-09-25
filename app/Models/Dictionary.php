@@ -64,7 +64,6 @@ class Dictionary extends Model
                 $node = new Node();
                 $node->id = $dictionary->id;
                 $node->text = $dictionary->name;
-                $node->tags = [$dictionary->site->title];
 
                 $parent->nodes[] = $node;
                 static::getNodes($node, $dictionaries);
