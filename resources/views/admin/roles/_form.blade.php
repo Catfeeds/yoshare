@@ -26,13 +26,14 @@
             </div>
         @else
             <div class="checkbox">
-                @foreach($permissions as $key=>$permission)
-                    <br class="{{$loop->index}}-perm" style="display: none" />
+                @for($i=0; $i<$count; $i++)
                     <label>
-                        <input type="checkbox" name="permission_id[]" value="{{$permission['id']}}">{{$permission['description']}}
+                        <input type="checkbox" name="permission_id[]" value="{{$permissions[$i]['id']}}">{{$permissions[$i]['description']}}
                     </label>
-                    <input type="hidden" value="{{$permission['group']}}" class="{{$loop->index}}-group">
-                @endforeach
+                    @if($i < $count - 1 && $permissions[$i]['group'] != $permissions[$i+1]['group'] )
+                        <br />
+                    @endif
+                @endfor
             </div>
         @endif
     </div>
