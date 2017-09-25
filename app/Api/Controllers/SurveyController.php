@@ -5,7 +5,7 @@ namespace App\Api\Controllers;
 use App\Models\Survey;
 use App\Models\SurveyData;
 use App\Models\SurveyItem;
-use App\Models\SurveyTitle;
+use App\Models\Subject;
 use Carbon\Carbon;
 use Exception;
 use Request;
@@ -244,7 +244,7 @@ class SurveyController extends BaseController
 
         $sub_title_total = $survey->items->count('title');
 
-        $sub_title_num = $sub_title_total / SurveyTitle::OPTIONS_NUM;
+        $sub_title_num = $sub_title_total / Subject::OPTIONS_NUM;
 
         if (empty($survey)) {
             return $this->responseError('此问卷ID不存在');

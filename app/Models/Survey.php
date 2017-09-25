@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Auth;
-use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
 use Response;
@@ -53,6 +52,7 @@ class Survey extends BaseModule
         'description',
         'ip',
         'state',
+        'user_id',
         'member_id',
         'begin_date',
         'end_date',
@@ -202,19 +202,10 @@ class Survey extends BaseModule
         ]);
     }
 
-//    public function items()
-//    {
-//        return $this->hasMany(SurveyItem::class);
-//    }
 
     public function data()
     {
         return $this->hasMany(SurveyData::class);
-    }
-
-    public function titles()
-    {
-        return $this->hasMany(SurveyTitle::class);
     }
 
     public function member()
@@ -227,9 +218,10 @@ class Survey extends BaseModule
         return $this->belongsTo(Site::class);
     }
 
-    public function items()
+    public function subjects()
     {
-        return $this->morphMany(Item::class, 'refer');
+        return $this->morphMany(Subject::class, 'refer');
 
     }
+
 }

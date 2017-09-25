@@ -217,7 +217,6 @@
                     type: 'POST',
                     data: {'_token': '{{ csrf_token() }}', 'id': row.id},
                     success: function (data) {
-//                        window.location.reload();
                         window.location.href = '/admin/surveys';
                     }
                 })

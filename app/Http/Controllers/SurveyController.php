@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SurveyRequest;
+use App\Models\Item;
+use App\Models\Subject;
 use App\Models\Survey;
-use App\Models\SurveyItem;
-use App\Models\SurveyTitle;
 use Auth;
-use Carbon\Carbon;
 use Gate;
+use Request;
 
 class SurveyController extends Controller
 {
@@ -46,58 +46,48 @@ class SurveyController extends Controller
             return redirect()->back();
         }
 
-        $default_title = SurveyTitle::DEFAULT_OPTIONS;
-
-        return view('admin.surveys.create', compact('default_title'));
+        return view('admin.surveys.create');
     }
-
 
     public function store(SurveyRequest $request)
     {
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
-        $data['sort'] = Carbon::now();
         $survey = Survey::create($data);
 
-        $title = $data['sub_title']; //子题目
+        $subject = $data['item_subject']; //子题目
 
-        if (count($title) != count(array_unique($title))) {
-
+        if (count($subject) != count(array_unique($subject))) {
             \Session::flash('flash_warning', '子选项标题不能一样！！');
             return redirect()->to($this->getRedirectUrl())->withInput();
-
         }
 
-        //判断有无item_sub_title然后存入数据库 子标题
-        if (array_key_exists('sub_title', $data)) {
-            foreach ($data['sub_title'] as $item_sub_title) {
-                $data3 = [
-                    'title' => $item_sub_title,
+        //判断有无item_subject,存入题目信息
+        if (array_key_exists('item_subject', $data)) {
+            foreach ($subject as $key => $item_subject) {
+                $data1 = [
+                    'type' => Item::TYPE_IMAGE,
+                    'title' => $item_subject,
+                    'summary' => $data['summary'][$key],
+                    'url' => $data['item_url_subject'][$key],
+                    'sort' => $key
                 ];
-                $survey->titles()->create($data3);
-            }
-        }
+                $subject = $survey->subjects()->create($data1);
 
-        //存储题目的子选项
-        foreach ($title as $k => $item) {
-            $title = SurveyTitle::where('title', $item)->where('survey_id', $survey->id)->first();
-
-            if (is_null($title)) {
-                return false;
-            }
-            $title_id = $title->id;
-
-            //判断有无item_title然后存入数据库 子选项
-            if (array_key_exists('sub_title_item_' . ($k + 1), $data)) {
-                foreach ($data['sub_title_item_' . ($k + 1)] as $item_title) {
-                    $data2 = [
-                        'title' => $item_title,
-                        'survey_title_id' => $title_id
-                    ];
-                    $survey->items()->create($data2);
+                //存入子选项信息
+                if (array_key_exists('item_title', $data)) {
+                    foreach ($data['item_title'] as $k => $item_title) {
+                        $data2 = [
+                            'type' => Item::TYPE_IMAGE,
+                            'title' => $item_title,
+                            'summary' => $data['summary'][$k],
+                            'url' => $data['item_url'][$k],
+                            'sort' => $k
+                        ];
+                        $subject->items()->create($data2);
+                    }
                 }
             }
         }
@@ -114,108 +104,93 @@ class SurveyController extends Controller
         return view("mobile.$site_id.admin.surveys.share", compact('survey'));
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         if (Gate::denies('@survey-edit')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
+        // 一个问卷对应多个题目,一个题目对应多个选项
+        $survey = Survey::with('subjects')->find($id);
 
-        $survey = Survey::with('items', 'titles')->find($id);
+        $subject = Subject::with('items')->where('refer_id', $id)->first();
 
-        $sub_title = Survey::with('titles')->find($id); //子标题
-        $sub_item = Survey::with('items')->find($id);  //子选项
-
-        return view('admin.surveys.edit', compact('survey', 'sub_title', 'sub_item'));
+        return view('admin.surveys.edit', compact('survey', 'subject'));
     }
 
     public function update(SurveyRequest $request, $id)
     {
-        $survey = Survey::with('items', 'titles')->find($id);
+        $survey = Survey::with('subjects')->find($id);
+
+        $subject = Subject::with('items')->where('refer_id', $id)->first();
+
         $data = $request->all();
-        $data['username'] = Auth::user()->name;
+
+        $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
+
+        if ($data['link_type'] == Survey::LINK_TYPE_NONE) {
+            $data['link'] = '';
+        }
         $survey->update($data);
 
-        $sub_title_name = $data['sub_title'];
+        //删除选项
+        $subject->items()->whereNotIn('id', $data['item_id'])->delete();
 
-        $sub_title_id = $data['sub_title_id'];
+        $subject = $data['item_subject'];
 
-        if (count($sub_title_name) != count(array_unique($sub_title_name))) {
+        if (count($subject) != count(array_unique($subject))) {
             \Session::flash('flash_warning', '子选项标题不能一样！！');
             return redirect()->to($this->getRedirectUrl())->withInput();
         }
 
-        //删除 题目
-        if (array_key_exists('sub_title_id', $data)) {
-            $delete_title_ids = SurveyTitle::where('survey_id', $id)
-                ->whereNotIn('id', $data['sub_title_id'])
-                ->pluck('id');
-            SurveyTitle::destroy($delete_title_ids->toArray());
-        }
-
-        //删除 题目的选项
-        if (array_key_exists('sub_item_id', $data)) {
-            $delete_item_ids = SurveyItem::where('survey_id', $id)
-                ->whereNotIn('id', $data['sub_item_id'])
-                ->pluck('id');
-            SurveyItem::destroy($delete_item_ids->toArray());
-        }
-
-
         //题目 更新
-        if (array_key_exists('sub_title', $data)) {
-            foreach ($data['sub_title'] as $k => $sub_title) {
-                if ($sub_title == '') {
+        if (array_key_exists('item_subject', $data)) {
+            foreach ($subject as $key => $item_subject) {
+                if ($item_subject == '') {
                     continue;
                 }
-
-                $data_title = [
-                    'title' => $sub_title,
-                    'survey_id' => $id
+                $data_subject = [
+                    'type' => Item::TYPE_IMAGE,
+                    'title' => $item_subject,
+                    'summary' => $data['summary_subject'][$key],
+                    'url' => $data['item_url_subject'][$key],
+                    'sort' => $key
                 ];
-                $item1 = SurveyTitle::where('survey_id', $id)->orderBy('id')->skip($k)->take(1)->first();
 
-                //判断存在就修改，不存在就新增
-                if ($item1) {
-                    $item1->update($data_title);
+                if (!isset($data['item_id_subject'][$key])) {
+                    $survey->subjects()->create($data_subject);
                 } else {
-                    SurveyTitle::create($data_title);
+                    $item_subject = $survey->subjects()->where('id', $data['item_id_subject'][$key])->first();
+                    $item_subject->update($data_subject);
                 }
-            }
-        }
 
-        //存储题目的子选项
-        foreach ($sub_title_id as $key => $item) {
-            //判断有无item_title然后存入数据库 子选项
-            if (array_key_exists('sub_title_item_' . ($key + 1), $data)) {
-                foreach ($data['sub_title_item_' . ($key + 1)] as $k => $sub_title_item) {
-
-                    if ($sub_title_item == '') {
-                        continue;
-                    }
-
-                    $data_item = [
-                        'title' => $sub_title_item,
-                        'survey_id' => $id,
-                        'survey_title_id' => $item
-                    ];
-                    $item1 = SurveyItem::where('survey_title_id', $item)
-                        ->where('survey_id', $id)
-                        ->orderBy('id')->skip($k)->take(1)->first();
-
-                    //判断存在就修改，不存在就新增
-                    if ($item1) {
-                        $item1->update($data_item);
-                    } else {
-                        $survey->items()->create($data_item);
+                //存储题目的子选项
+                if (array_key_exists('item_title', $data)) {
+                    foreach ($data['item_title'] as $k => $item) {
+                        if ($item == '') {
+                            continue;
+                        }
+                        $data_item = [
+                            'type' => Item::TYPE_IMAGE,
+                            'title' => $item,
+                            'summary' => $data['summary'][$key],
+                            'url' => $data['item_url'][$key],
+                            'sort' => $key
+                        ];
+                        if (!isset($data['item_id'][$k])) {
+                            $subject = Subject::with('items')->where('refer_id', $id)->first();
+                            $subject->items()->create($data_item);
+                        } else {
+                            $item2 = Subject::with('items')->where('id', $data['item_id'][$k])->first();
+                            $item2->update($data_item);
+                        }
                     }
                 }
             }
         }
-
-        return redirect(url('admin/surveys'))->with('item', $item)->with('flash_success', '编辑成功！');
+        return redirect(url('admin/surveys'))->with('flash_success', '编辑成功！');
     }
 
     public function table()

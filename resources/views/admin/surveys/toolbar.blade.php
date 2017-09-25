@@ -146,6 +146,8 @@
         //改变按钮样式
         $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
         $('.filter').addClass('btn-default');
+        $('.top').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.top').addClass('btn-default');
         $(this).removeClass('btn-default');
         $(this).addClass($(this).data('active'));
     });
@@ -155,12 +157,13 @@
         var object = $('#forms input').serializeObject();
         object['top'] = $('.top').val();
         object['_token'] = '{{ csrf_token() }}';
-        $('#table').bootstrapTable('selectPage', 1);
         $('#table').bootstrapTable('refresh', {query: object});
 
         //改变按钮样式
         $('.top').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
         $('.top').addClass('btn-default');
+        $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
+        $('.filter').addClass('btn-default');
         $(this).removeClass('btn-default');
         $(this).addClass($(this).data('active'));
     });
