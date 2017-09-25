@@ -84,9 +84,6 @@
     <link href="/plugins/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="/plugins/select2/4.0.3/js/select2.full.min.js"></script>
 
-    <!--Echarts-->
-    <script src="/plugins/echarts/3.3.2/echarts.min.js"></script>
-
     <!--Nestable-->
     <link href="/plugins/nestable/jquery.nestable.css" rel="stylesheet"/>
     <script src="/plugins/nestable/jquery.nestable.js"></script>

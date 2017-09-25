@@ -14,14 +14,15 @@
     <div class="col-sm-11">
         @if(isset($perms))
             <div class="checkbox">
-                @foreach($permissions as $key=>$permission)
-                    <br class="{{$loop->index}}-perm" style="display: none"/>
+                @for($i=0; $i<$count; $i++)
                     <label>
-                        <input type="checkbox" {{ in_array($permission['id'], $perms) ? 'checked' : '' }} name="permission_id[]"
-                               value="{{$permission['id']}}">{{$permission['description']}}
+                        <input type="checkbox" {{ in_array($permissions[$i]['id'], $perms) ? 'checked' : '' }} name="permission_id[]"
+                               value="{{ $permissions[$i]['id'] }}">{{ $permissions[$i]['description'] }}
                     </label>
-                    <input type="hidden" value="{{$permission['group']}}" class="{{$loop->index}}-group">
-                @endforeach
+                    @if($i < $count - 1 && $permissions[$i]['group'] != $permissions[$i+1]['group'] )
+                        <br />
+                    @endif
+                @endfor
             </div>
         @else
             <div class="checkbox">
@@ -53,19 +54,5 @@
             format: 'YYYY/MM/DD HH:mm',
             locale: 'zh-cn'
         });
-        //获取所有权限的数量
-        var count = '{{$count}}';
-        //循环所有权限的分组值
-        for(i=0; i<parseInt(count); i++){
-            var p = $('.'+i+'-group').val();
-            var n = $('.'+(i+1)+'-group').val();
-            //获取当前权限分组值与下一权限的分组值，判断是否换行符是否需要显示，以达到分组展示的目的。
-            if( parseInt(p) != parseInt(n)){
-                $('.'+(i+1)+'-perm').css('display', 'block');
-            }else{
-                $('.'+(i+1)+'-perm').css('display', 'none');
-
-            }
-        }
     });
 </script>
