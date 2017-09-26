@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
+use App\Jobs\PublishPage;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Module;
