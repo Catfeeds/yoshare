@@ -61,7 +61,7 @@
                     @can('@option')
                         <li><a href="/admin/options"><i class="fa fa-cog"></i> 系统设置</a></li>
                     @endcan
-                    @can('dictionaries')
+                    @can('@dictionary')
                         <li><a href="/admin/dictionaries"><i class="fa fa-book"></i> 字典设置</a></li>
                     @endcan
                     @can('@app')

@@ -40,15 +40,13 @@ class OptionController extends Controller
         $options = Option::owns()
                     ->get();
 
-        $names = Site::getNames();
-
-        $options->transform(function ($option) use($names) {
+        $options->transform(function ($option) {
             return [
                 'id' => $option->id,
                 'code' => $option->code,
                 'name' => $option->name,
                 'value' => $option->value,
-                'site_name' => $names[$option->site_id],
+                'site_name' => $option->site->title,
             ];
         });
 

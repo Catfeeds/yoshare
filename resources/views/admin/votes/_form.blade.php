@@ -197,14 +197,17 @@
     $('.tabs li').click(function () {
         if ($(this).hasClass('tab_items')) {
             $(this).parent().find('>li:last').show();
-        }else{
+        } else {
             $(this).parent().find('>li:last').hide();
         }
+    })
+    $('.tabs li:last').click(function () {
+        $(this).show();
     });
 
     $(document).ready(function () {
         CKEDITOR.replace('content', {
-            height: 300,
+            height: 800,
             filebrowserUploadUrl: '{{ url('/admin/files/upload?type=image') }}?_token={{csrf_token()}}',
         });
     });
@@ -313,7 +316,7 @@
             var files = $(this).fileinput('getFileStack');
 
             if (files.length > 0) {
-                return ret = toastrs('warning', '请先上传文件!');
+                return ret = toast('warning', '请先上传文件!');
             }
         });
         return ret;
@@ -322,7 +325,7 @@
     $('#tabItems').delegate('.files_del', 'click', function () {
         var cur_num = $(".file1").length;
         if (cur_num < 2) {
-            return toastrs('warning', '投票选项最少有一个');
+            return toast('warning', '投票选项最少有一个');
         } else {
             $(this).parents('div.file1').remove();
         }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model
 {
@@ -11,11 +11,18 @@ class Option extends Model
     const COMMENT_REQUIRE_PASS = 'COMMENT_REQUIRE_PASS';
 
     protected $fillable = [
+        'site_id',
+        'type',
+        'option',
         'code',
         'name',
         'value',
-        'site_id',
-        ];
+    ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 
     /**
      * 根据编码获取值
@@ -27,8 +34,7 @@ class Option extends Model
         $option = Option::where('code', $code)->first();
         if ($option) {
             return $option->value;
-        }
-        else{
+        } else {
             return null;
         }
     }
