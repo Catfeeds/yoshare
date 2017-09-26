@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class Site extends Model
 {
@@ -61,6 +61,7 @@ class Site extends Model
     {
         return $this->hasMany(Menu::class);
     }
+
     public static function stores($input)
     {
         $site_id = Auth::user()->site_id;
@@ -187,54 +188,5 @@ class Site extends Model
             $themes[$row->id] = $row->title;
         }
         return $themes;
-    }
-
-    public function publish($theme, $device = '')
-    {
-        $modules = Module::where('state', Module::STATE_ENABLE)->get();
-
-        //创建站点目录
-        $path = public_path("$this->directory/$theme->name");
-        if (!is_dir($path)) {
-            //创建模块目录
-            @mkdir($path, 0755, true);
-        }
-
-        //生成首页
-        $html = curl_get("http://$this->domain/index.html", [CURLOPT_USERAGENT => $device]);
-        $file_html = "$path/index.html";
-        file_put_contents($file_html, $html);
-
-        foreach ($modules as $module) {
-            $rows = call_user_func([$module->model_class, 'all']);
-            $categories = Category::where('module_id', $module->id)->get();
-
-            $path = public_path("$this->directory/$theme->name/$module->plural");
-            if (!is_dir($path)) {
-                //创建模块目录
-                @mkdir($path, 0755, true);
-            }
-
-            //生成列表页
-            $html = curl_get("http://$this->domain/$module->plural/index.html", [CURLOPT_USERAGENT => $device]);
-            $file_html = "$path/index.html";
-            file_put_contents($file_html, $html);
-
-            //生成栏目页
-            if ($module->fields()->where('name', 'category_id')->count()) {
-                foreach ($categories as $category) {
-                    $html = curl_get("http://$this->domain/$module->plural/category-$category->id.html", [CURLOPT_USERAGENT => $device]);
-                    $file_html = "$path/category-$category->id.html";
-                    file_put_contents($file_html, $html);
-                }
-            }
-
-            //生成详情页
-            foreach ($rows as $row) {
-                $html = curl_get("http://$this->domain/$module->plural/detail-$row->id.html", [CURLOPT_USERAGENT => $device]);
-                $file_html = "$path/detail-$row->id.html";
-                file_put_contents($file_html, $html);
-            }
-        }
     }
 }

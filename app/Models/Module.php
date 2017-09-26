@@ -492,6 +492,9 @@ class Module extends Model
                         case ModuleField::TYPE_IMAGE:
                         case ModuleField::TYPE_AUDIO:
                         case ModuleField::TYPE_VIDEO:
+                        case ModuleField::TYPE_IMAGES:
+                        case ModuleField::TYPE_AUDIOS:
+                        case ModuleField::TYPE_VIDEOS:
                             $table->text($field->name)->after($previous->name)->comment($field->title);
                             break;
                         case ModuleField::TYPE_LONG_TEXT:

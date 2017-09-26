@@ -3,7 +3,6 @@
 namespace App\Api\Controllers;
 
 use App\Models\__model__;
-use App\Models\Item;
 use Request;
 
 class __controller__ extends BaseController

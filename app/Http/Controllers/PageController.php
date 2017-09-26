@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
+use App\Jobs\PublishPage;
 use App\Models\Page;
 use App\Models\Category;
 use App\Models\Module;
@@ -25,8 +26,7 @@ class PageController extends Controller
 
     public function __construct()
     {
-        $module = Module::where('name', 'Page')->first();
-        $this->module = Module::transform($module->id);
+        $this->module = Module::where('name', 'Page')->first();
     }
 
     public function show($id)
@@ -83,7 +83,9 @@ class PageController extends Controller
             return abort(403);
         }
 
-        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -103,13 +105,15 @@ class PageController extends Controller
             return redirect()->back();
         }
 
+        $module = Module::transform($this->module->id);
+
         $page = call_user_func([$this->module->model_class, 'find'], $id);
         $page->images = null;
         $page->videos = null;
         $page->audios = null;
         $page->tags = $page->tags()->pluck('name')->toArray();
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $page, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $module, 'content' => $page, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -185,6 +189,7 @@ class PageController extends Controller
             $page->tags()->where('name', $tag)->delete();
         } else {
             $page->tags()->create([
+                'site_id' => $page->site_id,
                 'name' => $tag,
                 'sort' => strtotime(Carbon::now()),
             ]);
@@ -199,8 +204,17 @@ class PageController extends Controller
         $ids = $input['ids'];
         $stateName = Page::getStateName($input['state']);
 
+        //记录日志
         foreach ($ids as $id) {
             event(new UserLogEvent('变更' . '页面' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
+
+        //发布页面
+        $site = auth()->user()->site;
+        if ($input['state'] == Page::STATE_PUBLISHED) {
+            foreach ($ids as $id) {
+                $this->dispatch(new PublishPage($site, $this->module, $id));
+            }
         }
     }
 

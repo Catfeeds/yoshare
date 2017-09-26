@@ -13,14 +13,14 @@
         </section>
         <section class="content">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="box box-success">
                         <div class="box-body">
                             <div id="tree"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <div class="box box-info">
                         <div class="box-header">
                             <button class="btn btn-primary btn-xs margin-r-5 margin-t-5" onclick="window.location.href='/admin/categories/create/{{ $category_id }}';"> 新增子栏目</button>

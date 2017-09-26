@@ -3,7 +3,6 @@
 namespace App\Api\Controllers;
 
 use App\Models\Page;
-use App\Models\Item;
 use Request;
 
 class PageController extends BaseController

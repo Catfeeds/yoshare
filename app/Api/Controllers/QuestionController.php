@@ -3,7 +3,6 @@
 namespace App\Api\Controllers;
 
 use App\Models\Question;
-use App\Models\Item;
 use Request;
 
 class QuestionController extends BaseController

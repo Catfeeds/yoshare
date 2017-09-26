@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\PublishPage;
 use Auth;
 use Carbon\Carbon;
 use Gate;

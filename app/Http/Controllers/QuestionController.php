@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
+use App\Jobs\PublishPage;
 use App\Models\Question;
 use App\Models\Category;
-use App\Models\Item;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
+use Auth;
+use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
@@ -24,8 +26,7 @@ class QuestionController extends Controller
 
     public function __construct()
     {
-        $module = Module::where('name', 'Question')->first();
-        $this->module = Module::transform($module->id);
+        $this->module = Module::where('name', 'Question')->first();
     }
 
     public function show($id)
@@ -82,7 +83,9 @@ class QuestionController extends Controller
             return abort(403);
         }
 
-        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -102,9 +105,15 @@ class QuestionController extends Controller
             return redirect()->back();
         }
 
-        $question = call_user_func([$this->module->model_class, 'find'], $id);
+        $module = Module::transform($this->module->id);
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $question, 'base_url' => $this->base_url]);
+        $question = call_user_func([$this->module->model_class, 'find'], $id);
+        $question->images = null;
+        $question->videos = null;
+        $question->audios = null;
+        $question->tags = $question->tags()->pluck('name')->toArray();
+
+        return view('admin.contents.edit', ['module' => $module, 'content' => $question, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -119,22 +128,6 @@ class QuestionController extends Controller
         }
 
         $question = Question::stores($input);
-
-        //保存图片集、音频集、视频集
-        if (!empty($question)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $question, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $question, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $question, $input['videos']);
-            }
-        }
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '问答', $question->id, $this->module->model_class));
 
@@ -152,22 +145,6 @@ class QuestionController extends Controller
         }
 
         $question = Question::updates($id, $input);
-
-        //保存图片集、音频集、视频集
-        if (!empty($question)) {
-            if (isset($input['images'])) {
-                Item::sync(Item::TYPE_IMAGE, $question, $input['images']);
-
-            }
-
-            if (isset($input['audios'])) {
-                Item::sync(Item::TYPE_AUDIO, $question, $input['audios']);
-            }
-
-            if (isset($input['videos'])) {
-                Item::sync(Item::TYPE_VIDEO, $question, $input['videos']);
-            }
-        }
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '问答', $question->id, $this->module->model_class));
 
@@ -197,6 +174,28 @@ class QuestionController extends Controller
         return Question::sort();
     }
 
+    public function top($id)
+    {
+        $question = Question::find($id);
+        $question->top = !$question->top;
+        $question->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $question = Question::find($id);
+        if ($question->tags()->where('name', $tag)->exists()) {
+            $question->tags()->where('name', $tag)->delete();
+        } else {
+            $question->tags()->create([
+                'site_id' => $question->site_id,
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
+    }
+
     public function state()
     {
         $input = request()->all();
@@ -205,8 +204,17 @@ class QuestionController extends Controller
         $ids = $input['ids'];
         $stateName = Question::getStateName($input['state']);
 
+        //记录日志
         foreach ($ids as $id) {
             event(new UserLogEvent('变更' . '问答' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
+
+        //发布页面
+        $site = auth()->user()->site;
+        if ($input['state'] == Question::STATE_PUBLISHED) {
+            foreach ($ids as $id) {
+                $this->dispatch(new PublishPage($site, $this->module, $id));
+            }
         }
     }
 

@@ -25,8 +25,7 @@ class ArticleController extends Controller
 
     public function __construct()
     {
-        $module = Module::where('name', 'Article')->first();
-        $this->module = Module::transform($module->id);
+        $this->module = Module::where('name', 'Article')->first();
     }
 
     public function show($id)
@@ -99,7 +98,9 @@ class ArticleController extends Controller
             return abort(403);
         }
 
-        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -119,13 +120,15 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
+        $module = Module::transform($this->module->id);
+
         $article = call_user_func([$this->module->model_class, 'find'], $id);
         $article->images = null;
         $article->videos = null;
         $article->audios = null;
         $article->tags = $article->tags()->pluck('name')->toArray();
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $article, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $article->category_id]);
+        return view('admin.contents.edit', ['module' => $module, 'content' => $article, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $article->category_id]);
     }
 
     public function store()
@@ -201,6 +204,7 @@ class ArticleController extends Controller
             $article->tags()->where('name', $tag)->delete();
         } else {
             $article->tags()->create([
+                'site_id' => $article->site_id,
                 'name' => $tag,
                 'sort' => strtotime(Carbon::now()),
             ]);
@@ -215,8 +219,17 @@ class ArticleController extends Controller
         $ids = $input['ids'];
         $stateName = Article::getStateName($input['state']);
 
+        //记录日志
         foreach ($ids as $id) {
             event(new UserLogEvent('变更' . '文章' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
+
+        //发布页面
+        $site = auth()->user()->site;
+        if ($input['state'] == Article::STATE_PUBLISHED) {
+            foreach ($ids as $id) {
+                $this->dispatch(new PublishPage($site, $this->module, $id));
+            }
         }
     }
 

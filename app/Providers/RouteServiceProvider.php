@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -56,6 +56,31 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/web.php');
+            require base_path('routes/admin.php');
+
+            //引用模块路由
+            $path = base_path('routes/modules');
+            $d = dir($path);
+            $dirs = [];
+            while ($file = $d->read()) {
+                if ($file != '.' && $file != '..') {
+                    if (is_dir($path . DIRECTORY_SEPARATOR . $file)) {//当前为文件
+                        $dirs[] = $file;
+                    }
+                }
+            }
+
+            foreach ($dirs as $dir) {
+                $d = dir($path . DIRECTORY_SEPARATOR . $dir);
+                while ($file = $d->read()) {
+                    if ($file != '.' && $file != '..' && ends_with($file, '.php')) {
+                        $filename = $path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file;
+                        if (is_file($filename)) {//当前为文件
+                            require $filename;
+                        }
+                    }
+                }
+            }
         });
     }
 

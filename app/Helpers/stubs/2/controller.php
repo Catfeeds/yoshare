@@ -25,8 +25,7 @@ class __controller__ extends Controller
 
     public function __construct()
     {
-        $module = Module::where('name', '__module_name__')->first();
-        $this->module = Module::transform($module->id);
+        $this->module = Module::where('name', '__module_name__')->first();
     }
 
     public function show($id)
@@ -99,7 +98,9 @@ class __controller__ extends Controller
             return abort(403);
         }
 
-        return view($this->view_path . '.index', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -119,13 +120,15 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
+        $module = Module::transform($this->module->id);
+
         $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
         $__singular__->images = null;
         $__singular__->videos = null;
         $__singular__->audios = null;
         $__singular__->tags = $__singular__->tags()->pluck('name')->toArray();
 
-        return view('admin.contents.edit', ['module' => $this->module, 'content' => $__singular__, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $__singular__->category_id]);
+        return view('admin.contents.edit', ['module' => $module, 'content' => $__singular__, 'base_url' => $this->base_url, 'back_url' => $this->base_url . '?category_id=' . $__singular__->category_id]);
     }
 
     public function store()
@@ -201,6 +204,7 @@ class __controller__ extends Controller
             $__singular__->tags()->where('name', $tag)->delete();
         } else {
             $__singular__->tags()->create([
+                'site_id' => $__singular__->site_id,
                 'name' => $tag,
                 'sort' => strtotime(Carbon::now()),
             ]);
@@ -215,8 +219,17 @@ class __controller__ extends Controller
         $ids = $input['ids'];
         $stateName = __module_name__::getStateName($input['state']);
 
+        //记录日志
         foreach ($ids as $id) {
             event(new UserLogEvent('变更' . '__module_title__' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
+
+        //发布页面
+        $site = auth()->user()->site;
+        if ($input['state'] == __module_name__::STATE_PUBLISHED) {
+            foreach ($ids as $id) {
+                $this->dispatch(new PublishPage($site, $this->module, $id));
+            }
         }
     }
 

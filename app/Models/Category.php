@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    const ID_ROOT = 0;
+
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 
@@ -15,8 +17,6 @@ class Category extends Model
         0 => '已禁用',
     ];
 
-    const ID_ROOT = 0;
-
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
 
@@ -24,8 +24,6 @@ class Category extends Model
         0 => '无',
         1 => '网址',
     ];
-
-    const ID_FAQ = 4;
 
     protected $fillable = [
         'site_id',

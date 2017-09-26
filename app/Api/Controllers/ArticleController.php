@@ -3,7 +3,6 @@
 namespace App\Api\Controllers;
 
 use App\Models\Article;
-use App\Models\Item;
 use Request;
 
 class ArticleController extends BaseController

@@ -8,16 +8,13 @@
             {!! \App\Helpers\HtmlBuilder::menuTree(auth()->user()->site->menus()->where('parent_id', 0)->orderBy('sort')->get()) !!}
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-file-text-o"></i>
-                    <span class="menu-item-top">专题管理</span>
+                    <i class="fa fa-cog"></i>
+                    <span class="menu-item-top">问卷管理</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    @can('@feature-column')
-                        <li><a href="/admin/features/column"><i class="fa fa-columns"></i> 专题设置</a></li>
-                    @endcan
-                    @can('@feature-content')
-                        <li><a href="/admin/features"><i class="fa fa-paint-brush"></i> 文章管理</a></li>
+                    @can('@survey')
+                        <li><a href="/admin/surveys"><i class="fa fa-columns"></i> 问卷管理</a></li>
                     @endcan
                 </ul>
             </li>
@@ -36,18 +33,6 @@
                     @endcan
                     @can('@category')
                         <li><a href="/admin/categories"><i class="fa fa-columns"></i> 栏目管理</a></li>
-                    @endcan
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-cog"></i>
-                    <span class="menu-item-top">问卷管理</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    @can('@survey')
-                        <li><a href="/admin/surveys"><i class="fa fa-columns"></i> 问卷管理</a></li>
                     @endcan
                 </ul>
             </li>
