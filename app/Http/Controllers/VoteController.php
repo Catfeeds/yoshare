@@ -88,7 +88,9 @@ class VoteController extends Controller
 
         $vote->update($data);
 
-        $vote->items()->whereNotIn('id', $data['item_id'])->delete();
+        if (array_key_exists('item_id', $data)) {
+            $vote->items()->whereNotIn('id', $data['item_id'])->delete();
+        }
 
         foreach ($data['item_title'] as $k => $item_title) {
             if (!empty(trim($item_title)) || !empty(trim($data['item_url'][$k]))) {
