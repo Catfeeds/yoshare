@@ -267,7 +267,7 @@
                 '<div id="tabItems' + n + '" class="tab-content">' +
                 '<div id="tabHome' + n + '" class="tab-pane fade in active padding-t-15">' +
                 '<div class="col-sm-8 pull-left" style="padding-left: 0;">' +
-                '<div class="form-group"><div class="col-sm-12">' +
+                '<div class="form-group"><input type="hidden" name="item_id[]" value=""><div class="col-sm-12">' +
                 '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title[]" placeholder="输入标题"></div></div>' +
                 '<div class="form-group"><div class="col-sm-12">' +
                 '<textarea name="summary[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +

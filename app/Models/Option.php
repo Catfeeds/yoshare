@@ -12,11 +12,11 @@ class Option extends Model
 
     protected $fillable = [
         'site_id',
-        'type',
-        'option',
         'code',
         'name',
         'value',
+        'type',
+        'option',
     ];
 
     public function site()

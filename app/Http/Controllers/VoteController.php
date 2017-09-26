@@ -88,13 +88,11 @@ class VoteController extends Controller
 
         $vote->update($data);
 
-        if (array_key_exists('item_id', $data)) {
-            $vote->items()->whereNotIn('id', $data['item_id'])->delete();
-        }
+        $vote->items()->whereNotIn('id', $data['item_id'])->delete();
 
         foreach ($data['item_title'] as $k => $item_title) {
             if (!empty(trim($item_title)) || !empty(trim($data['item_url'][$k]))) {
-                if (!isset($data['item_id'][$k])) {
+                if (empty($data['item_id'][$k])) {
                     $vote->items()->create([
                         'type' => Item::TYPE_IMAGE,
                         'title' => $item_title,
@@ -115,7 +113,7 @@ class VoteController extends Controller
             }
         }
 
-        return redirect('/admin/votes')->with('item', $item)->with('flash_success', '编辑成功！');
+        return redirect('/admin/votes')->with('flash_success', '编辑成功！');
     }
 
     public function table()
