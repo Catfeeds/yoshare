@@ -26,7 +26,13 @@ class DictionaryRequest extends Request
         return [
             'code'=>'required',
             'name'=> 'required',
-            'value'=>'required',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'code.required' => '请填写编码',
+            'name.required' => '请填写名称',
         ];
     }
 }

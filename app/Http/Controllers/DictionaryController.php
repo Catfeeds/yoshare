@@ -96,7 +96,7 @@ class DictionaryController extends Controller
 
     public function tree()
     {
-        return Response::json(Dictionary::tree('', 0, false));
+        return Response::json(Dictionary::tree('', 0));
     }
 
     public function table($parent_id)
