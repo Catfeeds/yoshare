@@ -331,7 +331,7 @@
                 var files = $(this).fileinput('getFileStack');
 
                 if (files.length > 0) {
-                    return ret = toastrs('请先上传文件!');
+                    return ret = toast('info', '请先上传文件!');
                 }
             });
 

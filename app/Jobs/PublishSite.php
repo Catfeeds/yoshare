@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Module;
 use App\Models\Site;
 use Illuminate\Bus\Queueable;
@@ -34,58 +35,74 @@ class PublishSite implements ShouldQueue
     public function handle()
     {
         $this->publish($this->site->default_theme);
-        if ($this->site->default_theme != $this->site->mobile_theme) {
-            $this->publish($this->site->mobile_theme, 'iPhone');
-        }
+        $this->publish($this->site->mobile_theme);
     }
 
-    public function publish($theme, $device = '')
+    public function publish($theme)
     {
-        $site = $this->site;
-        $modules = Module::where('state', Module::STATE_ENABLE)->get();
+        try {
+            $site = $this->site;
+            $modules = Module::where('state', Module::STATE_ENABLE)->get();
 
-        //创建站点目录
-        $path = public_path("$site->directory/$theme->name");
-        if (!is_dir($path)) {
-            //创建模块目录
-            @mkdir($path, 0755, true);
-        }
-
-        //生成首页
-        $html = curl_get("http://$site->domain/index.html", [CURLOPT_USERAGENT => $device]);
-        $file_html = "$path/index.html";
-        file_put_contents($file_html, $html);
-
-        foreach ($modules as $module) {
-            $rows = call_user_func([$module->model_class, 'all']);
-            $categories = Category::where('module_id', $module->id)->get();
-
-            $path = public_path("$site->directory/$theme->name/$module->path");
+            //创建站点目录
+            $path = public_path("$site->directory/$theme->name");
             if (!is_dir($path)) {
                 //创建模块目录
                 @mkdir($path, 0755, true);
             }
 
-            //生成列表页
-            $html = curl_get("http://$site->domain/$module->path/index.html", [CURLOPT_USERAGENT => $device]);
+            //生成首页
+            $class = 'App\Http\\Controllers\\HomeController';
+            $controller = new $class();
+            $domain = new Domain($site->domain, $theme);
+
+            $html = $controller->index($domain)->__toString();
+            //TODO 临时
+            $html = str_replace('localhost', $domain->site->domain, $html);
             $file_html = "$path/index.html";
             file_put_contents($file_html, $html);
 
-            //生成栏目页
-            if ($module->fields()->where('name', 'category_id')->count()) {
-                foreach ($categories as $category) {
-                    $html = curl_get("http://$site->domain/$module->path/category-$category->id.html", [CURLOPT_USERAGENT => $device]);
-                    $file_html = "$path/category-$category->id.html";
+            foreach ($modules as $module) {
+                $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
+                $controller = new $class();
+
+                $rows = call_user_func([$module->model_class, 'all']);
+                $categories = Category::where('module_id', $module->id)->get();
+
+                $path = public_path("$site->directory/$theme->name/$module->path");
+                if (!is_dir($path)) {
+                    //创建模块目录
+                    @mkdir($path, 0755, true);
+                }
+
+                //生成列表页
+                $html = $controller->lists($domain)->__toString();
+                //TODO 临时
+                $html = str_replace('localhost', $domain->site->domain, $html);
+                $file_html = "$path/index.html";
+                file_put_contents($file_html, $html);
+
+                //生成栏目页
+                if ($module->fields()->where('name', 'category_id')->count()) {
+                    foreach ($categories as $category) {
+                        $html = $controller->category($domain, $category->id)->__toString();
+                        //TODO 临时
+                        $html = str_replace('localhost', $domain->site->domain, $html);
+                        $file_html = "$path/category-$category->id.html";
+                        file_put_contents($file_html, $html);
+                    }
+                }
+
+                //生成详情页
+                foreach ($rows as $row) {
+                    $html = $controller->show($domain, $row->id)->__toString();
+                    //TODO 临时
+                    $html = str_replace('localhost', $domain->site->domain, $html);
+                    $file_html = "$path/detail-$row->id.html";
                     file_put_contents($file_html, $html);
                 }
             }
-
-            //生成详情页
-            foreach ($rows as $row) {
-                $html = curl_get("http://$site->domain/$module->path/detail-$row->id.html", [CURLOPT_USERAGENT => $device]);
-                $file_html = "$path/detail-$row->id.html";
-                file_put_contents($file_html, $html);
-            }
+        } catch (\Exception $exception) {
         }
     }
 }

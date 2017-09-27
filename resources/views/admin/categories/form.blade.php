@@ -171,21 +171,11 @@
         $('#image_url').val('');
     });
 
-    //提示上传图片
-    function toastrs(message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-bottom-right',
-        };
-        toastr['warning'](message);
-        return false;
-    }
-
     $('#submit').click(function () {
         var image_file = $('#image_file').fileinput('getFileStack');
 
         if (image_file.length > 0) {
-            return toastrs('请先上传图片!');
+            return toast('info', '请先上传图片!');
         }
 
         @if(isset($parent_id) && $parent_id > 0)

@@ -145,7 +145,7 @@
     $('#submit').click(function () {
         var other_file = $('#other_file').fileinput('getFileStack');
         if (other_file.length > 0) {
-            return toastrs('请先上传文件!')
+            return toast('info', '请先上传文件!')
         }
     });
 </script>

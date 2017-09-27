@@ -115,7 +115,7 @@
 
     function createFile(path) {
         if (path.length == 0) {
-            toastrs('info', '<b>请选择文件</b>')
+            toast('info', '<b>请选择文件</b>')
             return;
         }
         $.ajax({
@@ -127,14 +127,14 @@
                 window.location.reload();
             },
             error: function () {
-                toastrs('error', '<b>创建失败</b>')
+                toast('error', '<b>创建失败</b>')
             }
         });
     }
 
     function removeFile(path) {
         if (path.length == 0) {
-            toastrs('info', '<b>请选择文件</b>')
+            toast('info', '<b>请选择文件</b>')
             return;
         }
         $.ajax({
@@ -146,7 +146,7 @@
                 window.location.reload();
             },
             error: function () {
-                toastrs('error', '<b>删除失败</b>')
+                toast('error', '<b>删除失败</b>')
             }
         });
     }
@@ -162,18 +162,18 @@
                     editor.focus();
                 }
                 else {
-                    toastrs('warning', '<b>读取失败: ' + data.message + '</b>')
+                    toast('warning', '<b>读取失败: ' + data.message + '</b>')
                 }
             },
             error: function () {
-                toastrs('error', '<b>读取失败</b>')
+                toast('error', '<b>读取失败</b>')
             }
         });
     }
 
     function writeFile(path, data) {
         if (path.length == 0) {
-            toastrs('info', '<b>请选择文件</b>');
+            toast('info', '<b>请选择文件</b>');
             return;
         }
         $.ajax({
@@ -183,15 +183,15 @@
             data: {'_token': '{{ csrf_token() }}', '_method': 'put', 'path': path, 'data': data},
             success: function (data) {
                 if (data.code == 200) {
-                    toastrs('success', '<b>保存成功</b>')
+                    toast('success', '<b>保存成功</b>')
                 }
                 else {
-                    toastrs('warning', '<b>保存失败: ' + data.message + '</b>')
+                    toast('warning', '<b>保存失败: ' + data.message + '</b>')
                 }
                 editor.focus();
             },
             error: function () {
-                toastrs('error', '<b>保存失败</b>')
+                toast('error', '<b>保存失败</b>')
             }
         });
     }
@@ -248,11 +248,11 @@
                     });
                 }
                 else {
-                    toastrs('warning', '<b>获取模块信息失败: ' + res.message + '</b>')
+                    toast('warning', '<b>获取模块信息失败: ' + res.message + '</b>')
                 }
             },
             error: function () {
-                toastrs('error', '<b>获取模块信息失败</b>')
+                toast('error', '<b>获取模块信息失败</b>')
             }
         });
     }

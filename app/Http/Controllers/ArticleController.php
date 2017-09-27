@@ -6,6 +6,7 @@ use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
@@ -29,12 +30,10 @@ class ArticleController extends Controller
         $this->module = Module::where('name', 'Article')->first();
     }
 
-    public function show($id)
+    public function show(Domain $domain, $id)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $article = Article::find($id);
@@ -42,15 +41,13 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $domain->theme->name . '.articles.detail', ['site' => $domain->site, 'article' => $article]);
     }
 
-    public function slug($slug)
+    public function slug(Domain $domain, $slug)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $article = Article::where('slug', $slug)
@@ -59,26 +56,28 @@ class ArticleController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.articles.detail', ['site' => $site, 'article' => $article]);
+        return view('themes.' . $domain->theme->name . '.articles.detail', ['site' => $domain->site, 'article' => $article]);
     }
 
-    public function lists()
+    public function lists(Domain $domain)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $articles = Article::where('state', Article::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme->name . '.articles.index', ['site' => $site, 'module' => $this->module, 'articles' => $articles]);
+        return view('themes.' . $domain->theme->name . '.articles.index', ['site' => $domain->site, 'module' => $this->module, 'articles' => $articles]);
     }
 
-    public function category($category_id)
+    public function category(Domain $domain, $category_id)
     {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
         $category = Category::find($category_id);
         if (empty($category)) {
             return abort(404);
@@ -90,7 +89,7 @@ class ArticleController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $category->site->theme->name . '.articles.category', ['site' => $category->site, 'category' => $category, 'articles' => $articles]);
+        return view('themes.' . $domain->theme->name . '.articles.category', ['site' => $domain->site, 'category' => $category, 'articles' => $articles]);
     }
 
     public function index()

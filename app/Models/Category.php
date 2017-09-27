@@ -61,6 +61,11 @@ class Category extends Model
         return $this->belongsTo(Module::class, 'module_id');
     }
 
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'module_id');
+    }
+
     public function scopeOwns($query)
     {
         if (Auth::user()->roles()->where('id', Role::ID_ADMIN)->exists()) {

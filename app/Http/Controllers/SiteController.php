@@ -6,6 +6,7 @@ use App\Http\Requests\SiteRequest;
 use App\Jobs\PublishSite;
 use App\Models\DataSource;
 use App\Models\Site;
+use App\Models\Theme;
 use Auth;
 use Gate;
 use Request;
@@ -26,6 +27,12 @@ class SiteController extends BaseController
         return view('admin.sites.index');
     }
 
+    public function create()
+    {
+        $themes = Theme::pluck('title', 'id')->toArray();
+        return view('admin.sites.create', compact('themes'));
+    }
+
     public function edit($id)
     {
         $site = Site::find($id);
@@ -35,7 +42,9 @@ class SiteController extends BaseController
             \Session::flash('flash_warning', '无此记录');
             return redirect('/admin/sites');
         }
-        $themes = Site::getThemes();
+
+        $themes = Theme::pluck('title', 'id')->toArray();
+
         return view('admin.sites.edit', compact('site', 'themes'));
     }
 
@@ -65,12 +74,6 @@ class SiteController extends BaseController
         }
         $site->delete();
         \Session::flash('flash_success', '删除成功');
-    }
-
-    public function create()
-    {
-        $themes = Site::getThemes();
-        return view('admin.sites.create', compact('themes'));
     }
 
     public function store(SiteRequest $request)

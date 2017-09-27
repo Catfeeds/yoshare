@@ -76,7 +76,7 @@
         //获取被复制module_id
         var row = $('#table').bootstrapTable('getSelections');
         if(row.length == 0 || row.length > 1){
-            return toastrs('warning', '请选择一个模型');
+            return toast('warning', '请选择一个模型');
         }
         $('#module_id').val(row[0].id);
     });

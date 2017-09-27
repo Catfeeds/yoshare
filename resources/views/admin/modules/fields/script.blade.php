@@ -13,7 +13,7 @@
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    return toastrs('warning', '保存失败');
+                    return toast('warning', '保存失败');
                 },
             });
         },
@@ -28,7 +28,7 @@
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    return toastrs('warning', '保存失败');
+                    return toast('warning', '保存失败');
                 },
             });
         },
@@ -43,7 +43,7 @@
                 success: function (data, status) {
                 },
                 error: function (data) {
-                    return toastrs('warning', '保存失败');
+                    return toast('warning', '保存失败');
                 },
             });
         },

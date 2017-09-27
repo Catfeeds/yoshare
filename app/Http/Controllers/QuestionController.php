@@ -6,6 +6,7 @@ use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Question;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
@@ -29,12 +30,10 @@ class QuestionController extends Controller
         $this->module = Module::where('name', 'Question')->first();
     }
 
-    public function show($id)
+    public function show(Domain $domain, $id)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $question = Question::find($id);
@@ -42,15 +41,13 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $domain->theme->name . '.questions.detail', ['site' => $domain->site, 'question' => $question]);
     }
 
-    public function slug($slug)
+    public function slug(Domain $domain, $slug)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $question = Question::where('slug', $slug)
@@ -59,22 +56,20 @@ class QuestionController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.questions.detail', ['site' => $site, 'question' => $question]);
+        return view('themes.' . $domain->theme->name . '.questions.detail', ['site' => $domain->site, 'question' => $question]);
     }
 
-    public function lists()
+    public function lists(Domain $domain)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $questions = Question::where('state', Question::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme->name . '.questions.index', ['site' => $site, 'module' => $this->module, 'questions' => $questions]);
+        return view('themes.' . $domain->theme->name . '.questions.index', ['site' => $domain->site, 'module' => $this->module, 'questions' => $questions]);
     }
 
     public function index()

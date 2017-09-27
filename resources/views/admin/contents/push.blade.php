@@ -65,26 +65,10 @@
                 if (data.status_code != 200) {
                     return window.location.reload();
                 }
-                //发送成功提示
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "preventDuplicates": false,
-                    "tapToDismiss": false,
-                    'positionClass': 'toast-bottom-right',
-                };
-                toastr['success']('发送成功！<a href="/admin/push/logs">查看推送日志</a>');
+                toast('success', '发送成功！<a href="/admin/push/logs">查看推送日志</a>');
             },
             error: function () {
-                //发送失败提示
-                toastr.options = {
-                    "timeOut": "1500",
-                    "extendedTimeOut": "800",
-                    'positionClass': 'toast-bottom-right',
-                };
-                toastr['error']('发送失败');
+                toast('error', '发送失败');
             },
         })
     });

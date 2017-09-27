@@ -6,6 +6,7 @@ use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Special;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Module;
 use App\Models\Site;
 use App\Models\UserLog;
@@ -29,12 +30,10 @@ class SpecialController extends Controller
         $this->module = Module::where('name', 'Special')->first();
     }
 
-    public function show($id)
+    public function show(Domain $domain, $id)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $special = Special::find($id);
@@ -42,15 +41,13 @@ class SpecialController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.specials.detail', ['site' => $site, 'special' => $special]);
+        return view('themes.' . $domain->theme->name . '.specials.detail', ['site' => $domain->site, 'special' => $special]);
     }
 
-    public function slug($slug)
+    public function slug(Domain $domain, $slug)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $special = Special::where('slug', $slug)
@@ -59,26 +56,28 @@ class SpecialController extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.specials.detail', ['site' => $site, 'special' => $special]);
+        return view('themes.' . $domain->theme->name . '.specials.detail', ['site' => $domain->site, 'special' => $special]);
     }
 
-    public function lists()
+    public function lists(Domain $domain)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $specials = Special::where('state', Special::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme->name . '.specials.index', ['site' => $site, 'module' => $this->module, 'specials' => $specials]);
+        return view('themes.' . $domain->theme->name . '.specials.index', ['site' => $domain->site, 'module' => $this->module, 'specials' => $specials]);
     }
 
-    public function category($category_id)
+    public function category(Domain $domain, $category_id)
     {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
         $category = Category::find($category_id);
         if (empty($category)) {
             return abort(404);
@@ -90,7 +89,7 @@ class SpecialController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $category->site->theme->name . '.specials.category', ['site' => $category->site, 'category' => $category, 'specials' => $specials]);
+        return view('themes.' . $domain->theme->name . '.specials.category', ['site' => $domain->site, 'category' => $category, 'specials' => $specials]);
     }
 
     public function index()

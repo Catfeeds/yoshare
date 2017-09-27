@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Domain;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -36,9 +37,13 @@ class PublishPage implements ShouldQueue
      */
     public function handle()
     {
+        $this->publish($this->site->default_theme);
+        $this->publish($this->site->mobile_theme);
+    }
+
+    public function publish($theme)
+    {
         $site = $this->site;
-        $theme = $site->default_theme;
-        $device = '';
         $module = $this->module;
         $id = $this->id;
 
@@ -55,7 +60,13 @@ class PublishPage implements ShouldQueue
             @mkdir($path, 0755, true);
         }
 
-        $html = curl_get("http://$site->domain/$module->path/detail-$id.html", [CURLOPT_USERAGENT => $device]);
+        $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
+        $controller = new $class();
+        $domain = new Domain($site->domain, $theme);
+        $html = $controller->show($domain, $id)->__toString();
+        //TODO 临时
+        $html = str_replace('localhost', $domain->site->domain, $html);
+
         $file_html = "$path/detail-$id.html";
         file_put_contents($file_html, $html);
     }

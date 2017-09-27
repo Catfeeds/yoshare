@@ -92,20 +92,11 @@
         $('#avatar_url').val('');
     });
 
-    function toastrs(message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-bottom-right',
-        };
-        toastr['warning'](message);
-        return false;
-    }
-
     $('#submit').click(function () {
         var image_file = $('#image_file').fileinput('getFileStack');
 
         if (image_file.length > 0) {
-            return toastrs('请先上传头像');
+            return toast('info', '请先上传头像');
         }
     })
 </script>

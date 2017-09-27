@@ -98,7 +98,7 @@
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh');
 
-                    toastrs('success', '删除成功！');
+                    toast('success', '删除成功！');
                 }
             });
         },
@@ -133,7 +133,7 @@
     function commit() {
         var content_val = $.trim($('#content').val());
         if (content_val == '') {
-            toastrs('warning', '请输入回答内容，再提交！');
+            toast('warning', '请输入回答内容，再提交！');
             return false;
         }
 
@@ -150,14 +150,14 @@
                     $('#comment_table').bootstrapTable('selectPage', 1);
                     $('#comment_table').bootstrapTable('refresh', {silent: true});
                     $('#content').val('');
-                    toastrs('success', '评论成功！');
+                    toast('success', '评论成功！');
 
                 } else {
-                    toastrs('error', data.message);
+                    toast('error', data.message);
                 }
             },
             error: function () {
-                toastrs('warning', '系统繁忙！');
+                toast('warning', '系统繁忙！');
             }
         });
     }
@@ -166,13 +166,5 @@
         return [
             '<p class="content_title" data-toggle="tooltip" data-placement="top" title="' + row.content + '">' + row.content + '</p>',
         ]
-    }
-
-    function toastrs(state, message) {
-        toastr.options = {
-            'closeButton': true,
-            'positionClass': 'toast-top-center',
-        };
-        toastr[state](message);
     }
 </script>

@@ -191,14 +191,14 @@
             $('#btn_sort').text('排序');
             $('#table tbody').sortable('disable');
             $('#table tbody').enableSelection();
-            toastrs('info', '<b>已禁用排序功能</b>')
+            toast('info', '<b>已禁用排序功能</b>')
         }
         else {
             $('#btn_sort').addClass('active');
             $('#btn_sort').text('排序(已启用)');
             $('#table tbody').sortable('enable');
             $('#table tbody').disableSelection();
-            toastrs('info', '<b>已启用排序功能</b>')
+            toast('info', '<b>已启用排序功能</b>')
         }
     });
 </script>

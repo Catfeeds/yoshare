@@ -31,9 +31,14 @@ class CategoryController extends Controller
 
     public function create($category_id)
     {
-        $modules = Module::where('state', Module::STATE_ENABLE)
+        $modules = Module::with('fields')
+            ->where('state', Module::STATE_ENABLE)
+            ->whereHas('fields', function ($query) {
+                $query->where('name', 'category_id');
+            })
             ->pluck('title', 'id')
             ->toArray();
+
         return view('admin.categories.create', compact('category_id', 'modules'));
     }
 
@@ -69,7 +74,11 @@ class CategoryController extends Controller
 
             return redirect('/admin/categories');
         }
-        $modules = Module::where('state', Module::STATE_ENABLE)
+        $modules = Module::with('fields')
+            ->where('state', Module::STATE_ENABLE)
+            ->whereHas('fields', function ($query) {
+                $query->where('name', 'category_id');
+            })
             ->pluck('title', 'id')
             ->toArray();
 

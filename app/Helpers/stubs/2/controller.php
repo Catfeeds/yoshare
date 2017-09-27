@@ -6,8 +6,8 @@ use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\__module_name__;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Module;
-use App\Models\Site;
 use App\Models\UserLog;
 use Auth;
 use Carbon\Carbon;
@@ -29,12 +29,10 @@ class __controller__ extends Controller
         $this->module = Module::where('name', '__module_name__')->first();
     }
 
-    public function show($id)
+    public function show(Domain $domain, $id)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $__singular__ = __module_name__::find($id);
@@ -42,15 +40,13 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
+        return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }
 
-    public function slug($slug)
+    public function slug(Domain $domain, $slug)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $__singular__ = __module_name__::where('slug', $slug)
@@ -59,26 +55,28 @@ class __controller__ extends Controller
             return abort(404);
         }
 
-        return view('themes.' . $site->theme->name . '.__module_path__.detail', ['site' => $site, '__singular__' => $__singular__]);
+        return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }
 
-    public function lists()
+    public function lists(Domain $domain)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
         $__plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $site->theme->name . '.__module_path__.index', ['site' => $site, 'module' => $this->module, '__plural__' => $__plural__]);
+        return view('themes.' . $domain->theme->name . '.__module_path__.index', ['site' => $domain->site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
-    public function category($category_id)
+    public function category(Domain $domain, $category_id)
     {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
         $category = Category::find($category_id);
         if (empty($category)) {
             return abort(404);
@@ -90,7 +88,7 @@ class __controller__ extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $category->site->theme->name . '.__module_path__.category', ['site' => $category->site, 'category' => $category, '__plural__' => $__plural__]);
+        return view('themes.' . $domain->theme->name . '.__module_path__.category', ['site' => $domain->site, 'category' => $category, '__plural__' => $__plural__]);
     }
 
     public function index()

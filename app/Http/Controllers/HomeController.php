@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Site;
+use App\Models\Domain;
 
 class HomeController extends Controller
 {
@@ -10,14 +10,12 @@ class HomeController extends Controller
     {
     }
 
-    public function index()
+    public function index(Domain $domain)
     {
-        $site_id = request('site_id') ?: Site::ID_DEFAULT;
-        $site = Site::find($site_id);
-        if (empty($site)) {
-            return abort(404);
+        if (empty($domain->site)) {
+            return abort(501);
         }
 
-        return view('themes.' . $site->theme->name . '.index', compact('site'));
+        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site]);
     }
 }

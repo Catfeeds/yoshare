@@ -8,18 +8,6 @@
             {!! \App\Helpers\HtmlBuilder::menuTree(auth()->user()->site->menus()->where('parent_id', 0)->orderBy('sort')->get()) !!}
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-cog"></i>
-                    <span class="menu-item-top">问卷管理</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    @can('@survey')
-                        <li><a href="/admin/surveys"><i class="fa fa-columns"></i> 问卷管理</a></li>
-                    @endcan
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
                     <i class="fa fa-sitemap"></i>
                     <span class="menu-item-top">站点管理</span>
                     <i class="fa fa-angle-left pull-right"></i>

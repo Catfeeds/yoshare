@@ -43,15 +43,6 @@ class Site extends Model
         return $this->belongsTo(Theme::class);
     }
 
-    public function getThemeAttribute()
-    {
-        if (is_mobile() && !empty($this->mobile_theme)) {
-            return $this->mobile_theme;
-        } else {
-            return $this->default_theme;
-        }
-    }
-
     public function categories()
     {
         return $this->hasMany(Category::class);
@@ -70,7 +61,7 @@ class Site extends Model
         $site = self::create($input);
 
         //添加站点时，添加默认菜单
-        $menu_content = $site->menus()->create([
+        $parent = $site->menus()->create([
             'site_id' => $site_id,
             'parent_id' => Menu::ID_ROOT,
             'name' => '内容管理',
@@ -81,65 +72,86 @@ class Site extends Model
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_content->id,
+            'parent_id' => $parent->id,
             'name' => '文章管理',
             'url' => '/admin/articles',
             'permission' => '@article',
+            'icon' => 'fa-file-o',
+            'sort' => 0
+        ]);
+
+        $site->menus()->create([
+            'site_id' => $site_id,
+            'parent_id' => $parent->id,
+            'name' => '单页管理',
+            'url' => '/admin/pages',
+            'permission' => '@page',
             'icon' => 'fa-file-o',
             'sort' => 1
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_content->id,
-            'name' => '单页管理',
-            'url' => '/admin/pages',
-            'permission' => '@page',
-            'icon' => 'fa-file-o',
+            'parent_id' => $parent->id,
+            'name' => '问答管理',
+            'url' => '/admin/questions',
+            'permission' => '@question',
+            'icon' => 'fa-question-circle',
             'sort' => 2
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_content->id,
-            'name' => '问答管理',
-            'url' => '/admin/questions',
-            'permission' => '@question',
-            'icon' => 'fa-question-circle',
+            'parent_id' => $parent->id,
+            'name' => '投票管理',
+            'url' => '/admin/votes',
+            'permission' => '@vote',
+            'icon' => 'fa-file-o',
             'sort' => 3
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_content->id,
-            'name' => '问卷管理',
-            'url' => '/admin/surveies',
-            'icon' => 'fa-file-circle',
+            'parent_id' => $parent->id,
+            'name' => '专题管理',
+            'url' => '/admin/specials',
+            'permission' => '@special',
+            'icon' => 'fa-flag-o',
             'sort' => 4
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_content->id,
-            'name' => '投票管理',
-            'url' => '/admin/votes',
-            'permission' => '@vote',
-            'icon' => 'fa-file-o',
+            'parent_id' => $parent->id,
+            'name' => '评论管理',
+            'url' => '/admin/comments',
+            'permission' => '@comment',
+            'icon' => 'fa-comment-o',
             'sort' => 5
-        ]);
-
-        $menu_member = $site->menus()->create([
-            'site_id' => $site_id,
-            'parent_id' => self::ID_ROOT,
-            'name' => '会员管理',
-            'url' => '#',
-            'icon' => 'fa-user',
-            'sort' => 0
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_member->id,
+            'parent_id' => $parent->id,
+            'name' => '标签管理',
+            'url' => '/admin/tags',
+            'permission' => '@tag',
+            'icon' => 'fa-tags',
+            'sort' => 6
+        ]);
+
+        $parent = $site->menus()->create([
+            'site_id' => $site_id,
+            'parent_id' => Menu::ID_ROOT,
+            'name' => '会员管理',
+            'url' => '#',
+            'icon' => 'fa-user',
+            'sort' => 1
+        ]);
+
+        $site->menus()->create([
+            'site_id' => $site_id,
+            'parent_id' => $parent->id,
             'name' => '会员管理',
             'url' => '/admin/members',
             'permission' => '@member',
@@ -147,9 +159,9 @@ class Site extends Model
             'sort' => 1
         ]);
 
-        $menu_log = $site->menus()->create([
+        $parent = $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => self::ID_ROOT,
+            'parent_id' => Menu::ID_ROOT,
             'name' => '日志查询',
             'url' => '#',
             'icon' => 'fa-calendar',
@@ -158,21 +170,31 @@ class Site extends Model
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_log->id,
+            'parent_id' => $parent->id,
+            'name' => '操作日志',
+            'url' => '/admin/users/logs',
+            'permission' => '@log',
+            'icon' => 'fa-user-o',
+            'sort' => 0
+        ]);
+
+        $site->menus()->create([
+            'site_id' => $site_id,
+            'parent_id' => $parent->id,
             'name' => '推送日志',
-            'url' => '/admin/members',
-            'permission' => '@member',
+            'url' => '/admin/push/logs',
+            'permission' => '@log',
             'icon' => 'fa-envelope-o',
             'sort' => 1
         ]);
 
         $site->menus()->create([
             'site_id' => $site_id,
-            'parent_id' => $menu_log->id,
+            'parent_id' => $parent->id,
             'name' => '短信日志',
-            'url' => '/admin/members',
-            'permission' => '@member',
-            'icon' => 'fa-envelope-o',
+            'url' => '/admin/sms/logs',
+            'permission' => '@log',
+            'icon' => 'fa-commenting-o',
             'sort' => 2
         ]);
 
@@ -180,13 +202,10 @@ class Site extends Model
         return true;
     }
 
-    public static function getThemes()
+    public static function findByDomain($domain)
     {
-        $theme = Theme::all();
-        $themes = [];
-        foreach ($theme as $row) {
-            $themes[$row->id] = $row->title;
-        }
-        return $themes;
+        return static::where('domain', $domain)
+            ->orderBy('id')
+            ->first();
     }
 }
