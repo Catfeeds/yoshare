@@ -552,4 +552,25 @@ CREATE TABLE `cms_dictionaries` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `site_id` (`site_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------
+-- 2017-9-27
+-- -----------
+DROP TABLE IF EXISTS `cms_options`;
+CREATE TABLE `cms_options` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点id',
+  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` text COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(10) unsigned DEFAULT NULL COMMENT '类型',
+  `option` text COLLATE utf8_unicode_ci COMMENT '选项',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_id` (`site_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'VOTE_REQUIRE_PASS', '投票是否需要审核', '0', '1', '是,否', '2017-09-27 10:42:17', '2017-09-27 17:34:46');
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SEX', '性别', '1', '6', '男,女', null, null);
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'demo', 'demo', '', '5', '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');

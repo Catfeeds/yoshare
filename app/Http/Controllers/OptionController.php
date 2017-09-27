@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\DataSource;
 use App\Models\Option;
-use App\Models\Site;
+use Gate;
 use Request;
 use Response;
-use Gate;
 
 class OptionController extends Controller
 {
@@ -24,21 +23,29 @@ class OptionController extends Controller
         return view('admin.options.index');
     }
 
-    public function update($id)
+    public function save($id)
     {
-        $option = Option::find($id);
+        $input = Request::all();
+        $value = Request::get('value');
 
+        $input['value'] = is_array($value) ? implode(',', $value) : $value;
+
+        $option = Option::find($id);
         if ($option == null) {
             return;
         }
 
-        $option->update(Request::all());
+        if (isset($input['type']) && $input['type'] != $option->type) {
+            $input['value'] = '';
+        }
+
+        $option->update($input);
     }
 
     public function table()
     {
         $options = Option::owns()
-                    ->get();
+            ->get();
 
         $options->transform(function ($option) {
             return [
@@ -47,6 +54,8 @@ class OptionController extends Controller
                 'name' => $option->name,
                 'value' => $option->value,
                 'site_name' => $option->site->title,
+                'type' => $option->type,
+                'option' => $option->option,
             ];
         });
 

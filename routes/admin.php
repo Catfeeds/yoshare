@@ -75,6 +75,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
      * 参数设置
      */
     Route::get('options/table', 'OptionController@table');
+    Route::get('options/{id}/save', 'OptionController@save');
     Route::resource('options', 'OptionController');
 
     /**
