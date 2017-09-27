@@ -52,6 +52,7 @@ class SurveyController extends Controller
     public function store(SurveyRequest $request)
     {
         $data = $request->all();
+//        dd($data);
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
@@ -77,13 +78,13 @@ class SurveyController extends Controller
                 $subject = $survey->subjects()->create($data1);
 
                 //存入子选项信息
-                if (array_key_exists('item_title_' . ($key + 1), $data)) {
-                    foreach ($data['item_title_' . ($key + 1)] as $k => $item_title) {
+                if (array_key_exists('item_title' . ($key + 1), $data)) {
+                    foreach ($data['item_title' . ($key + 1)] as $k => $item_title) {
                         $data2 = [
                             'type' => Item::TYPE_IMAGE,
                             'title' => $item_title,
-                            'summary' => $data['summary_' . ($key + 1)][$k],
-                            'url' => $data['item_url_' . ($key + 1)][$k],
+                            'summary' => $data['summary' . ($key + 1)][$k],
+                            'url' => $data['item_url' . ($key + 1)][$k],
                             'sort' => $k
                         ];
                         $subject->items()->create($data2);
@@ -124,9 +125,13 @@ class SurveyController extends Controller
     {
         $survey = Survey::with('subjects')->find($id);
 
-        $subject = Subject::with('items')->where('refer_id', $id)->first();
+//        $subject = Subject::with('items')->where('refer_id', $id)->first();
+        $subject = Subject::with('items')->where('refer_id', $id)->get();
 
+//        dd($subject);
         $data = $request->all();
+
+//        dd($data);
 
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
@@ -138,7 +143,9 @@ class SurveyController extends Controller
         $survey->update($data);
 
         //删除选项
-        $subject->items()->whereNotIn('id', $data['item_id'])->delete();
+        foreach ($subject as $k => $item) {
+            $item->items()->whereNotIn('id', $data['item_id' . ($k + 1)])->delete();
+        }
 
         $subject = $data['item_subject'];
 
@@ -161,35 +168,55 @@ class SurveyController extends Controller
                     'sort' => $key
                 ];
 
-                if (!isset($data['item_id_subject'][$key])) {
-                    $survey->subjects()->create($data_subject);
-                } else {
-                    $item_subject = $survey->subjects()->where('id', $data['item_id_subject'][$key])->first();
-                    $item_subject->update($data_subject);
-                }
-
-                //存储题目的子选项
-                if (array_key_exists('item_title', $data)) {
-                    foreach ($data['item_title'] as $k => $item) {
-                        if ($item == '') {
-                            continue;
+                if (empty($data['item_id_subject'][$key])) {
+                    $te = $survey->subjects()->create($data_subject);
+                    //存储题目的子选项
+                    if (array_key_exists('item_title' . ($key + 1), $data)) {
+                        foreach ($data['item_title' . ($key + 1)] as $k => $item) {
+                            if ($item == '') {
+                                continue;
+                            }
+                            $te->items()->create(
+                                [
+                                    'type' => Item::TYPE_IMAGE,
+                                    'title' => $item,
+                                    'summary' => $data['summary' . ($key + 1)][$k],
+                                    'url' => $data['item_url' . ($key + 1)][$k],
+                                    'sort' => $key
+                                ]
+                            );
                         }
-                        $data_item = [
-                            'type' => Item::TYPE_IMAGE,
-                            'title' => $item,
-                            'summary' => $data['summary'][$k],
-                            'url' => $data['item_url'][$k],
-                            'sort' => $key
-                        ];
-                        if (!isset($data['item_id'][$k])) {
-                            $subject = Subject::with('items')->where('refer_id', $id)->first();
-                            $subject->items()->create($data_item);
-                        } else {
-                            $item2 = Subject::with('items')->where('id', $data['item_id'][$k])->first();
-                            $item2->update($data_item);
+                    }
+
+                } else {
+                    $subject = $survey->subjects()->where('id', $data['item_id_subject'][$key])->first();
+                    $subject->update($data_subject);
+                    //存储题目的子选项
+                    if (array_key_exists('item_title' . ($key + 1), $data)) {
+                        foreach ($data['item_title' . ($key + 1)] as $k => $item) {
+                            if ($item == '') {
+                                continue;
+                            }
+                            $data_item = [
+                                'type' => Item::TYPE_IMAGE,
+                                'title' => $item,
+                                'summary' => $data['summary' . ($key + 1)][$k],
+                                'url' => $data['item_url' . ($key + 1)][$k],
+                                'sort' => $key
+                            ];
+                            if (empty($data['item_id' . ($key + 1)][$k])) {
+                                $subject = Subject::with('items')->where('refer_id', $id)->get();
+                                foreach ($subject as $item) {
+                                    $item->items()->create($data_item);
+                                }
+                            } else {
+                                $item2 = Subject::with('items')->where('id', $data['item_id' . ($key + 1)][$k])->first();
+                                $item2->update($data_item);
+                            }
                         }
                     }
                 }
+
             }
         }
         return redirect(url('admin/surveys'))->with('flash_success', '编辑成功！');
