@@ -70,20 +70,20 @@ class SurveyController extends Controller
                 $data1 = [
                     'type' => Item::TYPE_IMAGE,
                     'title' => $item_subject,
-                    'summary' => $data['summary'][$key],
+                    'summary' => $data['summary_subject'][$key],
                     'url' => $data['item_url_subject'][$key],
                     'sort' => $key
                 ];
                 $subject = $survey->subjects()->create($data1);
 
                 //存入子选项信息
-                if (array_key_exists('item_title', $data)) {
-                    foreach ($data['item_title'] as $k => $item_title) {
+                if (array_key_exists('item_title_' . ($key + 1), $data)) {
+                    foreach ($data['item_title_' . ($key + 1)] as $k => $item_title) {
                         $data2 = [
                             'type' => Item::TYPE_IMAGE,
                             'title' => $item_title,
-                            'summary' => $data['summary'][$k],
-                            'url' => $data['item_url'][$k],
+                            'summary' => $data['summary_' . ($key + 1)][$k],
+                            'url' => $data['item_url_' . ($key + 1)][$k],
                             'sort' => $k
                         ];
                         $subject->items()->create($data2);
@@ -99,9 +99,11 @@ class SurveyController extends Controller
     {
         $site_id = Auth::user()->site_id;
 
-        $survey = Survey::find($id);
+        $survey = Survey::with('subjects')->find($id);
 
-        return view("mobile.$site_id.admin.surveys.share", compact('survey'));
+        $subject = Subject::with('items')->where('refer_id', $id)->first();;
+
+        return view("mobile.$site_id.admin.surveys.share", compact('survey', 'subject'));
     }
 
     public function edit(Request $request, $id)
@@ -113,7 +115,7 @@ class SurveyController extends Controller
         // 一个问卷对应多个题目,一个题目对应多个选项
         $survey = Survey::with('subjects')->find($id);
 
-        $subject = Subject::with('items')->where('refer_id', $id)->first();
+        $subject = Subject::with('items')->where('refer_id', $id)->get();
 
         return view('admin.surveys.edit', compact('survey', 'subject'));
     }
@@ -175,8 +177,8 @@ class SurveyController extends Controller
                         $data_item = [
                             'type' => Item::TYPE_IMAGE,
                             'title' => $item,
-                            'summary' => $data['summary'][$key],
-                            'url' => $data['item_url'][$key],
+                            'summary' => $data['summary'][$k],
+                            'url' => $data['item_url'][$k],
                             'sort' => $key
                         ];
                         if (!isset($data['item_id'][$k])) {
