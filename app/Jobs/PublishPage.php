@@ -43,31 +43,35 @@ class PublishPage implements ShouldQueue
 
     public function publish($theme)
     {
-        $site = $this->site;
-        $module = $this->module;
-        $id = $this->id;
+        try {
+            $site = $this->site;
+            $module = $this->module;
+            $id = $this->id;
 
-        //创建站点目录
-        $path = public_path("$site->directory/$theme->name");
-        if (!is_dir($path)) {
-            //创建模块目录
-            @mkdir($path, 0755, true);
+            //创建站点目录
+            $path = public_path("$site->directory/$theme->name");
+            if (!is_dir($path)) {
+                //创建模块目录
+                @mkdir($path, 0755, true);
+            }
+
+            $path = public_path("$site->directory/$theme->name/$module->path");
+            if (!is_dir($path)) {
+                //创建模块目录
+                @mkdir($path, 0755, true);
+            }
+
+            $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
+            $controller = new $class();
+            $domain = new Domain($site->domain, $theme);
+            $html = $controller->show($domain, $id)->__toString();
+            //TODO 临时
+            $html = str_replace('localhost', $domain->site->domain, $html);
+
+            $file_html = "$path/detail-$id.html";
+            file_put_contents($file_html, $html);
+        } catch (\Exception $exception) {
+            \Log::debug('publish page: ' . $exception->getMessage());
         }
-
-        $path = public_path("$site->directory/$theme->name/$module->path");
-        if (!is_dir($path)) {
-            //创建模块目录
-            @mkdir($path, 0755, true);
-        }
-
-        $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
-        $controller = new $class();
-        $domain = new Domain($site->domain, $theme);
-        $html = $controller->show($domain, $id)->__toString();
-        //TODO 临时
-        $html = str_replace('localhost', $domain->site->domain, $html);
-
-        $file_html = "$path/detail-$id.html";
-        file_put_contents($file_html, $html);
     }
 }

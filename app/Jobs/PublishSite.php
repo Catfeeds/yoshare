@@ -63,46 +63,52 @@ class PublishSite implements ShouldQueue
             file_put_contents($file_html, $html);
 
             foreach ($modules as $module) {
-                $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
-                $controller = new $class();
+                try {
 
-                $rows = call_user_func([$module->model_class, 'all']);
-                $categories = Category::where('module_id', $module->id)->get();
+                    $class = 'App\Http\\Controllers\\' . $module->name . 'Controller';
+                    $controller = new $class();
 
-                $path = public_path("$site->directory/$theme->name/$module->path");
-                if (!is_dir($path)) {
-                    //创建模块目录
-                    @mkdir($path, 0755, true);
-                }
+                    $rows = call_user_func([$module->model_class, 'all']);
+                    $categories = Category::where('module_id', $module->id)->get();
 
-                //生成列表页
-                $html = $controller->lists($domain)->__toString();
-                //TODO 临时
-                $html = str_replace('localhost', $domain->site->domain, $html);
-                $file_html = "$path/index.html";
-                file_put_contents($file_html, $html);
-
-                //生成栏目页
-                if ($module->fields()->where('name', 'category_id')->count()) {
-                    foreach ($categories as $category) {
-                        $html = $controller->category($domain, $category->id)->__toString();
-                        //TODO 临时
-                        $html = str_replace('localhost', $domain->site->domain, $html);
-                        $file_html = "$path/category-$category->id.html";
-                        file_put_contents($file_html, $html);
+                    $path = public_path("$site->directory/$theme->name/$module->path");
+                    if (!is_dir($path)) {
+                        //创建模块目录
+                        @mkdir($path, 0755, true);
                     }
-                }
 
-                //生成详情页
-                foreach ($rows as $row) {
-                    $html = $controller->show($domain, $row->id)->__toString();
+                    //生成列表页
+                    $html = $controller->lists($domain)->__toString();
                     //TODO 临时
                     $html = str_replace('localhost', $domain->site->domain, $html);
-                    $file_html = "$path/detail-$row->id.html";
+                    $file_html = "$path/index.html";
                     file_put_contents($file_html, $html);
+
+                    //生成栏目页
+                    if ($module->fields()->where('name', 'category_id')->count()) {
+                        foreach ($categories as $category) {
+                            $html = $controller->category($domain, $category->id)->__toString();
+                            //TODO 临时
+                            $html = str_replace('localhost', $domain->site->domain, $html);
+                            $file_html = "$path/category-$category->id.html";
+                            file_put_contents($file_html, $html);
+                        }
+                    }
+
+                    //生成详情页
+                    foreach ($rows as $row) {
+                        $html = $controller->show($domain, $row->id)->__toString();
+                        //TODO 临时
+                        $html = str_replace('localhost', $domain->site->domain, $html);
+                        $file_html = "$path/detail-$row->id.html";
+                        file_put_contents($file_html, $html);
+                    }
+                } catch (\Exception $exception) {
+                    \Log::debug('publish ' . $module->name . ': ' . $exception->getMessage());
                 }
             }
         } catch (\Exception $exception) {
+            \Log::debug('publish site: ' . $exception->getMessage());
         }
     }
 }
