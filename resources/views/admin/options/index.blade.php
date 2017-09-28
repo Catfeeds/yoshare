@@ -158,7 +158,7 @@
                             case {{\App\Models\Option::TYPE_SINGLE}}:
                                 return '<a href="javascript:void(0);" class="single" data-type="select" data-field="single" data-name="' + row.name + '" data-pk="' + row.id + '" data-value="' + row.value + '" data-title="单选"></a>';
                                 break;
-                            case {{\App\Models\Option::TYPE_SELECT}}:
+                            case {{\App\Models\Option::TYPE_MULTIPLE}}:
                                 return '<a href="javascript:void(0);" class="select" data-type="select2" data-field="select" data-name="' + row.name + '" data-pk="' + row.id + '" data-title="多选">' + row.value + '</a>'
                                 break;
                             default:
