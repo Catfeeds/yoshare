@@ -52,7 +52,6 @@ class SurveyController extends Controller
     public function store(SurveyRequest $request)
     {
         $data = $request->all();
-//        dd($data);
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
@@ -61,7 +60,7 @@ class SurveyController extends Controller
         $subject = $data['item_subject']; //子题目
 
         if (count($subject) != count(array_unique($subject))) {
-            \Session::flash('flash_warning', '子选项标题不能一样！！');
+            \Session::flash('flash_warning', '问卷题目不能一样！！');
             return redirect()->to($this->getRedirectUrl())->withInput();
         }
 
@@ -125,14 +124,9 @@ class SurveyController extends Controller
     {
         $survey = Survey::with('subjects')->find($id);
 
-//        $subject = Subject::with('items')->where('refer_id', $id)->first();
         $subject = Subject::with('items')->where('refer_id', $id)->get();
 
-//        dd($subject);
         $data = $request->all();
-
-//        dd($data);
-
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
@@ -150,7 +144,7 @@ class SurveyController extends Controller
         $subject = $data['item_subject'];
 
         if (count($subject) != count(array_unique($subject))) {
-            \Session::flash('flash_warning', '子选项标题不能一样！！');
+            \Session::flash('flash_warning', '问卷题目不能一样！！');
             return redirect()->to($this->getRedirectUrl())->withInput();
         }
 
@@ -176,15 +170,13 @@ class SurveyController extends Controller
                             if ($item == '') {
                                 continue;
                             }
-                            $te->items()->create(
-                                [
-                                    'type' => Item::TYPE_IMAGE,
-                                    'title' => $item,
-                                    'summary' => $data['summary' . ($key + 1)][$k],
-                                    'url' => $data['item_url' . ($key + 1)][$k],
-                                    'sort' => $key
-                                ]
-                            );
+                            $te->items()->create([
+                                'type' => Item::TYPE_IMAGE,
+                                'title' => $item,
+                                'summary' => $data['summary' . ($key + 1)][$k],
+                                'url' => $data['item_url' . ($key + 1)][$k],
+                                'sort' => $key
+                            ]);
                         }
                     }
 
@@ -204,19 +196,11 @@ class SurveyController extends Controller
                                 'url' => $data['item_url' . ($key + 1)][$k],
                                 'sort' => $key
                             ];
-                            if (empty($data['item_id' . ($key + 1)][$k])) {
-                                $subject = Subject::with('items')->where('refer_id', $id)->get();
-                                foreach ($subject as $item) {
-                                    $item->items()->create($data_item);
-                                }
-                            } else {
-                                $item2 = Subject::with('items')->where('id', $data['item_id' . ($key + 1)][$k])->first();
-                                $item2->update($data_item);
-                            }
+                            $item2 = Subject::with('items')->where('id', $data['item_id' . ($key + 1)][$k])->first();
+                            $item2->update($data_item);
                         }
                     }
                 }
-
             }
         }
         return redirect(url('admin/surveys'))->with('flash_success', '编辑成功！');

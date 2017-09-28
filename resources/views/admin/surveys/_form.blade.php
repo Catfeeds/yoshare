@@ -657,7 +657,7 @@
             var files = $(this).fileinput('getFileStack');
 
             if (files.length > 0) {
-                return ret = toastrs('warning', '请先上传文件!');
+                return ret = toast('warning', '请先上传文件!');
             }
         });
         return ret;
@@ -666,7 +666,7 @@
     $('#tabContents').delegate('.files_del', 'click', function () {
         var cur_num = $(".subject_items").length;
         if (cur_num < 2) {
-            return toastrs('warning', '问卷选项最少有一个');
+            return toast('warning', '问卷选项最少有一个');
         } else {
             $(this).parents('div.subject_items').remove();
         }
