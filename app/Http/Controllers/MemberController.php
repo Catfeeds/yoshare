@@ -56,7 +56,7 @@ class MemberController extends Controller
                 'name' => $member_name,
                 'password' => md5(md5($password) . $salt),
                 'nick_name' => $nick_name,
-                'mobile' => $member_name,
+                'mobile' => $input['mobile'],
                 'avatar_url' => $input['avatar_url'],
                 'type' => $input['type'],
                 'state' => Member::STATE_ENABLED,

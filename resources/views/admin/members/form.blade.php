@@ -33,6 +33,10 @@
             <div class="col-sm-5">
                 {!! Form::select('type', \App\Models\Member::TYPES, null, ['class' => 'form-control']) !!}
             </div>
+            {!! Form::label('mobile', '手机号:', ['class' => 'control-label col-sm-1']) !!}
+            <div class="col-sm-5">
+                {!! Form::text('mobile', null, ['class' => 'form-control']) !!}
+            </div>
         </div>
 
         <div class="form-group" style="display: none;">
