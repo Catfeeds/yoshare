@@ -113,7 +113,7 @@
                             $('.select').editable({
                                 inputclass: 'input-large',
                                 select2: {
-                                    tags: [],
+                                    tags: ['英语', '汉语', '法语', '新西兰语'],
                                     width: '200px',
                                     tokenSeparators: [",", " "]
                                 },

@@ -572,5 +572,6 @@ CREATE TABLE `cms_options` (
   KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'VOTE_REQUIRE_PASS', '投票是否需要审核', '0', '1', '是,否', '2017-09-27 10:42:17', '2017-09-27 17:34:46');
-INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SEX', '性别', '1', '6', '男,女', null, null);
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SEX', '性别', '1', '6', '男,女', '2017-09-27 17:53:31', '2017-09-27 17:53:31');
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SELECT', '课程', '汉语,法语', '7', '英语,汉语,法语,新西兰语,', '2017-09-27 17:53:31', '2017-09-27 17:53:31');
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'demo', 'demo', '', '5', '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
