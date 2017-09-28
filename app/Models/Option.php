@@ -10,6 +10,14 @@ class Option extends Model
     //评论是否需要审核
     const COMMENT_REQUIRE_PASS = 'COMMENT_REQUIRE_PASS';
 
+    const TYPE_BOOLEAN = 1;
+    const TYPE_TEXT = 2;
+    const TYPE_TEXTAREA = 3;
+    const TYPE_DATE = 4;
+    const TYPE_DATETIME = 5;
+    const TYPE_SINGLE = 6;
+    const TYPE_SELECT = 7;
+
     protected $fillable = [
         'site_id',
         'code',

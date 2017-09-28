@@ -39,7 +39,7 @@
         </section>
     </div>
     <script>
-        function sendAjax(params) {
+        function save(params) {
             $.ajax({
                 url: '/admin/options/' + params.pk + '/save',
                 data: params,
@@ -56,73 +56,73 @@
             onLoadSuccess: function (options) {
                 $(options.data).each(function (k, option) {
                     switch (option.type) {
-                        case 1:
+                        case {{\App\Models\Option::TYPE_BOOLEAN}}:
                             $('.boolean').editable({
                                 source: [
                                     {value: 0, text: '否'},
                                     {value: 1, text: '是'}
                                 ],
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 2:
+                        case {{\App\Models\Option::TYPE_TEXT}}:
                             $('.text').editable({
                                 type: 'text',
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 3:
+                        case {{\App\Models\Option::TYPE_TEXTAREA}}:
                             $('.textarea').editable({
                                 showbuttons: 'bottom',
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 4:
+                        case {{\App\Models\Option::TYPE_DATE}}:
                             $('.date').editable({
                                 format: 'yyyy-mm-dd',
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 5:
+                        case {{\App\Models\Option::TYPE_DATETIME}}:
                             $('.datetime').editable({
                                 placement: 'top',
                                 combodate: {
                                     firstItem: 'name'
                                 },
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 6:
+                        case {{\App\Models\Option::TYPE_SINGLE}}:
                             $('.single').editable({
                                 source: [
                                     {value: 1, text: '男'},
                                     {value: 2, text: '女'}
                                 ],
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
-                        case 7:
+                        case {{\App\Models\Option::TYPE_SELECT}}:
                             $('.select').editable({
                                 inputclass: 'input-large',
                                 select2: {
-                                    tags: ['英语','汉语','法语','新西兰语'],
+                                    tags: ['英语', '汉语', '法语', '新西兰语'],
                                     width: '200px',
                                     tokenSeparators: [",", " "]
                                 },
                                 url: function (params) {
-                                    sendAjax(params)
+                                    save(params)
                                 },
                             });
                             break;
@@ -140,25 +140,25 @@
                     title: '值',
                     formatter: function (value, row, index) {
                         switch (row.type) {
-                            case 1:
+                            case {{\App\Models\Option::TYPE_BOOLEAN}}:
                                 return '<a href="javascript:void(0);" class="boolean" data-type="select" data-field="boolean" data-name="' + row.name + '" data-pk="' + row.id + '" data-value="' + row.value + '" data-title="布尔型"></a>';
                                 break;
-                            case 2:
+                            case {{\App\Models\Option::TYPE_TEXT}}:
                                 return '<a href="javascript:void(0);" class="text" data-type="text" data-field="text" data-name="' + row.name + '" data-pk="' + row.id + '" data-title="文本">' + row.value + '</a>'
                                 break;
-                            case 3:
+                            case {{\App\Models\Option::TYPE_TEXTAREA}}:
                                 return '<a href="javascript:void(0);" class="textarea" data-type="textarea" data-field="textarea" data-name="' + row.name + '" data-pk="' + row.id + '" data-placeholder="" data-title="多行文本">' + row.value + '</a>'
                                 break;
-                            case 4:
+                            case {{\App\Models\Option::TYPE_DATE}}:
                                 return '<a href="javascript:void(0);" class="date" data-type="combodate" data-field="date" data-name="' + row.name + '" data-pk="' + row.id + '" data-value="' + row.value + '" data-format="YYYY-MM-DD" data-viewformat="YYYY-MM-DD" data-template="YYYY-MM-DD" data-title="日期"></a>';
                                 break;
-                            case 5:
+                            case {{\App\Models\Option::TYPE_DATETIME}}:
                                 return '<a href="javascript:void(0);" class="datetime" data-type="combodate" data-field="datetime" data-name="' + row.name + '" data-pk="' + row.id + '" data-value="' + row.value + '" data-format="YYYY-MM-DD HH:mm" data-viewformat="YYYY-MM-DD HH:mm" data-template="YYYY-MM-DD HH:mm" data-title="日期时间"></a>'
                                 break;
-                            case 6:
+                            case {{\App\Models\Option::TYPE_SINGLE}}:
                                 return '<a href="javascript:void(0);" class="single" data-type="select" data-field="single" data-name="' + row.name + '" data-pk="' + row.id + '" data-value="' + row.value + '" data-title="单选"></a>';
                                 break;
-                            case 7:
+                            case {{\App\Models\Option::TYPE_SELECT}}:
                                 return '<a href="javascript:void(0);" class="select" data-type="select2" data-field="select" data-name="' + row.name + '" data-pk="' + row.id + '" data-title="多选">' + row.value + '</a>'
                                 break;
                             default:
@@ -171,13 +171,13 @@
                     editable: {
                         type: 'select',
                         source: [
-                            {value: 1, text: '布尔'},
-                            {value: 2, text: "文本"},
-                            {value: 3, text: "多行文本"},
-                            {value: 4, text: "日期"},
-                            {value: 5, text: "日期时间"},
-                            {value: 6, text: "单选"},
-                            {value: 7, text: "多选"},
+                            {value: {{\App\Models\Option::TYPE_BOOLEAN}}, text: '布尔'},
+                            {value: {{\App\Models\Option::TYPE_TEXT}}, text: "文本"},
+                            {value: {{\App\Models\Option::TYPE_TEXTAREA}}, text: "多行文本"},
+                            {value: {{\App\Models\Option::TYPE_DATE}}, text: "日期"},
+                            {value: {{\App\Models\Option::TYPE_DATETIME}}, text: "日期时间"},
+                            {value: {{\App\Models\Option::TYPE_SINGLE}}, text: "单选"},
+                            {value: {{\App\Models\Option::TYPE_SELECT}}, text: "多选"},
                         ]
                     }
                 }, {
