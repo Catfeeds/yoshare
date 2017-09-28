@@ -177,7 +177,7 @@
                             {value: {{\App\Models\Option::TYPE_DATE}}, text: "日期"},
                             {value: {{\App\Models\Option::TYPE_DATETIME}}, text: "日期时间"},
                             {value: {{\App\Models\Option::TYPE_SINGLE}}, text: "单选"},
-                            {value: {{\App\Models\Option::TYPE_SELECT}}, text: "多选"},
+                            {value: {{\App\Models\Option::TYPE_MULTIPLE}}, text: "多选"},
                         ]
                     }
                 }, {
