@@ -1,6 +1,10 @@
 @extends('admin.layouts.master')
 
 @section('content')
+    <!-- X-editable (Select2) -->
+    <link href="/plugins/x-editable/1.4.3/inputs/select2/lib/select2.css" rel="stylesheet">
+    <script src="/plugins/x-editable/1.4.3/inputs/select2/lib/select2.js"></script>
+
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
@@ -113,7 +117,7 @@
                             $('.select').editable({
                                 inputclass: 'input-large',
                                 select2: {
-                                    tags: ['英语', '汉语', '法语', '新西兰语'],
+                                    tags: ['英语','汉语','法语','新西兰语'],
                                     width: '200px',
                                     tokenSeparators: [",", " "]
                                 },

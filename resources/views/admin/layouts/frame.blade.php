@@ -61,10 +61,6 @@
     <link href="/plugins/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
     <script src="/plugins/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-    <!-- X-editable (Select2) -->
-    <link href="/plugins/x-editable/1.4.3/inputs/select2/lib/select2.css" rel="stylesheet">
-    <script src="/plugins/x-editable/1.4.3/inputs/select2/lib/select2.js"></script>
-
     <!--Bootstrap-TreeView-->
     <link href="/plugins/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" rel="stylesheet">
     <script src="/plugins/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
@@ -85,8 +81,8 @@
     <script src="/plugins/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <!--Select2-->
-    {{--<link href="/plugins/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>--}}
-    {{--<script src="/plugins/select2/4.0.3/js/select2.full.min.js"></script>--}}
+    <link href="/plugins/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+    <script src="/plugins/select2/4.0.3/js/select2.full.min.js"></script>
 
     <!--Nestable-->
     <link href="/plugins/nestable/jquery.nestable.css" rel="stylesheet"/>
