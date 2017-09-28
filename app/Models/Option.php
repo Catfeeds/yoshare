@@ -16,7 +16,7 @@ class Option extends Model
     const TYPE_DATE = 4;
     const TYPE_DATETIME = 5;
     const TYPE_SINGLE = 6;
-    const TYPE_SELECT = 7;
+    const TYPE_MULTIPLE = 7;
 
     protected $fillable = [
         'site_id',

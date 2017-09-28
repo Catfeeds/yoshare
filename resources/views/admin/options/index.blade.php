@@ -113,7 +113,7 @@
                                 },
                             });
                             break;
-                        case {{\App\Models\Option::TYPE_SELECT}}:
+                        case {{\App\Models\Option::TYPE_MULTIPLE}}:
                             $('.select').editable({
                                 inputclass: 'input-large',
                                 select2: {
