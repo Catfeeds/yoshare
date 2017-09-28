@@ -8,7 +8,6 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
-use App\Models\Site;
 use App\Models\UserLog;
 use Auth;
 use Carbon\Carbon;
@@ -110,7 +109,9 @@ class ArticleController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view('admin.contents.create', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function edit($id)

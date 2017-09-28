@@ -46,7 +46,7 @@
             <label for="image_file" class="control-label col-sm-1">上传头像:</label>
             <div class=" col-sm-11">
                 <input id="image_file" name="image_file" type="file" data-preview-file-type="text"
-                       data-upload-url="/files/upload?type=image">
+                       data-upload-url="/admin/files/upload?type=image">
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
         initialPreview: images,
         initialPreviewAsData: false,
         initialPreviewConfig: [{key: 1}],
-        deleteUrl: '/files/delete?_token={{csrf_token()}}',
+        deleteUrl: '/admin/files/delete?_token={{csrf_token()}}',
         maxFileSize: 10240,
         maxFileCount: 1,
         resizeImage: true,

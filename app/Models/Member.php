@@ -15,8 +15,7 @@ class Member extends Model
     const TYPE_EXPERT = 2;
 
     const TYPES = [
-        1 => '牧场人员',
-        2 => '技术人员',
+        1 => '普通会员',
     ];
 
     protected $fillable = [

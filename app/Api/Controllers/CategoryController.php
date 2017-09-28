@@ -12,8 +12,7 @@ class CategoryController extends BaseController
         $attributes = $category->getAttributes();
 
         $attributes['image_url'] = get_image_url($category->image_url);
-        $attributes['cover_url'] = get_image_url($category->image_url);
-        $attributes['content'] = $category->content;
+        $attributes['cover_url'] = get_image_url($category->cover_url);
 
         return $attributes;
     }

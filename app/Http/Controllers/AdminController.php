@@ -10,11 +10,16 @@ class AdminController extends Controller
 
     public function index()
     {
-        return redirect('/admin/articles');
+        return view('admin.dashboard');
     }
 
     public function login()
     {
         return view('admin.login');
+    }
+
+    public function dashboard()
+    {
+        return view('admin.dashboard');
     }
 }

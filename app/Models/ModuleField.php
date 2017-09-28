@@ -128,7 +128,7 @@ class ModuleField extends Model
     {
         //设置序号+1
         if (isset($input['index']) && intval($input['index']) == 0) {
-            $input['index'] = ModuleField::where('module_id', $input['module_id'])->where('index', '<=', '90')->max('index') + 1;
+            $input['index'] = ModuleField::where('module_id', $input['module_id'])->where('index', '<', '90')->max('index') + 1;
         }
 
         $count = ModuleField::where('name', $input['name'])

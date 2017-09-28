@@ -575,3 +575,9 @@ INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, 
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SEX', '性别', '1', '6', '男,女', '2017-09-27 17:53:31', '2017-09-27 17:53:31');
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'SELECT', '课程', '汉语,法语', '7', '英语,汉语,法语,新西兰语,', '2017-09-27 17:53:31', '2017-09-27 17:53:31');
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'demo', 'demo', '', '5', '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
+
+INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`)
+VALUES
+	(4, 'top', '是否置顶', '是否置顶', 3, '0', 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-09-19 11:35:51');
+
+UPDATE cms_module_fields set `column_formatter` = 'titleFormatter' where `module_id` = 4 and `name` = 'title';

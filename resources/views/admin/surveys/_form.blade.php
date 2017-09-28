@@ -404,12 +404,8 @@
 
     $(document).ready(function () {
         CKEDITOR.replace('description', {
-            extraPlugins: 'uploadimage,image2',
-            height: 500,
-            filebrowserUploadUrl: '{{ url('/admin/files/upload?type=image') }}?_token={{ csrf_token()}}',
-            contentsCss: [CKEDITOR.basePath + 'contents.css', '/css/admin/app.css'],
-            image2_alignClasses: ['image-align-left', 'image-align-center', 'image-align-right'],
-            image2_disableResizer: true
+            height: 800,
+            filebrowserUploadUrl: '/admin/files/upload?type=image&_token={{  csrf_token() }}'
         });
     });
 

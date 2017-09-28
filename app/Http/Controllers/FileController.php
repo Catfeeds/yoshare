@@ -34,22 +34,6 @@ class FileController extends Controller
             $file = current($file);
         }
         try {
-            if (Request::hasFile('upload')) //CKEditor
-            {
-                $url = $this->uploadImage($file);
-
-                if (Request::has('CKEditorFuncNum')) {
-                    $funcNum = $_GET['CKEditorFuncNum'];
-                    echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction($funcNum, '$url');</script>";
-                } else {
-                    return Response::json([
-                        'uploaded' => 1,
-                        'fileName' => basename($url),
-                        'url' => $url,
-                    ]);
-                }
-
-            }
             if (Request::get('type') == 'video') {
                 $url = $this->uploadVideo($file);
 
@@ -83,18 +67,23 @@ class FileController extends Controller
             } else if (Request::get('type') == 'image') {
                 $url = $this->uploadImage($file);
 
-                return Response::json([
-                    'status_code' => 200,
-                    'message' => 'success',
-                    'data' => $url,
-                    'initialPreview' => [
-                        '<img height="240" src="'. $url .'" class="kv-preview-data file-preview-image">',
-                    ],
-                    'initialPreviewConfig' => [
-                        ['key' => time(), 'image_url' => $url],
-                    ],
-                    'append' => true,
-                ]);
+                if (Request::has('CKEditorFuncNum')) {
+                    $funcNum = $_GET['CKEditorFuncNum'];
+                    echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction($funcNum, '$url');</script>";
+                } else {
+                    return Response::json([
+                        'status_code' => 200,
+                        'message' => 'success',
+                        'data' => $url,
+                        'initialPreview' => [
+                            '<img height="240" src="' . $url . '" class="kv-preview-data file-preview-image">',
+                        ],
+                        'initialPreviewConfig' => [
+                            ['key' => time(), 'image_url' => $url],
+                        ],
+                        'append' => true,
+                    ]);
+                }
             } else if (Request::get('type') == 'file') {
                 $url = $this->uploadFile($file);
 
@@ -116,7 +105,7 @@ class FileController extends Controller
     public function uploadImage($file)
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        if (!in_array($extension, static::ALLOW_EXTENSIONS)){
+        if (!in_array($extension, static::ALLOW_EXTENSIONS)) {
             return $this->responseFail('不允许上传此类型文件');
         }
 
@@ -140,7 +129,7 @@ class FileController extends Controller
     public function uploadVideo($file)
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        if (!in_array($extension, static::ALLOW_EXTENSIONS)){
+        if (!in_array($extension, static::ALLOW_EXTENSIONS)) {
             return $this->responseFail('不允许上传此类型文件');
         }
 
@@ -166,7 +155,7 @@ class FileController extends Controller
     public function uploadAudio($file)
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        if (!in_array($extension, static::ALLOW_EXTENSIONS)){
+        if (!in_array($extension, static::ALLOW_EXTENSIONS)) {
             return $this->responseFail('不允许上传此类型文件');
         }
 
@@ -192,7 +181,7 @@ class FileController extends Controller
     public function uploadFile($file)
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        if (!in_array($extension, static::ALLOW_EXTENSIONS)){
+        if (!in_array($extension, static::ALLOW_EXTENSIONS)) {
             return $this->responseFail('不允许上传此类型文件');
         }
 

@@ -29,7 +29,7 @@
                                     <script>
                                         CKEDITOR.replace('{{ $editor->name }}', {
                                             height: '{{ $editor->rows * 20 }}',
-                                            filebrowserUploadUrl: '{{ url('files/upload') }}?_token={{csrf_token()}}'
+                                            filebrowserUploadUrl: '/admin/files/upload?type=image&_token={{  csrf_token() }}'
                                         });
                                     </script>
                                 @elseif($editor->type == \App\Models\ModuleField::EDITOR_TYPE_DATETIME)

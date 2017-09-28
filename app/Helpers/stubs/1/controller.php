@@ -89,7 +89,9 @@ class __controller__ extends Controller
             return redirect()->back();
         }
 
-        return view('admin.contents.create', ['module' => $this->module, 'base_url' => $this->base_url]);
+        $module = Module::transform($this->module->id);
+
+        return view('admin.contents.create', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function edit($id)
