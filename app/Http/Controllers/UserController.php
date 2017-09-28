@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = User::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('name', 'id')->toArray();
         $sites = Site::all();
 
         return view('admin.users.create', compact('sites', 'roles'));
@@ -88,7 +88,7 @@ class UserController extends Controller
             return redirect('/admin/users');
         }
 
-        $roles = User::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('name', 'id')->toArray();
         $sites = Site::all();
 
         return view('admin.users.edit', compact('user', 'sites', 'roles'));
