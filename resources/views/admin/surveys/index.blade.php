@@ -156,7 +156,7 @@
         function titleFormatter(value, row, index) {
             return '<a href="/articles/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
                 (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '')
-            {{--(row.tags.indexOf('{{\App\Models\Survey::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')--}}
+{{--                (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')--}}
         }
 
         function actionFormatter(value, row, index) {
