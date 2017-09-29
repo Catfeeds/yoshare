@@ -92,4 +92,8 @@ $api->version('v1', function ($api) {
          */
         $api->get('messages/owns', 'MessageController@owns');
     });
+
+    $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:60000'], function ($api) {
+        $api->get('analyzers/web', 'AnalyzerController@web');
+    });
 });

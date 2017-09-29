@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Libraries\Swagger;
 use Illuminate\Console\Command;
+use Swagger;
 
 class SwaggerCommand extends Command
 {
@@ -38,6 +38,47 @@ class SwaggerCommand extends Command
      */
     public function handle()
     {
-        Swagger::make();
+        $paths = [base_path('app/Api')];
+
+        $options = array(
+            'output' => base_path('public/api-docs/swagger.json'),
+            'stdout' => false,
+            'exclude' => null,
+            'bootstrap' => false,
+            'help' => false,
+            'version' => false,
+            'debug' => false,
+        );
+
+        $version = '2.0.11';
+        error_log('');
+        error_log('Swagger-PHP ' . $version);
+        error_log('------------' . str_repeat('-', strlen($version)));
+
+        $swagger = Swagger\scan($paths, ['exclude' => null]);
+        $methods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];
+        $counter = 0;
+
+        foreach ($swagger->paths as $path) {
+            foreach ($path as $method => $operation) {
+                if ($operation !== null && in_array($method, $methods)) {
+                    error_log(str_pad($method, 7, ' ', STR_PAD_LEFT) . ' ' . $path->path);
+                    $counter++;
+                }
+            }
+        }
+        error_log('----------------------' . str_repeat('-', strlen($counter)));
+        error_log($counter . ' operations documented');
+        error_log('----------------------' . str_repeat('-', strlen($counter)));
+        if ($options['stdout']) {
+            echo $swagger;
+        } else {
+            if (is_dir($options['output'])) {
+                $options['output'] .= '/swagger.json';
+            }
+            $swagger->saveAs($options['output']);
+            error_log('Written to ' . realpath($options['output']));
+        }
+        error_log('');
     }
 }

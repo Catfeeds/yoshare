@@ -19,7 +19,5 @@
 @endsection
 
 @section('js')
-<script>
-    
-</script>
+    <script src="{{ asset('/js/analyzer.js') }}"></script>
 @endsection

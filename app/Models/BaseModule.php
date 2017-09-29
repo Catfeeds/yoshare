@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Jobs\PublishPage;
 use Auth;
+use Cache;
 use Carbon\Carbon;
 use Gate;
 use Illuminate\Database\Eloquent\Model;

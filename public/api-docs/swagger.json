@@ -11,6 +11,38 @@
         "https"
     ],
     "paths": {
+        "/analyzers/web": {
+            "get": {
+                "tags": [
+                    "/analyzers \u5206\u6790"
+                ],
+                "summary": "\u8bb0\u5f55\u9875\u9762\u8bbf\u95ee",
+                "parameters": [
+                    {
+                        "name": "app_key",
+                        "in": "query",
+                        "description": "App Key",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "url",
+                        "in": "query",
+                        "description": "URL",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/apps/info": {
             "get": {
                 "tags": [
@@ -317,13 +349,6 @@
                         "name": "type",
                         "in": "query",
                         "description": "\u7c7b\u578b",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
                         "required": true,
                         "type": "string"
                     }

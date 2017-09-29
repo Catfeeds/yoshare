@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserLogEvent' => [
             'App\Listeners\UserLogListener',
         ],
+        'Illuminate\Cache\Events\KeyWritten' => [
+            'App\Listeners\CacheKeyWritten',
+        ],
     ];
 
     /**

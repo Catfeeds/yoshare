@@ -620,3 +620,13 @@ CREATE TABLE `cms_surveys` (
 -- -----------
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'TEXT', '文本', '', 2, '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
 INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'TEXTAREA', '多行文本', '', 3, '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
+
+CREATE TABLE `cms_pv_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'URL',
+  `ip` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP地址',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -41,7 +41,6 @@ class Article extends BaseModule
             ->where('category_id', $this->category_id)
             ->where('state', $this->state)
             ->where('sort', '>', $this->sort)
-            ->orderBy('sort', 'desc')
             ->first();
     }
 
@@ -51,7 +50,6 @@ class Article extends BaseModule
             ->where('category_id', $this->category_id)
             ->where('state', $this->state)
             ->where('sort', '<', $this->sort)
-            ->orderBy('sort', 'desc')
             ->first();
     }
 

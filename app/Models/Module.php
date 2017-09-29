@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Console\Commands\SwaggerCommand;
 use App\Helpers\CodeBuilder;
-use App\Libraries\Swagger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Request;
@@ -115,7 +115,7 @@ class Module extends Model
             'name' => 'title',
             'title' => '标题',
             'label' => '标题',
-            'type' => ModuleField::TEXT,
+            'type' => ModuleField::TYPE_TEXT,
             'system' => 1,
             'index' => 3,
             'column_show' => 1,
@@ -514,12 +514,13 @@ class Module extends Model
     }
 
     /**
-     * 生成模块代码
+     * 生成模块代码和API文档
      *
      * @param $module
      */
     public static function generate($module)
     {
+        //代码生成
         $builder = new CodeBuilder($module);
         //生成model
         $builder->createModel();
@@ -537,7 +538,8 @@ class Module extends Model
         $builder->appendRoutes();
 
         //生成api文档
-        Swagger::make();
+        $swagger = new SwaggerCommand();
+        $swagger->handle();
     }
 
     /**
