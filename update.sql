@@ -630,3 +630,5 @@ CREATE TABLE `cms_pv_logs` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `cms_modules` ADD `is_category` TINYINT(1) NOT NULL COMMENT '是否使用栏目' AFTER `icon`, ADD `sort_type` TINYINT(1) NOT NULL COMMENT '排序方式' AFTER `is_category`, ADD `sort_direction` TINYINT(1) NOT NULL COMMENT '排序方向' AFTER `sort_type`;

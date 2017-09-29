@@ -23,6 +23,23 @@ class Module extends Model
         1 => '已启用',
     ];
 
+    const IS_CATEGORY = [
+        0 => '否',
+        1 => '是',
+    ];
+
+    const IS_CATEGORY_ON = 1;
+
+    const SORT_TYPE = [
+        0 => '栏目序号',
+        1 => '创建日期',
+    ];
+
+    const SORT_DIRECTION = [
+        0 => '倒序',
+        1 => '正序',
+    ];
+
     protected $fillable = [
         'name',
         'title',
@@ -31,6 +48,9 @@ class Module extends Model
         'groups',
         'is_lock',
         'state',
+        'is_category',
+        'sort_type',
+        'sort_direction',
     ];
 
     public function getModelNameAttribute()
@@ -89,6 +109,18 @@ class Module extends Model
 
         $module = self::create($input);
 
+        if($input['is_category'] == self::IS_CATEGORY_ON)
+        {
+            $module->fields()->create([
+                'name' => 'category_id',
+                'title' => '栏目ID',
+                'label' => '栏目',
+                'type' => ModuleField::TYPE_INTEGER,
+                'system' => 1,
+                'index' => 3,
+            ]);
+        }
+
         $module->fields()->create([
             'name' => 'id',
             'title' => 'ID',
@@ -117,7 +149,7 @@ class Module extends Model
             'label' => '标题',
             'type' => ModuleField::TYPE_TEXT,
             'system' => 1,
-            'index' => 3,
+            'index' => 4,
             'column_show' => 1,
             'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
             'column_index' => 2,

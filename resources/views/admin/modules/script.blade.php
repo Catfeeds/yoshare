@@ -2,7 +2,7 @@
     $('input[name=icon]').iconpicker();
 
     function iconFormatter(value, row, index) {
-        return '<i class="fa '+ row.icon +'"></i>';
+        return '<i class="fa ' + row.icon + '"></i>';
     }
 
     function booleanFormatter(value, row, index) {
@@ -44,6 +44,9 @@
             $('#groups').val(row.groups);
             $('#is_lock').bootstrapSwitch('state', row.is_lock);
             $('#is_lock').next().val(row.is_lock);
+            $('#is_category').val(row.is_category);
+            $('#sort_type').val(row.sort_type);
+            $('#sort_direction').val(row.sort_direction);
             $('#modal_form').modal('show');
         },
         'click .field': function (e, value, row, index) {
@@ -61,6 +64,8 @@
         $('#groups').val('');
         $('#is_lock').bootstrapSwitch('state', false);
         $('#is_lock').next().val(0);
+        $('#is_category').val(0);
+
     });
 
     $('#btn_copy').click(function () {
@@ -75,10 +80,17 @@
         $('#is_lock').next().val(0);
         //获取被复制module_id
         var row = $('#table').bootstrapTable('getSelections');
-        if(row.length == 0 || row.length > 1){
+        if (row.length == 0 || row.length > 1) {
             return toast('warning', '请选择一个模型');
         }
         $('#module_id').val(row[0].id);
     });
 
+    $('.is_category').change(function () {
+        if ($(this).val() == 1) {
+            $('.category').css('display', 'block');
+        } else {
+            $('.category').css('display', 'none');
+        }
+    })
 </script>

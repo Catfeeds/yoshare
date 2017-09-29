@@ -42,7 +42,23 @@
                                                 <span class="input-group-addon"></span>
                                             </div>
                                         </div>
+                                        {!! Form::label('is_category', '是否用栏目:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::select('is_category', \App\Models\Module::IS_CATEGORY, null, ['class' => 'form-control is_category']) !!}
+                                        </div>
                                     </div>
+
+                                    <div class="form-group category" style="display: none">
+                                        {!! Form::label('sort_type', '排序方式:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::select('sort_type', \App\Models\Module::SORT_TYPE, null, ['class' => 'form-control']) !!}
+                                        </div>
+                                        {!! Form::label('sort_direction', '排序方向:', ['class' => 'control-label col-sm-2']) !!}
+                                        <div class="col-sm-4">
+                                            {!! Form::select('sort_direction', \App\Models\Module::SORT_DIRECTION, null, ['class' => 'form-control']) !!}
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
                                         {!! Form::label('groups', '编辑器分组', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-10">
