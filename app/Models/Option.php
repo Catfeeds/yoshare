@@ -18,6 +18,16 @@ class Option extends Model
     const TYPE_SINGLE = 6;
     const TYPE_MULTIPLE = 7;
 
+    const TYPES = [
+        1 => '布尔',
+        2 => '文本',
+        3 => '多行文本',
+        4 => '日期',
+        5 => '日期时间',
+        6 => '单选',
+        7 => '多选',
+    ];
+
     protected $fillable = [
         'site_id',
         'code',
@@ -30,6 +40,11 @@ class Option extends Model
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function typeName()
+    {
+        return array_key_exists($this->type, static::TYPES) ? static::TYPES[$this->type] : '';
     }
 
     /**

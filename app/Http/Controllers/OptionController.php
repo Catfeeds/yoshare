@@ -53,9 +53,10 @@ class OptionController extends Controller
                 'code' => $option->code,
                 'name' => $option->name,
                 'value' => $option->value,
-                'site_name' => $option->site->title,
                 'type' => $option->type,
+                'type_name' => $option->typeName(),
                 'option' => $option->option,
+                'site_name' => $option->site->title,
             ];
         });
 

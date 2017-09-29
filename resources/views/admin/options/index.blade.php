@@ -166,20 +166,8 @@
                         }
                     }
                 }, {
-                    field: "type",
+                    field: "type_name",
                     title: "类型",
-                    editable: {
-                        type: 'select',
-                        source: [
-                            {value: {{\App\Models\Option::TYPE_BOOLEAN}}, text: '布尔'},
-                            {value: {{\App\Models\Option::TYPE_TEXT}}, text: "文本"},
-                            {value: {{\App\Models\Option::TYPE_TEXTAREA}}, text: "多行文本"},
-                            {value: {{\App\Models\Option::TYPE_DATE}}, text: "日期"},
-                            {value: {{\App\Models\Option::TYPE_DATETIME}}, text: "日期时间"},
-                            {value: {{\App\Models\Option::TYPE_SINGLE}}, text: "单选"},
-                            {value: {{\App\Models\Option::TYPE_MULTIPLE}}, text: "多选"},
-                        ]
-                    }
                 }, {
                     field: "option",
                     title: "选项",
