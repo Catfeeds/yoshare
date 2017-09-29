@@ -615,3 +615,8 @@ CREATE TABLE `cms_surveys` (
   `published_at` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- -----------
+-- 2017-9-29
+-- -----------
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'TEXT', '文本', '', 2, '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
+INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, `created_at`, `updated_at`) VALUES ('1', 'TEXTAREA', '多行文本', '', 3, '', '2017-09-26 17:48:31', '2017-09-27 17:53:31');
