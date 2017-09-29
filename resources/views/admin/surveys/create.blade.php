@@ -14,24 +14,21 @@
         </section>
 
         <section class="content">
-            <section class="content">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box box-info">
-                            <div class="box-body">
-                                @include('admin.layouts.flash')
-                                @include('admin.errors.list')
-                                {!! Form::open(['url' => '/admin/surveys', 'class' => 'form-horizontal']) !!}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            @include('admin.layouts.flash')
+                            @include('admin.errors.list')
+                            {!! Form::open(['url' => '/admin/surveys', 'class' => 'form-horizontal']) !!}
 
-                                @include('admin.surveys._form')
+                            @include('admin.surveys._form')
 
-                                {!! Form::close() !!}
-                            </div>
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
-
-            </section>
+            </div>
         </section>
 
 

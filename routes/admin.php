@@ -23,7 +23,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 短信管理
      */
-    Route::get('sms/logs','SmsController@log');
+    Route::get('sms/logs', 'SmsController@log');
     Route::get('sms/logs/table', 'SmsController@logTable');
 
     /**
@@ -181,7 +181,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('survey/items', 'SurveyItemController');
 
     Route::get('surveys/table', 'SurveyController@table');
-    Route::post('surveys/top', 'SurveyController@top');
+    Route::post('surveys/{id}/top', 'SurveyController@top');
     Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
     Route::post('surveys/state', 'SurveyController@state');
     Route::get('surveys/sort', 'SurveyController@sort');
@@ -196,5 +196,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('votes/table', 'VoteController@table');
     Route::get('votes/statistic/{vote_id}', 'VoteController@statistic');
     Route::post('votes/state', 'VoteController@state');
-    Route::resource('votes','VoteController');
+    Route::resource('votes', 'VoteController');
 });

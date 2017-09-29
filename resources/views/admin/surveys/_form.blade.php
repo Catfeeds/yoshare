@@ -19,9 +19,7 @@
             </li>
         @endif
 
-    </ul>
-    <ul style="list-style:none;">
-        <li class="pull-right">
+        <li class="pull-right" style="list-style:none;">
             <button type='button' class="btn btn-success btn-flat pull-right" onclick="appendSubject()">问卷题目 ＋
             </button>
         </li>
@@ -461,10 +459,7 @@
             '<div class="file1 panel panel-default subject_items">' +
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
-            '<label class="no-margin">问卷选项(' + n + ')</label></a></li>' +
-            '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
-            '</button></span>' +
+            '<label class="no-margin">问卷选项(' + (n+1) + ')</label></a></li>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -544,6 +539,9 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
             '<label class="no-margin">问卷题目</label></a></li>' +
+            '<span class="pull-right">' +
+            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
+            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -566,9 +564,6 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + (n - 1) + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + (n - 1) + '" data-toggle="tab">' +
             '<label class="no-margin">问卷选项(' + (n - 1) + ')</label></a></li>' +
-            '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
-            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +

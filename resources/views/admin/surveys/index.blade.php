@@ -23,20 +23,22 @@
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>
                                 <tr>
-                                    <th data-field="state" data-checkbox="true"></th>
-                                    <th data-field="id" data-width="50" data-align="center">ID</th>
-                                    <th data-field="title" data-width="300" data-align="left"
+                                    <th data-field="state" data-width="36" data-checkbox="true"></th>
+                                    <th data-field="id" data-width="45" data-align="center">ID</th>
+                                    <th data-field="title"
+
+                                        data-align="left"
                                         data-formatter="titleFormatter">标题
                                     </th>
-                                    <th data-field="amount" data-align="center" data-width="50">访问量</th>
-                                    <th data-field="state_name" data-align="center" data-width="50"
+                                    <th data-field="amount" data-align="center" data-width="45">参与数</th>
+                                    <th data-field="state_name" data-align="center" data-width="45"
                                         data-formatter="stateFormatter">状态
                                     </th>
                                     <th data-field="begin_date" data-width="120" data-align="center">问卷开始时间</th>
                                     <th data-field="end_date" data-width="120" data-align="center">问卷结束时间</th>
 
                                     <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
-                                    <th data-field="action" data-align="center" data-width="200"
+                                    <th data-field="action" data-align="center" data-width="160"
                                         data-formatter="actionFormatter" data-events="actionEvents">管理操作
                                     </th>
                                 </tr>
@@ -152,41 +154,28 @@
         }
 
         function titleFormatter(value, row, index) {
-            if (row.is_top == 1) {
-                return [
-                    '<span class="label label-success">置顶</span><span> </span><a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
-                ]
-            }
-            else {
-                return [
-                    '<a href="/admin/surveys/' + row.id + '" target="_blank">' + row.title + '</a>',
-                ]
-            }
+            return '<a href="/articles/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+                (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '')
+            {{--(row.tags.indexOf('{{\App\Models\Survey::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')--}}
         }
 
         function actionFormatter(value, row, index) {
 
-            var disabled_del = '';
-            if (row.state_name == '已删除') {
-                disabled_del = 'disabled="disabled"';
-            }
+            //编辑
+            var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
 
-            html =
-                '<button class="btn btn-primary btn-xs edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>' +
-                '<span> </span>';
-            if (row.is_top == 0) {
-                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="置顶"><i class="fa fa-chevron-circle-down"></i></button>';
-            } else {
-                html += '<button class="btn btn-primary btn-xs top" data-toggle="tooltip" data-placement="top" title="取消置顶"><i class="fa fa-chevron-circle-down"></i></button>';
-            }
-            html +=
-                '<span> </span>' +
-                '<button class="btn btn-info btn-xs count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-envelope"></i></button>';
-            if (row.state != '{{ App\Models\Survey::STATE_DELETED}}') {
-                html +=
-                    '<span> </span>' +
-                    '<button class="btn btn-danger btn-xs remove" data-toggle="modal" data-target="#modal"  title="删除"><i class="fa fa-trash"></i></button>';
-            }
+            //置顶
+            html += '<button class="btn btn-primary btn-xs margin-r-5 top" data-toggle="tooltip" data-placement="top" title="' + (row.top ? '取消置顶' : '置顶') + '"><i class="fa ' + (row.top ? 'fa-chevron-circle-down' : 'fa-chevron-circle-up') + '"></i></button>';
+
+            //推荐
+            html += '<button class="btn btn-primary btn-xs margin-r-5 tag" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-hand-o-right"></i></button>';
+
+            //统计
+            html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-line-chart"></i></button>';
+
+            //推送
+            html += '<button class="btn btn-info btn-xs push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
+
             return html;
         }
 
@@ -213,11 +202,14 @@
             },
             'click .top': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/surveys/top',
-                    type: 'POST',
-                    data: {'_token': '{{ csrf_token() }}', 'id': row.id},
+                    url: '/admin/surveys/' + row.id + '/top',
+                    type: 'post',
+                    data: {'_token': '{{ csrf_token() }}'},
                     success: function (data) {
-                        window.location.href = '/admin/surveys';
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function () {
+                        toast('error', '操作失败');
                     }
                 })
             },
@@ -228,6 +220,25 @@
                 $('#modal_remove').show();
                 $('#modal_remove').data('id', row.id);
             },
+
+            'click .tag': function (e, value, row, index) {
+                $.ajax({
+                    url: '/admin/articles/' + row.id + '/tag',
+                    type: 'post',
+                    data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
+                    success: function (data) {
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function () {
+                        toast('error', '操作失败');
+                    }
+                })
+            },
+
+            'click .push': function (e, value, row, index) {
+                $('#push_id').val(row.id);
+                $('#push_title').val(row.title);
+            }
         }
 
         $("#modal_remove").click(function () {

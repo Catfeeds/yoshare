@@ -25,6 +25,8 @@ class Survey extends BaseModule
     const LINK_TYPE_NONE = 0;
     const LINK_TYPE_WEB = 1;
 
+    const RECOMMEND = '推荐';
+
     const STATES = [
         0 => '已删除',
         1 => '未发布',
@@ -102,7 +104,7 @@ class Survey extends BaseModule
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
-            empty($filters['top']) ?: $query->where('is_top', $filters['top']);
+            empty($filters['top']) ?: $query->where('top', $filters['top']);
             empty($filters['title']) ?: $query->where('title', 'like', '%' . $filters['title'] . '%');
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);

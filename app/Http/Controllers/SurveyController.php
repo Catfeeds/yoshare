@@ -227,25 +227,10 @@ class SurveyController extends Controller
         return view('admin.surveys.show', compact('survey'));
     }
 
-    public function top()
+    public function top($id)
     {
-        if (Gate::denies('@survey-top')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return;
-        }
-
-        $survey = Survey::find(request()->get('id'));
-
-        if ($survey->is_top == Survey::TOP_TRUE) {
-            $survey->is_top = Survey::TOP_FALSE;
-            $survey->updated_at = date('Y-m-d H:i:s');
-            $survey->save();
-            \Session::flash('flash_success', '取消置顶成功');
-        } else {
-            $survey->is_top = Survey::TOP_TRUE;
-            $survey->updated_at = date('Y-m-d H:i:s');
-            $survey->save();
-            \Session::flash('flash_success', '置顶成功');
-        }
+        $survey = Survey::find($id);
+        $survey->top = !$survey->top;
+        $survey->save();
     }
 }

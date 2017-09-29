@@ -13,9 +13,6 @@
 <div class="btn-group margin-bottom pull-right">
     <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" id="" value="">全部
     </button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5  top"
-            value="{{ \App\Models\Survey::TOP_TRUE }}" title="置顶" data-active="btn-primary">置顶
-    </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary"
             value="{{ \App\Models\Survey::STATE_NORMAL }}">未发布
     </button>
@@ -28,8 +25,7 @@
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
             value="{{ \App\Models\Survey::STATE_DELETED }}" data-active="btn-danger">已删除
     </button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" onclick="openOrClose('forms')">查询
-    </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5" data-toggle="modal" data-target="#modal_query"><span class="fa fa-search"></span></button>
 </div>
 
 
@@ -71,6 +67,12 @@
 
 
 <script>
+
+    /* 查询 */
+    $('#btn_query').click(function () {
+        $('#table').bootstrapTable('selectPage', 1);
+    });
+
     /* 新增 */
     function create() {
         window.location.href = '/admin/surveys/create'
@@ -144,24 +146,6 @@
         });
 
         //改变按钮样式
-        $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
-        $('.filter').addClass('btn-default');
-        $('.top').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
-        $('.top').addClass('btn-default');
-        $(this).removeClass('btn-default');
-        $(this).addClass($(this).data('active'));
-    });
-
-    /* 筛选推荐 */
-    $('.top').click(function () {
-        var object = $('#forms input').serializeObject();
-        object['top'] = $('.top').val();
-        object['_token'] = '{{ csrf_token() }}';
-        $('#table').bootstrapTable('refresh', {query: object});
-
-        //改变按钮样式
-        $('.top').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
-        $('.top').addClass('btn-default');
         $('.filter').removeClass('btn-primary btn-info btn-success btn-danger btn-warning');
         $('.filter').addClass('btn-default');
         $(this).removeClass('btn-default');
