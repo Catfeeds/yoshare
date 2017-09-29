@@ -8,7 +8,7 @@
                 修改站点
             </h1>
             <ol class="breadcrumb">
-                <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a href="#">系统管理</a></li>
                 <li><a href="/sites">站点管理</a></li>
                 <li class="active">编辑</li>

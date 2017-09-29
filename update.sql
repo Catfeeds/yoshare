@@ -275,29 +275,29 @@ ALTER TABLE `cms_categories` ADD `type` TINYINT(1) NOT NULL COMMENT '栏目类�
 -- 2017-9-18
 -- -----------
 #cms_surveys
-INSERT INTO `cms_modules` VALUES ('5', 'Survey', '问卷', 'surveys', '问卷管理', '0', 'fa-bookmark', '1', '2017-09-04 16:55:26', '2017-09-04 17:04:20');
+INSERT INTO `cms_modules` VALUES ('7', 'Survey', '问卷', 'surveys', '问卷管理', '0', 'fa-bookmark', '1', '2017-09-04 16:55:26', '2017-09-04 17:04:20');
 
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'id', 'ID', 'ID', '3', '', '0', '0', '0', '0', '1', '0', '1', '0', '1', '30', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-05 17:01:54');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'site_id', '站点ID', '站点', '3', '', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'member_id', '会员ID', '会员', '7', '', '0', '0', '0', '0', '1', '90', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:46:04');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'user_id', '用户ID', '用户', '7', '', '0', '0', '0', '0', '1', '89', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:45:52');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'sort', '序号', '序号', '3', '', '0', '0', '0', '0', '1', '91', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:44:01');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'state', '状态', '状态', '3', '', '0', '0', '0', '0', '1', '94', '1', '0', '2', '45', 'stateFormatter', '9', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'created_at', '创建时间', '创建时间', '5', '', '0', '0', '0', '0', '1', '95', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'updated_at', '修改时间', '修改时间', '5', '', '0', '0', '0', '0', '1', '96', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'deleted_at', '删除时间', '删除时间', '5', '', '0', '0', '0', '0', '1', '97', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'published_at', '发布时间', '发布时间', '5', '', '0', '0', '0', '0', '1', '98', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'title', '标题', '标题', '1', '', '0', '0', '0', '0', '0', '2', '1', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 14:40:00', '2017-09-05 17:03:58');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'image_url', '缩略图', '缩略图', '1', '', '0', '0', '0', '0', '0', '3', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:48:30', '2017-09-05 17:04:20');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'description', '描述', '描述', '1', '', '0', '0', '0', '0', '0', '4', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:49:02', '2017-09-05 16:49:02');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'amount', '点击量', '点击量', '3', '', '0', '0', '0', '0', '0', '5', '1', '1', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:51:11', '2017-09-05 17:02:38');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'username', '用户名', '用户名', '1', '', '0', '0', '0', '0', '0', '6', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:51:43', '2017-09-05 16:51:43');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'is_top', '是否推荐到轮播图', '是否推荐到轮播图', '3', '0', '0', '0', '0', '0', '0', '7', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:52:33', '2017-09-05 16:52:33');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'likes', '点赞数', '点赞数', '1', '0', '0', '0', '0', '0', '0', '8', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:52:53', '2017-09-05 16:56:09');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'multiple', '是否多选', '是否多选', '1', '', '0', '0', '0', '0', '0', '9', '0', '0', '1', '0', '', '0', '1', '0', '3', '', '1', '1', '问卷管理', '0', '2017-09-05 16:53:07', '2017-09-05 17:10:13');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'link', '外链', '外链', '1', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:54:17', '2017-09-05 16:54:17');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'begin_date', '问卷开始时间', '问卷开始时间', '5', '', '0', '0', '0', '0', '0', '92', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:54:50', '2017-09-13 14:43:52');
-INSERT INTO `cms_module_fields` VALUES ('', '5', 'end_date', '问卷结束时间', '问卷结束时间', '5', '', '0', '0', '0', '0', '0', '93', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:55:19', '2017-09-13 14:43:08');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'id', 'ID', 'ID', '3', '', '0', '0', '0', '0', '1', '0', '1', '0', '1', '30', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-05 17:01:54');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'site_id', '站点ID', '站点', '3', '', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'member_id', '会员ID', '会员', '7', '', '0', '0', '0', '0', '1', '90', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:46:04');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'user_id', '用户ID', '用户', '7', '', '0', '0', '0', '0', '1', '89', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:45:52');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'sort', '序号', '序号', '3', '', '0', '0', '0', '0', '1', '91', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-13 14:44:01');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'state', '状态', '状态', '3', '', '0', '0', '0', '0', '1', '94', '1', '0', '2', '45', 'stateFormatter', '9', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'created_at', '创建时间', '创建时间', '7', '', '0', '0', '0', '0', '1', '95', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'updated_at', '修改时间', '修改时间', '7', '', '0', '0', '0', '0', '1', '96', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'deleted_at', '删除时间', '删除时间', '7', '', '0', '0', '0', '0', '1', '97', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'published_at', '发布时间', '发布时间', '7', '', '0', '0', '0', '0', '1', '98', '0', '0', '0', '0', '', '0', '0', '0', '0', '', '0', '0', '', '0', '2017-09-04 16:55:26', '2017-09-04 16:55:26');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'title', '标题', '标题', '1', '', '0', '0', '0', '0', '0', '2', '1', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 14:40:00', '2017-09-05 17:03:58');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'image_url', '缩略图', '缩略图', '1', '', '0', '0', '0', '0', '0', '3', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:48:30', '2017-09-05 17:04:20');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'description', '描述', '描述', '1', '', '0', '0', '0', '0', '0', '4', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:49:02', '2017-09-05 16:49:02');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'amount', '点击量', '点击量', '3', '', '0', '0', '0', '0', '0', '7', '1', '1', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:51:11', '2017-09-05 17:02:38');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'username', '用户名', '用户名', '1', '', '0', '0', '0', '0', '0', '6', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:51:43', '2017-09-05 16:51:43');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'is_top', '是否推荐到轮播图', '是否推荐到轮播图', '3', '0', '0', '0', '0', '0', '0', '7', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:52:33', '2017-09-05 16:52:33');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'likes', '点赞数', '点赞数', '1', '0', '0', '0', '0', '0', '0', '8', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:52:53', '2017-09-05 16:56:09');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'multiple', '是否多选', '是否多选', '1', '', '0', '0', '0', '0', '0', '9', '0', '0', '1', '0', '', '0', '1', '0', '3', '', '1', '1', '问卷管理', '0', '2017-09-05 16:53:07', '2017-09-05 17:10:13');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'link', '外链', '外链', '1', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:54:17', '2017-09-05 16:54:17');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'begin_date', '问卷开始时间', '问卷开始时间', '7', '', '0', '0', '0', '0', '0', '92', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:54:50', '2017-09-13 14:43:52');
+INSERT INTO `cms_module_fields` VALUES ('', '7', 'end_date', '问卷结束时间', '问卷结束时间', '5', '', '0', '0', '0', '0', '0', '93', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:55:19', '2017-09-13 14:43:08');
 
 # survey_items
 CREATE TABLE `cms_survey_items` (
@@ -517,7 +517,6 @@ INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `upda
 -- -----------
 -- 2017-9-22
 -- -----------
-INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@survey-top', '问卷-置顶', '0', '5', NULL, NULL);
 INSERT INTO `cms_permissions` (`name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('@tag', '标签', '0', '6', NULL, NULL);
 
 -- -----------
@@ -581,3 +580,38 @@ VALUES
 	(4, 'top', '是否置顶', '是否置顶', 3, '0', 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-09-19 11:35:51');
 
 UPDATE cms_module_fields set `column_formatter` = 'titleFormatter' where `module_id` = 4 and `name` = 'title';
+
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey', '问卷', '0', '1', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-create', '问卷-添加', '0', '2', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-edit', '问卷-编辑', '0', '3', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-delete', '问卷-删除', '0', '4', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-publish', '问卷-发布', '0', '5', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-cancel', '问卷-撤回', '0', '6', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-sort', '问卷-排序', '0', '7', NULL, NULL);
+INSERT INTO `cms`.`cms_permissions` (`id`, `name`, `description`, `group`, `sort`, `created_at`, `updated_at`) VALUES ('', '@survey-top', '问卷-置顶', '0', '5', NULL, NULL);
+
+CREATE TABLE `cms_surveys` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(11) NOT NULL COMMENT '站点ID',
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `image_url` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '缩略图',
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '描述',
+  `link_type` int(11) NOT NULL COMMENT '外链类型',
+  `username` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户名',
+  `likes` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '点赞数',
+  `multiple` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '是否多选',
+  `link` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '外链',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `member_id` int(11) NOT NULL COMMENT '会员ID',
+  `sort` int(11) NOT NULL COMMENT '序号',
+  `is_top` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '置顶',
+  `amount` int(11) NOT NULL COMMENT '参与数',
+  `begin_date` datetime DEFAULT NULL COMMENT '问卷开始时间',
+  `end_date` datetime DEFAULT NULL COMMENT '问卷结束时间',
+  `state` int(11) NOT NULL COMMENT '状态',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  `published_at` datetime DEFAULT NULL COMMENT '发布时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

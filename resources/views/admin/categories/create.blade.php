@@ -7,7 +7,7 @@
                 新增栏目
             </h1>
             <ol class="breadcrumb">
-                <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a href="/categories">栏目管理</a></li>
                 <li class="active">新增</li>
             </ol>

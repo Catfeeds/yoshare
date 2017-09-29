@@ -9,7 +9,8 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
-    Route::get('/', 'AdminController@index');
+    Route::get('/', 'AdminController@dashboard');
+    Route::get('/index', 'AdminController@dashboard');
     Route::get('dashboard', 'AdminController@dashboard');
 
     /**

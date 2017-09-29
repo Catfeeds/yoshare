@@ -8,7 +8,7 @@
                 添加投票
             </h1>
             <ol class="breadcrumb">
-                <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li class="active">投票管理</li>
             </ol>
         </section>
