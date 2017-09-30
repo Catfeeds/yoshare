@@ -35,6 +35,24 @@ class Special extends BaseModule
 
     protected $entities = ['member_id', 'user_id'];
 
+    public function previous()
+    {
+        return static::where('site_id', $this->site_id)
+            ->where('category_id', $this->category_id)
+            ->where('state', $this->state)
+            ->where('sort', '>', $this->sort)
+            ->first();
+    }
+
+    public function next()
+    {
+        return static::where('site_id', $this->site_id)
+            ->where('category_id', $this->category_id)
+            ->where('state', $this->state)
+            ->where('sort', '<', $this->sort)
+            ->first();
+    }
+
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
