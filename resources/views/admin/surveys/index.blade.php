@@ -26,7 +26,6 @@
                                     <th data-field="state" data-width="36" data-checkbox="true"></th>
                                     <th data-field="id" data-width="45" data-align="center">ID</th>
                                     <th data-field="title"
-
                                         data-align="left"
                                         data-formatter="titleFormatter">标题
                                     </th>
@@ -154,9 +153,9 @@
         }
 
         function titleFormatter(value, row, index) {
-            return '<a href="/articles/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
-                (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '')
-{{--                (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')--}}
+            return '<a href="/survey/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+                (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '')+
+                (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
         }
 
         function actionFormatter(value, row, index) {
@@ -223,7 +222,7 @@
 
             'click .tag': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/articles/' + row.id + '/tag',
+                    url: '/admin/surveys/' + row.id + '/tag',
                     type: 'post',
                     data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
                     success: function (data) {

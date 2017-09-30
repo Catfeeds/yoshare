@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Subject;
 use App\Models\Survey;
 use Auth;
+use Carbon\Carbon;
 use Gate;
 use Request;
 
@@ -232,5 +233,20 @@ class SurveyController extends Controller
         $survey = Survey::find($id);
         $survey->top = !$survey->top;
         $survey->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $survey = Survey::find($id);
+        if ($survey->tags()->where('name', $tag)->exists()) {
+            $survey->tags()->where('name', $tag)->delete();
+        } else {
+            $survey->tags()->create([
+                'site_id' => $survey->site_id,
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
     }
 }

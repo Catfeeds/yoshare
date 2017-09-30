@@ -585,7 +585,6 @@
             '<input id="item_file_' + (n) + '_' + (n - 1) + '" name="item_file' + (sub) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
 
-
         $(".subject").append(html); //追加标签
 
         $(".subject_content").append(subject_content);       //追加内容

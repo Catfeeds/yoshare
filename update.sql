@@ -299,6 +299,8 @@ INSERT INTO `cms_module_fields` VALUES ('', '7', 'link', '外链', '外链', '1'
 INSERT INTO `cms_module_fields` VALUES ('', '7', 'begin_date', '问卷开始时间', '问卷开始时间', '5', '', '0', '0', '0', '0', '0', '95', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:54:50', '2017-09-29 17:00:42');
 INSERT INTO `cms_module_fields` VALUES ('', '7', 'end_date', '问卷结束时间', '问卷结束时间', '5', '', '0', '0', '0', '0', '0', '96', '1', '0', '2', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-05 16:55:19', '2017-09-29 17:00:46');
 
+INSERT INTO `cms`.`cms_module_fields` VALUES ('', '7', 'tags', '标签', '标签', '1', '', '0', '0', '0', '0', '0', '10', '0', '0', '1', '0', '', '0', '0', '0', '1', '', '1', '11', '问卷管理', '0', '2017-09-30 10:03:10', '2017-09-30 10:03:10');
+
 # survey_data
 CREATE TABLE `cms_survey_data` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -599,3 +601,4 @@ CREATE TABLE `cms_pv_logs` (
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `cms_modules` ADD `is_category` TINYINT(1) NOT NULL COMMENT '是否使用栏目' AFTER `icon`, ADD `sort_type` TINYINT(1) NOT NULL COMMENT '排序方式' AFTER `is_category`, ADD `sort_direction` TINYINT(1) NOT NULL COMMENT '排序方向' AFTER `sort_type`;
+
