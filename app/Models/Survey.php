@@ -62,7 +62,8 @@ class Survey extends BaseModule
         'link_type',
         'sort',
         'published_at',
-        'is_top'
+        'top',
+        'tags'
     ];
 
     protected $dates = ['published_at'];
@@ -140,6 +141,9 @@ class Survey extends BaseModule
                 $attributes[$date] = empty($survey->$date) ? '' : $survey->$date->toDateTimeString();
             }
             $attributes['state_name'] = $survey->stateName();
+            $attributes['tags'] = implode(',', $survey->tags()->pluck('name')->toArray());
+            $attributes['created_at'] = empty($survey->created_at) ? '' : $survey->created_at->toDateTimeString();
+            $attributes['updated_at'] = empty($survey->updated_at) ? '' : $survey->updated_at->toDateTimeString();
             return $attributes;
         });
 
@@ -220,7 +224,11 @@ class Survey extends BaseModule
     public function subjects()
     {
         return $this->morphMany(Subject::class, 'refer');
+    }
 
+    public function tags()
+    {
+        return $this->morphMany(Tag::class, 'refer');
     }
 
 }

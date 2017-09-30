@@ -459,7 +459,10 @@
             '<div class="file1 panel panel-default subject_items">' +
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
-            '<label class="no-margin">问卷选项(' + (n+1) + ')</label></a></li>' +
+            '<label class="no-margin">问卷选项(' + n + ')</label></a></li>' +
+            '<span class="pull-right">' +
+            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
+            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -539,9 +542,6 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
             '<label class="no-margin">问卷题目</label></a></li>' +
-            '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
-            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -564,6 +564,9 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + (n - 1) + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + (n - 1) + '" data-toggle="tab">' +
             '<label class="no-margin">问卷选项(' + (n - 1) + ')</label></a></li>' +
+            '<span class="pull-right">' +
+            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
+            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -581,7 +584,6 @@
             '<div class="form-group"><div class="col-sm-12">' +
             '<input id="item_file_' + (n) + '_' + (n - 1) + '" name="item_file' + (sub) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
-
 
         $(".subject").append(html); //追加标签
 
