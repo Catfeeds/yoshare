@@ -66,6 +66,10 @@ function getTimeIndex(a, data) {
 }
 
 function booleanFormatter(value, row, index) {
-    return value ? '<i class="fa fa-check"></i>' : '';
+    if (value == 1) {
+        return '<i class="fa fa-check"></i>';
+    } else {
+        return '<i class="glyphicon glyphicon-remove"></i>';
+    }
 }
 
