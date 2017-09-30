@@ -102,9 +102,9 @@ class SurveyController extends Controller
 
         $survey = Survey::with('subjects')->find($id);
 
-        $subject = Subject::with('items')->where('refer_id', $id)->first();;
+//        $subject = Subject::with('items')->where('refer_id', $id)->first();;
 
-        return view("mobile.$site_id.admin.surveys.share", compact('survey', 'subject'));
+        return view("mobile.$site_id.admin.surveys.share", compact('survey'));
     }
 
     public function edit(Request $request, $id)
@@ -116,16 +116,12 @@ class SurveyController extends Controller
         // 一个问卷对应多个题目,一个题目对应多个选项
         $survey = Survey::with('subjects')->find($id);
 
-        $subject = Subject::with('items')->where('refer_id', $id)->get();
-
-        return view('admin.surveys.edit', compact('survey', 'subject'));
+        return view('admin.surveys.edit', compact('survey'));
     }
 
     public function update(SurveyRequest $request, $id)
     {
         $survey = Survey::with('subjects')->find($id);
-
-        $subject = Subject::with('items')->where('refer_id', $id)->get();
 
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
@@ -138,7 +134,7 @@ class SurveyController extends Controller
         $survey->update($data);
 
         //删除选项
-        foreach ($subject as $k => $item) {
+        foreach ($survey->subjects as $k => $item) {
             $item->items()->whereNotIn('id', $data['item_id' . ($k + 1)])->delete();
         }
 
@@ -164,14 +160,14 @@ class SurveyController extends Controller
                 ];
 
                 if (empty($data['item_id_subject'][$key])) {
-                    $te = $survey->subjects()->create($data_subject);
+                    $title = $survey->subjects()->create($data_subject);
                     //存储题目的子选项
                     if (array_key_exists('item_title' . ($key + 1), $data)) {
                         foreach ($data['item_title' . ($key + 1)] as $k => $item) {
                             if ($item == '') {
                                 continue;
                             }
-                            $te->items()->create([
+                            $title->items()->create([
                                 'type' => Item::TYPE_IMAGE,
                                 'title' => $item,
                                 'summary' => $data['summary' . ($key + 1)][$k],
@@ -182,7 +178,7 @@ class SurveyController extends Controller
                     }
 
                 } else {
-                    $subject = $survey->subjects()->where('id', $data['item_id_subject'][$key])->first();
+                    $subject = $survey->subjects->find($data['item_id_subject'][$key]);
                     $subject->update($data_subject);
                     //存储题目的子选项
                     if (array_key_exists('item_title' . ($key + 1), $data)) {
@@ -197,8 +193,12 @@ class SurveyController extends Controller
                                 'url' => $data['item_url' . ($key + 1)][$k],
                                 'sort' => $key
                             ];
-                            $item2 = Subject::with('items')->where('id', $data['item_id' . ($key + 1)][$k])->first();
-                            $item2->update($data_item);
+                            if (empty($data['item_id' . ($key + 1)][$k])) {
+                                $subject->items()->create($data_item);
+                            } else {
+                                $item2 = Subject::with('items')->find($data['item_id' . ($key + 1)][$k]);
+                                $item2->update($data_item);
+                            }
                         }
                     }
                 }

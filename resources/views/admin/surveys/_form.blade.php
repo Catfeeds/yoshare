@@ -89,7 +89,7 @@
     </div>
 
     @if(isset($survey))
-        @foreach($subject as $k=>$item_subject)
+        @foreach($survey->subjects as $k=>$item_subject)
             <div id="tabSubjectsItems{{$k+1}}" class="tab-pane fade padding-t-15 tab_subjects">
                 <div class="edit_file{{$k+1}}">
                     <div class="file1 panel panel-default">
@@ -109,7 +109,8 @@
                                 <div id="tabHome{{$k+1}}" class="tab-pane fade in active padding-t-15">
                                     <div class="col-sm-8 pull-left" style="padding-left: 0;">
                                         <div class="form-group">
-                                            <input type="hidden" name="item_id_subject[]"
+                                            <input type="hidden"
+                                                   name="item_id_subject[]"
                                                    value="{{$item_subject->id}}">
                                             <div class="col-sm-12">
                                                 <input type="text" id="item_subject{{$k+1}}"
@@ -298,7 +299,7 @@
                             <div id="tabHome1" class="tab-pane fade in active padding-t-15">
                                 <div class="col-sm-8 pull-left" style="padding-left: 0;">
                                     <div class="form-group">
-                                        <input type="hidden" name="item_subject_id[]" value="">
+                                        <input type="hidden" name="item_id_subject[]" value="">
                                         <div class="col-sm-12">
                                             <input type="text" id="item_subject" class="form-control"
                                                    value=""
@@ -470,6 +471,7 @@
             '<div id="tabHome' + n + '" class="tab-pane fade in active padding-t-15">' +
             '<div class="col-sm-8 pull-left" style="padding-left: 0;">' +
             '<div class="form-group"><div class="col-sm-12">' +
+            '<input type="hidden" name="item_id' + sub + '[]" >' +
             '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title' + sub + '[]" placeholder="输入标题"></div></div>' +
             '<div class="form-group"><div class="col-sm-12">' +
             '<textarea name="summary' + sub + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
