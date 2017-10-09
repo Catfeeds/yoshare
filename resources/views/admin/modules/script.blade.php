@@ -44,7 +44,9 @@
             $('#groups').val(row.groups);
             $('#is_lock').bootstrapSwitch('state', row.is_lock);
             $('#is_lock').next().val(row.is_lock);
-            $('#is_category').val(row.is_category);
+            $('#use_category').bootstrapSwitch('state', row.use_category);
+            $('#use_category').next().val(row.use_category);
+            $('#use_category').val(row.use_category);
             $('#sort_type').val(row.sort_type);
             $('#sort_direction').val(row.sort_direction);
             $('#modal_form').modal('show');
@@ -64,7 +66,8 @@
         $('#groups').val('');
         $('#is_lock').bootstrapSwitch('state', false);
         $('#is_lock').next().val(0);
-        $('#is_category').val(0);
+        $('#user_category').bootstrapSwitch('state', false);
+        $('#user_category').next().val(0);
 
     });
 
@@ -85,12 +88,4 @@
         }
         $('#module_id').val(row[0].id);
     });
-
-    $('.is_category').change(function () {
-        if ($(this).val() == 1) {
-            $('.category').css('display', 'block');
-        } else {
-            $('.category').css('display', 'none');
-        }
-    })
 </script>

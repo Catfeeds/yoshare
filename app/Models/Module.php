@@ -13,8 +13,6 @@ use Validator;
 
 class Module extends Model
 {
-    const ID_ARTICLE = 1;
-
     const STATE_DISABLE = 0;
     const STATE_ENABLE = 1;
 
@@ -23,21 +21,14 @@ class Module extends Model
         1 => '已启用',
     ];
 
-    const IS_CATEGORY = [
-        0 => '否',
-        1 => '是',
-    ];
-
-    const IS_CATEGORY_ON = 1;
-
-    const SORT_TYPE = [
+    const SORT_TYPES = [
         0 => '栏目序号',
         1 => '创建日期',
     ];
 
-    const SORT_DIRECTION = [
-        0 => '倒序',
-        1 => '正序',
+    const SORT_DIRECTIONS = [
+        0 => '正序',
+        1 => '倒序',
     ];
 
     protected $fillable = [
@@ -47,10 +38,8 @@ class Module extends Model
         'icon',
         'groups',
         'is_lock',
+        'use_category',
         'state',
-        'is_category',
-        'sort_type',
-        'sort_direction',
     ];
 
     public function getModelNameAttribute()
@@ -109,18 +98,6 @@ class Module extends Model
 
         $module = self::create($input);
 
-        if($input['is_category'] == self::IS_CATEGORY_ON)
-        {
-            $module->fields()->create([
-                'name' => 'category_id',
-                'title' => '栏目ID',
-                'label' => '栏目',
-                'type' => ModuleField::TYPE_INTEGER,
-                'system' => 1,
-                'index' => 3,
-            ]);
-        }
-
         $module->fields()->create([
             'name' => 'id',
             'title' => 'ID',
@@ -143,22 +120,51 @@ class Module extends Model
             'index' => 2,
         ]);
 
-        $module->fields()->create([
-            'name' => 'title',
-            'title' => '标题',
-            'label' => '标题',
-            'type' => ModuleField::TYPE_TEXT,
-            'system' => 1,
-            'index' => 4,
-            'column_show' => 1,
-            'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
-            'column_index' => 2,
-            'editor_show' => 1,
-            'editor_type' => ModuleField::EDITOR_TYPE_TEXT,
-            'editor_columns' => 11,
-            'editor_group' => '基本信息',
-            'editor_index' => 1,
-        ]);
+        if ($input['use_category']) {
+            $module->fields()->create([
+                'name' => 'category_id',
+                'title' => '栏目ID',
+                'label' => '栏目',
+                'type' => ModuleField::TYPE_INTEGER,
+                'system' => 1,
+                'index' => 3,
+            ]);
+
+            $module->fields()->create([
+                'name' => 'title',
+                'title' => '标题',
+                'label' => '标题',
+                'type' => ModuleField::TYPE_TEXT,
+                'system' => 1,
+                'index' => 4,
+                'column_show' => 1,
+                'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
+                'column_index' => 2,
+                'editor_show' => 1,
+                'editor_type' => ModuleField::EDITOR_TYPE_TEXT,
+                'editor_columns' => 11,
+                'editor_group' => '基本信息',
+                'editor_index' => 1,
+            ]);
+
+        } else {
+            $module->fields()->create([
+                'name' => 'title',
+                'title' => '标题',
+                'label' => '标题',
+                'type' => ModuleField::TYPE_TEXT,
+                'system' => 1,
+                'index' => 3,
+                'column_show' => 1,
+                'column_align' => ModuleField::COLUMN_ALIGN_LEFT,
+                'column_index' => 2,
+                'editor_show' => 1,
+                'editor_type' => ModuleField::EDITOR_TYPE_TEXT,
+                'editor_columns' => 11,
+                'editor_group' => '基本信息',
+                'editor_index' => 1,
+            ]);
+        }
 
         $module->fields()->create([
             'name' => 'member_id',

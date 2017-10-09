@@ -69,7 +69,7 @@ function booleanFormatter(value, row, index) {
     if (value == 1) {
         return '<i class="fa fa-check"></i>';
     } else {
-        return '<i class="glyphicon glyphicon-remove"></i>';
+        return '<i class="fa fa-remove"></i>';
     }
 }
 
