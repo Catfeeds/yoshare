@@ -113,7 +113,7 @@ class Special extends BaseModule
         return $special;
     }
 
-    public static function table()
+    public static function table($module_id)
     {
         $filters = Request::all();
 
@@ -122,7 +122,7 @@ class Special extends BaseModule
         if (!empty($time) && empty($category_id)) {
             $firstday = date('Y-m-d', strtotime($time . '01'));
             $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
-            $filters['ids'] = Category::where('type', Category::TYPE_SPECIAL)
+            $filters['ids'] = Category::where('module_id', $module_id)
                 ->where('created_at', '<', $lastday)
                 ->where('created_at', '>', $firstday)
                 ->pluck('id');
@@ -254,7 +254,6 @@ class Special extends BaseModule
             ->get();
 
         $parents = Category::where('module_id', $module_id)
-            ->where('type', Category::TYPE_SPECIAL)
             ->orderBy('created_at', 'desc')
             ->get();
         $arr = [];

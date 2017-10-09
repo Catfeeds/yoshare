@@ -9,9 +9,6 @@ class Category extends Model
 {
     const ID_ROOT = 0;
 
-    const TYPE_COLUMN = 0;
-    const TYPE_SPECIAL = 1;
-
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 
