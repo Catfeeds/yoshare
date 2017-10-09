@@ -591,11 +591,12 @@ INSERT INTO `cms_options`(`site_id`, `code`, `name`, `value`, `type`, `option`, 
 CREATE TABLE `cms_pv_logs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
-  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'URL',
-  `ip` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'IP地址',
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'URL',
+  `ip` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'IP地址',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `cms_modules` ADD `use_category` TINYINT(1) NOT NULL COMMENT '是否使用栏目' AFTER `icon`;

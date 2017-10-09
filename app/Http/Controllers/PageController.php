@@ -39,6 +39,7 @@ class PageController extends Controller
         if (empty($page)) {
             return abort(404);
         }
+        $page->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.pages.detail', ['site' => $domain->site, 'page' => $page]);
     }
@@ -54,6 +55,7 @@ class PageController extends Controller
         if (empty($page)) {
             return abort(404);
         }
+        $page->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.pages.detail', ['site' => $domain->site, 'page' => $page]);
     }

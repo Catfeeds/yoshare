@@ -6,13 +6,13 @@ use App\Models\PvLog;
 use App\Models\Site;
 use Request;
 
-class AnalyzerController extends BaseController
+class AccessController extends BaseController
 {
     /**
      * @SWG\Get(
-     *   path="/analyzers/web",
-     *   summary="记录页面访问",
-     *   tags={"/analyzers 分析"},
+     *   path="/access/log",
+     *   summary="记录页面访问日志",
+     *   tags={"/access 访问"},
      *   @SWG\Parameter(name="app_key", in="query", required=false, description="App Key", type="string"),
      *   @SWG\Parameter(name="url", in="query", required=true, description="URL", type="string"),
      *   @SWG\Response(
@@ -25,10 +25,11 @@ class AnalyzerController extends BaseController
      *   )
      * )
      */
-    public function web()
+    public function log()
     {
         $app_key = Request::get('app_key');
         $url = Request::get('url');
+        $title = Request::get('title');
 
         //验证app_key
 
@@ -48,6 +49,7 @@ class AnalyzerController extends BaseController
         //记录PV日志
         PvLog::create([
             'site_id' => $site_id,
+            'title' => $title,
             'url' => $url,
             'ip' => get_client_ip()
         ]);
@@ -60,5 +62,4 @@ class AnalyzerController extends BaseController
 
         return $this->responseSuccess();
     }
-
 }

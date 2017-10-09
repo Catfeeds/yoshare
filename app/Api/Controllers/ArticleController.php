@@ -140,7 +140,9 @@ class ArticleController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Article-info-$id";
+        Article::click($id);
+
+        $key = "articles-info-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $article = Article::find($id);
@@ -172,12 +174,14 @@ class ArticleController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Article-detail-$id";
+        Article::click($id);
+
+        $key = "articles-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $article = Article::findOrFail($id);
             $site = $article->site;
-            $theme = $article->site->mobile_theme;
+            $theme = $article->site->mobile_theme->name;
             $article->content = replace_content_url($article->content);
             return view("themes.$theme.articles.detail", compact('site', 'article'))->__toString();
         });
@@ -203,12 +207,14 @@ class ArticleController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Article-detail-$id";
+        Article::click($id);
+
+        $key = "articles-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $article = Article::findOrFail($id);
             $site = $article->site;
-            $theme = $article->site->mobile_theme;
+            $theme = $article->site->mobile_theme->name;
             $article->content = replace_content_url($article->content);
             $share = 1;
             return view("themes.$theme.articles.detail", compact('site', 'article', 'share'))->__toString();

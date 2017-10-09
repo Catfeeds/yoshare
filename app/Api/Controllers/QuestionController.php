@@ -137,7 +137,9 @@ class QuestionController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Question-info-$id";
+        Question::click($id);
+
+        $key = "questions-info-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $question = Question::find($id);
@@ -169,12 +171,14 @@ class QuestionController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Question-detail-$id";
+        Question::click($id);
+
+        $key = "questions-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $question = Question::findOrFail($id);
             $site = $question->site;
-            $theme = $question->site->mobile_theme;
+            $theme = $question->site->mobile_theme->name;
             $question->content = replace_content_url($question->content);
             return view("themes.$theme.questions.detail", compact('site', 'question'))->__toString();
         });
@@ -200,12 +204,14 @@ class QuestionController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Question-detail-$id";
+        Question::click($id);
+
+        $key = "questions-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $question = Question::findOrFail($id);
             $site = $question->site;
-            $theme = $question->site->mobile_theme;
+            $theme = $question->site->mobile_theme->name;
             $question->content = replace_content_url($question->content);
             $share = 1;
             return view("themes.$theme.questions.detail", compact('site', 'question', 'share'))->__toString();

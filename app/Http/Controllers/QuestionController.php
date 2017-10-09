@@ -39,6 +39,7 @@ class QuestionController extends Controller
         if (empty($question)) {
             return abort(404);
         }
+        $question->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.questions.detail', ['site' => $domain->site, 'question' => $question]);
     }
@@ -54,6 +55,7 @@ class QuestionController extends Controller
         if (empty($question)) {
             return abort(404);
         }
+        $question->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.questions.detail', ['site' => $domain->site, 'question' => $question]);
     }

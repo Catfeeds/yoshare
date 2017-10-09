@@ -20,5 +20,5 @@
 @endsection
 
 @section('js')
-
+    <script src="{{ asset('/js/access.js') }}"></script>
 @endsection

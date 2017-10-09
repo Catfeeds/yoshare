@@ -39,6 +39,7 @@ class __controller__ extends Controller
         if (empty($__singular__)) {
             return abort(404);
         }
+        $__singular__->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }
@@ -54,6 +55,7 @@ class __controller__ extends Controller
         if (empty($__singular__)) {
             return abort(404);
         }
+        $__singular__->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }

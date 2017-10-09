@@ -140,7 +140,9 @@ class __controller__ extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "__module_name__-info-$id";
+        __model__::click($id);
+
+        $key = "__plural__-info-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $__singular__ = __model__::find($id);
@@ -172,12 +174,14 @@ class __controller__ extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "__module_name__-detail-$id";
+        __model__::click($id);
+
+        $key = "__plural__-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $__singular__ = __model__::findOrFail($id);
             $site = $__singular__->site;
-            $theme = $__singular__->site->mobile_theme;
+            $theme = $__singular__->site->mobile_theme->name;
             $__singular__->content = replace_content_url($__singular__->content);
             return view("themes.$theme.__module_path__.detail", compact('site', '__singular__'))->__toString();
         });
@@ -203,12 +207,14 @@ class __controller__ extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "__module_name__-detail-$id";
+        __model__::click($id);
+
+        $key = "__plural__-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $__singular__ = __model__::findOrFail($id);
             $site = $__singular__->site;
-            $theme = $__singular__->site->mobile_theme;
+            $theme = $__singular__->site->mobile_theme->name;
             $__singular__->content = replace_content_url($__singular__->content);
             $share = 1;
             return view("themes.$theme.__module_path__.detail", compact('site', '__singular__', 'share'))->__toString();

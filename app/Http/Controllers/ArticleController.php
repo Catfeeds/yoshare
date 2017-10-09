@@ -39,6 +39,7 @@ class ArticleController extends Controller
         if (empty($article)) {
             return abort(404);
         }
+        $article->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.articles.detail', ['site' => $domain->site, 'article' => $article]);
     }
@@ -54,6 +55,7 @@ class ArticleController extends Controller
         if (empty($article)) {
             return abort(404);
         }
+        $article->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.articles.detail', ['site' => $domain->site, 'article' => $article]);
     }

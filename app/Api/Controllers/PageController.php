@@ -137,7 +137,9 @@ class PageController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Page-info-$id";
+        Page::click($id);
+
+        $key = "pages-info-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $page = Page::find($id);
@@ -169,12 +171,14 @@ class PageController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Page-detail-$id";
+        Page::click($id);
+
+        $key = "pages-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $page = Page::findOrFail($id);
             $site = $page->site;
-            $theme = $page->site->mobile_theme;
+            $theme = $page->site->mobile_theme->name;
             $page->content = replace_content_url($page->content);
             return view("themes.$theme.pages.detail", compact('site', 'page'))->__toString();
         });
@@ -200,12 +204,14 @@ class PageController extends BaseController
     {
         $id = Request::get('id');
 
-        $key = "Page-detail-$id";
+        Page::click($id);
+
+        $key = "pages-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
             $page = Page::findOrFail($id);
             $site = $page->site;
-            $theme = $page->site->mobile_theme;
+            $theme = $page->site->mobile_theme->name;
             $page->content = replace_content_url($page->content);
             $share = 1;
             return view("themes.$theme.pages.detail", compact('site', 'page', 'share'))->__toString();

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Jobs\PublishPage;
 use Auth;
 use Cache;
 use Carbon\Carbon;
@@ -74,7 +73,7 @@ class BaseModule extends Model
 
     public function getCommentCountAttribute()
     {
-        return cache_remember($this->getTable() . "-comment-$this->id", 1, function () {
+        return cache_remember($this->table . "-comment-$this->id", 1, function () {
             return $this->comments()->where('state', Comment::STATE_PASSED)->count();
         });
     }
@@ -86,7 +85,7 @@ class BaseModule extends Model
 
     public function getFavoriteCountAttribute()
     {
-        return cache_remember($this->getTable() . "-favorite-$this->id", 1, function () {
+        return cache_remember($this->table . "-favorite-$this->id", 1, function () {
             return $this->favorites()->count();
         });
     }
@@ -98,7 +97,7 @@ class BaseModule extends Model
 
     public function getFollowCountAttribute()
     {
-        return cache_remember($this->getTable() . "-follow-$this->id", 1, function () {
+        return cache_remember($this->table . "-follow-$this->id", 1, function () {
             return $this->follows()->count();
         });
     }
@@ -110,9 +109,8 @@ class BaseModule extends Model
 
     public function getLikeCountAttribute()
     {
-        return cache_remember($this->getTable() . "-like-$this->id", 1, function () {
-            $count = array_get($this->likes, 'count');
-            return $count ? $count : 0;
+        return cache_remember($this->table . "-like-$this->id", 1, function () {
+            return $this->likes ? $this->likes->count : 0;
         });
     }
 
@@ -123,10 +121,25 @@ class BaseModule extends Model
 
     public function getClickCountAttribute()
     {
-        return cache_remember($this->getTable() . "-click-$this->id", 1, function () {
-            $count = array_get($this->clicks, 'count');
-            return $count ? $count : 0;
+        return Cache::rememberForever($this->table . "-click-$this->id", function () {
+            return $this->clicks ? $this->clicks->count : 0;
         });
+    }
+
+    public function incrementClick()
+    {
+        $count = Cache::increment($this->table . "-click-$this->id");
+        //降低同时写数据库的压力
+        if ($count % env('CLICK_INTERVAL', 1) == 0) {
+            if (empty($this->clicks)) {
+                $this->clicks()->create([
+                    'site_id' => $this->site_id,
+                    'count' => $count,
+                ]);
+            } else {
+                $this->clicks->increment('count');
+            }
+        }
     }
 
     public function getStateNameAttribute()
@@ -205,5 +218,15 @@ class BaseModule extends Model
                 $item->save();
             }
         }
+    }
+
+    public static function click($id)
+    {
+        $object = static::find($id);
+        if (empty($object)) {
+            return;
+        }
+
+        $object->incrementClick();
     }
 }

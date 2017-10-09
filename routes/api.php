@@ -65,11 +65,6 @@ $api->version('v1', function ($api) {
         $api->post('likes/create', 'LikeController@create');
 
         /**
-         * 点击数
-         */
-        $api->post('clicks/create', 'ClickController@create');
-
-        /**
          * 会员
          */
         $api->get('members/login', 'MemberController@login');
@@ -94,6 +89,6 @@ $api->version('v1', function ($api) {
     });
 
     $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:60000'], function ($api) {
-        $api->get('analyzers/web', 'AnalyzerController@web');
+        $api->get('access/log', 'AccessController@log');
     });
 });
