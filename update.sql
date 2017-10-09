@@ -599,4 +599,15 @@ CREATE TABLE `cms_pv_logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-ALTER TABLE `cms_modules` ADD `use_category` TINYINT(1) NOT NULL COMMENT '是否使用栏目' AFTER `icon`;
+-- -----------
+-- 2017-10-09
+-- -----------
+INSERT INTO `cms_permissions`(`name`, `description`, `sort`, `created_at`, `updated_at`) VALUES ('@vote-top', '投票-置顶', '8', null, null);
+INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`)
+VALUES
+	(5, 'top', '是否置顶', '是否置顶', 3, '0', 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, '', 0, 0, 0, 0, '', 0, 0, '', 0, '2017-06-21 00:00:00', '2017-09-19 11:35:51');
+INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, `default`, `required`, `unique`, `min_length`, `max_length`, `system`, `index`, `column_show`, `column_editable`, `column_align`, `column_width`, `column_formatter`, `column_index`, `editor_show`, `editor_readonly`, `editor_type`, `editor_options`, `editor_rows`, `editor_columns`, `editor_group`, `editor_index`, `created_at`, `updated_at`)
+VALUES
+  (5, 'tags', '标签', '标签', '1', '', '0', '0', '0', '0', '0', '5', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 15:33:00', '2017-09-18 15:33:00');
+ALTER TABLE `cms_votes` ADD `top` tinyint(1) NOT NULL COMMENT '置顶' AFTER `amount`;
+ALTER TABLE `cms_votes` ADD `tags` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标签' AFTER `link`;

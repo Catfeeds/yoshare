@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VoteRequest;
 use App\Models\Item;
+use App\Models\Module;
 use App\Models\Vote;
 use Auth;
+use Carbon\Carbon;
 use Gate;
 
 class VoteController extends Controller
 {
+    protected $module;
+
     public function __construct()
     {
+        $this->module = Module::where('name', 'Vote')->first();
     }
 
     public function index()
@@ -20,7 +25,8 @@ class VoteController extends Controller
             $this->middleware('deny403');
         }
 
-        return view('admin.votes.index');
+        $module = Module::transform($this->module->id);
+        return view('admin.votes.index', ['module' => $module]);
     }
 
     public function create()
@@ -124,6 +130,28 @@ class VoteController extends Controller
     public function sort()
     {
         return Vote::sort();
+    }
+
+    public function top($id)
+    {
+        $vote = Vote::find($id);
+        $vote->top = !$vote->top;
+        $vote->save();
+    }
+
+    public function tag($id)
+    {
+        $tag = request('tag');
+        $vote = Vote::find($id);
+        if ($vote->tags()->where('name', $tag)->exists()) {
+            $vote->tags()->where('name', $tag)->delete();
+        } else {
+            $vote->tags()->create([
+                'site_id' => $vote->site_id,
+                'name' => $tag,
+                'sort' => strtotime(Carbon::now()),
+            ]);
+        }
     }
 
     public function state()

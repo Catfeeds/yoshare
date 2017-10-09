@@ -127,6 +127,7 @@ class Vote extends BaseModule
             foreach ($vote->getDates() as $date) {
                 $attributes[$date] = empty($vote->$date) ? '' : $vote->$date->toDateTimeString();
             }
+            $attributes['tags'] = implode(',', $vote->tags()->pluck('name')->toArray());
             $attributes['state_name'] = $vote->stateName();
             return $attributes;
         });

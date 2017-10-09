@@ -39,6 +39,9 @@
         </section>
     </div>
     <script>
+        var myDate = new Date();
+        var year = myDate.getFullYear();
+
         function save(params) {
             $.ajax({
                 url: '/admin/options/' + params.pk + '/save',
@@ -86,6 +89,9 @@
                         case {{\App\Models\Option::TYPE_DATE}}:
                             $('.date').editable({
                                 format: 'yyyy-mm-dd',
+                                combodate: {
+                                    maxYear: year,
+                                },
                                 url: function (params) {
                                     save(params)
                                 },
@@ -95,6 +101,7 @@
                             $('.datetime').editable({
                                 placement: 'top',
                                 combodate: {
+                                    maxYear: year,
                                     firstItem: 'name'
                                 },
                                 url: function (params) {

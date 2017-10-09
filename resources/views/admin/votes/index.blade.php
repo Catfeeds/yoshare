@@ -22,6 +22,7 @@
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.votes.toolbar')
                             @include('admin.layouts.modal', ['id' => 'modal_count'])
+                            @include('admin.contents.push')
                             <table id="table" data-toggle="table">
                                 <thead>
                                 <tr class="parent">
@@ -35,7 +36,7 @@
                                         data-formatter="stateFormatter">状态
                                     </th>
                                     <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
-                                    <th data-field="action" data-align="center" data-width="150"
+                                    <th data-field="action" data-align="center" data-width="170"
                                         data-formatter="actionFormatter" data-events="actionEvents">管理操作
                                     </th>
                                 </tr>
@@ -137,23 +138,28 @@
         });
 
         function titleFormatter(value, row, index) {
-            return [
-                row.title,
-            ]
+            return '<a href="/votes/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+                    (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '') +
+                    (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
         }
 
         function actionFormatter(value, row, index) {
-            var disabled_del = '';
-            if (row.state_name == '已删除') {
-                disabled_del = 'disabled="disabled"';
-            }
-            return [
-                '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',
-                '<span> </span>',
-                '<a class="count" href="javascript:void(0)"><button class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal_count">统计</button></a>',
-                '<span> </span>',
-                '<a class="remove" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' data-toggle="modal" data-target="#modal">删除</button></a>',
-            ].join('');
+            //编辑
+            var html = '<button class="btn btn-primary btn-xs margin-r-5 edit" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></button>';
+
+            //置顶
+            html += '<button class="btn btn-primary btn-xs margin-r-5 top" data-toggle="tooltip" data-placement="top" title="' + (row.top ? '取消置顶' : '置顶') + '"><i class="fa ' + (row.top ? 'fa-chevron-circle-down' : 'fa-chevron-circle-up') + '"></i></button>';
+
+            //推荐
+            html += '<button class="btn btn-primary btn-xs margin-r-5 tag" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-hand-o-right"></i></button>';
+
+            //统计
+            html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-pie-chart"></i></button>';
+
+            //推送
+            html += '<button class="btn btn-info btn-xs push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
+
+            return html;
         }
 
         $("#modal_remove").click(function () {
@@ -178,6 +184,34 @@
                 window.location.href = '/admin/votes/' + row.id + '/edit';
             },
 
+            'click .top': function (e, value, row, index) {
+                $.ajax({
+                    url: '/admin/votes/' + row.id + '/top',
+                    type: 'post',
+                    data: {'_token': '{{ csrf_token() }}'},
+                    success: function (data) {
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function () {
+                        toast('error', '操作失败');
+                    }
+                })
+            },
+
+            'click .tag': function (e, value, row, index) {
+                $.ajax({
+                    url: '/admin/votes/' + row.id + '/tag',
+                    type: 'post',
+                    data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
+                    success: function (data) {
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function () {
+                        toast('error', '操作失败');
+                    }
+                })
+            },
+
             'click .count': function (e, value, row, index) {
                 $('#modal_title').text('投票统计');
                 $('#window_msg').hide();
@@ -195,12 +229,10 @@
                 });
             },
 
-            'click .remove': function (e, value, row, index) {
-                remove_open = true;
-                $('#msg').html('您确认删除该条信息吗？');
-                $('#modal_remove').show();
-                $('#modal_remove').data('id', row.id);
-            },
+            'click .push': function (e, value, row, index) {
+                $('#push_id').val(row.id);
+                $('#push_title').val(row.title);
+            }
         }
 
         function stateFormatter(value, row, index) {
