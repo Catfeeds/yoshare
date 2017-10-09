@@ -10,6 +10,7 @@
                 levels: 4,
                 onNodeSelected: function (event, data) {
                     $('#category_id').val(data.id);
+                    $('#time').val(data.time);
                     $('#table').bootstrapTable('refresh');
                 }
             });

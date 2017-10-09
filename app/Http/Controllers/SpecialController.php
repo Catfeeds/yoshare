@@ -241,6 +241,6 @@ class SpecialController extends Controller
 
     public function categories()
     {
-        return Response::json(Category::tree('', 0, $this->module->id, false));
+        return Response::json(Special::tree('', 0, $this->module->id, true));
     }
 }

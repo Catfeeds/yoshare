@@ -117,6 +117,18 @@ class Special extends BaseModule
     {
         $filters = Request::all();
 
+        $time = $filters['time'];
+        $category_id = $filters['category_id'];
+        if (!empty($time) && empty($category_id)) {
+            $firstday = date('Y-m-d', strtotime($time . '01'));
+            $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
+            $filters['ids'] = Category::where('type', Category::TYPE_SPECIAL)
+                ->where('created_at', '<', $lastday)
+                ->where('created_at', '>', $firstday)
+                ->pluck('id');
+
+        }
+
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
@@ -224,4 +236,68 @@ class Special extends BaseModule
             'message' => 'success',
         ]);
     }
+
+    public static function tree($state = '', $parent_id = 0, $module_id = 0, $show_parent = true)
+    {
+        $categories = Category::owns()
+            ->where(function ($query) use ($state) {
+                if (!empty($state)) {
+                    $query->where('state', $state);
+                }
+            })
+            ->where(function ($query) use ($module_id) {
+                if (!empty($module_id)) {
+                    $query->where('module_id', $module_id);
+                }
+            })
+            ->orderBy('sort')
+            ->get();
+
+        $parents = Category::where('module_id', $module_id)
+            ->where('type', Category::TYPE_SPECIAL)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $arr = [];
+
+        foreach ($parents as $parent) {
+            if (empty($parent)) {
+                $root = new Node();
+                $root->text = '所有栏目';
+            } else {
+                $root = new Node();
+                $root->id = 0;
+                $root->time = date('Ym', strtotime($parent->created_at));
+                $root->text = date('Ym', strtotime($parent->created_at));
+            }
+            static::getNodes($root, $categories);
+
+            if (in_array($root, $arr) == false) {
+                $arr[] = $root;
+            }
+        }
+
+        if ($show_parent) {
+            return $arr;
+        } else {
+            return $root->nodes;
+        }
+    }
+
+    public static function getNodes($parent, $categories)
+    {
+        foreach ($categories as $category) {
+            $time = date('Ym', strtotime($category->created_at));
+
+            if ($time == $parent->text) {
+                $node = new Node();
+                $node->id = $category->id;
+                $node->text = $category->name;
+                $node->time = '';
+
+                $parent->nodes[] = $node;
+                static::getNodes($node, $categories);
+            }
+        }
+    }
+
 }
