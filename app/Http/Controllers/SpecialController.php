@@ -236,7 +236,7 @@ class SpecialController extends Controller
 
     public function table()
     {
-        return Special::table($this->module->id);
+        return Special::table();
     }
 
     public function categories()

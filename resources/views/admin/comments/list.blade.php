@@ -8,11 +8,11 @@
                     <tr>
                         <th data-field="id" data-width="60">ID</th>
                         <th data-field="nick_name" data-width="100">会员</th>
-                        <th data-field="content" data-width="380" data-formatter="titleFormatter">评论</th>
+                        <th data-field="content" data-width="380" data-formatter="commentTitleFormatter">评论</th>
                         <th data-field="ip" data-width="125">IP</th>
-                        <th data-field="state_name" data-width="60" data-formatter="stateFormatter">状态</th>
+                        <th data-field="state_name" data-width="60" data-formatter="commentStateFormatter">状态</th>
                         <th data-field="created_at" data-width="130">发表时间</th>
-                        <th data-field="action" data-width="100" data-align="center" data-formatter="commentactionFormatter"
+                        <th data-field="action" data-width="100" data-align="center" data-formatter="commentActionFormatter"
                             data-events="actionEvents"> 操作
                         </th>
                     </tr>
@@ -58,7 +58,7 @@
         },
     });
 
-    function stateFormatter(value, row, index) {
+    function commentStateFormatter(value, row, index) {
         var style = 'label-primary';
         switch (row.state_name) {
             case '未审核':
@@ -76,7 +76,7 @@
         ].join('');
     }
 
-    function commentactionFormatter(value, row, index) {
+    function commentActionFormatter(value, row, index) {
         var disabled_del = '';
         switch (row.state_name) {
             case '已删除':
@@ -167,7 +167,7 @@
         });
     }
 
-    function titleFormatter(value, row, index) {
+    function commentTitleFormatter(value, row, index) {
         return [
             '<p class="content_title" data-toggle="tooltip" data-placement="top" title="' + row.content + '">' + row.content + '</p>',
         ]

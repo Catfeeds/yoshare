@@ -213,7 +213,7 @@
 
                     if (page == 'index.blade.php') {
                         //列表页
-                        $('#link_preview').text('/articles/index.html');
+                        $('#link_preview').text(res.data.table_name+'/index.html');
                         $('#link_preview').attr('href', $('#link_preview').text());
 
                         $('#list_var').append('<li class="divider"></li>');
@@ -223,7 +223,7 @@
                         $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$' + res.data.name.toLowerCase() + 's">' + res.data.title + '(集合)' + '</a></li>');
                     } else if (page == 'category.blade.php') {
                         //栏目页
-                        $('#link_preview').text('/articles/category-1.html');
+                        $('#link_preview').text(res.data.table_name+'/category-1.html');
                         $('#link_preview').attr('href', $('#link_preview').text());
 
                         $('#list_var').append('<li class="divider"></li>');
@@ -233,7 +233,7 @@
                         $('#list_var').append('<li><a href="javascript:void(0)" class="code" data-code="$' + res.data.name.toLowerCase() + 's">' + res.data.title + '(集合)' + '</a></li>');
                     } else if (page == 'detail.blade.php') {
                         //详情页
-                        $('#link_preview').text('/articles/detail-1.html');
+                        $('#link_preview').text(res.data.table_name+'/detail-1.html');
                         $('#link_preview').attr('href', $('#link_preview').text());
 
                         $('#list_var').append('<li class="divider"></li>');

@@ -17,7 +17,7 @@
         </section>
         <section class="content">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3" style="width: 26%">
                     <div class="box box-success">
                         <div class="box-header ui-sortable-handle">
                             <h3 class="box-title"></h3>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-9" style="width: 74%">
                     <div class="box box-info">
                         <div class="box-header ui-sortable-handle">
                             <h3 class="box-title margin-l-5"><a href="#" id="link_preview" target="_blank"></a></h3>
