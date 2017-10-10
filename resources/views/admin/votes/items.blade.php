@@ -2,7 +2,7 @@
     <div class="box box-info">
         <div class="box-body">
 
-            <table id="table"
+            <table id="items_table"
                    data-toggle="table"
                    data-url="/admin/votes/items/table/{{$vote_id}}"
                    data-show-export="true"
@@ -23,7 +23,7 @@
 
 <script>
     (function () {
-        $('#table').bootstrapTable({
+        $('#items_table').bootstrapTable({
             onEditableSave: function (field, row, old, $el) {
                 row._token = '{{ csrf_token() }}';
                 $.ajax({
@@ -31,7 +31,7 @@
                     url: "/admin/votes/items/" + row.id,
                     data: row,
                     success: function (data, status) {
-                        $('#table').bootstrapTable('refresh');
+                        $('#items_table').bootstrapTable('refresh');
                     },
                     error: function (data) {
                         alert('Error');

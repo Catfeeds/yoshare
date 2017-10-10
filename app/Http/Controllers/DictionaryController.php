@@ -92,6 +92,7 @@ class DictionaryController extends Controller
     {
         $dictionary = Dictionary::find($id);
         $dictionary->delete();
+        \Session::flash('flash_success', '删除成功');
     }
 
     public function tree()

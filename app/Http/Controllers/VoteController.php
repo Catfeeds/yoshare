@@ -154,6 +154,12 @@ class VoteController extends Controller
         }
     }
 
+    public function comments($refer_id)
+    {
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
+    }
+
     public function state()
     {
         Vote::state(request()->all());

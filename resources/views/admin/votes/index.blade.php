@@ -20,8 +20,8 @@
                         <div class="box-body">
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
+                            @include('admin.layouts.modal', ['id' => 'modal_comment'])
                             @include('admin.votes.toolbar')
-                            @include('admin.layouts.modal', ['id' => 'modal_count'])
                             @include('admin.contents.push')
                             <table id="table" data-toggle="table">
                                 <thead>
@@ -36,7 +36,7 @@
                                         data-formatter="stateFormatter">状态
                                     </th>
                                     <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
-                                    <th data-field="action" data-align="center" data-width="170"
+                                    <th data-field="action" data-align="center" data-width="190"
                                         data-formatter="actionFormatter" data-events="actionEvents">管理操作
                                     </th>
                                 </tr>
@@ -156,6 +156,9 @@
             //统计
             html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-pie-chart"></i></button>';
 
+            //评论
+            html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+
             //推送
             html += '<button class="btn btn-info btn-xs push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
 
@@ -196,11 +199,28 @@
             },
 
             'click .count': function (e, value, row, index) {
+                $('.common').prop('id', 'modal_count');
                 $('#modal_title').text('投票统计');
                 $('#window_msg').hide();
-                $('.common').prop('id', 'modal_count');
 
                 var url = '/admin/votes/items/' + row.id;
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {'_token': '{{ csrf_token() }}'},
+                    dataType: 'html',
+                    success: function (html) {
+                        $('#contents').html(html);
+                    }
+                });
+            },
+
+            'click .comment': function (e, value, row, index) {
+                $('.common').prop('id', 'modal_comment');
+                $('#modal_title').text('查看评论');
+                $('#window_msg').hide();
+
+                var url = '/admin/votes/comments/' + row.id;
                 $.ajax({
                     url: url,
                     type: "get",
