@@ -102,8 +102,6 @@ class SurveyController extends Controller
 
         $survey = Survey::with('subjects')->find($id);
 
-//        $subject = Subject::with('items')->where('refer_id', $id)->first();;
-
         return view("mobile.$site_id.admin.surveys.share", compact('survey'));
     }
 
@@ -178,7 +176,7 @@ class SurveyController extends Controller
                     }
 
                 } else {
-                    $subject = $survey->subjects->find($data['item_id_subject'][$key]);
+                    $subject = $survey->subjects()->find($data['item_id_subject'][$key]);
                     $subject->update($data_subject);
                     //存储题目的子选项
                     if (array_key_exists('item_title' . ($key + 1), $data)) {

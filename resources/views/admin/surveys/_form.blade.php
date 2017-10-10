@@ -453,7 +453,7 @@
     var i = $(".subject_items").length;
     function appendFile() {
         var sub = $('.tab_subjects').length; //use subject
-        var n = i;
+        var n = i + 1;
         i++;
 
         var html =
@@ -461,9 +461,6 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
             '<label class="no-margin">问卷选项(' + n + ')</label></a></li>' +
-            '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
-            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -544,6 +541,10 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
             '<label class="no-margin">问卷题目</label></a></li>' +
+            '<span class="pull-right">' +
+            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
+            '</button>' +
+            '</span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -566,9 +567,6 @@
             '<div class="box-body"><div class="input-group"><ul id="tabs' + (n - 1) + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + (n - 1) + '" data-toggle="tab">' +
             '<label class="no-margin">问卷选项(' + (n - 1) + ')</label></a></li>' +
-            '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
-            '</button></span>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -658,12 +656,14 @@
         return ret;
     });
 
-    $('#tabContents').delegate('.files_del', 'click', function () {
-        var cur_num = $(".subject_items").length;
+    $('.tab_subjects').length;
+    //    $('#tabContents').delegate('.files_del', 'click', function () {
+    $('#tabSubjectsItems2').delegate('.files_del', 'click', function () {
+        var cur_num = $(".file2").length;
         if (cur_num < 2) {
             return toast('warning', '问卷选项最少有一个');
         } else {
-            $(this).parents('div.subject_items').remove();
+            $(this).parents('div.file2').remove();
         }
     })
 </script>
