@@ -53,6 +53,7 @@ class SurveyController extends Controller
     public function store(SurveyRequest $request)
     {
         $data = $request->all();
+//        dd($data);
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
@@ -60,10 +61,10 @@ class SurveyController extends Controller
 
         $subject = $data['item_subject']; //子题目
 
-        if (count($subject) != count(array_unique($subject))) {
-            \Session::flash('flash_warning', '问卷题目不能一样！！');
-            return redirect()->to($this->getRedirectUrl())->withInput();
-        }
+//        if (count($subject) != count(array_unique($subject))) {
+//            \Session::flash('flash_warning', '问卷题目不能一样！！');
+//            return redirect()->to($this->getRedirectUrl())->withInput();
+//        }
 
         //判断有无item_subject,存入题目信息
         if (array_key_exists('item_subject', $data)) {
@@ -138,10 +139,10 @@ class SurveyController extends Controller
 
         $subject = $data['item_subject'];
 
-        if (count($subject) != count(array_unique($subject))) {
-            \Session::flash('flash_warning', '问卷题目不能一样！！');
-            return redirect()->to($this->getRedirectUrl())->withInput();
-        }
+//        if (count($subject) != count(array_unique($subject))) {
+//            \Session::flash('flash_warning', '问卷题目不能一样！！');
+//            return redirect()->to($this->getRedirectUrl())->withInput();
+//        }
 
         //题目 更新
         if (array_key_exists('item_subject', $data)) {

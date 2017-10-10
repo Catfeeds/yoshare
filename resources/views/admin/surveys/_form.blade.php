@@ -475,7 +475,7 @@
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
             '<input name="item_url' + sub + '[]" id="item_url' + n + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input id="item_file' + n + '" name="item_file' + sub + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
+            '<input id="item_file' + sub + '_' + n + '" name="item_file' + sub + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div>';
 
         if (sub == 1) {
@@ -492,7 +492,7 @@
             image_items = ['<img height="200" src="' + this_url + '">'];
         }
 
-        $('#item_file' + n).fileinput({
+        $('#item_file' + sub + '_' + n).fileinput({
             language: 'zh',
             uploadExtraData: {_token: '{{ csrf_token() }}'},
             allowedFileExtensions: ['jpg', 'gif', 'png'],
@@ -521,12 +521,13 @@
 
     // 题目的追加
     var j = $('.tab_subjects').length;
+    //    var sub = $('.tab_subjects').length; //use subject
 
     function appendSubject() {
 
-        var sub = $('.tab_subjects').length; //use subject
+        var sub = $('.tab_subjects_item').length; //use subject
+
         var n = j + 1;
-//        var n =j;
         j++;
 
         var html = '<li class="tab_subjects_item">' +
@@ -576,13 +577,13 @@
             '<div class="form-group">' +
             '<input type="hidden" name="item_id' + (n) + '[]" value="">' +
             '<div class="col-sm-12">' +
-            '<input type="text" id="item_title' + (n) + '" class="form-control " value="" name="item_title' + (n) + '[]" placeholder="输入标题"></div></div>' +
+            '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title' + n + '[]" placeholder="输入标题"></div></div>' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<textarea name="summary' + (n) + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + (n - 1) + '"></textarea></div></div></div> ' +
+            '<textarea name="summary' + n + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + (n) + '[]" id="item_url' + (n) + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + (sub+1) + '[]" id="item_url' + (sub+1) + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input id="item_file_' + (n) + '" name="item_file' + (n)+ '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
+            '<input id="item_file' + (sub + 1) + '_' + (n - 1) + '"  name="item_file' + (sub + 1) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
 
         $(".subject").append(html); //追加标签
@@ -603,7 +604,7 @@
             image_items_subject = ['<img height="200" src="' + this_url_subject + '">'];
         }
 
-        $('#item_file_' + (n) ).fileinput({
+        $('#item_file' + (sub + 1) + '_' + (n - 1)).fileinput({
             language: 'zh',
             uploadExtraData: {_token: '{{ csrf_token() }}'},
             allowedFileExtensions: ['jpg', 'gif', 'png'],
@@ -618,9 +619,9 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url' + (n)).val(data.response.data);
+            $('#item_url' + (sub+1)).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url' + (n)).val('');
+            $('#item_url' + (sub+1)).val('');
         });
 
         $('#item_file_subject' + (n)).fileinput({
@@ -644,17 +645,18 @@
         });
     }
 
-//    $('.submit').click(function () {
-//        var ret = true;
-//        $('.file').each(function (k, obj) {
-//            var files = $(this).fileinput('getFileStack');
-//
-//            if (files.length > 0) {
-//                return ret = toast('warning', '请先上传文件!');
-//            }
-//        });
-//        return ret;
-//    });
+
+    //    $('.submit').click(function () {
+    //        var ret = true;
+    //        $('.file').each(function (k, obj) {
+    //            var files = $(this).fileinput('getFileStack');
+    //
+    //            if (files.length > 0) {
+    //                return ret = toast('warning', '请先上传文件!');
+    //            }
+    //        });
+    //        return ret;
+    //    });
 
     //    $('.tab_subjects').length;
     //    $('#tabContents').delegate('.files_del', 'click', function () {
