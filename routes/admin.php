@@ -12,6 +12,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/', 'AdminController@dashboard');
     Route::get('/index', 'AdminController@dashboard');
     Route::get('dashboard', 'AdminController@dashboard');
+    Route::get('browsers', 'AdminController@browsers');
+    Route::get('areas', 'AdminController@areas');
 
     /**
      * 推送管理

@@ -129,7 +129,7 @@ class BaseModule extends Model
     public function incrementClick()
     {
         $count = Cache::increment($this->table . "-click-$this->id");
-        //降低同时写数据库的压力
+        //间隔回写数据库
         if ($count % env('CLICK_INTERVAL', 1) == 0) {
             if (empty($this->clicks)) {
                 $this->clicks()->create([

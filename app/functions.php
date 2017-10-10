@@ -337,7 +337,7 @@ function theme_asset_path($path)
 }
 
 /**
- * 获取主题试图路径
+ * 获取主题视图路径
  *
  * @param $path
  * @return string
@@ -345,4 +345,64 @@ function theme_asset_path($path)
 function theme_view_path($path)
 {
     return resource_path('views/themes' . DIRECTORY_SEPARATOR . $path);
+}
+
+/**
+ * 获取浏览器信息
+ *
+ * @return string
+ */
+function get_ua_browser()
+{
+    if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+        $browser = $_SERVER['HTTP_USER_AGENT'];
+        if (preg_match('/MSIE/i', $browser)) {
+            $browser = 'IE';
+        } elseif (preg_match('/Firefox/i', $browser)) {
+            $browser = 'Firefox';
+        } elseif (preg_match('/Chrome/i', $browser)) {
+            $browser = 'Chrome';
+        } elseif (preg_match('/Safari/i', $browser)) {
+            $browser = 'Safari';
+        } elseif (preg_match('/Edge/i', $browser)) {
+            $browser = 'Edge';
+        } else {
+            $browser = 'Other';
+        }
+        return $browser;
+    } else {
+        return '';
+    }
+}
+
+/**
+ * 获取操作系统信息
+ *
+ * @return string
+ */
+function get_ua_os()
+{
+    if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+        $OS = $_SERVER['HTTP_USER_AGENT'];
+        if (preg_match('/win/i', $OS)) {
+            $OS = 'Windows';
+        } elseif (preg_match('/mac/i', $OS)) {
+            $OS = 'Mac';
+        } elseif (preg_match('/linux/i', $OS)) {
+            $OS = 'Linux';
+        } elseif (preg_match('/unix/i', $OS)) {
+            $OS = 'Unix';
+        } elseif (preg_match('/bsd/i', $OS)) {
+            $OS = 'BSD';
+        } elseif (preg_match('/android/i', $OS)) {
+            $OS = 'Android';
+        } elseif (preg_match('/iphone/i', $OS)) {
+            $OS = 'iOS';
+        } else {
+            $OS = 'Other';
+        }
+        return $OS;
+    } else {
+        return "获取访客操作系统信息失败！";
+    }
 }

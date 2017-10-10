@@ -610,3 +610,30 @@ INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, 
 VALUES
   (5, 'tags', '标签', '标签', '1', '', '0', '0', '0', '0', '0', '5', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 15:33:00', '2017-09-18 15:33:00');
 ALTER TABLE `cms_votes` ADD `top` tinyint(1) NOT NULL COMMENT '置顶' AFTER `amount`;
+
+-- -----------
+-- 2017-10-10
+-- -----------
+CREATE TABLE `cms_ip_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `ip` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'IP地址',
+  `count` int(10) unsigned NOT NULL COMMENT '数量',
+  `country` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '国家',
+  `province` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '省份',
+  `city` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '城市',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `cms_uv_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) unsigned NOT NULL COMMENT '站点ID',
+  `uvid` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'UVID',
+  `browser` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '浏览器',
+  `os` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作系统',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

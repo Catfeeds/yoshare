@@ -2,8 +2,12 @@
 
 namespace App\Api\Controllers;
 
+use App\Libraries\Ip\Ip;
+use App\Models\IpLog;
 use App\Models\PvLog;
 use App\Models\Site;
+use App\Models\UvLog;
+use Carbon\Carbon;
 use Request;
 
 class AccessController extends BaseController
@@ -30,15 +34,18 @@ class AccessController extends BaseController
         $app_key = Request::get('app_key');
         $url = Request::get('url');
         $title = Request::get('title');
+        $ip = get_client_ip();
+        $browser = get_ua_browser();
+        $os = get_ua_os();
 
-        //验证app_key
+        //TODO 验证app_key
 
         //获取站点ID
-        $site_id = Site::ID_DEFAULT;
         $sites = cache_remember('site-all', 1, function () {
             return Site::all();
         });
 
+        $site_id = 0;
         foreach ($sites as $site) {
             if (str_contains(strtolower($url), strtolower($site->domain))) {
                 $site_id = $site->id;
@@ -46,19 +53,53 @@ class AccessController extends BaseController
             }
         }
 
+        if ($site_id == 0) {
+            return $this->responseError('此域名未注册');
+        }
+
         //记录PV日志
         PvLog::create([
             'site_id' => $site_id,
             'title' => $title,
             'url' => $url,
-            'ip' => get_client_ip()
+            'ip' => $ip
         ]);
 
         //记录IP日志
+        $area = Ip::find($ip);
+        $log = IpLog::where('ip', $ip)
+            ->where('created_at', '>=', Carbon::now()->toDateString())
+            ->where('created_at', '<', Carbon::now()->addDay()->toDateString())
+            ->first();
+        if (empty($log)) {
+            IpLog::create([
+                'site_id' => $site_id,
+                'ip' => $ip,
+                'country' => $area[0],
+                'province' => $area[1],
+                'city' => $area[2],
+                'count' => 1,
+            ]);
+        } else {
+            $log->increment('count');
+        }
 
         //记录UV日志
-
-        //记录浏览器日志
+        if (isset($_COOKIE['uvid'])) {
+            $uvid = $_COOKIE['uvid'];
+            $log = UvLog::where('uvid', $uvid)
+                ->where('created_at', '>=', Carbon::now()->toDateString())
+                ->where('created_at', '<', Carbon::now()->addDay()->toDateString())
+                ->first();
+            if (empty($log)) {
+                UvLog::create([
+                    'site_id' => $site_id,
+                    'uvid' => $uvid,
+                    'browser' => $browser,
+                    'os' => $os,
+                ]);
+            }
+        }
 
         return $this->responseSuccess();
     }
