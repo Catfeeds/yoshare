@@ -103,6 +103,7 @@ class Survey extends BaseModule
     public function scopeFilter($query, $filters)
     {
         $query->where(function ($query) use ($filters) {
+            empty($filters['id']) ?: $query->where('id', $filters['id']);
             empty($filters['title']) ?: $query->where('title', 'like', '%' . $filters['title'] . '%');
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SurveyRequest;
 use App\Models\Item;
+use App\Models\Module;
 use App\Models\Subject;
 use App\Models\Survey;
 use Auth;
@@ -13,9 +14,13 @@ use Request;
 
 class SurveyController extends Controller
 {
+    protected $base_url = '/admin/surveys';
+    protected $view_path = 'admin.surveys';
+    protected $module;
+
     public function __construct()
     {
-
+        $this->module = Module::where('name', 'Survey')->first();
     }
 
     public function index()
@@ -53,18 +58,12 @@ class SurveyController extends Controller
     public function store(SurveyRequest $request)
     {
         $data = $request->all();
-//        dd($data);
         $data['user_id'] = Auth::user()->id;
         $data['state'] = Survey::STATE_NORMAL;
         $data['site_id'] = Auth::user()->site_id;
         $survey = Survey::create($data);
 
         $subject = $data['item_subject']; //子题目
-
-//        if (count($subject) != count(array_unique($subject))) {
-//            \Session::flash('flash_warning', '问卷题目不能一样！！');
-//            return redirect()->to($this->getRedirectUrl())->withInput();
-//        }
 
         //判断有无item_subject,存入题目信息
         if (array_key_exists('item_subject', $data)) {
@@ -138,11 +137,6 @@ class SurveyController extends Controller
         }
 
         $subject = $data['item_subject'];
-
-//        if (count($subject) != count(array_unique($subject))) {
-//            \Session::flash('flash_warning', '问卷题目不能一样！！');
-//            return redirect()->to($this->getRedirectUrl())->withInput();
-//        }
 
         //题目 更新
         if (array_key_exists('item_subject', $data)) {
@@ -248,4 +242,11 @@ class SurveyController extends Controller
             ]);
         }
     }
+
+    public function comments($refer_id)
+    {
+        $refer_type = $this->module->model_class;
+        return view('admin.comments.list', compact('refer_id', 'refer_type'));
+    }
+
 }

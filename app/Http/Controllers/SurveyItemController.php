@@ -2,48 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote;
-use App\Http\Requests;
+use App\Models\DataSource;
+use App\Models\Survey;
 use App\Models\SurveyItem;
-use App\DataSource;
-use App\Record;
-use App\Column;
-use Response;
 use Request;
+use Response;
 
 class SurveyItemController extends Controller
 {
     public function update($id)
     {
+        $input = Request::all();
         $item = SurveyItem::find($id);
+        $item->count = $input['count'];
 
         if ($item == null) {
             return;
         }
-        $item->update(Request::all());
+        $item->save();
     }
 
+    //TODO tongji unfinished
     public function table($survey_id)
     {
-        $items = SurveyItem::with('survey', 'survey_title')->where('survey_id', $survey_id)->orderBy('id', 'desc')->get();
-        $amount = SurveyItem::where('survey_id', $survey_id)->sum('amount');
+        $survey = Survey::with('subjects')->find($survey_id);
+        $subjects = $survey->subjects()->orderBy('id', 'desc')->get();
 
-        $items->transform(function ($item) use ($amount) {
 
-            return [
-                'id' => $item->id,
-                'survey_id' => $item->survey_id,
-                'title' => $item->title,
-                'sub_title' => $item->survey_title->title,
-                'master_title' => $item->survey->title,
-                'percent' => $amount == 0 ? 0 : round(($item->amount / $amount) * 100) . '%',
-                'amount' => $item->amount,
-                'sort' => $item->sort,
-            ];
+        foreach ($subjects as $subject) {
 
-        });
+            $amount = $subject->items->sum('count');
+
+            $subjects->transform(function ($item) use ($amount) {
+
+                return [
+                    'id' => $item->id,
+                    'survey_id' => $item->survey_id,
+                    'subject' => $item->title,
+                    'title' => $item->title,
+                    'percent' => $amount == 0 ? 0 : round(($item->count / $amount) * 100) . '%',
+                    'count' => $item->count,
+                    'sort' => $item->sort,
+                ];
+
+            });
+        }
+
         $ds = new DataSource();
-        $ds->data = $items;
+        $ds->data = $subjects;
 
         return Response::json($ds);
     }

@@ -29,49 +29,8 @@
 </div>
 
 
-<div class="form-horizontal form-group-sm" id="forms" style="display: none;">
-    <div class="btn-group margin-bottom col-md-6" style="padding: 0;">
-        <div class="col-md-5" style="padding: 0">
-            {!! Form::label('title', '标题:', ['class' => 'control-label cb-toolbar']) !!}
-            <div class="col-sm-9" style="padding: 0;">
-                {!! Form::text('title', null, ['class' => 'form-control']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="btn-group margin-bottom col-md-6 pull-right" style="padding: 0">
-        <div class="col-md-11" style="width: 88%;padding: 0;">
-            <div class="col-md-6" style="padding: 0">
-                {!! Form::label('start_date', '时间:', ['class' => 'control-label cb-toolbar']) !!}
-                <div class='input-group col-md-9 date'>
-                    {!! Form::text('start_date', null, ['class' => 'form-control date']) !!}
-                    <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-                </div>
-            </div>
-            <div class="col-md-6" style="padding: 0">
-                {!! Form::label('start_date', '至', ['class' => 'control-label cb-toolbar']) !!}
-                <div class='input-group col-md-9 date'>
-                    {!! Form::text('end_date', null, ['class' => 'form-control date']) !!}
-                    <span class="input-group-addon">
-                 <span class="glyphicon glyphicon-calendar"></span>
-             </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-1 text-center" style="width: 12%;padding: 0">
-            <button type="button" class="btn btn-info btn-sm" id="contents_query">查 询</button>
-        </div>
-    </div>
-</div>
-
 
 <script>
-
-    /* 查询 */
-    $('#btn_query').click(function () {
-        $('#table').bootstrapTable('selectPage', 1);
-    });
 
     /* 新增 */
     function create() {
@@ -160,13 +119,6 @@
             $(id_name).slideDown(350);
         }
     }
-
-    $('.date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm',
-        locale: "zh-CN",
-        toolbarPlacement: 'bottom',
-        showClear: true,
-    });
 
     /* 启动排序 */
     $('#btn_sort').click(function () {

@@ -20,6 +20,8 @@
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.surveys.toolbar')
                             @include('admin.layouts.modal', ['id' => 'modal_count'])
+                            @include('admin.layouts.modal', ['id' => 'modal_comment'])
+                            @include('admin.surveys.query')
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>
                                 <tr>
@@ -37,7 +39,7 @@
                                     <th data-field="end_date" data-width="120" data-align="center">问卷结束时间</th>
 
                                     <th data-field="published_at" data-align="center" data-width="120">发布时间</th>
-                                    <th data-field="action" data-align="center" data-width="160"
+                                    <th data-field="action" data-align="center" data-width="190"
                                         data-formatter="actionFormatter" data-events="actionEvents">管理操作
                                     </th>
                                 </tr>
@@ -51,9 +53,6 @@
     </div>
 
     <script>
-        $('#contents_query').click(function () {
-            $('#table').bootstrapTable('selectPage', 1);
-        });
 
         $('#table').bootstrapTable({
             method: 'get',
@@ -111,11 +110,11 @@
                 $('#table tbody').sortable('disable');
             },
             queryParams: function (params) {
-                var object = $('#forms input').serializeObject();
+                var object = $('#form_query input,#form_query select').serializeObject();
                 object['state'] = $('#state').val();
-                object['_token'] = '{{ csrf_token() }}';
                 object['offset'] = params.offset;
                 object['limit'] = params.limit;
+                object['_token'] = '{{ csrf_token() }}';
                 return object;
             },
         });
@@ -154,7 +153,7 @@
 
         function titleFormatter(value, row, index) {
             return '<a href="/survey/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
-                (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '')+
+                (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '') +
                 (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
         }
 
@@ -172,6 +171,9 @@
             //统计
             html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-line-chart"></i></button>';
 
+            //评论
+            html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
+
             //推送
             html += '<button class="btn btn-info btn-xs push" data-toggle="modal" data-target="#modal_push"><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="推送"></i></button>';
 
@@ -188,7 +190,7 @@
                 $('#window_msg').hide();
                 $('.common').prop('id', 'modal_count');
 
-                var url = '/admin/survey/items/' + row.id;
+                var url = '/admin/surveys/items/' + row.id;
                 $.ajax({
                     url: url,
                     type: "get",
@@ -232,6 +234,23 @@
                         toast('error', '操作失败');
                     }
                 })
+            },
+
+            'click .comment': function (e, value, row, index) {
+                $('#modal_title').text('查看评论');
+                $('#window_msg').hide();
+                $('.common').prop('id', 'modal_comment');
+
+                var url = '/admin/surveys/comments/' + row.id;
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {'_token': '{{ csrf_token() }}'},
+                    dataType: 'html',
+                    success: function (html) {
+                        $('#contents').html(html);
+                    }
+                });
             },
 
             'click .push': function (e, value, row, index) {
