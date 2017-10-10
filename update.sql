@@ -610,4 +610,3 @@ INSERT INTO `cms_module_fields` (`module_id`, `name`, `title`, `label`, `type`, 
 VALUES
   (5, 'tags', '标签', '标签', '1', '', '0', '0', '0', '0', '0', '5', '0', '0', '1', '0', '', '0', '1', '0', '1', '', '1', '11', '基本信息', '0', '2017-09-18 15:33:00', '2017-09-18 15:33:00');
 ALTER TABLE `cms_votes` ADD `top` tinyint(1) NOT NULL COMMENT '置顶' AFTER `amount`;
-ALTER TABLE `cms_votes` ADD `tags` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标签' AFTER `link`;

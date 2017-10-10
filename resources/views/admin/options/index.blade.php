@@ -39,8 +39,8 @@
         </section>
     </div>
     <script>
-        var myDate = new Date();
-        var year = myDate.getFullYear();
+        var date = new Date();
+        var year = date.getFullYear();
 
         function save(params) {
             $.ajax({
