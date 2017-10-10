@@ -162,23 +162,6 @@
             return html;
         }
 
-        $("#modal_remove").click(function () {
-            var row_id = $(this).data('id');
-            if (typeof(row_id) == "undefined") {
-                return false;
-            }
-            var ids = [row_id];
-            $.ajax({
-                url: '/admin/votes/state',
-                type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
-                success: function (data) {
-                    $('#modal').modal('hide');
-                    $('#table').bootstrapTable('refresh');
-                }
-            });
-        });
-
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
                 window.location.href = '/admin/votes/' + row.id + '/edit';
