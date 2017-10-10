@@ -184,12 +184,9 @@
                                         <ul id="tabs{{$item_k+1}}" class="nav nav-tabs">
                                             <li class="active">
                                                 <a href="#tabHome{{$item_k+1}}" data-toggle="tab"><label
-                                                            class="no-margin">问卷选项({{$item_k+1}})</label></a>
+                                                            class="no-margin">题目选项({{$item_k+1}})</label></a>
                                             </li>
-                                            <span class="pull-right">
-                                                 <button type="button" class="btn btn-success btn-flatpull-right "
-                                                         onclick="appendFile()">问卷选项 ＋
-                                            </button></span>
+
                                         </ul>
                                         <span class="input-group-addon files_del"
                                               style="border-left: 1px solid #d2d6de;cursor: pointer;"><span
@@ -288,7 +285,7 @@
                                 </li>
                                 <span class="pull-right">
                                                  <button type="button" class="btn btn-success btn-flatpull-right "
-                                                         onclick="appendFile()">问卷选项 ＋
+                                                         onclick="appendFile()">题目选项 ＋
                                             </button></span>
                             </ul>
                             <span class="input-group-addon files_del"
@@ -460,7 +457,7 @@
             '<div class="file1 panel panel-default subject_items">' +
             '<div class="box-body"><div class="input-group"><ul id="tabs' + n + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
-            '<label class="no-margin">问卷选项(' + n + ')</label></a></li>' +
+            '<label class="no-margin">题目选项(' + n + ')</label></a></li>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -543,7 +540,7 @@
             '<li class="active"><a href="#tabHome' + n + '" data-toggle="tab">' +
             '<label class="no-margin">问卷题目</label></a></li>' +
             '<span class="pull-right">' +
-            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">问卷选项 ＋ ' +
+            '<button type="button" class="btn btn-success btn-flatpull-right " onclick="appendFile()">题目选项 ＋ ' +
             '</button>' +
             '</span>' +
             '</ul>' +
@@ -567,7 +564,7 @@
             '<div class="file1 panel panel-default subject_items">' +
             '<div class="box-body"><div class="input-group"><ul id="tabs' + (n ) + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + (n) + '" data-toggle="tab">' +
-            '<label class="no-margin">问卷选项(' + (n) + ')</label></a></li>' +
+            '<label class="no-margin">题目选项(' + (n) + ')</label></a></li>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -581,7 +578,7 @@
             '<div class="form-group"><div class="col-sm-12">' +
             '<textarea name="summary' + n + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + (sub+1) + '[]" id="item_url' + (sub+1) + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + (sub + 1) + '[]" id="item_url' + (sub + 1) + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
             '<input id="item_file' + (sub + 1) + '_' + (n - 1) + '"  name="item_file' + (sub + 1) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
@@ -619,9 +616,9 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url' + (sub+1)).val(data.response.data);
+            $('#item_url' + (sub + 1)).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url' + (sub+1)).val('');
+            $('#item_url' + (sub + 1)).val('');
         });
 
         $('#item_file_subject' + (n)).fileinput({
@@ -658,14 +655,12 @@
     //        return ret;
     //    });
 
-    //    $('.tab_subjects').length;
-    //    $('#tabContents').delegate('.files_del', 'click', function () {
-    $('#tabSubjectsItems2').delegate('.files_del', 'click', function () {
-        var cur_num = $(".file2").length;
-        if (cur_num < 2) {
-            return toast('warning', '问卷选项最少有一个');
+    $('#tabContents').delegate('.files_del', 'click', function () {
+        var cur_num = $(".file1").length;
+        if (cur_num < 3) {
+            return toast('warning', '题目和题目选项最少有一个');
         } else {
-            $(this).parents('div.file2').remove();
+            $(this).parents('div.file1').remove();
         }
     })
 </script>
