@@ -113,21 +113,9 @@ class Special extends BaseModule
         return $special;
     }
 
-    public static function table($module_id)
+    public static function table()
     {
         $filters = Request::all();
-
-        $time = $filters['time'];
-        $category_id = $filters['category_id'];
-        if (!empty($time) && empty($category_id)) {
-            $firstday = date('Y-m-d', strtotime($time . '01'));
-            $lastday = date("Y-m-d", strtotime("$firstday 1 month -1 day"));
-            $filters['ids'] = Category::where('module_id', $module_id)
-                ->where('created_at', '<', $lastday)
-                ->where('created_at', '>', $firstday)
-                ->pluck('id');
-
-        }
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
@@ -256,6 +244,7 @@ class Special extends BaseModule
         $parents = Category::where('module_id', $module_id)
             ->orderBy('created_at', 'desc')
             ->get();
+
         $arr = [];
 
         foreach ($parents as $parent) {
