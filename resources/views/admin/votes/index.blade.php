@@ -78,7 +78,7 @@
         var move_down = 1;
         $('#table').bootstrapTable({
             method: 'get',
-            url: '/admin/votes/table',
+            url: '{{$base_url}}/table',
             pagination: true,
             pageNumber: 1,
             pageSize: 20,
@@ -115,7 +115,7 @@
                         }
 
                         $.ajax({
-                            url: '/admin/votes/sort',
+                            url: '{{$base_url}}/sort',
                             type: 'get',
                             async: true,
                             data: {select_id: select_id, place_id: place_id, move_down: move_down},
@@ -167,12 +167,12 @@
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
-                window.location.href = '/admin/votes/' + row.id + '/edit';
+                window.location.href = '{{$base_url}}/' + row.id + '/edit';
             },
 
             'click .top': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/votes/' + row.id + '/top',
+                    url: '{{$base_url}}/' + row.id + '/top',
                     type: 'post',
                     data: {'_token': '{{ csrf_token() }}'},
                     success: function (data) {
@@ -186,7 +186,7 @@
 
             'click .tag': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/votes/' + row.id + '/tag',
+                    url: '{{$base_url}}/' + row.id + '/tag',
                     type: 'post',
                     data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
                     success: function (data) {
@@ -203,7 +203,7 @@
                 $('#modal_title').text('投票统计');
                 $('#window_msg').hide();
 
-                var url = '/admin/votes/items/' + row.id;
+                var url = '{{$base_url}}/items/' + row.id;
                 $.ajax({
                     url: url,
                     type: "get",
@@ -220,7 +220,7 @@
                 $('#modal_title').text('查看评论');
                 $('#window_msg').hide();
 
-                var url = '/admin/votes/comments/' + row.id;
+                var url = '{{$base_url}}/comments/' + row.id;
                 $.ajax({
                     url: url,
                     type: "get",

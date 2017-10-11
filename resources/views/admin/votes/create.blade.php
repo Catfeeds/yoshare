@@ -5,11 +5,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                添加投票
+                新增{{ $module->title }}
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">投票管理</li>
+                <li class="active">新增{{ $module->title }}</li>
             </ol>
         </section>
 
@@ -20,7 +20,7 @@
                             <div class="box-body">
 
                                 @include('admin.errors.list')
-                                {!! Form::open(['url' => '/admin/votes', 'class' => 'form-horizontal']) !!}
+                                {!! Form::open(['url' => $base_url, 'class' => 'form-horizontal']) !!}
 
                                 @include('admin.votes._form')
 

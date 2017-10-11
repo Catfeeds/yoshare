@@ -5,11 +5,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                编辑投票
+                编辑{{ $module->title }}
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">投票管理</li>
+                <li class="active">编辑{{ $module->title }}</li>
             </ol>
         </section>
 

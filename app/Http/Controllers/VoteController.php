@@ -12,6 +12,8 @@ use Gate;
 
 class VoteController extends Controller
 {
+    protected $base_url = '/admin/votes';
+    protected $view_path = 'admin.votes';
     protected $module;
 
     public function __construct()
@@ -26,7 +28,7 @@ class VoteController extends Controller
         }
 
         $module = Module::transform($this->module->id);
-        return view('admin.votes.index', ['module' => $module]);
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function create()
@@ -36,7 +38,8 @@ class VoteController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.votes.create');
+        $module = Module::transform($this->module->id);
+        return view($this->view_path . '.create', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function store(VoteRequest $request)
@@ -57,7 +60,7 @@ class VoteController extends Controller
             ]);
         }
 
-        return redirect('/admin/votes')->with('flash_success', '新增成功！');
+        return redirect($this->base_url)->with('flash_success', '新增成功！');
     }
 
     public function show($id)
@@ -77,7 +80,9 @@ class VoteController extends Controller
         }
 
         $vote = Vote::with('items')->find($id);
-        return view('admin.votes.edit')->with('vote', $vote);
+
+        $module = Module::transform($this->module->id);
+        return view($this->view_path . '.edit', ['module' => $module, 'vote' => $vote]);
     }
 
     public function update(VoteRequest $request, $id)
@@ -119,7 +124,7 @@ class VoteController extends Controller
             }
         }
 
-        return redirect('/admin/votes')->with('flash_success', '编辑成功！');
+        return redirect($this->base_url)->with('flash_success', '编辑成功！');
     }
 
     public function table()

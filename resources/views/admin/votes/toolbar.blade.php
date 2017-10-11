@@ -18,7 +18,7 @@
 <script>
     /* 新增 */
     function create() {
-        window.location.href = '/admin/votes/create'
+        window.location.href = '{{$base_url}}/create'
     }
 
     var remove_open = false;
@@ -36,7 +36,7 @@
         }
 
         $.ajax({
-            url: '/admin/votes/state',
+            url: '{{$base_url}}/state',
             type: 'POST',
             data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Comment::STATE_DELETED }}'},
             success: function (data) {
@@ -69,7 +69,7 @@
         }
         if (ids.length > 0) {
             $.ajax({
-                url: '/admin/votes/state',
+                url: '{{$base_url}}/state',
                 type: 'POST',
                 data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': state},
                 success: function () {

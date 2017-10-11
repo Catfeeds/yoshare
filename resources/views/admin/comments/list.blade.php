@@ -13,7 +13,7 @@
                         <th data-field="state_name" data-width="60" data-formatter="commentStateFormatter">状态</th>
                         <th data-field="created_at" data-width="130">发表时间</th>
                         <th data-field="action" data-width="100" data-align="center" data-formatter="commentActionFormatter"
-                            data-events="actionEvents"> 操作
+                            data-events="commentActionEvents"> 操作
                         </th>
                     </tr>
                     </thead>
@@ -88,7 +88,7 @@
         ].join('');
     }
 
-    window.actionEvents = {
+    window.commentActionEvents = {
         'click .remove': function (e, value, row, index) {
             var ids = [row.id];
             $.ajax({
