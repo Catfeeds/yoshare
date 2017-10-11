@@ -28,7 +28,7 @@
                 row._token = '{{ csrf_token() }}';
                 $.ajax({
                     type: "put",
-                    url: "/admin/survey/items/" + row.id,
+                    url: "/admin/surveys/items/" + row.id,
                     data: row,
                     success: function (data, status) {
                         $('#table').bootstrapTable('refresh');

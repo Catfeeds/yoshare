@@ -57,6 +57,7 @@ class Survey extends BaseModule
         'begin_date',
         'end_date',
         'username',
+        'amount',
         'multiple',
         'link',
         'link_type',

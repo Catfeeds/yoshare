@@ -170,7 +170,7 @@
             html += '<button class="btn btn-primary btn-xs margin-r-5 tag" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-hand-o-right"></i></button>';
 
             //统计
-            html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-line-chart"></i></button>';
+            html += '<button class="btn btn-info btn-xs  margin-r-5 count" data-toggle="modal" data-target="#modal_count" title="统计"><i class="fa fa-pie-chart"></i></button>';
 
             //评论
             html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
