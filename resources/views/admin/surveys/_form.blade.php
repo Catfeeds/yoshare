@@ -100,6 +100,10 @@
                                         <a href="#tabHome{{$k+1}}" data-toggle="tab"><label
                                                     class="no-margin">问卷题目</label></a>
                                     </li>
+                                    <span class="pull-right">
+                                    <button type="button" class="btn btn-success btn-flatpull-right"
+                                            onclick="appendFile()" >题目选项 ＋
+                                    </button></span>
                                 </ul>
                                 <span class="input-group-addon files_del"
                                       style="border-left: 1px solid #d2d6de;cursor: pointer;"><span
@@ -448,7 +452,13 @@
 
 
     var i = $(".subject_items").length;
+
+//    $('.tab_subjects_item').hasClass('active');
+//    $('.tab_subjects_item.active').text();
     function appendFile() {
+
+        var flag = $('.flag').val();
+
         var sub = $('.tab_subjects').length; //use subject
         var n = i + 1;
         i++;
