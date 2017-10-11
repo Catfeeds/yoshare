@@ -22,37 +22,35 @@ class SurveyItemController extends Controller
         $item->save();
     }
 
-    //TODO tongji unfinished
+    //TODO
     public function table($survey_id)
     {
         $survey = Survey::with('subjects')->find($survey_id);
+
         $subjects = $survey->subjects()->orderBy('id', 'desc')->get();
 
-
-        foreach ($subjects as $subject) {
+        $subjects->transform(function ($subject) {
+            $titles = $subject->items()->get();
 
             $amount = $subject->items->sum('count');
 
-            $subjects->transform(function ($item) use ($amount) {
-
+            foreach ($titles as $title) {
                 return [
-                    'id' => $item->id,
-                    'survey_id' => $item->survey_id,
-                    'subject' => $item->title,
-                    'title' => $item->title,
-                    'percent' => $amount == 0 ? 0 : round(($item->count / $amount) * 100) . '%',
-                    'count' => $item->count,
-                    'sort' => $item->sort,
+                    'id' => $title->id,
+                    'survey_id' => $title->refer_id,
+                    'subject' => $subject->title,
+                    'title' => $title->title,
+                    'percent' => $amount == 0 ? 0 : round(($subject->count / $amount) * 100) . '%',
+                    'count' => $subject->count,
+                    'sort' => $title->sort,
                 ];
-
-            });
-        }
-
+            }
+        });
         $ds = new DataSource();
         $ds->data = $subjects;
-
         return Response::json($ds);
     }
+
 
     public function show($survey_id)
     {
