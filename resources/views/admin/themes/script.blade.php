@@ -78,6 +78,27 @@
         }
     });
 
+    function createFile(name) {
+        var nodes = $('#tree').treeview('getSelected');
+        var path = nodes[0].path + '/';
+        var extension = nodes[0].extension;
+        if (path.length == 0) {
+            toast('info', '<b>请选择文件夹</b>')
+            return;
+        }
+        $.ajax({
+            type: 'post',
+            url: '{{ url('admin/themes/file') }}',
+            data: {'_token': '{{ csrf_token() }}', 'path': path, 'name' : name, 'extension':extension},
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function () {
+                toast('error', '<b>创建失败</b>')
+            }
+        });
+    }
+
     $('#btn_create_file').click(function () {
         var nodes = $('#tree').treeview('getSelected');
         if (nodes.length > 0) {
@@ -112,25 +133,6 @@
             $('#modal_theme').modal('show');
         }
     });
-
-    function createFile(path) {
-        if (path.length == 0) {
-            toast('info', '<b>请选择文件</b>')
-            return;
-        }
-        $.ajax({
-            type: 'post',
-            async: false,
-            url: '{{ url('admin/themes/file') }}',
-            data: {'_token': '{{ csrf_token() }}', 'path': path},
-            success: function (data) {
-                window.location.reload();
-            },
-            error: function () {
-                toast('error', '<b>创建失败</b>')
-            }
-        });
-    }
 
     function removeFile(path) {
         if (path.length == 0) {

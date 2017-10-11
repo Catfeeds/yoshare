@@ -43,9 +43,9 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="javascript:void(0)">列表页 - index.blade.php</a></li>
-                                        <li><a href="javascript:void(0)">栏目页 - category.blade.php</a></li>
-                                        <li><a href="javascript:void(0)">详情页 - detail.blade.php</a></li>
+                                        <li><a href="javascript:void(0)" onclick="createFile('index')">列表页 - index.blade.php</a></li>
+                                        <li><a href="javascript:void(0)" onclick="createFile('category')">栏目页 - category.blade.php</a></li>
+                                        <li><a href="javascript:void(0)" onclick="createFile('detail')">详情页 - detail.blade.php</a></li>
                                     </ul>
                                 </div>
 
