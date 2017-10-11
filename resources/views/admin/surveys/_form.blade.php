@@ -9,12 +9,12 @@
 
         @if(isset($survey))
             @foreach($survey->subjects as $k=>$item_subject)
-                <li class="tab_subjects_item">
+                <li class="tab_subjects_item" value="{{ $k+1 }}">
                     <a href="#tabSubjectsItems{{ $k+1 }}" data-toggle="tab">问卷题目{{ $k+1 }}</a>
                 </li>
             @endforeach
         @else
-            <li class="tab_subjects_item">
+            <li class="tab_subjects_item" value="1">
                 <a href="#tabSubjectsItems1" data-toggle="tab">问卷题目1</a>
             </li>
         @endif
@@ -102,7 +102,7 @@
                                     </li>
                                     <span class="pull-right">
                                     <button type="button" class="btn btn-success btn-flatpull-right"
-                                            onclick="appendFile()" >题目选项 ＋
+                                            onclick="appendFile()">题目选项 ＋
                                     </button></span>
                                 </ul>
                                 <span class="input-group-addon files_del"
@@ -450,16 +450,28 @@
         $('#image_url').val('');
     });
 
-
     var i = $(".subject_items").length;
 
-//    $('.tab_subjects_item').hasClass('active');
-//    $('.tab_subjects_item.active').text();
+    //add subject length
     function appendFile() {
+        var subject_curr = $('.tab_subjects_item.active').val();
+        @if(isset($survey))
+        if (subject_curr == 0) {
+            var subject_curr_num = $('.tab_subjects').length;
+        } else {
+            var subject_curr_num = subject_curr;
+        }
+        @else
+        if (subject_curr == 0) {
+            var subject_curr_num = $('.tab_subjects').length;
+            $('.tab_subjects_item.active').attr('value', subject_curr_num);
+        } else if (subject_curr == undefined) {
+            var subject_curr_num = $('.tab_subjects').length;
+        } else {
+            var subject_curr_num = $('.tab_subjects_item.active').val();
+        }
+                @endif
 
-        var flag = $('.flag').val();
-
-        var sub = $('.tab_subjects').length; //use subject
         var n = i + 1;
         i++;
 
@@ -475,31 +487,35 @@
             '<div id="tabHome' + n + '" class="tab-pane fade in active padding-t-15">' +
             '<div class="col-sm-8 pull-left" style="padding-left: 0;">' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input type="hidden" name="item_id' + sub + '[]" >' +
-            '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title' + sub + '[]" placeholder="输入标题"></div></div>' +
+            '<input type="hidden" name="item_id' + subject_curr_num + '[]" >' +
+            '<input type="text" id="item_title' + n + '" class="form-control " value="" name="item_title' + subject_curr_num + '[]" placeholder="输入标题"></div></div>' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<textarea name="summary' + sub + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
+            '<textarea name="summary' + subject_curr_num + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + sub + '[]" id="item_url' + n + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + subject_curr_num + '[]" id="item_url_' + subject_curr_num + '_' + n + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input id="item_file' + sub + '_' + n + '" name="item_file' + sub + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
+            '<input id="item_file' + subject_curr_num + '_' + n + '" name="item_file' + subject_curr_num + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div>';
 
-        if (sub == 1) {
-            $(".edit_file1").append(html);
+        if ($('.tab_subjects_item').hasClass('active')) {
+            $(".edit_file" + subject_curr_num).append(html);
         } else {
-            $(".edit_file" + sub).append(html);
+            //default status
+            if (subject_curr_num == 1) {
+                $(".edit_file1").append(html);
+            } else {
+                $(".edit_file" + subject_curr_num).append(html);
+            }
         }
 
-
-        var this_url = $('#item_url' + n).val();
+        var this_url = $('#item_url_' + subject_curr_num + '_' + n).val();
         var image_items = [];
 
         if (this_url == null || this_url.length > 0) {
             image_items = ['<img height="200" src="' + this_url + '">'];
         }
 
-        $('#item_file' + sub + '_' + n).fileinput({
+        $('#item_file' + subject_curr_num + '_' + n).fileinput({
             language: 'zh',
             uploadExtraData: {_token: '{{ csrf_token() }}'},
             allowedFileExtensions: ['jpg', 'gif', 'png'],
@@ -514,12 +530,11 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url' + n).val(data.response.data);
+            $('#item_url_' + subject_curr_num + '_' + n).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url' + n).val('');
+            $('#item_url_' + subject_curr_num + '_' + n).val('');
         });
     }
-
 
     @if(!isset($survey))
         appendFile();
@@ -528,12 +543,10 @@
 
     // 题目的追加
     var j = $('.tab_subjects').length;
-    //    var sub = $('.tab_subjects').length; //use subject
 
     function appendSubject() {
 
-        var sub = $('.tab_subjects_item').length; //use subject
-
+        var subject_length = $('.tab_subjects_item').length;
         var n = j + 1;
         j++;
 
@@ -588,16 +601,16 @@
             '<div class="form-group"><div class="col-sm-12">' +
             '<textarea name="summary' + n + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + (sub + 1) + '[]" id="item_url' + (sub + 1) + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + (subject_length + 1) + '[]" id="item_url_' + (subject_length + 1) + '_' + (n) + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input id="item_file' + (sub + 1) + '_' + (n - 1) + '"  name="item_file' + (sub + 1) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
+            '<input id="item_file' + (subject_length + 1) + '_' + (n) + '"  name="item_file' + (subject_length + 1) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
 
         $(".subject").append(html); //追加标签
 
         $(".subject_content").append(subject_content);       //追加内容
 
-        var this_url = $('#item_url' + (n)).val();
+        var this_url = $('#item_url_' + (subject_length + 1) + '_' + (n)).val();
         var this_url_subject = $('#item_url_subject' + (n)).val();
 
         var image_items = [];
@@ -611,7 +624,7 @@
             image_items_subject = ['<img height="200" src="' + this_url_subject + '">'];
         }
 
-        $('#item_file' + (sub + 1) + '_' + (n - 1)).fileinput({
+        $('#item_file' + (subject_length + 1) + '_' + (n)).fileinput({
             language: 'zh',
             uploadExtraData: {_token: '{{ csrf_token() }}'},
             allowedFileExtensions: ['jpg', 'gif', 'png'],
@@ -626,9 +639,9 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url' + (sub + 1)).val(data.response.data);
+            $('#item_url_' + (subject_length + 1) + '_' + (n)).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url' + (sub + 1)).val('');
+            $('#item_url_' + (subject_length + 1) + '_' + (n)).val('');
         });
 
         $('#item_file_subject' + (n)).fileinput({
@@ -652,25 +665,28 @@
         });
     }
 
-
-    //    $('.submit').click(function () {
-    //        var ret = true;
-    //        $('.file').each(function (k, obj) {
-    //            var files = $(this).fileinput('getFileStack');
-    //
-    //            if (files.length > 0) {
-    //                return ret = toast('warning', '请先上传文件!');
-    //            }
-    //        });
-    //        return ret;
-    //    });
-
     $('#tabContents').delegate('.files_del', 'click', function () {
-        var cur_num = $(".file1").length;
-        if (cur_num < 3) {
-            return toast('warning', '题目和题目选项最少有一个');
+
+        var subject_curr = $('.tab_subjects_item.active').val();
+
+                @if(isset($survey))
+        var subject_curr_num = subject_curr;
+        @else
+        if (subject_curr == 0) {
+            var subject_curr_num = $('.tab_subjects_item').length;
         } else {
-            $(this).parents('div.file1').remove();
+            var subject_curr_num = subject_curr;
         }
-    })
+        @endif
+
+        if ($('.tab_subjects_item').hasClass('active')) {
+            var cur_num = $(".edit_file" + subject_curr_num + '>' + ".file1").length;
+            if (cur_num <= 2) {
+                return toast('warning', '题目和题目选项最少有一个');
+            } else {
+                $(this).parents('div.edit_file' + subject_curr_num + '>' + '.file1').remove();
+            }
+        }
+    });
+
 </script>
