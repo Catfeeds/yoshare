@@ -18,10 +18,11 @@
                         <div class="box-body">
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                            @include('admin.surveys.toolbar')
                             @include('admin.layouts.modal', ['id' => 'modal_count'])
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
+                            @include('admin.surveys.toolbar')
                             @include('admin.surveys.query')
+
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>
                                 <tr>
@@ -252,7 +253,6 @@
                     }
                 });
             },
-
             'click .push': function (e, value, row, index) {
                 $('#push_id').val(row.id);
                 $('#push_title').val(row.title);

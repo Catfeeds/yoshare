@@ -179,8 +179,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /**
      * 问卷管理
      */
-    Route::get('survey/items/table/{survey_id}', 'SurveyItemController@table');
-    Route::resource('survey/items', 'SurveyItemController');
+    Route::get('surveys/items/table/{survey_id}', 'SurveyItemController@table');
+    Route::resource('surveys/items', 'SurveyItemController');
 
     Route::get('surveys/table', 'SurveyController@table');
     Route::post('surveys/{id}/top', 'SurveyController@top');

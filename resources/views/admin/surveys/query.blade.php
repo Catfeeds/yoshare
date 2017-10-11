@@ -1,4 +1,4 @@
-<div class="modal fade common" id="modal_query" tabindex="-1" role="dialog">
+<div class="modal fade common1" id="modal_query" tabindex="-1" role="dialog">
     <div class="modal-dialog" style="width:640px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -32,18 +32,15 @@
                                         <label for="start_date" class="control-label col-sm-2">起始日期:</label>
                                         <div class="col-sm-4">
                                             <div class="input-group date" id="start_date">
-                                                <input class="form-control" name="start_date" type="text"
-                                                       id="start_date">
-                                                <span class="input-group-addon"> <span
-                                                            class="fa fa-calendar"></span> </span>
+                                                <input class="form-control" name="start_date" type="text" id="start_date">
+                                                <span class="input-group-addon"> <span class="fa fa-calendar"></span> </span>
                                             </div>
                                         </div>
                                         <label for="end_date" class="control-label col-sm-2">截止日期:</label>
                                         <div class="col-sm-4">
                                             <div class="input-group date" id="end_date">
                                                 <input class="form-control" name="end_date" type="text" id="end_date">
-                                                <span class="input-group-addon"> <span
-                                                            class="fa fa-calendar"></span> </span>
+                                                <span class="input-group-addon"> <span class="fa fa-calendar"></span> </span>
                                             </div>
                                         </div>
                                     </div>
