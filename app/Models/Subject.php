@@ -8,7 +8,7 @@ class Subject extends Item
 
     public function items()
     {
-        return $this->morphMany(Item::class, 'refer');
+        return $this->morphMany(SurveyItem::class, 'refer');
     }
 
 }
