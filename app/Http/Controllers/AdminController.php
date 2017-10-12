@@ -42,7 +42,7 @@ class AdminController extends BaseController
         $i = 0;
         foreach ($pages as $page) {
             $page->percent = round($page->clicks / max(1, $sum) * 100, 2) . '%';
-            $page->badge = $badges[min($i++, count($badges))];
+            $page->badge = $badges[min($i++, count($badges) - 1)];
         };
 
         //统计
