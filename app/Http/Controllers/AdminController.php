@@ -61,7 +61,9 @@ class AdminController extends BaseController
      */
     public function browsers()
     {
-        $logs = UvLog::select(DB::raw('browser as name'), DB::raw('count(*) as value'))
+        $logs = UvLog::selectRaw('browser as name, count(*) as value')
+            ->where('created_at', '>=', Carbon::now()->toDateString())
+            ->where('created_at', '<', Carbon::now()->addDay()->toDateString())
             ->groupBy('browser')
             ->get();
 
