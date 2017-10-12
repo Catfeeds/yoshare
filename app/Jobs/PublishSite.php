@@ -79,8 +79,7 @@ class PublishSite implements ShouldQueue
 
                     //生成列表页
                     $html = $controller->lists($domain)->__toString();
-                    //TODO 临时
-                    $html = str_replace('localhost', $domain->site->domain, $html);
+                    $html = str_replace('://localhost', '://' . $domain->site->domain, $html);
                     $file_html = "$path/index.html";
                     file_put_contents($file_html, $html);
 

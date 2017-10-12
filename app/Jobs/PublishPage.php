@@ -65,8 +65,7 @@ class PublishPage implements ShouldQueue
             $controller = new $class();
             $domain = new Domain($site->domain, $theme);
             $html = $controller->show($domain, $id)->__toString();
-            //TODO 临时
-            $html = str_replace('localhost', $domain->site->domain, $html);
+            $html = str_replace('://localhost', '://' . $domain->site->domain, $html);
 
             $file_html = "$path/detail-$id.html";
             file_put_contents($file_html, $html);

@@ -19,7 +19,7 @@ require(
 
         var option = {
             timeline: {
-                data: lineDate,
+                data: lineDates,
                 label: {
                     formatter: function (s) {
                         return s.slice(0, 10);
@@ -28,128 +28,7 @@ require(
                 autoPlay: true,
                 playInterval: 1000
             },
-            options: [
-                {
-                    tooltip: {'trigger': 'axis'},
-                    legend: {
-                        x: 'center',
-                        'data': ['PV', 'UV', 'IP', 'RM'],
-                        'selected': {
-                            'PV': true,
-                            'UV': true,
-                            'IP': false,
-                            'RM': false
-                        }
-                    },
-                    calculable: true,
-                    grid: {'y': 30, 'y2': 100},
-                    xAxis: [{
-                        'type': 'category',
-                        'axisLabel': {'interval': 0},
-                        'data': lineHour
-                    }],
-                    yAxis: [
-                        {
-                            'type': 'value',
-                            'max': 53500
-                        },
-                        {
-                            'type': 'value',
-                        }
-                    ],
-                    series: [
-                        {
-                            'name': 'PV',
-                            'type': 'bar',
-                            'data': pvData[0]
-                        },
-                        {
-                            'name': 'UV', 'yAxisIndex': 1, 'type': 'bar',
-                            'data': dataMap.dataFinancial['2002']
-                        },
-                        {
-                            'name': 'RM', 'yAxisIndex': 1, 'type': 'bar',
-                            'data': dataMap.dataEstate['2002']
-                        },
-                        {
-                            'name': 'IP', 'yAxisIndex': 1, 'type': 'bar',
-                            'data': dataMap.dataPI['2002']
-                        },
-                    ]
-                },
-                {
-                    series: [
-                        {'data': pvData[1]},
-                        {'data': dataMap.dataFinancial['2003']},
-                        {'data': dataMap.dataEstate['2003']},
-                        {'data': dataMap.dataPI['2003']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2004']},
-                        {'data': dataMap.dataFinancial['2004']},
-                        {'data': dataMap.dataEstate['2004']},
-                        {'data': dataMap.dataPI['2004']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2005']},
-                        {'data': dataMap.dataFinancial['2005']},
-                        {'data': dataMap.dataEstate['2005']},
-                        {'data': dataMap.dataPI['2005']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2006']},
-                        {'data': dataMap.dataFinancial['2006']},
-                        {'data': dataMap.dataEstate['2006']},
-                        {'data': dataMap.dataPI['2006']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2007']},
-                        {'data': dataMap.dataFinancial['2007']},
-                        {'data': dataMap.dataEstate['2007']},
-                        {'data': dataMap.dataPI['2007']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2008']},
-                        {'data': dataMap.dataFinancial['2008']},
-                        {'data': dataMap.dataEstate['2008']},
-                        {'data': dataMap.dataPI['2008']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2009']},
-                        {'data': dataMap.dataFinancial['2009']},
-                        {'data': dataMap.dataEstate['2009']},
-                        {'data': dataMap.dataPI['2009']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2010']},
-                        {'data': dataMap.dataFinancial['2010']},
-                        {'data': dataMap.dataEstate['2010']},
-                        {'data': dataMap.dataPI['2010']},
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2011']},
-                        {'data': dataMap.dataFinancial['2011']},
-                        {'data': dataMap.dataEstate['2011']},
-                        {'data': dataMap.dataPI['2011']},
-                    ]
-                }
-            ]
+            options: lineOptions
         };
 
         // 加载数据
@@ -159,7 +38,7 @@ require(
 
         var option = {
             timeline: {
-                data: mapDate,
+                data: mapDates,
                 label: {
                     formatter: function (s) {
                         return s.slice(0, 10);
@@ -168,71 +47,7 @@ require(
                 autoPlay: true,
                 playInterval: 1000
             },
-            options: [
-                {
-                    tooltip: {'trigger': 'item'},
-                    dataRange: {
-                        min: 0,
-                        max: 53000,
-                        text: ['高', '低'],
-                        calculable: true,
-                        x: 'left',
-                        color: ['orangered', 'yellow', 'lightskyblue']
-                    },
-                    series: [
-                        {
-                            'name': 'GDP',
-                            'type': 'map',
-                            'data': mapData['2017-10-01']
-                        }
-                    ]
-                },
-                {
-                    series: [
-                        {'data': mapData['2017-10-02']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2004']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2005']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2006']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2007']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2008']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2009']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2010']}
-                    ]
-                },
-                {
-                    series: [
-                        {'data': dataMap.dataGDP['2011']}
-                    ]
-                }
-            ]
+            options: mapOptions
         };
 
         // 加载数据

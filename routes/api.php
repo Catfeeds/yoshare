@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
 
-    $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:600'], function ($api) {
+    $api->group(['namespace' => 'App\Api\Controllers'], function ($api) {
         $api->get('apps/info', 'AppController@info');
         $api->get('options', 'OptionController@lists');
         $api->post('files/upload', 'FileController@upload');

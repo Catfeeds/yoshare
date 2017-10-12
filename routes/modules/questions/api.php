@@ -6,7 +6,7 @@
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
 
-    $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:600'], function ($api) {
+    $api->group(['namespace' => 'App\Api\Controllers'], function ($api) {
         $api->get('questions', 'QuestionController@lists');
         $api->get('questions/search', 'QuestionController@search');
         $api->get('questions/info', 'QuestionController@info');
