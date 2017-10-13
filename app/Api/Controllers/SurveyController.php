@@ -2,53 +2,53 @@
 
 namespace App\Api\Controllers;
 
+use App\Models\Subject;
 use App\Models\Survey;
 use App\Models\SurveyData;
-use App\Models\SurveyItem;
-use App\Models\Subject;
 use Carbon\Carbon;
 use Exception;
 use Request;
 
 class SurveyController extends BaseController
 {
-    public function transform($survey)
+    //TODO
+    public function transform($survey, $subjects)
     {
-        return [
-            'id' => $survey->id,
-            'type' => $survey->type,
-            'title' => $survey->title,
-            'description' => $survey->description,
-            'multiple' => !empty($survey->multiple) ? $survey->multiple : 0,
-            'image_url' => get_image_url($survey->image_url),
-            'amount' => !empty($survey->amount) ? $survey->amount : 0,
-            'is_top' => !empty($survey->is_top) ? $survey->is_top : 0,
-            'begin_date' => $survey->begin_date,
-            'end_date' => $survey->end_date,
-            'state' => $survey->state,
-            'likes' => $survey->likes,
-            'items' => $survey->items->transform(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'image_url' => get_image_url($item->image_url),
-                    'description' => $item->description,
-                    'amount' => $item->amount,
-                    'percent' => $item->percent,
-                ];
-            }),
-            'sub_title' => $survey->titles->transform(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                ];
-            }),
-        ];
+        foreach ($subjects as $k => $subject) {
+            $amount = $subject->items->sum('count');
+
+            return [
+                'id' => $survey->id,
+                'type' => $survey->type,
+                'title' => $survey->title,
+                'link' => $survey->link,
+                'description' => $survey->description,
+                'multiple' => !empty($survey->multiple) ? $survey->multiple : 0,
+                'image_url' => get_image_url($survey->image_url),
+                'amount' => !empty($survey->amount) ? $survey->amount : 0,
+                'top' => !empty($survey->top) ? $survey->top : 0,
+                'begin_date' => $survey->begin_date,
+                'end_date' => $survey->end_date,
+                'state' => $survey->state,
+
+                'items' => $subject->items->transform(function ($item) use ($amount) {
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'url' => get_image_url($item->url),
+                        'summary' => $item->summary,
+                        'count' => $item->count,
+                        'percent' => $amount ? round(($item->count / $amount) * 100) . '%' : 0,
+                        'sort' => $item->sort,
+                    ];
+                }),
+            ];
+        }
     }
 
     /**
      * @SWG\Get(
-     *   path="/surveys/list",
+     *   path="/surveys",
      *   summary="获取问卷列表",
      *   tags={"/surveys 问卷"},
      *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
@@ -71,67 +71,20 @@ class SurveyController extends BaseController
         $page = Request::get('page') ? Request::get('page') : 1;
 
 
-        $surveys = Survey::with('items')
+        $surveys = Survey::with('subjects')
             ->where('site_id', $site_id)
-            ->where('state', Survey::STATE_NORMAL)
-            ->orderBy('is_top', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->skip(($page - 1) * $page_size)
-            ->limit($page_size)
-            ->get();
-
-        $surveys->transform(function ($survey) {
-
-            return $this->transform($survey);
-        });
-
-
-        return $this->response([
-            'status_code' => 200,
-            'message' => 'success',
-            'data' => $surveys,
-        ]);
-    }
-
-    /**
-     * @SWG\Get(
-     *   path="/surveys/slides",
-     *   summary="获取问卷轮播图",
-     *   tags={"/surveys 问卷"},
-     *   @SWG\Parameter(name="site_id", in="query", required=true, description="站点ID", type="string"),
-     *   @SWG\Parameter(name="page_size", in="query", required=true, description="分页大小", type="integer"),
-     *   @SWG\Parameter(name="page", in="query", required=true, description="分页序号", type="integer"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="查询成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到路由"
-     *   )
-     * )
-     */
-    public function slides()
-    {
-        $site_id = Request::get('site_id') ?: 1;
-        $page_size = Request::get('page_size') ? min(100, Request::get('page_size')) : 20;
-        $page = Request::get('page') ? Request::get('page') : 1;
-
-        $surveys = Survey::with('items')
-            ->where('site_id', $site_id)
-            ->where('is_top', Survey::TOP_TRUE)
-            ->where('state', Survey::STATE_NORMAL)
-            ->orderBy('is_top', 'desc')
+            ->where('state', Survey::STATE_PUBLISHED)
+            ->where('end_date', '>=', Carbon::now())
             ->orderBy('sort', 'desc')
-            ->orderBy('created_at', 'desc')
             ->skip(($page - 1) * $page_size)
             ->limit($page_size)
             ->get();
 
         $surveys->transform(function ($survey) {
 
-            return $this->transform($survey);
+            return $this->transform($survey, $survey->subjects);
         });
+
 
         return $this->response([
             'status_code' => 200,
@@ -188,8 +141,9 @@ class SurveyController extends BaseController
 
         //判断是否已有投票记录
         $data = SurveyData::where('survey_id', $survey_id)
-            ->where('member_name', $member->name)
+            ->where('member_id', $member->id)
             ->first();
+
         if (!empty($data)) {
             return $this->responseError('您已经参与过调查！');
         }
@@ -200,17 +154,24 @@ class SurveyController extends BaseController
         $data->survey_id = $survey_id;
         $data->survey_item_ids = $item_ids;
         $data->avatar_url = $member->avatar_url;
-        $data->member_name = $member->name;
-        $data->nick_name = $member->nick_name;
+        $data->member_id = $member->id;
         $data->ip = Request::getClientIp();
         $data->save();
 
 
         //增加选项调查数
-        SurveyItem::whereIn('id', explode(',', $item_ids))->increment('amount');
+//        SurveyItem::whereIn('id', explode(',', $item_ids))->increment('amount');
+
+        $subjects = $survey->subjects;
+        foreach ($subjects as $subject) {
+            $subject->items()->whereIn('id', explode(',', $item_ids))->get()->each(function ($item) {
+                $item->count += 1;
+                $item->save();
+            });
+        }
 
         //增加调查数
-        Survey::find($survey_id)->increment('amount');
+        $survey->increment('amount');
 
         return $this->responseSuccess();
     }
@@ -263,67 +224,4 @@ class SurveyController extends BaseController
             return view("mobile.$site_id.votes.share", compact('survey', 'amount', 'sub_title_num', 'survey_item_ids_num'));
         }
     }
-
-    /**
-     * @SWG\Get(
-     *   path="/surveys/likes",
-     *   summary="点赞",
-     *   tags={"/surveys 问卷"},
-     *   @SWG\Parameter(name="survey_id", in="query", required=true, description="问卷ID", type="integer"),
-     *   @SWG\Parameter(name="type", in="query", required=true, description="点赞类型(0:取消点赞,1:点赞)", type="integer"),
-     *   @SWG\Parameter(name="token", in="query", required=true, description="token", type="string"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="查询成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到路由"
-     *   )
-     * )
-     */
-    public function likes()
-    {
-        $survey_id = Request::get('survey_id');
-
-        $type = Request::get('type');
-
-        $vote = Survey::find($survey_id);
-
-        if (is_null($vote)) {
-            return $this->responseError('问卷id不存在!');
-        }
-        try {
-            $member = \JWTAuth::parseToken()->authenticate();
-        } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
-        }
-
-        switch ($type) {
-            case Survey::STATE_DELETED:
-                Survey::find($survey_id)->decrement('likes');
-                $vote = Survey::find($survey_id);
-                $likes = $vote->likes;
-                if ($likes <= 0) {
-                    $likes = 0;
-                    $vote->likes = $likes;
-                    $vote->save();
-                }
-
-                break;
-
-            case Survey::STATE_NORMAL:
-                Survey::find($survey_id)->increment('likes');
-                $vote = Survey::find($survey_id);
-                $likes = $vote->likes;
-                break;
-        }
-
-        return $this->response([
-            'status_code' => 200,
-            'message' => 'success',
-            'likes' => $likes
-        ]);
-    }
-
 }

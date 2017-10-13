@@ -86,6 +86,13 @@ $api->version('v1', function ($api) {
          * 消息
          */
         $api->get('messages/owns', 'MessageController@owns');
+
+        /**
+         * 问卷
+         */
+        $api->get('surveys', 'SurveyController@lists');
+        $api->post('surveys/create', 'SurveyController@create');
+        $api->get('surveys/detail', 'SurveyController@detail');
     });
 
     $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:60000'], function ($api) {

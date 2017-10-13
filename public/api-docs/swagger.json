@@ -1860,51 +1860,12 @@
                 }
             }
         },
-        "/surveys/list": {
+        "/surveys": {
             "get": {
                 "tags": [
                     "/surveys \u95ee\u5377"
                 ],
                 "summary": "\u83b7\u53d6\u95ee\u5377\u5217\u8868",
-                "parameters": [
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "page_size",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5927\u5c0f",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5e8f\u53f7",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
-                    }
-                }
-            }
-        },
-        "/surveys/slides": {
-            "get": {
-                "tags": [
-                    "/surveys \u95ee\u5377"
-                ],
-                "summary": "\u83b7\u53d6\u95ee\u5377\u8f6e\u64ad\u56fe",
                 "parameters": [
                     {
                         "name": "site_id",
@@ -2000,45 +1961,6 @@
                         "description": "\u7ad9\u70b9ID",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
-                    }
-                }
-            }
-        },
-        "/surveys/likes": {
-            "get": {
-                "tags": [
-                    "/surveys \u95ee\u5377"
-                ],
-                "summary": "\u70b9\u8d5e",
-                "parameters": [
-                    {
-                        "name": "survey_id",
-                        "in": "query",
-                        "description": "\u95ee\u5377ID",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "\u70b9\u8d5e\u7c7b\u578b(0:\u53d6\u6d88\u70b9\u8d5e,1:\u70b9\u8d5e)",
-                        "required": true,
-                        "type": "integer"
                     },
                     {
                         "name": "token",
