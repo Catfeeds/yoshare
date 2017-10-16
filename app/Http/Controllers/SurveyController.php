@@ -10,7 +10,6 @@ use App\Models\Survey;
 use Auth;
 use Carbon\Carbon;
 use Gate;
-use Request;
 
 class SurveyController extends Controller
 {
@@ -29,7 +28,8 @@ class SurveyController extends Controller
         if (Gate::denies('@survey')) {
             $this->middleware('deny403');
         }
-        return view('admin.surveys.index');
+        $module = Module::transform($this->module->id);
+        return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function destroy($id)
@@ -52,7 +52,8 @@ class SurveyController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.surveys.create');
+        $module = Module::transform($this->module->id);
+        return view($this->view_path . '.create', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
     public function store(SurveyRequest $request)
@@ -68,6 +69,10 @@ class SurveyController extends Controller
         //判断有无item_subject,存入题目信息
         if (array_key_exists('item_subject', $data)) {
             foreach ($subject as $key => $item_subject) {
+                //存在题目存选项
+                if ($item_subject == '') {
+                    continue;
+                }
                 $data1 = [
                     'type' => Item::TYPE_IMAGE,
                     'title' => $item_subject,
@@ -98,14 +103,17 @@ class SurveyController extends Controller
 
     public function show($id)
     {
-        $site_id = Auth::user()->site_id;
-
         $survey = Survey::with('subjects')->find($id);
 
-        return view("mobile.$site_id.admin.surveys.share", compact('survey'));
+        $site = $survey->site;
+
+        $theme = $site->mobile_theme->name;
+
+        return view("themes.$theme.surveys.share", compact('survey', 'site'));
+
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         if (Gate::denies('@survey-edit')) {
             \Session::flash('flash_warning', '无此操作权限');
@@ -114,7 +122,10 @@ class SurveyController extends Controller
         // 一个问卷对应多个题目,一个题目对应多个选项
         $survey = Survey::with('subjects')->find($id);
 
-        return view('admin.surveys.edit', compact('survey'));
+        $module = Module::transform($this->module->id);
+
+        return view($this->view_path . '.edit', ['module' => $module, 'survey' => $survey]);
+
     }
 
     public function update(SurveyRequest $request, $id)

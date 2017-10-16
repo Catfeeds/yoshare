@@ -18,7 +18,6 @@
                 <div class="col-xs-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            @include('admin.layouts.flash')
                             @include('admin.errors.list')
                             {!! Form::open(['url' => '/admin/surveys', 'class' => 'form-horizontal']) !!}
 

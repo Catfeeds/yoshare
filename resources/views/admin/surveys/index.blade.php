@@ -22,6 +22,7 @@
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
                             @include('admin.surveys.toolbar')
                             @include('admin.surveys.query')
+                            @include('admin.contents.push')
 
                             <table id="table" data-toggle="table" style="word-break:break-all;">
                                 <thead>

@@ -18,7 +18,6 @@
                     <div class="col-xs-12">
                         <div class="box box-info">
                             <div class="box-body">
-                                @include('admin.layouts.flash')
                                 @include('admin.errors.list')
 
                                 {!! Form::model($survey,['method' => 'PUT', 'action' => ['\App\Http\Controllers\SurveyController@update', $survey->id],
