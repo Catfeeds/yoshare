@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Http\Requests\RoleRequest;
 use App\Models\Permission;
 use App\Models\PermissionRole;
@@ -143,7 +142,7 @@ class RoleController extends Controller
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $roles;
 
         return Response::json($ds);

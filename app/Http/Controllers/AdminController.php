@@ -99,7 +99,12 @@ class AdminController extends BaseController
         $logs = DB::select('select date_format(created_at, \'%Y-%m-%d\') as date, province as name, sum(count) as value from cms_ip_logs where date_sub(curdate(), interval 7 day) <= date(`created_at`) group by province,date_format(created_at, \'%Y-%m-%d\')');
 
         foreach ($logs as $log) {
-            $data[$log->date][] = ['name' => $log->name, 'value' => $log->value];
+            for ($i = 0; $i < count($areas); $i++) {
+                if ($areas[$i] == $log->name) {
+                    $data[$log->date][$i] = ['name' => $log->name, 'value' => $log->value];
+                    break;
+                }
+            }
             $max = max($log->value, $max);
         }
 

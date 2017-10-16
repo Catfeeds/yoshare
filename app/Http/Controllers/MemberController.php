@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberRequest;
-use App\Models\DataSource;
 use App\Models\Member;
 use Exception;
 use Gate;
@@ -160,7 +159,7 @@ class MemberController extends Controller
                 'updated_at' => empty($member->updated_at) ? '' : $member->updated_at->toDateTimeString(),
             ];
         });
-        $ds = New DataSource();
+        $ds = new \stdClass();
         $ds->total = $total;
         $ds->rows = $members;
 

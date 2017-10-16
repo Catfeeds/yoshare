@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace Modules\__module_name__\Api;
 
-use App\Models\__model__;
+use App\Api\Controllers\BaseController;
+use Modules\__module_name__\Models\__model__;
 use Request;
 
 class __controller__ extends BaseController
@@ -176,11 +177,13 @@ class __controller__ extends BaseController
         $key = "__plural__-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
-            $__singular__ = __model__::findOrFail($id);
+            $__singular__ = __model__::where('id', $id)
+                ->where('state', __model__::STATE_PUBLISHED)
+                ->first();
             $site = $__singular__->site;
             $theme = $__singular__->site->mobile_theme->name;
             $__singular__->content = replace_content_url($__singular__->content);
-            return view("themes.$theme.__module_path__.detail", compact('site', '__singular__'))->__toString();
+            return view("$theme.__module_path__.detail", compact('site', '__singular__'))->__toString();
         });
     }
 
@@ -209,12 +212,14 @@ class __controller__ extends BaseController
         $key = "__plural__-detail-$id";
 
         return cache_remember($key, 1, function () use ($id) {
-            $__singular__ = __model__::findOrFail($id);
+            $__singular__ = __model__::where('id', $id)
+                ->where('state', __model__::STATE_PUBLISHED)
+                ->first();
             $site = $__singular__->site;
             $theme = $__singular__->site->mobile_theme->name;
             $__singular__->content = replace_content_url($__singular__->content);
             $share = 1;
-            return view("themes.$theme.__module_path__.detail", compact('site', '__singular__', 'share'))->__toString();
+            return view("$theme.__module_path__.detail", compact('site', '__singular__', 'share'))->__toString();
         });
     }
 }

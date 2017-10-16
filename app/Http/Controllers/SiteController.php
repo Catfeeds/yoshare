@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SiteRequest;
 use App\Jobs\PublishSite;
-use App\Models\DataSource;
 use App\Models\Site;
 use App\Models\Theme;
 use Auth;
@@ -104,7 +103,7 @@ class SiteController extends BaseController
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $sites;
 
         return Response::json($ds);

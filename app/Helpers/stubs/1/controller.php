@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\__module_name__\Web;
 
 use App\Events\UserLogEvent;
+use App\Http\Controllers\BaseController;
 use App\Jobs\PublishPage;
-use App\Models\__module_name__;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
@@ -12,16 +12,17 @@ use App\Models\UserLog;
 use Auth;
 use Carbon\Carbon;
 use Gate;
+use Modules\__module_name__\Models\__model__;
 use Request;
 use Response;
 
 /**
  * __module_title__
  */
-class __controller__ extends Controller
+class __controller__ extends BaseController
 {
     protected $base_url = '/admin/__module_path__';
-    protected $view_path = 'admin.__module_path__';
+    protected $view_path = '__singular__.views';
     protected $module;
 
     public function __construct()
@@ -35,13 +36,13 @@ class __controller__ extends Controller
             return abort(501);
         }
 
-        $__singular__ = __module_name__::find($id);
+        $__singular__ = __model__::find($id);
         if (empty($__singular__)) {
             return abort(404);
         }
         $__singular__->incrementClick();
 
-        return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
+        return view($domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }
 
     public function slug(Domain $domain, $slug)
@@ -50,14 +51,14 @@ class __controller__ extends Controller
             return abort(501);
         }
 
-        $__singular__ = __module_name__::where('slug', $slug)
+        $__singular__ = __model__::where('slug', $slug)
             ->first();
         if (empty($__singular__)) {
             return abort(404);
         }
         $__singular__->incrementClick();
 
-        return view('themes.' . $domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
+        return view($domain->theme->name . '.__module_path__.detail', ['site' => $domain->site, '__singular__' => $__singular__]);
     }
 
     public function lists(Domain $domain)
@@ -66,11 +67,11 @@ class __controller__ extends Controller
             return abort(501);
         }
 
-        $__plural__ = __module_name__::where('state', __module_name__::STATE_PUBLISHED)
+        $__plural__ = __model__::where('state', __model__::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $domain->theme->name . '.__module_path__.index', ['site' => $domain->site, 'module' => $this->module, '__plural__' => $__plural__]);
+        return view($domain->theme->name . '.__module_path__.index', ['site' => $domain->site, 'module' => $this->module, '__plural__' => $__plural__]);
     }
 
     public function index()
@@ -105,7 +106,7 @@ class __controller__ extends Controller
 
         $module = Module::transform($this->module->id);
 
-        $__singular__ = call_user_func([$this->module->model_class, 'find'], $id);
+        $__singular__ = __model__::find($id);
         $__singular__->images = null;
         $__singular__->videos = null;
         $__singular__->audios = null;
@@ -125,7 +126,7 @@ class __controller__ extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $__singular__ = __module_name__::stores($input);
+        $__singular__ = __model__::stores($input);
 
         event(new UserLogEvent(UserLog::ACTION_CREATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
@@ -142,7 +143,7 @@ class __controller__ extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $__singular__ = __module_name__::updates($id, $input);
+        $__singular__ = __model__::updates($id, $input);
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '__module_title__', $__singular__->id, $this->module->model_class));
 
@@ -158,7 +159,7 @@ class __controller__ extends Controller
 
     public function save($id)
     {
-        $__singular__ = __module_name__::find($id);
+        $__singular__ = __model__::find($id);
 
         if (empty($__singular__)) {
             return;
@@ -169,12 +170,12 @@ class __controller__ extends Controller
 
     public function sort()
     {
-        return __module_name__::sort();
+        return __model__::sort();
     }
 
     public function top($id)
     {
-        $__singular__ = __module_name__::find($id);
+        $__singular__ = __model__::find($id);
         $__singular__->top = !$__singular__->top;
         $__singular__->save();
     }
@@ -182,7 +183,7 @@ class __controller__ extends Controller
     public function tag($id)
     {
         $tag = request('tag');
-        $__singular__ = __module_name__::find($id);
+        $__singular__ = __model__::find($id);
         if ($__singular__->tags()->where('name', $tag)->exists()) {
             $__singular__->tags()->where('name', $tag)->delete();
         } else {
@@ -197,10 +198,10 @@ class __controller__ extends Controller
     public function state()
     {
         $input = request()->all();
-        __module_name__::state($input);
+        __model__::state($input);
 
         $ids = $input['ids'];
-        $stateName = __module_name__::getStateName($input['state']);
+        $stateName = __model__::getStateName($input['state']);
 
         //记录日志
         foreach ($ids as $id) {
@@ -209,7 +210,7 @@ class __controller__ extends Controller
 
         //发布页面
         $site = auth()->user()->site;
-        if ($input['state'] == __module_name__::STATE_PUBLISHED) {
+        if ($input['state'] == __model__::STATE_PUBLISHED) {
             foreach ($ids as $id) {
                 $this->dispatch(new PublishPage($site, $this->module, $id));
             }
@@ -218,7 +219,7 @@ class __controller__ extends Controller
 
     public function table()
     {
-        return __module_name__::table();
+        return __model__::table();
     }
 
     public function categories()

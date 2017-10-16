@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DictionaryRequest;
-use App\Models\DataSource;
 use App\Models\Dictionary;
 use Gate;
 use Request;
@@ -119,7 +118,7 @@ class DictionaryController extends Controller
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $dictionaries;
 
         return Response::json($ds);

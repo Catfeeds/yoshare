@@ -38,7 +38,7 @@ class SwaggerCommand extends Command
      */
     public function handle()
     {
-        $paths = [base_path('app/Api')];
+        $paths = [base_path('app/Api'), base_path('modules')];
 
         $options = array(
             'output' => base_path('public/api-docs/swagger.json'),

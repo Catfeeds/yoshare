@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use App\Models\DataSource;
 use App\Models\Role;
-use App\Models\RoleUser;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\UserLog;
-use App\Models\UserSite;
 use Auth;
 use DB;
 use Gate;
@@ -172,7 +169,7 @@ class UserController extends Controller
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $users;
 
         return Response::json($ds);
@@ -223,7 +220,7 @@ class UserController extends Controller
                 'updated_at' => $log->updated_at->toDateTimeString(),
             ];
         });
-        $ds = New DataSource();
+        $ds = new \stdClass();
         $ds->total = $total;
         $ds->rows = $logs;
 

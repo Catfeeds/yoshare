@@ -149,7 +149,7 @@ class Survey extends BaseModule
             return $attributes;
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->rows = $surveys;
         $ds->total = $count;
         return Response::json($ds);

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Models\Option;
 use Gate;
 use Request;
@@ -60,7 +59,7 @@ class OptionController extends Controller
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $options;
 
         return Response::json($ds);

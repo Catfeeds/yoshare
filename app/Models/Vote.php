@@ -132,7 +132,7 @@ class Vote extends BaseModule
             return $attributes;
         });
 
-        $ds = New DataSource();
+        $ds = new \stdClass();
         $ds->rows = $votes;
         $ds->total = $total;
 

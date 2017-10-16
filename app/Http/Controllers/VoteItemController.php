@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Models\Vote;
 use App\Models\VoteItem;
 use Request;
@@ -43,7 +42,7 @@ class VoteItemController extends Controller
             ];
         });
 
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $items;
 
         return Response::json($ds);

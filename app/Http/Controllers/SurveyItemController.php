@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Models\Survey;
 use App\Models\SurveyItem;
 use Request;
@@ -54,7 +53,7 @@ class SurveyItemController extends Controller
                 $titles[] = $value;
             }
         }
-        $ds = new DataSource();
+        $ds = new \stdClass();
         $ds->data = $titles;
         return Response::json($ds);
     }

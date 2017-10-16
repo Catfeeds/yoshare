@@ -40,7 +40,7 @@
                                     <th data-field="refer_id" data-width="60" data-align="center" data-align="center">
                                         关联ID
                                     </th>
-                                    <th data-field="refer_type" data-width="90" data-align="center">关联类型</th>
+                                    <th data-field="refer_type" data-width="90">关联类型</th>
                                     <th data-field="title">标题</th>
                                     <th data-field="clicks" data-width="60" data-align="center">访问量</th>
                                     <th data-field="username" data-width="60" data-align="center">操作员</th>

@@ -68,173 +68,6 @@
                 }
             }
         },
-        "/articles": {
-            "get": {
-                "tags": [
-                    "/articles \u6587\u7ae0"
-                ],
-                "summary": "\u83b7\u53d6\u6587\u7ae0\u5217\u8868",
-                "parameters": [
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "category_id",
-                        "in": "query",
-                        "description": "\u680f\u76eeID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "page_size",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5927\u5c0f",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5e8f\u53f7",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/articles/search": {
-            "get": {
-                "tags": [
-                    "/articles \u6587\u7ae0"
-                ],
-                "summary": "\u641c\u7d22\u6587\u7ae0",
-                "parameters": [
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "title",
-                        "in": "query",
-                        "description": "\u641c\u7d22\u6807\u9898",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "page_size",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5927\u5c0f",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5e8f\u53f7",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/articles/info": {
-            "get": {
-                "tags": [
-                    "/articles \u6587\u7ae0"
-                ],
-                "summary": "\u83b7\u53d6\u6587\u7ae0\u4fe1\u606f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "\u6587\u7ae0ID",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/articles/detail": {
-            "get": {
-                "tags": [
-                    "/articles \u6587\u7ae0"
-                ],
-                "summary": "\u83b7\u53d6\u6587\u7ae0\u8be6\u60c5\u9875",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "\u6587\u7ae0ID",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/articles/share": {
-            "get": {
-                "tags": [
-                    "/articles \u6587\u7ae0"
-                ],
-                "summary": "\u83b7\u53d6\u6587\u7ae0\u5206\u4eab\u9875",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "\u6587\u7ae0ID",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
         "/categories/list": {
             "get": {
                 "tags": [
@@ -1373,6 +1206,413 @@
                 }
             }
         },
+        "/surveys": {
+            "get": {
+                "tags": [
+                    "/surveys \u95ee\u5377"
+                ],
+                "summary": "\u83b7\u53d6\u95ee\u5377\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
+                    }
+                }
+            }
+        },
+        "/surveys/create": {
+            "post": {
+                "tags": [
+                    "/surveys \u95ee\u5377"
+                ],
+                "summary": "\u63d0\u4ea4\u95ee\u5377",
+                "parameters": [
+                    {
+                        "name": "survey_id",
+                        "in": "query",
+                        "description": "\u8c03\u67e5ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "item_ids",
+                        "in": "query",
+                        "description": "\u9009\u9879ID",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u63d0\u4ea4\u95ee\u5377\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/surveys/detail": {
+            "get": {
+                "tags": [
+                    "/surveys \u95ee\u5377"
+                ],
+                "summary": "\u83b7\u53d6\u95ee\u5377\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "survey_id",
+                        "in": "query",
+                        "description": "\u95ee\u5377ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
+                    }
+                }
+            }
+        },
+        "/votes": {
+            "get": {
+                "tags": [
+                    "/votes \u6295\u7968"
+                ],
+                "summary": "\u83b7\u53d6\u6295\u7968\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
+                    }
+                }
+            }
+        },
+        "/votes/create": {
+            "post": {
+                "tags": [
+                    "/votes \u6295\u7968"
+                ],
+                "summary": "\u63d0\u4ea4\u6295\u7968",
+                "parameters": [
+                    {
+                        "name": "vote_id",
+                        "in": "query",
+                        "description": "\u6295\u7968ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "item_ids",
+                        "in": "query",
+                        "description": "\u9009\u9879ID",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u6295\u7968\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/votes/detail": {
+            "get": {
+                "tags": [
+                    "/votes \u6295\u7968"
+                ],
+                "summary": "\u83b7\u53d6\u6295\u7968\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u6295\u7968ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
+                    }
+                }
+            }
+        },
+        "/articles": {
+            "get": {
+                "tags": [
+                    "/articles \u6587\u7ae0"
+                ],
+                "summary": "\u83b7\u53d6\u6587\u7ae0\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "\u680f\u76eeID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/articles/search": {
+            "get": {
+                "tags": [
+                    "/articles \u6587\u7ae0"
+                ],
+                "summary": "\u641c\u7d22\u6587\u7ae0",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/articles/info": {
+            "get": {
+                "tags": [
+                    "/articles \u6587\u7ae0"
+                ],
+                "summary": "\u83b7\u53d6\u6587\u7ae0\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u6587\u7ae0ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/articles/detail": {
+            "get": {
+                "tags": [
+                    "/articles \u6587\u7ae0"
+                ],
+                "summary": "\u83b7\u53d6\u6587\u7ae0\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u6587\u7ae0ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/articles/share": {
+            "get": {
+                "tags": [
+                    "/articles \u6587\u7ae0"
+                ],
+                "summary": "\u83b7\u53d6\u6587\u7ae0\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u6587\u7ae0ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/pages": {
             "get": {
                 "tags": [
@@ -1856,246 +2096,6 @@
                     },
                     "404": {
                         "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/surveys": {
-            "get": {
-                "tags": [
-                    "/surveys \u95ee\u5377"
-                ],
-                "summary": "\u83b7\u53d6\u95ee\u5377\u5217\u8868",
-                "parameters": [
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "page_size",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5927\u5c0f",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5e8f\u53f7",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
-                    }
-                }
-            }
-        },
-        "/surveys/create": {
-            "post": {
-                "tags": [
-                    "/surveys \u95ee\u5377"
-                ],
-                "summary": "\u63d0\u4ea4\u95ee\u5377",
-                "parameters": [
-                    {
-                        "name": "survey_id",
-                        "in": "query",
-                        "description": "\u8c03\u67e5ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "item_ids",
-                        "in": "query",
-                        "description": "\u9009\u9879ID",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u63d0\u4ea4\u95ee\u5377\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/surveys/detail": {
-            "get": {
-                "tags": [
-                    "/surveys \u95ee\u5377"
-                ],
-                "summary": "\u83b7\u53d6\u95ee\u5377\u8be6\u60c5\u9875",
-                "parameters": [
-                    {
-                        "name": "survey_id",
-                        "in": "query",
-                        "description": "\u95ee\u5377ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
-                    }
-                }
-            }
-        },
-        "/votes": {
-            "get": {
-                "tags": [
-                    "/votes \u6295\u7968"
-                ],
-                "summary": "\u83b7\u53d6\u6295\u7968\u5217\u8868",
-                "parameters": [
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "page_size",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5927\u5c0f",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "\u5206\u9875\u5e8f\u53f7",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
-                    }
-                }
-            }
-        },
-        "/votes/create": {
-            "post": {
-                "tags": [
-                    "/votes \u6295\u7968"
-                ],
-                "summary": "\u63d0\u4ea4\u6295\u7968",
-                "parameters": [
-                    {
-                        "name": "vote_id",
-                        "in": "query",
-                        "description": "\u6295\u7968ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "item_ids",
-                        "in": "query",
-                        "description": "\u9009\u9879ID",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u6295\u7968\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230"
-                    }
-                }
-            }
-        },
-        "/votes/detail": {
-            "get": {
-                "tags": [
-                    "/votes \u6295\u7968"
-                ],
-                "summary": "\u83b7\u53d6\u6295\u7968\u8be6\u60c5\u9875",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "\u6295\u7968ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "site_id",
-                        "in": "query",
-                        "description": "\u7ad9\u70b9ID",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u67e5\u8be2\u6210\u529f"
-                    },
-                    "404": {
-                        "description": "\u6ca1\u6709\u627e\u5230\u8def\u7531"
                     }
                 }
             }

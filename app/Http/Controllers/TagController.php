@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataSource;
 use App\Models\Tag;
 use App\Models\User;
 use DB;
@@ -58,7 +57,7 @@ class TagController extends BaseController
                 'updated_at' => $log->updated_at->toDateTimeString(),
             ];
         });
-        $ds = New DataSource();
+        $ds = new \stdClass();
         $ds->total = $total;
         $ds->rows = $logs;
 
