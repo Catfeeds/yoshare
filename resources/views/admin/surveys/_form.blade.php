@@ -450,18 +450,23 @@
         $('#image_url').val('');
     });
 
-    var i = $(".subject_items").length;
-
     //add subject length
     function appendFile() {
         var subject_curr = $('.tab_subjects_item.active').val();
+
+        var i;
         @if(isset($survey))
+
         if (subject_curr == 0) {
             var subject_curr_num = $('.tab_subjects').length;
         } else {
             var subject_curr_num = subject_curr;
         }
-        @else
+        var i = $(".edit_file" + subject_curr + '>' + ".file1").length - 1;
+
+                @else
+
+        var i = $(".edit_file" + subject_curr + '>' + ".subject_items").length;
         if (subject_curr == 0) {
             var subject_curr_num = $('.tab_subjects').length;
             $('.tab_subjects_item.active').attr('value', subject_curr_num);
@@ -492,7 +497,7 @@
             '<div class="form-group"><div class="col-sm-12">' +
             '<textarea name="summary' + subject_curr_num + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + subject_curr_num + '[]" id="item_url_' + subject_curr_num + '_' + n + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + subject_curr_num + '[]" id="item_url' + subject_curr_num + '_' + n + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
             '<input id="item_file' + subject_curr_num + '_' + n + '" name="item_file' + subject_curr_num + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div>';
@@ -508,7 +513,7 @@
             }
         }
 
-        var this_url = $('#item_url_' + subject_curr_num + '_' + n).val();
+        var this_url = $('#item_url' + subject_curr_num + '_' + n).val();
         var image_items = [];
 
         if (this_url == null || this_url.length > 0) {
@@ -530,9 +535,9 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url_' + subject_curr_num + '_' + n).val(data.response.data);
+            $('#item_url' + subject_curr_num + '_' + n).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url_' + subject_curr_num + '_' + n).val('');
+            $('#item_url' + subject_curr_num + '_' + n).val('');
         });
     }
 
@@ -541,12 +546,13 @@
     @endif
 
 
-    // 题目的追加
-    var j = $('.tab_subjects').length;
-
     function appendSubject() {
 
-        var subject_length = $('.tab_subjects_item').length;
+        // 题目的追加
+        var j = $('.tab_subjects').length;
+
+        var subject_length = $('.tab_subjects_item:last').val() + 1;
+
         var n = j + 1;
         j++;
 
@@ -587,7 +593,7 @@
             '<div class="file1 panel panel-default subject_items">' +
             '<div class="box-body"><div class="input-group"><ul id="tabs' + (n ) + '" class="nav nav-tabs">' +
             '<li class="active"><a href="#tabHome' + (n) + '" data-toggle="tab">' +
-            '<label class="no-margin">题目选项(' + (n) + ')</label></a></li>' +
+            '<label class="no-margin">题目选项1</label></a></li>' +
             '</ul>' +
             '<span class="input-group-addon files_del" style="border-left: 1px solid #d2d6de;cursor: pointer;">' +
             '<span class="glyphicon glyphicon-remove"></span></span></div>' +
@@ -601,16 +607,18 @@
             '<div class="form-group"><div class="col-sm-12">' +
             '<textarea name="summary' + n + '[]" class="col-sm-12 form-control" rows="11" placeholder="输入描述" id="summary' + n + '"></textarea></div></div></div> ' +
             '<div class="col-sm-4 pull-right" style="padding-right: 0;"><div class="col-sm-12"> ' +
-            '<input name="item_url' + (subject_length + 1) + '[]" id="item_url_' + (subject_length + 1) + '_' + (n) + '"  type="hidden" value=""></div> ' +
+            '<input name="item_url' + (subject_length) + '[]" id="item_url' + subject_length + '_' + (1) + '"  type="hidden" value=""></div> ' +
             '<div class="form-group"><div class="col-sm-12">' +
-            '<input id="item_file' + (subject_length + 1) + '_' + (n) + '"  name="item_file' + (subject_length + 1) + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
+            '<input id="item_file' + subject_length + '_' + (1) + '"  name="item_file' + subject_length + '" type="file" class="file" data-preview-file-type="text" data-upload-url="/admin/files/upload?type=image">' +
             '</div></div></div></div></div></div></div></div></div>';
 
         $(".subject").append(html); //追加标签
 
+        $('.tab_subjects_item:last').attr('value', n);   //追加标签value值
+
         $(".subject_content").append(subject_content);       //追加内容
 
-        var this_url = $('#item_url_' + (subject_length + 1) + '_' + (n)).val();
+        var this_url = $('#item_url' + (subject_length) + '_' + (1)).val();
         var this_url_subject = $('#item_url_subject' + (n)).val();
 
         var image_items = [];
@@ -624,7 +632,7 @@
             image_items_subject = ['<img height="200" src="' + this_url_subject + '">'];
         }
 
-        $('#item_file' + (subject_length + 1) + '_' + (n)).fileinput({
+        $('#item_file' + (subject_length) + '_' + (1)).fileinput({
             language: 'zh',
             uploadExtraData: {_token: '{{ csrf_token() }}'},
             allowedFileExtensions: ['jpg', 'gif', 'png'],
@@ -639,9 +647,9 @@
             uploadClass: "btn btn-info",
             uploadIcon: '<i class=\"glyphicon glyphicon-upload\"></i>',
         }).on('fileuploaded', function (event, data) {
-            $('#item_url_' + (subject_length + 1) + '_' + (n)).val(data.response.data);
+            $('#item_url' + (subject_length) + '_' + (1)).val(data.response.data);
         }).on('filedeleted', function (event, key) {
-            $('#item_url_' + (subject_length + 1) + '_' + (n)).val('');
+            $('#item_url' + (subject_length) + '_' + (1)).val('');
         });
 
         $('#item_file_subject' + (n)).fileinput({
