@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -91,7 +89,7 @@ $api->version('v1', function ($api) {
          * 问卷
          */
         $api->get('surveys', 'SurveyController@lists');
-        $api->post('surveys/create', 'SurveyController@create');
+        $api->post('surveys/submit', 'SurveyController@submit');
         $api->get('surveys/detail', 'SurveyController@detail');
     });
 

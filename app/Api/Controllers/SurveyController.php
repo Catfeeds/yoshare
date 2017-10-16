@@ -2,7 +2,6 @@
 
 namespace App\Api\Controllers;
 
-use App\Models\Subject;
 use App\Models\Survey;
 use App\Models\SurveyData;
 use Carbon\Carbon;
@@ -16,34 +15,48 @@ class SurveyController extends BaseController
     {
         foreach ($subjects as $k => $subject) {
             $amount = $subject->items->sum('count');
+            $titles = $subject->items()->get();
 
-            return [
-                'id' => $survey->id,
-                'type' => $survey->type,
-                'title' => $survey->title,
-                'link' => $survey->link,
-                'description' => $survey->description,
-                'multiple' => !empty($survey->multiple) ? $survey->multiple : 0,
-                'image_url' => get_image_url($survey->image_url),
-                'amount' => !empty($survey->amount) ? $survey->amount : 0,
-                'top' => !empty($survey->top) ? $survey->top : 0,
-                'begin_date' => $survey->begin_date,
-                'end_date' => $survey->end_date,
-                'state' => $survey->state,
+            $titles->transform(function ($item) use ($subject, $amount) {
+                return [
+                    'subject_id' => $subject->id,
+                    'subject_title' => $subject->title,
+                    'subject_url' => $subject->url,
+                    'subject_summary' => $subject->summary,
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'url' => get_image_url($item->url),
+                    'summary' => $item->summary,
+                    'count' => $item->count,
+                    'percent' => $amount ? round(($item->count / $amount) * 100) . '%' : 0,
+                    'sort' => $item->sort,
+                ];
 
-                'items' => $subject->items->transform(function ($item) use ($amount) {
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->title,
-                        'url' => get_image_url($item->url),
-                        'summary' => $item->summary,
-                        'count' => $item->count,
-                        'percent' => $amount ? round(($item->count / $amount) * 100) . '%' : 0,
-                        'sort' => $item->sort,
-                    ];
-                }),
-            ];
+            });
+            $titles_item[] = $titles->toArray();
+
+            $titles = [];
+            foreach ($titles_item as $item) {
+                foreach ($item as $value) {
+                    $titles[] = $value;
+                }
+            }
         }
+        return [
+            'id' => $survey->id,
+            'title' => $survey->title,
+            'link' => $survey->link,
+            'link_type' => $survey->link_type,
+            'description' => $survey->description,
+            'multiple' => !empty($survey->multiple) ? $survey->multiple : 0,
+            'image_url' => get_image_url($survey->image_url),
+            'amount' => !empty($survey->amount) ? $survey->amount : 0,
+            'top' => !empty($survey->top) ? $survey->top : 0,
+            'begin_date' => $survey->begin_date,
+            'end_date' => $survey->end_date,
+            'state' => $survey->state,
+            'items' => $titles
+        ];
     }
 
     /**
@@ -95,7 +108,7 @@ class SurveyController extends BaseController
 
     /**
      * @SWG\Post(
-     *   path="/surveys/create",
+     *   path="/surveys/submit",
      *   summary="提交问卷",
      *   tags={"/surveys 问卷"},
      *   @SWG\Parameter(name="survey_id", in="query", required=true, description="调查ID", type="string"),
@@ -111,7 +124,7 @@ class SurveyController extends BaseController
      *   )
      * )
      */
-    public function create()
+    public function submit()
     {
         $survey_id = Request::get('survey_id');
         $item_ids = Request::get('item_ids');
@@ -158,10 +171,6 @@ class SurveyController extends BaseController
         $data->ip = Request::getClientIp();
         $data->save();
 
-
-        //增加选项调查数
-//        SurveyItem::whereIn('id', explode(',', $item_ids))->increment('amount');
-
         $subjects = $survey->subjects;
         foreach ($subjects as $subject) {
             $subject->items()->whereIn('id', explode(',', $item_ids))->get()->each(function ($item) {
@@ -197,15 +206,16 @@ class SurveyController extends BaseController
     public function detail()
     {
         $site_id = Request::get('site_id') ?: 1;
+
         $id = Request::get('survey_id');
 
-        $survey = Survey::find($id);
+        $survey = Survey::with('subjects')->find($id);
 
-        $amount = $survey->items->sum('amount');
+//        foreach ($survey->subjects as $subject) {
+//            $amount = $subject->items->sum('count');
+//        }
 
-        $sub_title_total = $survey->items->count('title');
-
-        $sub_title_num = $sub_title_total / Subject::OPTIONS_NUM;
+        $subject_total = $survey->subjects->count('title');
 
         if (empty($survey)) {
             return $this->responseError('此问卷ID不存在');
@@ -219,9 +229,9 @@ class SurveyController extends BaseController
             }
 
             return view("mobile.$site_id.surveys.detail",
-                compact('survey', 'member', 'amount', 'sub_title_num', 'survey_item_ids_num'));
+                compact('survey', 'member', 'amount', 'subject_total'));
         } else {
-            return view("mobile.$site_id.votes.share", compact('survey', 'amount', 'sub_title_num', 'survey_item_ids_num'));
+            return view("mobile.$site_id.votes.share", compact('survey', 'amount', 'subject_total'));
         }
     }
 }
