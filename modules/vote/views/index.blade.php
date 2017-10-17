@@ -21,7 +21,7 @@
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
-                            @include('admin.votes.toolbar')
+                            @include('vote.views.toolbar')
                             @include('admin.contents.push')
                             <table id="table" data-toggle="table">
                                 <thead>
@@ -138,7 +138,7 @@
         });
 
         function titleFormatter(value, row, index) {
-            return '<a href="/votes/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
+            return '<a href="/vote/detail-' + row.id + '.html" target="_blank">' + row.title + '</a>' +
                     (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '') +
                     (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
         }

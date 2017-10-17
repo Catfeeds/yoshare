@@ -4,7 +4,7 @@
 
             <table id="items_table"
                    data-toggle="table"
-                   data-url="/admin/votes/items/table/{{$vote_id}}"
+                   data-url="/admin/vote/items/table/{{$vote_id}}"
                    data-show-export="true"
                    data-pagination="true"
                    data-toolbar="#toolbar">
@@ -28,7 +28,7 @@
                 row._token = '{{ csrf_token() }}';
                 $.ajax({
                     type: "put",
-                    url: "/admin/votes/items/" + row.id,
+                    url: "/vote/items/" + row.id,
                     data: row,
                     success: function (data, status) {
                         $('#items_table').bootstrapTable('refresh');

@@ -22,7 +22,7 @@
                                 @include('admin.errors.list')
                                 {!! Form::open(['url' => $base_url, 'class' => 'form-horizontal']) !!}
 
-                                @include('admin.votes._form')
+                                @include('admin.vote._form')
 
                                 {!! Form::close() !!}
 

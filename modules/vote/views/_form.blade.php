@@ -27,12 +27,12 @@
             <label class="col-sm-1 control-label">投票类型</label>
             <div class="col-sm-5">
                 <div class="pull-left col-sm-3 no-padding">
-                    {!! Form::select('multiple', \App\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
+                    {!! Form::select('multiple', \Modules\Vote\Models\Vote::MULTIPLES, null, ['class' => 'form-control']) !!}
                 </div>
             </div>
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-1">
-                {!! Form::select('link_type', \App\Models\Vote::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
+                {!! Form::select('link_type', \Modules\Vote\Models\Vote::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
             <div class="col-sm-4" id="link"></div>
         </div>
@@ -213,9 +213,9 @@
     });
 
     function showLink(type, is_edit) {
-        if (type == '{{\App\Models\Vote::LINK_TYPE_NONE}}') {
+        if (type == '{{\Modules\Vote\Models\Vote::LINK_TYPE_NONE}}') {
             $('#link').html('');
-        } else if (type == '{{\App\Models\Vote::LINK_TYPE_WEB}}') {
+        } else if (type == '{{\Modules\Vote\Models\Vote::LINK_TYPE_WEB}}') {
             $('#link').html('{!! Form::text('link', null, ['class' => 'form-control','id'=>'text']) !!}');
             if (is_edit == true) {
                 $('#text').val('');

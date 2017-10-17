@@ -24,7 +24,7 @@
                                 {!! Form::model($vote,['method' => 'PUT', 'action' => ['\App\Http\Controllers\VoteController@update', $vote->id],
                                 'class' => 'form-horizontal']) !!}
 
-                                @include('admin.votes._form')
+                                @include('admin.vote._form')
 
                                 {!! Form::close() !!}
 

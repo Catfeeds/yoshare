@@ -2,17 +2,17 @@
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
     <button class="btn btn-primary btn-xs margin-r-5" id="create" onclick="create()">新增</button>
-    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \App\Models\Vote::STATE_PUBLISHED }}">发布</button>
-    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \App\Models\Vote::STATE_CANCELED }}">撤回</button>
-    <button class="btn btn-danger btn-xs margin-r-5" id="delete" value="{{ \App\Models\Vote::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal" data-target="#modal">删除</button>
+    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \Modules\Vote\Models\Vote::STATE_PUBLISHED }}">发布</button>
+    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \Modules\Vote\Models\Vote::STATE_CANCELED }}">撤回</button>
+    <button class="btn btn-danger btn-xs margin-r-5" id="delete" value="{{ \Modules\Vote\Models\Vote::STATE_DELETED }}" onclick="modalRemove()" data-toggle="modal" data-target="#modal">删除</button>
     <button class="btn btn-default btn-xs margin-r-5" id="btn_sort">排序</button>
 </div>
 <div class="btn-group margin-bottom pull-right">
     <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \App\Models\Article::STATE_NORMAL }}">未发布</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\Article::STATE_PUBLISHED }}">已发布</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \App\Models\Article::STATE_CANCELED }}">已撤回</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\Article::STATE_DELETED }}">已删除</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \Modules\Vote\Models\Vote::STATE_NORMAL }}">未发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \Modules\Vote\Models\Vote::STATE_PUBLISHED }}">已发布</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \Modules\Vote\Models\Vote::STATE_CANCELED }}">已撤回</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \Modules\Vote\Models\Vote::STATE_DELETED }}">已删除</button>
 </div>
 
 <script>

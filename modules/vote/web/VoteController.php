@@ -14,7 +14,7 @@ use Gate;
 class VoteController extends BaseController
 {
     protected $base_url = '/admin/votes';
-    protected $view_path = 'admin.votes';
+    protected $view_path = 'vote.views';
     protected $module;
 
     public function __construct()
