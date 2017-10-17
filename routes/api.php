@@ -51,13 +51,6 @@ $api->version('v1', function ($api) {
         $api->get('follows/exist', 'FollowController@exist');
 
         /**
-         * 投票
-         */
-        $api->get('votes', 'VoteController@lists');
-        $api->post('votes/create', 'VoteController@create');
-        $api->get('votes/detail', 'VoteController@detail');
-
-        /**
          * 点赞
          */
         $api->post('likes/create', 'LikeController@create');
