@@ -1,3 +1,9 @@
+<style>
+    #items_table th, #items_table td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
 <div class="row">
     <div class="box box-info">
         <div class="box-body">
@@ -9,11 +15,11 @@
                    data-toolbar="#toolbar">
                 <thead>
                 <tr>
-                    <th data-field="id" data-align="center" data-width="45">ID</th>
-                    <th data-field="subject" data-align="center">问卷题目</th>
+                    <th data-field="id" data-width="45">ID</th>
+                    <th data-field="subject">问卷题目</th>
                     <th data-field="title">问卷选项</th>
-                    <th data-field="count" data-align="center" data-width="90" data-editable="true">参与数</th>
-                    <th data-field="percent" data-align="center" data-width="120">百分比</th>
+                    <th data-field="count" data-width="90" data-editable="true">参与数</th>
+                    <th data-field="percent" data-width="120">百分比</th>
                 </tr>
                 </thead>
             </table>
