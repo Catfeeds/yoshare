@@ -12,7 +12,7 @@ class VoteItemController extends BaseController
 {
     public function show($vote_id)
     {
-        return view('admin.votes.items', compact('vote_id'));
+        return view('vote.views.items', compact('vote_id'));
     }
 
     public function update($id)
