@@ -21,10 +21,10 @@
 
                                 @include('admin.errors.list')
 
-                                {!! Form::model($vote,['method' => 'PUT', 'action' => ['\App\Http\Controllers\VoteController@update', $vote->id],
+                                {!! Form::model($vote,['method' => 'PUT', 'action' => ['\Modules\Vote\Web\VoteController@update', $vote->id],
                                 'class' => 'form-horizontal']) !!}
 
-                                @include('admin.vote._form')
+                                @include('vote.views._form')
 
                                 {!! Form::close() !!}
 
