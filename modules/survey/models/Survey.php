@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Survey\Models;
 
+use App\Models\BaseModule;
+use App\Models\Member;
+use App\Models\Site;
+use App\Models\Tag;
 use Auth;
+use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
 use Response;

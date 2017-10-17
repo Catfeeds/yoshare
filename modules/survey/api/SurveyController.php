@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace Modules\Survey\Api;
 
-use App\Models\Survey;
-use App\Models\SurveyData;
+use App\Api\Controllers\BaseController;
 use Carbon\Carbon;
 use Exception;
+use Modules\Survey\Models\Survey;
+use Modules\Survey\Models\SurveyData;
 use Request;
 
 class SurveyController extends BaseController
 {
-    //TODO
     public function transform($survey, $subjects)
     {
+        $titles = [];
         foreach ($subjects as $k => $subject) {
             $amount = $subject->items->sum('count');
             $titles = $subject->items()->get();
@@ -35,7 +36,6 @@ class SurveyController extends BaseController
             });
             $titles_item[] = $titles->toArray();
 
-            $titles = [];
             foreach ($titles_item as $item) {
                 foreach ($item as $value) {
                     $titles[] = $value;

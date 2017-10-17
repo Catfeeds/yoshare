@@ -2,10 +2,10 @@
 <div class="btn-group margin-bottom">
     <input type="hidden" name="state" id="state" value=""/>
     <button class="btn btn-primary btn-xs margin-r-5 " id="create" onclick="create()">新增</button>
-    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \App\Models\Survey::STATE_PUBLISHED }}">发布
+    <button class="btn btn-success btn-xs margin-r-5 state" value="{{ \Modules\Survey\Models\Survey::STATE_PUBLISHED }}">发布
     </button>
-    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \App\Models\Survey::STATE_CANCELED }}">撤回</button>
-    <button class="btn btn-danger btn-xs margin-r-5 " id="delete" value="{{ \App\Models\Survey::STATE_DELETED }}"
+    <button class="btn btn-warning btn-xs margin-r-5 state" value="{{ \Modules\Survey\Models\Survey::STATE_CANCELED }}">撤回</button>
+    <button class="btn btn-danger btn-xs margin-r-5 " id="delete" value="{{ \Modules\Survey\Models\Survey::STATE_DELETED }}"
             onclick="modalRemove()" data-toggle="modal" data-target="#modal">删除
     </button>
     <button class="btn btn-default btn-xs margin-r-5" id="btn_sort">排序</button>
@@ -14,16 +14,16 @@
     <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" id="" value="">全部
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary"
-            value="{{ \App\Models\Survey::STATE_NORMAL }}">未发布
+            value="{{ \Modules\Survey\Models\Survey::STATE_NORMAL }}">未发布
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success"
-            value="{{ \App\Models\Survey::STATE_PUBLISHED }}">已发布
+            value="{{ \Modules\Survey\Models\Survey::STATE_PUBLISHED }}">已发布
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning"
-            value="{{ \App\Models\Survey::STATE_CANCELED }}">已撤回
+            value="{{ \Modules\Survey\Models\Survey::STATE_CANCELED }}">已撤回
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter"
-            value="{{ \App\Models\Survey::STATE_DELETED }}" data-active="btn-danger">已删除
+            value="{{ \Modules\Survey\Models\Survey::STATE_DELETED }}" data-active="btn-danger">已删除
     </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5" data-toggle="modal" data-target="#modal_query"><span class="fa fa-search"></span></button>
 </div>
@@ -53,7 +53,7 @@
         $.ajax({
             url: '/admin/surveys/state',
             type: 'POST',
-            data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Survey::STATE_DELETED }}'},
+            data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \Modules\Survey\Models\Survey::STATE_DELETED }}'},
             success: function () {
                 window.location.reload();
             }

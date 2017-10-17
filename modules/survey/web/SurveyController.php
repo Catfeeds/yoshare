@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Survey\Web;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\SurveyRequest;
 use App\Models\Item;
 use App\Models\Module;
-use App\Models\Subject;
-use App\Models\Survey;
 use Auth;
 use Carbon\Carbon;
 use Gate;
+use Modules\Survey\Models\Subject;
+use Modules\Survey\Models\Survey;
 
-class SurveyController extends Controller
+class SurveyController extends BaseController
 {
     protected $base_url = '/admin/surveys';
-    protected $view_path = 'admin.surveys';
+    protected $view_path = 'survey.views';
     protected $module;
 
     public function __construct()
@@ -29,6 +30,7 @@ class SurveyController extends Controller
             $this->middleware('deny403');
         }
         $module = Module::transform($this->module->id);
+
         return view($this->view_path . '.index', ['module' => $module, 'base_url' => $this->base_url]);
     }
 
@@ -98,7 +100,7 @@ class SurveyController extends Controller
             }
         }
 
-        return redirect(url('admin/surveys'))->with('flash_success', '新增成功！');
+        return redirect($this->base_url)->with('flash_success', '新增成功！');
     }
 
     public function show($id)
@@ -208,7 +210,7 @@ class SurveyController extends Controller
                 }
             }
         }
-        return redirect(url('admin/surveys'))->with('flash_success', '编辑成功！');
+        return redirect($this->base_url)->with('flash_success', '编辑成功！');
     }
 
     public function table()

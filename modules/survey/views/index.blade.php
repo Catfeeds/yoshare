@@ -4,11 +4,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                问卷管理
+                {{ $module->title }}管理
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">问卷管理</li>
+                <li class="active">{{ $module->title }}管理</li>
             </ol>
         </section>
         <section class="content">
@@ -20,8 +20,8 @@
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.modal', ['id' => 'modal_count'])
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
-                            @include('admin.surveys.toolbar')
-                            @include('admin.surveys.query')
+                            @include('survey.views.toolbar')
+                            @include('survey.views.query')
                             @include('admin.contents.push')
 
                             <table id="table" data-toggle="table" style="word-break:break-all;">
@@ -269,7 +269,11 @@
             $.ajax({
                 url: '/admin/surveys/state',
                 type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Survey::STATE_DELETED }}'},
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'ids': ids,
+                    'state': '{{ \Modules\Survey\Models\Survey::STATE_DELETED }}'
+                },
                 success: function (data) {
                     window.location.href = '/admin/surveys';
                 }

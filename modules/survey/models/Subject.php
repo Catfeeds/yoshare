@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Survey\Models;
+
+use App\Models\Item;
 
 class Subject extends Item
 {

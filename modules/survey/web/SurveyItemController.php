@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Survey\Web;
 
-use App\Models\Survey;
-use App\Models\SurveyItem;
+use App\Http\Controllers\BaseController;
+use Modules\Survey\Models\Survey;
+use Modules\Survey\Models\SurveyItem;
 use Request;
 use Response;
 
-class SurveyItemController extends Controller
+class SurveyItemController extends BaseController
 {
     public function update($id)
     {
@@ -61,6 +62,6 @@ class SurveyItemController extends Controller
 
     public function show($survey_id)
     {
-        return view('admin.surveys.items', compact('survey_id'));
+        return view('survey.views.items', compact('survey_id'));
     }
 }

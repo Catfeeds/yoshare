@@ -37,12 +37,12 @@
         <div class="form-group">
             <label class="col-sm-1 control-label">问卷类型:</label>
             <div class="col-sm-5">
-                {!! Form::select('multiple', \App\Models\Survey::MULTIPLE, null, ['class' => 'form-control']) !!}
+                {!! Form::select('multiple', \Modules\Survey\Models\Survey::MULTIPLE, null, ['class' => 'form-control']) !!}
             </div>
 
             {!! Form::label('link', '外链:', ['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-1">
-                {!! Form::select('link_type', \App\Models\Survey::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
+                {!! Form::select('link_type', \Modules\Survey\Models\Survey::getLinkTypes(), null, ['class' => 'form-control','onchange'=>'return showLink(this.value,true)']) !!}
             </div>
             <div class="col-sm-4" id="link"></div>
         </div>
@@ -410,9 +410,9 @@
     });
 
     function showLink(type, is_edit) {
-        if (type == '{{\App\Models\Vote::LINK_TYPE_NONE}}') {
+        if (type == '{{\Modules\Survey\Models\Survey::LINK_TYPE_NONE}}') {
             $('#link').html('');
-        } else if (type == '{{\App\Models\Vote::LINK_TYPE_WEB}}') {
+        } else if (type == '{{\Modules\Survey\Models\Survey::LINK_TYPE_WEB}}') {
             $('#link').html('{!! Form::text('link', null, ['class' => 'form-control','id'=>'text']) !!}');
             if (is_edit == true) {
                 $('#text').val('');

@@ -5,11 +5,11 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                添加问卷
+                添加{{ $module->title }}
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">问卷管理</li>
+                <li class="active">{{ $module->title }}管理</li>
             </ol>
         </section>
 
@@ -21,7 +21,7 @@
                             @include('admin.errors.list')
                             {!! Form::open(['url' => '/admin/surveys', 'class' => 'form-horizontal']) !!}
 
-                            @include('admin.surveys._form')
+                            @include('survey.views._form')
 
                             {!! Form::close() !!}
                         </div>
