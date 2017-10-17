@@ -2,7 +2,7 @@
     <div class="box box-info">
         <div class="box-body">
 
-            <table id="table"
+            <table id="items_table"
                    data-toggle="table"
                    data-url="/admin/surveys/items/table/{{$survey_id}}"
                    data-pagination="true"
@@ -23,15 +23,15 @@
 
 <script>
     (function () {
-        $('#table').bootstrapTable({
+        $('#items_table').bootstrapTable({
             onEditableSave: function (field, row, old, $el) {
                 row._token = '{{ csrf_token() }}';
                 $.ajax({
                     type: "put",
-                    url: "/admin/surveys/items/" + row.id,
+                    url: "/admin/surveys/items" + row.id,
                     data: row,
                     success: function (data, status) {
-                        $('#table').bootstrapTable('refresh');
+                        $('#items_table').bootstrapTable('refresh');
                     },
                     error: function (data) {
                         alert('Error');

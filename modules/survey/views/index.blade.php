@@ -18,7 +18,6 @@
                         <div class="box-body">
                             @include('admin.layouts.flash')
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                            @include('admin.layouts.modal', ['id' => 'modal_count'])
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
                             @include('survey.views.toolbar')
                             @include('survey.views.query')
@@ -58,7 +57,7 @@
 
         $('#table').bootstrapTable({
             method: 'get',
-            url: '/admin/surveys/table',
+            url: '{{$base_url}}/table',
             pagination: true,
             pageNumber: 1,
             pageSize: 20,
@@ -96,7 +95,7 @@
                         }
 
                         $.ajax({
-                            url: '/admin/surveys/sort',
+                            url: '{{$base_url}}/sort',
                             type: 'get',
                             async: true,
                             data: {select_id: select_id, place_id: place_id, move_down: move_down},
@@ -184,28 +183,12 @@
 
         window.actionEvents = {
             'click .edit': function (e, value, row, index) {
-                window.location.href = '/admin/surveys/' + row.id + '/edit';
+                window.location.href = '{{$base_url}}/' + row.id + '/edit';
             },
 
-            'click .count': function (e, value, row, index) {
-                $('#modal_title').text('问卷统计');
-                $('#window_msg').hide();
-                $('.common').prop('id', 'modal_count');
-
-                var url = '/admin/surveys/items/' + row.id;
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {'_token': '{{ csrf_token() }}'},
-                    dataType: 'html',
-                    success: function (html) {
-                        $('#contents').html(html);
-                    }
-                });
-            },
             'click .top': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/surveys/' + row.id + '/top',
+                    url: '{{$base_url}}/' + row.id + '/top',
                     type: 'post',
                     data: {'_token': '{{ csrf_token() }}'},
                     success: function (data) {
@@ -226,7 +209,7 @@
 
             'click .tag': function (e, value, row, index) {
                 $.ajax({
-                    url: '/admin/surveys/' + row.id + '/tag',
+                    url: '{{$base_url}}/' + row.id + '/tag',
                     type: 'post',
                     data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
                     success: function (data) {
@@ -238,12 +221,29 @@
                 })
             },
 
+
+            'click .count': function (e, value, row, index) {
+                $('.common').prop('id', 'modal_count');
+                $('#modal_title').text('问卷统计');
+                $('#window_msg').hide();
+
+                var url = '{{$base_url}}/items/' + row.id;
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {'_token': '{{ csrf_token() }}'},
+                    dataType: 'html',
+                    success: function (html) {
+                        $('#contents').html(html);
+                    }
+                });
+            },
             'click .comment': function (e, value, row, index) {
+                $('.common').prop('id', 'modal_comment');
                 $('#modal_title').text('查看评论');
                 $('#window_msg').hide();
-                $('.common').prop('id', 'modal_comment');
 
-                var url = '/admin/surveys/comments/' + row.id;
+                var url = '{{$base_url}}/comments/' + row.id;
                 $.ajax({
                     url: url,
                     type: "get",
@@ -267,7 +267,7 @@
             }
             var ids = [row_id];
             $.ajax({
-                url: '/admin/surveys/state',
+                url: '{{$base_url}}/state',
                 type: 'POST',
                 data: {
                     '_token': '{{ csrf_token() }}',
@@ -275,7 +275,7 @@
                     'state': '{{ \Modules\Survey\Models\Survey::STATE_DELETED }}'
                 },
                 success: function (data) {
-                    window.location.href = '/admin/surveys';
+                    window.location.href = '{{$base_url}}';
                 }
             });
 

@@ -10,6 +10,11 @@ use Response;
 
 class SurveyItemController extends BaseController
 {
+    public function show($survey_id)
+    {
+        return view('survey.views.items', compact('survey_id'));
+    }
+
     public function update($id)
     {
         $input = Request::all();
@@ -60,8 +65,4 @@ class SurveyItemController extends BaseController
     }
 
 
-    public function show($survey_id)
-    {
-        return view('survey.views.items', compact('survey_id'));
-    }
 }
