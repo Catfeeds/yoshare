@@ -83,7 +83,7 @@ class VoteController extends BaseController
         $vote = Vote::with('items')->find($id);
 
         $module = Module::transform($this->module->id);
-        return view($this->view_path . '.edit', ['module' => $module, 'vote' => $vote]);
+        return view($this->view_path . '.edit', ['module' => $module, 'vote' => $vote, 'base_url' => $this->base_url]);
     }
 
     public function update(VoteRequest $request, $id)
