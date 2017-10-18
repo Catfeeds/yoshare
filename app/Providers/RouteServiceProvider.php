@@ -57,25 +57,26 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require base_path('routes/web.php');
             require base_path('routes/admin.php');
-        });
 
-        //模块路由
-        Route::group([
-            'middleware' => 'web',
-        ], function ($router) {
             //引用模块路由
-            $path = base_path('modules');
+            $path = base_path('routes/modules');
             $d = dir($path);
+            $dirs = [];
             while ($file = $d->read()) {
                 if ($file != '.' && $file != '..') {
-                    if (is_dir($path . DIRECTORY_SEPARATOR . $file)) {
-                        $web = $path . DIRECTORY_SEPARATOR . $file . '/routes/web.php';
-                        $admin = $path . DIRECTORY_SEPARATOR . $file . '/routes/admin.php';
-                        if (file_exists($web)) {
-                            require $web;
-                        }
-                        if (file_exists($admin)) {
-                            require $admin;
+                    if (is_dir($path . DIRECTORY_SEPARATOR . $file)) {//当前为文件
+                        $dirs[] = $file;
+                    }
+                }
+            }
+
+            foreach ($dirs as $dir) {
+                $d = dir($path . DIRECTORY_SEPARATOR . $dir);
+                while ($file = $d->read()) {
+                    if ($file != '.' && $file != '..' && ends_with($file, '.php')) {
+                        $filename = $path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file;
+                        if (is_file($filename)) {//当前为文件
+                            require $filename;
                         }
                     }
                 }
@@ -98,25 +99,6 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'api',
         ], function ($router) {
             require base_path('routes/api.php');
-        });
-
-        //模块路由
-        Route::group([
-            'middleware' => 'api',
-            'prefix' => 'api',
-        ], function ($router) {
-            $path = base_path('modules');
-            $d = dir($path);
-            while ($file = $d->read()) {
-                if ($file != '.' && $file != '..') {
-                    if (is_dir($path . DIRECTORY_SEPARATOR . $file)) {
-                        $api = $path . DIRECTORY_SEPARATOR . $file . '/routes/api.php';
-                        if (file_exists($api)) {
-                            require $api;
-                        }
-                    }
-                }
-            }
         });
     }
 }

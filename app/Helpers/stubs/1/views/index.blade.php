@@ -19,12 +19,12 @@
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
                             @include('admin.layouts.flash')
                             @include('admin.layouts.modal', ['id' => 'modal_comment'])
-                            @include('__singular__.views.toolbar')
-                            @include('__singular__.views.query')
+                            @include('admin.__module_path__.toolbar')
+                            @include('admin.__module_path__.query')
                             @include('admin.contents.table')
                             @include('admin.contents.push')
                             @include('admin.contents.script')
-                            @include('__singular__.views.script')
+                            @include('admin.__module_path__.script')
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 /**
 * __module_title__
 */
-Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Modules\__module_name__\Web'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('__module_path__/table', '__controller__@table');
     Route::post('__module_path__/state', '__controller__@state');
     Route::get('__module_path__/sort', '__controller__@sort');

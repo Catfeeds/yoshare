@@ -42,7 +42,7 @@ class AdminController extends BaseController
         $i = 0;
         foreach ($pages as $page) {
             $page->percent = round($page->clicks / max(1, $sum) * 100, 2) . '%';
-            $page->badge = $badges[min($i++, count($badges) - 1)];
+            $page->badge = $badges[min($i++, count($badges))];
         };
 
         //统计
@@ -99,12 +99,7 @@ class AdminController extends BaseController
         $logs = DB::select('select date_format(created_at, \'%Y-%m-%d\') as date, province as name, sum(count) as value from cms_ip_logs where date_sub(curdate(), interval 7 day) <= date(`created_at`) group by province,date_format(created_at, \'%Y-%m-%d\')');
 
         foreach ($logs as $log) {
-            for ($i = 0; $i < count($areas); $i++) {
-                if ($areas[$i] == $log->name) {
-                    $data[$log->date][$i] = ['name' => $log->name, 'value' => $log->value];
-                    break;
-                }
-            }
+            $data[$log->date][] = ['name' => $log->name, 'value' => $log->value];
             $max = max($log->value, $max);
         }
 

@@ -151,6 +151,7 @@ require(
     ],
     function (echarts) {
         var lineChart = echarts.init(document.getElementById('lineChart'), 'macarons');
+
         var option = {
             timeline: {
                 data: lineDates,
@@ -167,8 +168,9 @@ require(
 
         // 加载数据
         lineChart.setOption(option);
-        
+
         var mapChart = echarts.init(document.getElementById('mapChart'), 'macarons');
+
         var option = {
             timeline: {
                 data: mapDates,
@@ -185,8 +187,9 @@ require(
 
         // 加载数据
         mapChart.setOption(option);
-         
+
         var pieChart = echarts.init(document.getElementById('pieChart'), 'macarons');
+
         var option = {
             tooltip: {
                 trigger: 'item',
@@ -215,10 +218,5 @@ require(
 
         // 加载数据
         pieChart.setOption(option);
-        window.onresize = function(){
-        	lineChart.resize();
-        	mapChart.resize();
-            pieChart.resize();
-        };
     }
 );

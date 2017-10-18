@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Models\DataSource;
 use App\Models\Module;
 use DB;
 use Gate;
@@ -179,7 +180,7 @@ class CategoryController extends Controller
             ];
         });
 
-        $ds = new \stdClass();
+        $ds = new DataSource();
         $ds->data = $categories;
 
         return Response::json($ds);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataSource;
 use App\Http\Requests\AppRequest;
 use App\Models\App;
 use Request;
@@ -99,7 +100,7 @@ class AppController extends Controller
             ];
         });
 
-        $ds = new \stdClass();
+        $ds = new DataSource();
         $ds->data = $apps;
 
         return Response::json($ds);

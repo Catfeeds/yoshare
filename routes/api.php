@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,6 +53,13 @@ $api->version('v1', function ($api) {
         $api->get('follows/exist', 'FollowController@exist');
 
         /**
+         * 投票
+         */
+        $api->get('votes', 'VoteController@lists');
+        $api->post('votes/create', 'VoteController@create');
+        $api->get('votes/detail', 'VoteController@detail');
+
+        /**
          * 点赞
          */
         $api->post('likes/create', 'LikeController@create');
@@ -78,6 +87,12 @@ $api->version('v1', function ($api) {
          */
         $api->get('messages/owns', 'MessageController@owns');
 
+        /**
+         * 问卷
+         */
+        $api->get('surveys', 'SurveyController@lists');
+        $api->post('surveys/create', 'SurveyController@create');
+        $api->get('surveys/detail', 'SurveyController@detail');
     });
 
     $api->group(['namespace' => 'App\Api\Controllers', 'middleware' => 'throttle:60000'], function ($api) {

@@ -16,6 +16,7 @@ class HomeController extends Controller
             return abort(501);
         }
 
-        return view($domain->theme->name . '.index', ['site' => $domain->site]);
+        $mark = 'index';
+        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'mark' => $mark]);
     }
 }

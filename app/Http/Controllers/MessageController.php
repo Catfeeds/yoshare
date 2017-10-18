@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataSource;
 use App\Models\Message;
 use Request;
 use Response;
@@ -107,7 +108,7 @@ class MessageController extends Controller
             ];
         });
 
-        $ds = new \stdClass();
+        $ds = New DataSource();
         $ds->total = $total;
         $ds->rows = $messages;
 

@@ -104,11 +104,11 @@ class Category extends Model
 
         $parent = Category::find($parent_id);
         if (empty($parent)) {
-            $root = new \stdClass();
+            $root = new Node();
             $root->id = $parent_id;
             $root->text = '所有栏目';
         } else {
-            $root = new \stdClass();
+            $root = new Node();
             $root->id = $parent->id;
             $root->text = $parent->name;
         }
@@ -126,7 +126,7 @@ class Category extends Model
     {
         foreach ($categories as $category) {
             if ($category->parent_id == $parent->id) {
-                $node = new \stdClass();
+                $node = new Node();
                 $node->id = $category->id;
                 $node->text = $category->name;
                 $node->tags = [$category->module->title];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleFieldRequest;
+use App\Models\DataSource;
 use App\Models\Module;
 use App\Models\ModuleField;
 use Request;
@@ -103,7 +104,7 @@ class ModuleFieldController extends Controller
             $attributes['column_align_name'] = $field->columnAlignName();
             return $attributes;
         });
-        $ds = new \stdClass();
+        $ds = new DataSource();
         $ds->data = $fields;
 
         return Response::json($ds);

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberRequest;
+use App\Models\DataSource;
+use App\Models\Domain;
 use App\Models\Member;
 use Exception;
 use Gate;
@@ -159,7 +161,7 @@ class MemberController extends Controller
                 'updated_at' => empty($member->updated_at) ? '' : $member->updated_at->toDateTimeString(),
             ];
         });
-        $ds = new \stdClass();
+        $ds = New DataSource();
         $ds->total = $total;
         $ds->rows = $members;
 
@@ -178,5 +180,22 @@ class MemberController extends Controller
             $member->save();
             \Session::flash('flash_success', '启用成功');
         }
+    }
+
+    public function show(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $member = Member::find(Member::ID_ADMIN);
+
+        if (empty($member)) {
+            return abort(404);
+        }
+        //$member->incrementClick();  TODO
+
+        $mark = Domain::MARK_MEMBER;
+        return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'mark' => $mark]);
     }
 }

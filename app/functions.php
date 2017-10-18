@@ -344,7 +344,7 @@ function theme_asset_path($path)
  */
 function theme_view_path($path)
 {
-    return base_path('themes' . DIRECTORY_SEPARATOR . $path);
+    return resource_path('views/themes' . DIRECTORY_SEPARATOR . $path);
 }
 
 /**

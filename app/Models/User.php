@@ -83,7 +83,7 @@ class User extends Authenticatable
     {
         $categories = Category::owns()->orderBy('sort')->get();
 
-        $root = new \stdClass();
+        $root = new Node();
         $root->id = 0;
 
         $user = User::find($user_id);
@@ -98,7 +98,7 @@ class User extends Authenticatable
     {
         foreach ($categories as $category) {
             if ($category->parent_id == $parent->id) {
-                $node = new \stdClass();
+                $node = new Node();
                 $node->id = $category->id;
                 $node->text = $category->name;
 

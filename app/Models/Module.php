@@ -283,7 +283,7 @@ class Module extends Model
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
-        $ds = new \stdClass();
+        $ds = new DataSource();
         $modules = static::orderBy('id')
             ->skip($offset)
             ->limit($limit)

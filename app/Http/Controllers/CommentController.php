@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\DataSource;
 use App\Models\Member;
 use Auth;
 use Gate;
@@ -137,7 +138,7 @@ class CommentController extends Controller
             ];
         });
 
-        $ds = new \stdClass();
+        $ds = New DataSource();
         $ds->total = $count;
         $ds->rows = $comments;
 

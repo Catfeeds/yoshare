@@ -39,11 +39,11 @@ class Dictionary extends Model
 
         $parent = static::find($parent_id);
         if (empty($parent)) {
-            $root = new \stdClass();
+            $root = new Node();
             $root->id = $parent_id;
             $root->text = '所有字典';
         } else {
-            $root = new \stdClass();
+            $root = new Node();
             $root->id = $parent->id;
             $root->text = $parent->name;
         }
@@ -61,7 +61,7 @@ class Dictionary extends Model
     {
         foreach ($dictionaries as $dictionary) {
             if ($dictionary->parent_id == $parent->id) {
-                $node = new \stdClass();
+                $node = new Node();
                 $node->id = $dictionary->id;
                 $node->text = $dictionary->name;
 

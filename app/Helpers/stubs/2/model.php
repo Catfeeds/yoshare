@@ -1,9 +1,7 @@
 <?php
 
-namespace Modules\__module_name__\Models;
+namespace App\Models;
 
-use App\Models\BaseModule;
-use App\Models\Item;
 use Exception;
 use Request;
 use Response;
@@ -122,7 +120,7 @@ class __model__ extends BaseModule
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
-        $ds = new \stdClass();
+        $ds = new DataSource();
         $__plural__ = static::with('tags', 'member', 'user')
             ->filter($filters)
             ->orderBy('top', 'desc')

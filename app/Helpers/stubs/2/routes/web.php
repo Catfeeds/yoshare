@@ -3,7 +3,7 @@
 /**
 * __module_title__
 */
-Route::group(['middleware' => 'web', 'namespace' => 'Modules\__module_name__\Web'], function () {
+Route::group(['middleware' => 'web'], function () {
     Route::get('__module_path__/index.html', '__controller__@lists');
     Route::get('__module_path__/category-{id}.html', '__controller__@category');
     Route::get('__module_path__/detail-{id}.html', '__controller__@show');

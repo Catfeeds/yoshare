@@ -1,1 +1,0 @@
-<div class="ac-header"></div>

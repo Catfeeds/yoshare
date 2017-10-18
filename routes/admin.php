@@ -153,6 +153,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
     /**
+     * 问答管理
+     */
+    Route::post('questions/reply/{id}', 'QuestionController@reply');
+
+    /**
      * 评论管理
      */
     Route::get('comments/table', 'CommentController@table');
@@ -172,4 +177,32 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('tags/sort', 'TagController@sort');
     Route::resource('tags', 'TagController');
 
+    /**
+     * 问卷管理
+     */
+    Route::get('surveys/items/table/{survey_id}', 'SurveyItemController@table');
+    Route::resource('surveys/items', 'SurveyItemController');
+
+    Route::get('surveys/table', 'SurveyController@table');
+    Route::post('surveys/{id}/top', 'SurveyController@top');
+    Route::post('surveys/{id}/tag', 'SurveyController@tag');
+    Route::get('surveys/statistic/{survey_id}', 'SurveyController@statistic');
+    Route::post('surveys/state', 'SurveyController@state');
+    Route::get('surveys/sort', 'SurveyController@sort');
+    Route::get('surveys/comments/{id}','SurveyController@comments');
+    Route::resource('surveys', 'SurveyController');
+
+    /**
+     * 投票管理
+     */
+    Route::get('votes/items/table/{vote_id}', 'VoteItemController@table');
+    Route::resource('votes/items', 'VoteItemController');
+    Route::get('votes/sort', 'VoteController@sort');
+    Route::get('votes/table', 'VoteController@table');
+    Route::get('votes/statistic/{vote_id}', 'VoteController@statistic');
+    Route::post('votes/state', 'VoteController@state');
+    Route::post('votes/{id}/top', 'VoteController@top');
+    Route::post('votes/{id}/tag', 'VoteController@tag');
+    Route::get('votes/comments/{id}','VoteController@comments');
+    Route::resource('votes', 'VoteController');
 });

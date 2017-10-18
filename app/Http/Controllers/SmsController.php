@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataSource;
 use App\Models\SmsLog;
 use Gate;
 use Request;
@@ -48,7 +49,7 @@ class SmsController extends Controller
                 'updated_at' => $log->updated_at->toDateTimeString(),
             ];
         });
-        $ds = new \stdClass();
+        $ds = New DataSource();
         $ds->total = $total;
         $ds->rows = $logs;
 
