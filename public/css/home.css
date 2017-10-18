@@ -1,0 +1,46 @@
+body{
+    background: #fff;
+}
+.logo{
+    width: 254px;
+    height: 156px;
+    margin: 250px auto 250px;
+}
+.forms{
+    position: relative;
+}
+.register-a{
+    margin: 45px auto 160px;
+    width: 642px;
+}
+.register-a a{
+    color: #878787;
+    font-size: 32px;
+}
+.third-party{
+    margin: 0 auto;
+    width: 324px;
+}
+.third-party li{
+    float: left;
+}
+.third-party li:first-child{
+    margin-right: 100px;
+}
+.account{
+    background: url('../images/index/account_bg.png') no-repeat 0 30px;
+}
+.pass{
+    background: url('../images/index/pass_bg.png') no-repeat 0 30px;
+}
+.phone-btn{
+    border-radius: 10px;
+    border: 1px solid #bebebe;
+    width: 250px;
+    height: 90px;
+    position: absolute;
+    top: 153px;
+    right: 15px;
+    background: none;
+    color: #878787;
+}

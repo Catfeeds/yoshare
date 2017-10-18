@@ -1,0 +1,89 @@
+@charset "utf-8";
+.section_01 .news{
+	display:block;
+	text-align:center;
+}
+.section_01 .news .news_item{
+	display:inline-block;
+	margin:0 5px;
+}
+.section_02 .news{
+	display:block;
+	text-align:center;
+}
+.section_02 .news .news_item{
+	display:inline-block;
+	margin:0 5px;
+}
+.section_02 .news .news_item a{
+	display:block;
+}
+.section_03 .news{
+	display:block;
+	text-align:center;
+}
+.section_03 .news .news_item{
+	display:inline-block;
+	margin:0 5px;
+}
+.section_03 .news .news_item a{
+	display:block;
+}
+.section_04 .service{
+	display:block;
+}
+.section_04 .service_item{
+	float:left;
+	margin:0 23px;
+}
+.section_02 .car_list{
+	display:block;
+	text-align:center;
+}
+.section_02 .outer_item{
+	display:inline-block;
+}
+.section_02 .text code,
+.section_02 .text .text_left .p2{
+	text-align:left;
+}
+.section_03 .video{
+	display:block;
+	text-align:center;
+}
+.section_03 .video .video_item{
+	display:inline-block;
+	margin:0 5px;
+}
+.news_list .list_item01{
+	display:block;
+	clear:both;
+}
+.news_list .list_item01 .news_item{
+	float:left;
+	margin:20px 10px 10px 0;
+}
+.news_list .list_item01 .news_item a{
+	display:block;
+}
+.content .tabs{
+	display:block;
+	text-align:center;
+}
+.content .tabs02{
+	text-align:right;
+}
+.list_item01{
+	display:block;
+	text-align:center;
+}
+.list_item01 .news_item a{
+	display:block;
+}
+.list_item01 .news_item{
+	display:inline-block;
+	margin:0 5px;
+}
+.list_item01 .text .article_title{
+	text-align:left;
+}

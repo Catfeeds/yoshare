@@ -5,6 +5,8 @@ namespace App\Models;
 
 class Domain
 {
+    const MARK_MEMBER = 'user';
+    const MARK_GOODS = 'goods';
     public $site = '';
     public $theme = '';
 
@@ -13,6 +15,7 @@ class Domain
         if (empty($host)) {
             $host = request()->getHost();
         }
+
         $this->site = Site::findByDomain($host);
 
         if (empty($theme)) {

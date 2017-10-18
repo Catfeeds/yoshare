@@ -1,0 +1,157 @@
+body{
+    background: #eee;
+}
+.u-wrapper{
+    background: #eee;
+    color: #555;
+}
+.u-wrapper a{
+    color: #555;
+}
+.head{
+    width: 1080px;
+    height: 350px;
+    background: #ffcc42;
+    padding-top: 47px;
+}
+.head .avatar{
+    width: 140px;
+    height: 140px;
+    border: 5px solid #fff;
+    background: #a0a0a0;
+    margin: 0 auto;
+    position: relative;
+}
+.head .avatar i{
+    background: url('../images/users/vip.png') no-repeat;
+    position: absolute;
+    top: -27px;
+    left: -27px;
+    height: 54px;
+    width: 54px;
+}
+.head h3{
+    font-size: 50px;
+    color: #393a3f;
+    text-align: center;
+    margin-top: 33px;
+}
+.content{
+    background: #fff;
+    width: 980px;
+    margin: 0 auto;
+}
+.order{
+    height: 356px;
+    background: #fff;
+    width: 100%;
+}
+.order .o-title{
+    height: 145px;
+    line-height: 145px;
+    border-bottom: 2px solid #eff0f1;
+    padding-left: 64px;
+    background: url('../images/users/all-order.png') no-repeat 0 51px;
+}
+.order .o-title a{
+    float: right;
+}
+.order ul li{
+    float: left;
+    padding-top: 126px;
+    margin-right: 162px;
+    text-align: center;
+}
+.order ul li:first-child{
+    background: url('../images/users/wait-pay.png') no-repeat center 43px;
+}
+.order ul li:nth-child(2){
+    background: url('../images/users/wait-send.png') no-repeat center 43px;
+}
+.order ul li:nth-child(3){
+    background: url('../images/users/wait-receive.png') no-repeat center 43px;
+}
+.order ul li:nth-child(4){
+    background: url('../images/users/wait-back.png') no-repeat center 43px;
+}
+.order ul li:last-child{
+    margin-right: 0;
+}
+.wallet{
+    height: 320px;
+    background: #fff;
+    width: 100%;
+    margin-top: 30px;
+}
+.wallet .w-title{
+    height: 145px;
+    line-height: 145px;
+    border-bottom: 2px solid #eff0f1;
+    padding-left: 64px;
+    background: url('../images/users/wallet.png') no-repeat 0 51px;
+}
+.wallet ul li{
+    float: left;
+    width: 326px;
+    text-align: center;
+    font-size: 40px;
+}
+.wallet ul li h5{
+    margin: 20px auto;
+    font-size: 40px;
+}
+.wallet ul li:last-child{
+    margin-right: 0;
+}
+.set{
+    margin-top: 30px;
+    background: #fff;
+}
+.set ul li{
+    height: 144px;
+    line-height: 144px;
+    padding-left: 68px;
+    border-bottom: 2px solid #eff0f1;
+}
+.set ul li:first-child{
+    background: url('../images/users/s-address.png') no-repeat 0 48px;
+}
+.set ul li:nth-child(2){
+    background: url('../images/users/s-vip.png') no-repeat 0 48px;
+}
+.set ul li:nth-child(3){
+    background: url('../images/users/s-phone.png') no-repeat 0 48px;
+}
+.set ul li.s-user{
+    margin-top: 30px;
+    background: url('../images/users/s-user.png') no-repeat 0 48px;
+}
+.vip-text {
+    background: #fff;
+    padding: 80px;
+}
+/**** wallet ****/
+.w-wrapper{
+    height: 550px;
+    padding-top: 180px;
+    background: #fff;
+}
+.w-wrapper .v-wallet{
+    margin: 0 auto;
+    font-size: 170px;
+    width: 300px;
+    text-align: center;
+}
+.w-wrapper .title{
+    margin: 30px auto 168px;
+    width: 300px;
+    text-align: center;
+    font-size: 42px;
+}
+.take-out{
+    height: 114px;
+    background: #fff url('../images/users/take_out.png') no-repeat 968px 36px;
+    line-height: 114px;
+    margin-top: 28px;
+    padding: 0 86px;
+}

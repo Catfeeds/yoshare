@@ -1,0 +1,89 @@
+body{
+    background: #eee;
+}
+.u-wrapper{
+    background: #eee;
+    color: #555;
+}
+.address{
+    background: #fff;
+    padding: 50px;
+    padding-bottom: 0;
+}
+.address ul.form li{
+    height: 124px;
+    border-bottom: 2px solid #eff0f1;
+}
+.address ul.form li:last-child{
+    height: 246px;
+}
+.address textarea{
+    height: 230px;
+    width: 764px;
+    float: left;
+}
+h3{
+    text-align: center;
+}
+.a-form{
+    float: left;
+    width: 770px;
+    height: 112px;
+}
+.address ul.form li span{
+    display: inline-block;
+    float: left;
+    width: 200px;
+    height: 120px;
+    line-height: 120px;
+}
+select{
+    width: 290px;
+    height: 120px;
+    float: left;
+    font-size: 40px;
+    color: #555;
+    background: #fff;
+}
+.title{
+    text-align: center;
+    height: 168px;
+    line-height: 168px;
+    background: #fff;
+}
+ul.list li{
+    background: #fff;
+    margin-top: 16px;
+    height: 353px;
+    padding: 48px;
+}
+ul.list li span{
+    display: inline-block;
+}
+ul.list li .w-addr{
+    height: 118px;
+    line-height: 118px;
+}
+ul.list li .receiver{
+    float: left;
+}
+ul.list li .tel{
+    float: right;
+}
+ul.list li .addr-detail{
+    height: 118px;
+    border-bottom: 2px solid #eff0f1;
+}
+ul.list li .a-left{
+    float: left;
+    padding-left: 76px;
+    background: url('../images/users/addr-default.png') no-repeat 10px 37px;
+}
+ul.list li .a-right{
+    float: right;
+}
+ul.list li .addr-set{
+    height: 124px;
+    line-height: 124px;
+
+}

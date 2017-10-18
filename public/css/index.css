@@ -1,0 +1,210 @@
+.header{
+	height: 120px;
+	background: #ffcc42;
+	padding-top: 30px;
+}
+.header .search{
+	height: 90px;
+	width: 810px;
+	margin: 0 auto;
+	background: #fff;
+	border-radius: 8px;
+}
+.header .search .s-input{
+	padding: 24px 90px;
+	border-radius: 8px;
+	background: url('../images/index/search_bg.png') no-repeat 26px 24px;
+	font-size: 40px;
+	width: 630px;
+	height: 42px;
+}
+.nav-wrapper{
+	width: 1080px;
+	height: 180px;
+	box-shadow: 0 -5px 10px #dedede;
+	position: fixed;
+	bottom: 0;
+	background: #fff;
+}
+.nav{
+	height: 180px;
+	width: 760px;
+	left: 14.8%;
+	position: fixed;
+	bottom: 0;
+}
+.nav ul li{
+	float: left;
+	width: 90px;
+	text-align: center;
+	padding-top: 98px;
+	margin-right: 16.2%;
+}
+.nav ul li:first-child{
+	background: url('../images/index/index_bg.png') no-repeat 10px 18px;
+}
+.nav ul li:nth-child(2){
+	background: url('../images/index/sort_bg.png') no-repeat 10px 18px;
+}
+.nav ul li:nth-child(3){
+	background: url('../images/index/cart_bg.png') no-repeat 10px 18px;
+	width: 120px;
+}
+.nav ul li:nth-child(4){
+	background: url('../images/index/user_bg.png') no-repeat 10px 18px;
+	margin-right: 0;
+}
+.nav ul li:first-child.active{
+	background: url('../images/index/index_active.png') no-repeat 10px 18px;
+}
+.nav ul li:nth-child(2).active{
+	background: url('../images/index/sort_active.png') no-repeat 10px 18px;
+}
+.nav ul li:nth-child(3).active{
+	background: url('../images/index/cart_active.png') no-repeat 10px 18px;
+}
+.nav ul li:nth-child(4).active{
+	background: url('../images/index/user_active.png') no-repeat 10px 18px;
+}
+.nav ul li a{
+	font-size: 28px;
+}
+.main{
+	width: 1080px;
+	margin: 0 auto;
+	background: #eee;
+	padding-bottom: 180px;
+}
+.main .category{
+	height: 566px;
+	padding: 55px 104px 0px;
+	background: #fff;
+}
+.main .category ul li{
+	float: left;
+	width: 153px;
+	margin-right: 84px;
+	margin-bottom: 55px;
+}
+.main .category ul li:nth-child(4){
+	margin-right: 0;
+}
+.main .category ul li:nth-child(8){
+	margin-right: 0;
+}
+.main .category ul li h5{
+	height: 70px;
+	font-size: 34px;
+	font-weight: normal;
+	text-align: center;
+	line-height: 70px;
+	display: inline-block;
+	color: #555;
+}
+.main .wrapper{
+	margin-top: 50px;
+	background: #fff;
+	padding: 50px 56px;
+}
+.main .top{
+	display: inline-block;
+	width: 100%;
+}
+.main h3{
+	float: left;
+	font-size: 40px;
+	color: #555;
+}
+.main .more{
+	float: right;
+	font-size: 30px;
+	color: #bfbfbf;
+	background: url('../images/index/more_bg.png') no-repeat top right;
+	padding-right: 42px;
+}
+.main .activity ul{
+	height: 755px;
+}
+.main .activity ul li{
+	float: left;
+	width: 440px;
+	margin-right: 56px;
+}
+.main .activity ul li:nth-child(2) {
+	margin-right: 0;
+}
+.main .activity ul li:nth-child(4) {
+	margin-right: 0;
+}
+.main .activity ul li h4{
+	font-size: 35px;
+	color: #555;
+	font-weight: normal;
+	padding-top: 35px;
+}
+.main .activity ul li .price{
+	font-size: 30px;
+	color: #878787;
+	padding: 15px 0;
+}
+.main .activity ul li .hot-tag{
+	width: 98px;
+	height: 52px;
+	display: block;
+	background: url('../images/index/hot_tag.png') no-repeat;
+	float: right;
+}
+.main .activity ul li .img{
+	width: 440px;
+	height: 220px;
+	margin-top: 15px;
+}
+.main .hot ul li{
+	height: 316px;
+	padding-top: 64px;
+	border-bottom: 2px solid #e4e4e4;
+}
+.main .hot ul li .img{
+	float: left;
+	margin-top: 9px;
+}
+.main .hot ul li .text{
+	float: left;
+	margin-left: 84px;
+	width: 630px;
+	text-align: justify;
+}
+.main .hot ul li .text h4{
+	font-size: 35px;
+	color: #555;
+	font-weight: normal;
+}
+.main .hot ul li .text .intro{
+	font-size: 25px;
+	color: #555;
+}
+.main .hot ul li .text .price{
+	font-size: 30px;
+	color: #e60012;
+	margin-top: 25px;
+	display: inline-block;
+}
+.main .hot ul li .text a{
+	display: inline-block;
+	width: 180px;
+	height: 70px;
+	line-height: 70px;
+	border: 1px solid #ffcc42;
+	border-radius: 6px;
+	text-align: center;
+	font-size: 32px;
+	color: #ffcc42;
+	float: right;
+}
+.main .news{
+	margin-top: 50px;
+	background: #fff;
+}
+.main .news .top{
+	padding: 50px 0 40px;
+}

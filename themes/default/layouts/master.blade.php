@@ -1,14 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title')</title>
-    @yield('head')
-</head>
-<body>
-@yield('body')
-@yield('js')
-</body>
-</html>
+@extends('themes.default.layouts.frame')
+
+@section('body')
+    <body class="hold-transition skin-red sidebar-mini">
+
+        @if($mark !== 'user')
+            @include('themes.default.widgets.header')
+        @endif
+
+        @yield('css')
+
+        @yield('content')
+
+        @if($mark !== 'detail')
+            @include('themes.default.widgets.nav')
+        @else
+            @include('themes.default.widgets.action')
+        @endif
+
+        @yield('js')
+
+    <!-- ./wrapper -->
+    </body>
+@endsection
