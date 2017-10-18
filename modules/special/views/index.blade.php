@@ -13,7 +13,7 @@
         </section>
         <section class="content">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-lg-3 col-md-4">
                     <div class="box box-success">
                         <div class="box-body">
                             <div id="tree">
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10">
+                <div class="col-lg-9 col-md-8">
                     <div class="box box-info">
                         <div class="box-body">
                             @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])

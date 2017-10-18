@@ -70,7 +70,7 @@ class VoteController extends BaseController
         $site = $vote->site;
         $theme = $site->mobile_theme->name;
 
-        return view("themes.$theme.votes.share", compact('vote', 'site'));
+        return view("$theme.votes.share", compact('vote', 'site'));
     }
 
     public function edit($id)

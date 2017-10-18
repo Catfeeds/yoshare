@@ -111,7 +111,7 @@ class SurveyController extends BaseController
 
         $theme = $site->mobile_theme->name;
 
-        return view("themes.$theme.surveys.share", compact('survey', 'site'));
+        return view("$theme.surveys.share", compact('survey', 'site'));
 
     }
 
