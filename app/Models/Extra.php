@@ -5,23 +5,18 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 
-class Click extends Model
+class Extra extends Model
 {
     protected $fillable = [
         'site_id',
         'refer_id',
         'refer_type',
-        'count',
-        'ip',
+        'clicks',
+        'likes',
     ];
 
     public function refer()
     {
         return $this->morphTo();
-    }
-
-    public function member()
-    {
-        return $this->hasOne(Member::class, 'id', 'member_id');
     }
 }

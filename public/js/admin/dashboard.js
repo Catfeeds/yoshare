@@ -168,7 +168,6 @@ require(
         // 加载数据
         lineChart.setOption(option);
         
-        
         var mapChart = echarts.init(document.getElementById('mapChart'), 'macarons');
         var option = {
             timeline: {
@@ -188,7 +187,6 @@ require(
         mapChart.setOption(option);
          
         var pieChart = echarts.init(document.getElementById('pieChart'), 'macarons');
-
         var option = {
             tooltip: {
                 trigger: 'item',
@@ -220,6 +218,7 @@ require(
         window.onresize = function(){
         	lineChart.resize();
         	mapChart.resize();
+            pieChart.resize();
         };
     }
 );

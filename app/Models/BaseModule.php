@@ -41,6 +41,11 @@ class BaseModule extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function clicks()
+    {
+        return $this->morphOne(Extra::class, 'refer');
+    }
+
     public function tags()
     {
         return $this->morphMany(Tag::class, 'refer');
@@ -102,27 +107,17 @@ class BaseModule extends Model
         });
     }
 
-    public function likes()
+    public function getClickCountAttribute()
     {
-        return $this->morphOne(Like::class, 'refer');
+        return Cache::rememberForever($this->table . "-click-$this->id", function () {
+            return $this->extra ? $this->extra->clicks : 0;
+        });
     }
 
     public function getLikeCountAttribute()
     {
         return cache_remember($this->table . "-like-$this->id", 1, function () {
-            return $this->likes ? $this->likes->count : 0;
-        });
-    }
-
-    public function clicks()
-    {
-        return $this->morphOne(Click::class, 'refer');
-    }
-
-    public function getClickCountAttribute()
-    {
-        return Cache::rememberForever($this->table . "-click-$this->id", function () {
-            return $this->clicks ? $this->clicks->count : 0;
+            return $this->extra ? $this->extra->likes : 0;
         });
     }
 
@@ -131,13 +126,13 @@ class BaseModule extends Model
         $count = Cache::increment($this->table . "-click-$this->id");
         //间隔回写数据库
         if ($count % env('CLICK_INTERVAL', 1) == 0) {
-            if (empty($this->clicks)) {
-                $this->clicks()->create([
+            if (empty($this->extra)) {
+                $this->extra()->create([
                     'site_id' => $this->site_id,
-                    'count' => $count,
+                    'clicks' => $count,
                 ]);
             } else {
-                $this->clicks->increment('count');
+                $this->extra->increment('clicks');
             }
         }
     }

@@ -153,11 +153,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('categories/{id}/delete', 'CategoryController@destroy');
 
     /**
-     * 问答管理
-     */
-    Route::post('questions/reply/{id}', 'QuestionController@reply');
-
-    /**
      * 评论管理
      */
     Route::get('comments/table', 'CommentController@table');

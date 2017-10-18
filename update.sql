@@ -630,3 +630,21 @@ CREATE TABLE `cms_uv_logs` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------
+-- 2017-10-18
+-- -----------
+CREATE TABLE `cms_extras` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(10) NOT NULL,
+  `refer_id` int(10) unsigned NOT NULL COMMENT '内容ID',
+  `refer_type` varchar(255) DEFAULT NULL,
+  `clicks` int(10) unsigned NOT NULL COMMENT '点击数',
+  `likes` int(10) unsigned NOT NULL COMMENT '点赞数',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cms_clicks`;
+DROP TABLE IF EXISTS `cms_likes`;
