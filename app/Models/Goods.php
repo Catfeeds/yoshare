@@ -13,7 +13,6 @@ class Goods extends BaseModule
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
-    const MARK = 'detail';
 
     const STATES = [
         0 => '已删除',

@@ -1,0 +1,38 @@
+.o-fixed{
+    position: fixed;
+    height: 280px;
+}
+.o-fixed .o-header{
+    height: 140px;
+    background: #edc84d;
+}
+.o-fixed .o-header .title{
+    width: 580px;
+    float: left;
+    height: 140px;
+    line-height: 140px;
+    text-align: center;
+    font-size: 48px;
+    color: #fff;
+}
+.o-fixed ul{
+    width: 1000px;
+    height: 140px;
+    margin: 0 auto;
+    border-bottom: 1px solid #1b1b1b;
+}
+.o-fixed ul li{
+    width: 200px;
+    float: left;
+    text-align: center;
+    line-height: 140px;
+}
+.o-fixed ul li:first-child{
+    width: 180px;
+}
+.o-fixed ul li.active{
+    border-bottom: 2px solid #e71f19;
+}
+.o-fixed ul li.active a{
+    color: #e71f19;
+}

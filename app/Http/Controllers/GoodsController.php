@@ -29,6 +29,16 @@ class GoodsController extends Controller
         $this->module = Module::where('name', 'Goods')->first();
     }
 
+    public function order(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = Domain::MARK_MEMBER;
+        return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'mark' => $mark]);
+    }
+
     public function show(Domain $domain, $id)
     {
         if (empty($domain->site)) {
@@ -42,7 +52,7 @@ class GoodsController extends Controller
         }
         $goods->incrementClick();
 
-        $mark = Goods::MARK;
+        $mark = Domain::MARK_DETAIL;
         return view('themes.' . $domain->theme->name . '.goods.detail', ['site' => $domain->site, 'goods' => $goods, 'mark' => $mark]);
     }
 

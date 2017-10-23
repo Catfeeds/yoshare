@@ -1,13 +1,8 @@
 @extends('themes.mobile.layouts.frame')
 
 @section('body')
-    <body class="hold-transition skin-red sidebar-mini">
 
-        @if($mark == 'detail')
-            @include('themes.mobile.widgets.back')
-        @elseif($mark !== 'user' && $mark != 'detail')
-            @include('themes.mobile.widgets.header')
-        @endif
+    <body class="hold-transition skin-red sidebar-mini">
 
         @yield('css')
 
@@ -20,7 +15,5 @@
         @endif
 
         @yield('js')
-
-    <!-- ./wrapper -->
     </body>
 @endsection

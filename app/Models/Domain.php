@@ -5,8 +5,10 @@ namespace App\Models;
 
 class Domain
 {
-    const MARK_MEMBER = 'user';
+    const MARK_MEMBER = 'member';
     const MARK_GOODS = 'goods';
+    const MARK_DETAIL = 'detail';
+
     public $site = '';
     public $theme = '';
 

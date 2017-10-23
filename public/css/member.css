@@ -4,6 +4,7 @@ body{
 .u-wrapper{
     background: #eee;
     color: #555;
+    padding-bottom: 180px;
 }
 .u-wrapper a{
     color: #555;

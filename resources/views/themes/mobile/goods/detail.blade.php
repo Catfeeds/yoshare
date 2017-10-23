@@ -5,6 +5,7 @@
     <link href="{{ url('css/swiper.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 @section('content')
+    @include('themes.mobile.goods.header')
     <div  class="product">
         <div class="banner swiper-container">
             <div class="swiper-wrapper" id="banner_swiper">
