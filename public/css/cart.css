@@ -1,6 +1,7 @@
 .c-goods{
     padding: 140px 0;
     background: #eee;
+    min-height: 1800px;
 }
 .c-goods .all{
     height: 100px;
@@ -41,7 +42,6 @@
 }
 .c-goods ul li{
     height: 300px;
-    line-height: 300px;
     padding-left: 86px;
 }
 .c-goods ul li .c-radio{
@@ -71,6 +71,7 @@
 .c-goods ul li .g-desc .name{
     color: #242d32;
     height: 50px;
+    margin-top: 50px;
 }
 .c-goods ul li .g-desc .subtitle{
     color: #677e85;
@@ -79,4 +80,76 @@
 .c-goods ul li .g-desc .price{
     color: #ff0b0f;
     height: 50px;
+}
+.c-goods ul li .num{
+    float: left;
+    width: 140px;
+    height: 300px;
+    line-height: 300px;
+    margin-left: 55px;
+    position: relative;
+}
+.c-goods ul li .num .i-num{
+    height: 24px;
+    width: 62px;
+    border: 3px solid #b6c6c8;
+    position: absolute;
+    top: 134px;
+    left: 31px;
+}
+.c-goods ul li .num i{
+    display: inline-block;
+    height: 40px;
+    width: 34px;
+}
+.c-goods ul li .num .i-sub{
+    background: url('../images/goods/sub_bg.png') no-repeat top left;
+    position: absolute;
+    top: 134px;
+    left: 0;
+}
+.c-goods ul li .num .i-add{
+    background: url('../images/goods/add_bg.png') no-repeat top left;
+    position: absolute;
+    top: 134px;
+    left: 105px;
+}
+.c-goods ul li .action{
+    float: left;
+    width: 145px;
+    line-height: 300px;
+    text-align: center;
+}
+.c-goods ul li .action a{
+    font-size: 25px;
+}
+.c-fixed{
+    width: 1080px;
+    height: 135px;
+    box-shadow: 0 -5px 10px #dedede;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    padding-top: 45px;
+}
+.c-fixed .payment{
+    height: 72px;
+    width: 240px;
+    border-radius: 5px;
+    background: #ffcc42;
+    line-height: 72px;
+    text-align: center;
+    float: right;
+    margin-right: 80px;
+}
+.c-fixed .price{
+    float: right;
+    margin-right: 54px;
+    color: #333;
+}
+.c-fixed .price span{
+    color: #ff0b0f;
+}
+.c-fixed .price i{
+    color: #555;
 }

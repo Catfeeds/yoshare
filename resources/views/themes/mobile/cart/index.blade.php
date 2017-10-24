@@ -18,19 +18,17 @@
                     <div class="subtitle">索尼（sony）ps4【国行游戏】</div>
                     <div class="price">￥30/月</div>
                 </div>
-                <div class="num"></div>
+                <div class="num">
+                    <i class="i-sub"></i>
+                    <input type="text" class="i-num" value="">
+                    <i class="i-add"></i>
+                </div>
                 <div class="action">
                     <a class="c-button">删除</a>
                 </div>
                 <div class="clear"></div>
             </li>
         </ul>
-        <div class="payment">
-            <div class="price">
-                <p>合计：￥30 <span>（不含运费）</span>></p>
-            </div>
-            <button class="Settlement">去结算</button>
-        </div>
     </div>
 @endsection
 

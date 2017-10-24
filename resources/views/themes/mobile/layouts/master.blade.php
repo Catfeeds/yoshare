@@ -8,10 +8,12 @@
 
         @yield('content')
 
-        @if($mark !== 'detail')
-            @include('themes.mobile.widgets.nav')
-        @else
+        @if($mark == 'detail')
             @include('themes.mobile.widgets.action')
+        @elseif($mark == 'cart')
+            @include('themes.mobile.cart.footer')
+        @else
+            @include('themes.mobile.widgets.nav')
         @endif
 
         @yield('js')
