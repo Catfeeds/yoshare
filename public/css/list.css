@@ -1,55 +1,70 @@
-.category{
+.c-wrapper{
+    width: 1080px;
+    margin: 0 auto;
+    background: #eee;
+    padding-bottom: 180px;
+}
+.c-wrapper .category{
     padding: 15px 30px;
     background: #eee;
     height: 220px;
 }
-.category ul:first-child{
+.c-wrapper .category ul:first-child{
     margin-bottom: 15px;
     height: 100px;
 }
-.category ul li{
+.c-wrapper .category ul li{
     float: left;
-    margin-right: 6px;
-    width: 250px;
+    margin-right: 1%;
+    width: 24%;
     height: 100px;
     line-height: 100px;
     text-align: center;
     background: #fff;
 }
-.category ul li a{
+.c-wrapper .category ul li a{
     font-size: 40px;
     color: #555;
 }
-.category ul li:nth-child(4){
+.c-wrapper .category ul li:nth-child(4){
     margin-right: 0;
 }
-.products{
-    padding: 65px 80px;
+.c-wrapper .products{
     background: #fff;
 }
-.products ul li{
+.c-wrapper .products ul{
+    height: 634px;
+}
+.c-wrapper .products ul li{
     margin-right: 110px;
-    width: 400px;
     height: 508px;
     float: left;
     color: #1b1b1b;
     position: relative;
+    padding-top: 65px;
 }
-.products ul li:nth-child(2){
+.c-wrapper .products ul li:first-child{
+    padding-left: 80px;
+}
+.c-wrapper .products ul li a img{
+    width: 400px;
+    height: 400px;
+}
+.c-wrapper .products ul li:nth-child(2){
     margin-right: 0;
 }
-.products ul li .summary{
+.c-wrapper .products ul li .summary{
     font-size: 25px;
     height: 72px;
     line-height: 72px;
 }
-.products ul li h4{
+.c-wrapper .products ul li h4{
     font-size: 35px;
 }
-.products ul li .price{
+.c-wrapper .products ul li .price{
     font-size: 35px;
     position: absolute;
-    bottom: -14px;
+    bottom: -6px;
     right: 0;
 }
 

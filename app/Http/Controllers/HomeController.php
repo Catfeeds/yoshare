@@ -19,4 +19,14 @@ class HomeController extends Controller
         $mark = 'index';
         return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'mark' => $mark]);
     }
+
+    public function cart(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = 'cart';
+        return view('themes.' . $domain->theme->name . '.cart.index', ['site' => $domain->site, 'mark' => $mark]);
+    }
 }

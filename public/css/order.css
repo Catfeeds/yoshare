@@ -7,7 +7,16 @@
     background: #edc84d;
 }
 .o-fixed .o-header .title{
-    width: 580px;
+    width: 560px;
+    float: left;
+    height: 140px;
+    line-height: 140px;
+    text-align: center;
+    font-size: 48px;
+    color: #fff;
+}
+.o-fixed .o-header .c-title{
+    width: 650px;
     float: left;
     height: 140px;
     line-height: 140px;

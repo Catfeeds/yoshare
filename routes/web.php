@@ -27,6 +27,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/wallet/{type}', 'UserController@wallet');
     Route::get('/wallet/coupon', 'UserController@coupon');
     Route::get('/orders', 'GoodsController@order');
+    Route::get('/cart', 'HomeController@cart');
 
 
 // 网站后端数据统计接口

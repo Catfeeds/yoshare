@@ -1,0 +1,82 @@
+.c-goods{
+    padding: 140px 0;
+    background: #eee;
+}
+.c-goods .all{
+    height: 100px;
+    line-height: 100px;
+    padding: 24px 80px;
+    background: #fff;
+    margin-top: 10px;
+    position: relative;
+    border-bottom: 2px solid #eee;
+}
+.c-goods a.all-checked{
+    border-radius: 27px;
+    width: 54px;
+    height: 54px;
+    border: 3px solid #c0bfbe;
+    display: inline-block;
+    margin-top: 18px;
+}
+.c-goods a.active{
+    border-radius: 27px;
+    width: 54px;
+    height: 54px;
+    border: 3px solid #c0bfbe;
+    display: inline-block;
+    margin-top: 18px;
+    background: url('../images/all_bg.png') no-repeat top left;
+}
+.c-goods .words{
+    font-size: 48px;
+    color: #7d7c7d;
+    position: absolute;
+    top: 19px;
+    left: 200px;
+}
+.c-goods ul{
+    margin-top: 10px;
+    background: #fff;
+}
+.c-goods ul li{
+    height: 300px;
+    line-height: 300px;
+    padding-left: 86px;
+}
+.c-goods ul li .c-radio{
+    border-radius: 27px;
+    width: 54px;
+    height: 54px;
+    border: 3px solid #c0bfbe;
+    display: inline-block;
+    margin-top: 123px;
+    float: left;
+    background: #fff;
+}
+.c-goods ul li .g-img{
+    float: left;
+    height: 200px;
+    width: 200px;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+.c-goods ul li .g-desc{
+    float: left;
+    height: 300px;
+    font-size: 28px;
+    padding-left: 50px;
+    width: 300px;
+}
+.c-goods ul li .g-desc .name{
+    color: #242d32;
+    height: 50px;
+}
+.c-goods ul li .g-desc .subtitle{
+    color: #677e85;
+    height: 100px;
+}
+.c-goods ul li .g-desc .price{
+    color: #ff0b0f;
+    height: 50px;
+}
