@@ -6,13 +6,13 @@
     </div>
 </div>
 <div class="h-fixed">
-    <a herf="#" onclick="javascript:history.back(-1);" class="f-back"></a>
+    <a herf="#" onclick="javascript:history.back(-1);" class="f-back"><</a>
     <ul>
         <li><a href="#">商品</a></li>
         <li><a href="#">详情</a></li>
         <li><a href="#">评价</a></li>
     </ul>
-    <a class="h-nav" herf="#" ></a>
+    <a class="g-nav" herf="#" ></a>
     <div class="clear"></div>
 </div>
 <script>
