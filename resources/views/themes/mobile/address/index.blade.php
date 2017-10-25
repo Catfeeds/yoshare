@@ -2,11 +2,13 @@
 @section('title', '我的收货地址-北京优享科技有限公司')
 @section('css')
     <link href="{{ url('css/address.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
     <div class="u-wrapper">
 
-        @include('templates.back')
+        @include('themes.mobile.address.header')
+
         <div class="title">我的收货地址</div>
         <ul class="list">
             <li>

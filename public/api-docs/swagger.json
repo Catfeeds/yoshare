@@ -43,6 +43,166 @@
                 }
             }
         },
+        "/addresses": {
+            "get": {
+                "tags": [
+                    "/addresses \u5730\u5740"
+                ],
+                "summary": "\u83b7\u53d6\u5730\u5740\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/addresses/search": {
+            "get": {
+                "tags": [
+                    "/addresses \u5730\u5740"
+                ],
+                "summary": "\u641c\u7d22\u5730\u5740",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/addresses/info": {
+            "get": {
+                "tags": [
+                    "/addresses \u5730\u5740"
+                ],
+                "summary": "\u83b7\u53d6\u5730\u5740\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u5730\u5740ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/addresses/detail": {
+            "get": {
+                "tags": [
+                    "/addresses \u5730\u5740"
+                ],
+                "summary": "\u83b7\u53d6\u5730\u5740\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u5730\u5740ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/addresses/share": {
+            "get": {
+                "tags": [
+                    "/addresses \u5730\u5740"
+                ],
+                "summary": "\u83b7\u53d6\u5730\u5740\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u5730\u5740ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/apps/info": {
             "get": {
                 "tags": [

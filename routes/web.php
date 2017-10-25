@@ -23,7 +23,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/phone', 'MemberController@phone');
     Route::get('/member/bind', 'MemberController@bind');
     Route::get('/member/vip', 'MemberController@vip');
-    Route::resource('/address', 'AddressController');
     Route::get('/wallet/{type}', 'UserController@wallet');
     Route::get('/wallet/coupon', 'UserController@coupon');
     Route::get('/orders', 'GoodsController@order');

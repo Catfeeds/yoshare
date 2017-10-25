@@ -34,7 +34,7 @@
         <div class="set">
             <div class="content">
                 <ul>
-                    <li><a href="/address">管理收货地址</a></li>
+                    <li><a href="/address/index.html">管理收货地址</a></li>
                     <li><a href="/member/vip">高级用户管理</a></li>
                     <li><a href="/member/phone">绑定我的手机</a></li>
                 </ul>

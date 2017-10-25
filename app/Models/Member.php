@@ -66,8 +66,8 @@ class Member extends Model
         });
     }
 
-    public function pastures(){
-        return $this->belongsToMany(Pasture::class);
+    public function addresses(){
+        return $this->hasMany(Address::class);
     }
 
 }
