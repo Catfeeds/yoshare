@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\ModelsNode;
 use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

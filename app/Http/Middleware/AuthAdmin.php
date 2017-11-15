@@ -5,22 +5,23 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class RedirectIfAuthenticated
+class AuthAdmin
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $guard
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            // 根据不同 guard 跳转到不同的页面
-            $url = $guard ? 'admin':'/';
-            return redirect($url);
+        if (auth()->guard('admin')->guest()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest('admin/login');
+            }
         }
 
         return $next($request);

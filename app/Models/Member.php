@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Auth;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Member extends Model
+class Member extends Authenticatable
 {
+    use Notifiable;
     const ID_ADMIN = 1;
 
     const STATE_DISABLED = 0;
@@ -19,9 +22,9 @@ class Member extends Model
     ];
 
     protected $fillable = [
-        'name',
+        'username',
         'password',
-        'nick_name',
+        'email',
         'mobile',
         'avatar_url',
         'salt',
@@ -58,7 +61,7 @@ class Member extends Model
     {
         $query->where(function ($query) use ($filters) {
             !empty($filters['id']) ? $query->where('id', $filters['id']) : '';
-            !empty($filters['nick_name']) ? $query->where('nick_name', 'like', '%' . $filters['nick_name'] . '%') : '';
+            !empty($filters['username']) ? $query->where('username', 'like', '%' . $filters['username'] . '%') : '';
             !empty($filters['mobile']) ? $query->where('mobile', $filters['mobile']) : '';
             $filters['state'] != '' ? $query->where('state', $filters['state']) : '';
             !empty($filters['start_date']) ? $query->where('created_at', '>=', $filters['start_date'])

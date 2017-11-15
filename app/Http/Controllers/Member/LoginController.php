@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Member;
 
-use App\Events\UserLogEvent;
+use App\Events\MemberLogEvent;
 use App\Http\Controllers\Controller;
-use App\Models\UserLog;
+use App\Models\MemberLog;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Captcha;
+use Illuminate\Support\Facades\Auth;
 
 
 class LoginController extends Controller
@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'admin';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -39,17 +39,12 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:admin', ['except' => ['logout', 'captcha']]);
+        $this->middleware('guest', ['except' => ['logout']]);
     }
 
     public function username()
     {
         return 'username';
-    }
-
-    public function captcha()
-    {
-        return Captcha::create();
     }
 
     /**
@@ -63,10 +58,9 @@ class LoginController extends Controller
         $this->validate($request, [
             $this->username() => 'required',
             'password' => 'required',
-            'captcha' => 'required|captcha',
         ]);
 
-        event(new UserLogEvent(UserLog::ACTION_LOGIN));
+        event(new MemberLogEvent(MemberLog::ACTION_LOGIN));
     }
 
     /**
@@ -83,19 +77,14 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        event(new UserLogEvent(UserLog::ACTION_LOGOUT));
+        event(new MemberLogEvent(MemberLog::ACTION_LOGOUT));
 
-        return redirect('admin/login');
+        return redirect('/login');
     }
 
-    /**
-     * 自定义认证驱动
-     * @author
-     * @date   2016-09-05T23:53:07+0800
-     * @return [type]                   [description]
-     */
-    protected function guard()
+    public function guard()
     {
-        return auth()->guard('admin');
+        return Auth::guard('web');
     }
+
 }

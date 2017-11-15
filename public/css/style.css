@@ -128,6 +128,18 @@ a.homehref{
 	margin-left: 80px;
 	float: left;
 }
+.g-back{
+	display: inline-block;
+	width: 120px;
+	height: 140px;
+	line-height: 102px;
+	text-align: center;
+	font-size: 60px;
+	background: url(../images/goods/goods_back.png) no-repeat 0px 50px;
+	z-index: 99;
+	margin-left: 80px;
+	float: left;
+}
 .l-cart{
 	width: 60px;
 	height: 140px;
@@ -143,6 +155,14 @@ a.homehref{
 	display: inline-block;
 	margin-right: 70px;
 	background: url(../images/nav_bg.png) no-repeat 0px 50px;
+}
+.g-nav{
+	width: 100px;
+	height: 140px;
+	float: right;
+	display: inline-block;
+	margin-right: 70px;
+	background: url(../images/goods/goods_nav.png) no-repeat 0px 50px;
 }
 input, textarea{
 	padding: 5px;

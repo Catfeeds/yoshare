@@ -7,7 +7,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('captcha', 'Auth\LoginController@captcha');
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
 
     Route::get('/', 'AdminController@dashboard');
     Route::get('/index', 'AdminController@dashboard');
