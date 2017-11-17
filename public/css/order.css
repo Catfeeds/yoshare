@@ -3,14 +3,13 @@
     height: 280px;
 }
 .m-fixed{
-    position: fixed;
     height: 170px;
 }
-.o-fixed,.m-fixed .o-header{
+.o-fixed .o-header{
     height: 140px;
     background: #edc84d;
 }
-.o-fixed,.m-fixed .o-header .title{
+.o-fixed .o-header .title{
     width: 560px;
     float: left;
     height: 140px;
@@ -19,7 +18,7 @@
     font-size: 48px;
     color: #fff;
 }
-.o-fixed,.m-fixed .o-header .c-title{
+.o-fixed .o-header .c-title{
     width: 650px;
     float: left;
     height: 140px;
@@ -28,24 +27,24 @@
     font-size: 48px;
     color: #fff;
 }
-.o-fixed,.m-fixed ul{
+.o-fixed ul{
     width: 1000px;
     height: 140px;
     margin: 0 auto;
     border-bottom: 1px solid #1b1b1b;
 }
-.o-fixed,.m-fixed ul li{
+.o-fixed ul li{
     width: 200px;
     float: left;
     text-align: center;
     line-height: 140px;
 }
-.o-fixed,.m-fixed ul li:first-child{
+.o-fixed ul li:first-child{
     width: 180px;
 }
-.o-fixed,.m-fixed ul li.active{
+.o-fixed ul li.active{
     border-bottom: 2px solid #e71f19;
 }
-.o-fixed,.m-fixed ul li.active a{
+.o-fixed ul li.active a{
     color: #e71f19;
 }

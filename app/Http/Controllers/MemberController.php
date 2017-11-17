@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberRequest;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use App\Models\DataSource;
 use App\Models\Domain;
 use App\Models\Member;
@@ -191,7 +191,7 @@ class MemberController extends Controller
             return view('auth.login');
         }
 
-        $member = Auth::member();
+        $member = $this->getMember();
         //菜单栏标记
         $mark = Domain::MARK_MEMBER;
         return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'mark' => $mark]);
@@ -200,11 +200,15 @@ class MemberController extends Controller
 
     public function checkLogin()
     {
-        if (!is_null(Auth::member())) {
+        if (!is_null($this->getMember())) {
             return true;
         } else {
             return false;
         }
+    }
+    public function getMember()
+    {
+        return Auth::guard('web')->user();
     }
 
     public function vip(Domain $domain)
