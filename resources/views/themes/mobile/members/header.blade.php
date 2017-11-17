@@ -1,4 +1,4 @@
-<div class="m-fixed">
+<div class="o-fixed">
     <div class="o-header" style="height: 166px;width: 1080px;">
         <a herf="#" onclick="javascript:history.back(-1);" class="f-back"></a>
         <div class="c-title">{{ $title }}</div>

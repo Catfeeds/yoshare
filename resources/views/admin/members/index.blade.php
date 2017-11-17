@@ -24,7 +24,7 @@
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-width="50" data-align="center">ID</th>
-                                    <th data-field="nick_name" data-width="100" data-align="center">昵称</th>
+                                    <th data-field="username" data-width="100" data-align="center">用户名</th>
                                     <th data-field="points" data-width="60" data-align="center">积分</th>
                                     <th data-field="mobile" data-align="center" data-width="100">手机号</th>
                                     <th data-field="ip" data-width="100" data-align="center">IP</th>

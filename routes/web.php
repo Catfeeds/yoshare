@@ -31,10 +31,4 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/orders', 'GoodsController@order');
     Route::get('/cart', 'HomeController@cart');
 
-
-// 网站后端数据统计接口
-    Route::get('access/tend/{num}', 'AccessController@tend');
-    Route::get('access/progress/{num}', 'AccessController@progress');
-    Route::get('access/area/{limit?}', 'AccessController@area');
-    Route::get('access/browser', 'AccessController@browser');
 });

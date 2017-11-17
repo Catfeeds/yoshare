@@ -8,7 +8,7 @@
         <div class="head">
             <div class="avatar">
                 <i></i><img src="#" alt="avatar"></div>
-            <h3>哎呦喂</h3>
+            <h3>{{ $member->username }}</h3>
         </div>
         <div class="order">
             <div class="content">
@@ -43,7 +43,7 @@
         <div class="set">
             <div class="content">
                 <ul>
-                    <li class="s-user"><a href="#">个人设置</a></li>
+                    <li class="s-user"><a href="#">系统设置</a></li>
                 </ul>
             </div>
         </div>

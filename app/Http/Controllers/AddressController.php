@@ -29,21 +29,6 @@ class AddressController extends Controller
         $this->module = Module::where('name', 'Address')->first();
     }
 
-    public function show(Domain $domain, $id)
-    {
-        if (empty($domain->site)) {
-            return abort(501);
-        }
-
-        $address = Address::find($id);
-        if (empty($address)) {
-            return abort(404);
-        }
-        $address->incrementClick();
-
-        return view('themes.' . $domain->theme->name . '.addresses.detail', ['site' => $domain->site, 'address' => $address]);
-    }
-
     public function slug(Domain $domain, $slug)
     {
         if (empty($domain->site)) {
@@ -55,7 +40,6 @@ class AddressController extends Controller
         if (empty($address)) {
             return abort(404);
         }
-        $address->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.addresses.detail', ['site' => $domain->site, 'address' => $address]);
     }
@@ -117,8 +101,8 @@ class AddressController extends Controller
     public function store()
     {
         $input = Request::all();
-        $input['site_id'] = Auth::user()->site_id;
-        $input['user_id'] = Auth::user()->id;
+        $input['site_id'] = Auth::member()->site_id;
+        $input['member'] = Auth::member()->id;
 
         $validator = Module::validate($this->module, $input);
         if ($validator->fails()) {

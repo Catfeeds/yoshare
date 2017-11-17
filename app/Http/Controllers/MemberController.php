@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\DataSource;
 use App\Models\Domain;
 use App\Models\Member;
@@ -124,32 +125,30 @@ class MemberController extends Controller
     {
         $filters = [
             'id' => Request::has('id') ? intval(Request::get('id')) : 0,
-            'nick_name' => Request::has('nick_name') ? trim(Request::get('nick_name')) : '',
+            'username' => Request::has('username') ? trim(Request::get('username')) : '',
             'mobile' => Request::has('mobile') ? trim(Request::get('mobile')) : '',
             'state' => Request::has('state') ? Request::get('state') : '',
         ];
 
         $offset = Request::get('offset') ? Request::get('offset') : 0;
         $limit = Request::get('limit') ? Request::get('limit') : 20;
-        
 
-        
+
         $members = Member::filter($filters)
-        ->orderBy('id', 'desc')
-        ->skip($offset)
-        ->limit($limit)
-        ->get();
+            ->orderBy('id', 'desc')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
 
         $total = Member::filter($filters)
-        ->count();
-       
-        
+            ->count();
+
 
         $members->transform(function ($member) {
             return [
                 'id' => $member->id,
                 'name' => $member->name,
-                'nick_name' => $member->nick_name,
+                'username' => $member->username,
                 'mobile' => $member->mobile,
                 'avatar_url' => $member->avatar_url,
                 'points' => $member->points,
@@ -188,14 +187,35 @@ class MemberController extends Controller
             return abort(501);
         }
 
-        $member = Member::find(Member::ID_ADMIN);
-
-        if (empty($member)) {
-            return abort(404);
+        if (empty($this->checkLogin())) {
+            return view('auth.login');
         }
-        //$member->incrementClick();  TODO
 
+        $member = Auth::member();
+        //菜单栏标记
         $mark = Domain::MARK_MEMBER;
         return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'mark' => $mark]);
+
+    }
+
+    public function checkLogin()
+    {
+        if (!is_null(Auth::member())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function vip(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = Domain::MARK_MEMBER;
+        $title = 'VIP管理';
+
+        return view('themes.' . $domain->theme->name . '.members.vip', ['title' => $title, 'site' => $domain->site, 'mark' => $mark]);
     }
 }

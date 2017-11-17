@@ -1380,7 +1380,19 @@ namespace Illuminate\Support\Facades {
         {
             return \Illuminate\Auth\AuthManager::guard($name);
         }
-        
+
+        /**
+         * Attempt to get the member from the local cache.
+         *
+         * @param Object member
+         * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\member
+         * @static
+         */
+        public static function member()
+        {
+            return self::guard('web')->user();
+        }
+
         /**
          * Create a session based authentication guard.
          *

@@ -395,6 +395,166 @@
                 }
             }
         },
+        "/carts": {
+            "get": {
+                "tags": [
+                    "/carts \u8d2d\u7269\u8f66"
+                ],
+                "summary": "\u83b7\u53d6\u8d2d\u7269\u8f66\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/carts/search": {
+            "get": {
+                "tags": [
+                    "/carts \u8d2d\u7269\u8f66"
+                ],
+                "summary": "\u641c\u7d22\u8d2d\u7269\u8f66",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/carts/info": {
+            "get": {
+                "tags": [
+                    "/carts \u8d2d\u7269\u8f66"
+                ],
+                "summary": "\u83b7\u53d6\u8d2d\u7269\u8f66\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8d2d\u7269\u8f66ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/carts/detail": {
+            "get": {
+                "tags": [
+                    "/carts \u8d2d\u7269\u8f66"
+                ],
+                "summary": "\u83b7\u53d6\u8d2d\u7269\u8f66\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8d2d\u7269\u8f66ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/carts/share": {
+            "get": {
+                "tags": [
+                    "/carts \u8d2d\u7269\u8f66"
+                ],
+                "summary": "\u83b7\u53d6\u8d2d\u7269\u8f66\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8d2d\u7269\u8f66ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/categories/list": {
             "get": {
                 "tags": [
@@ -1700,6 +1860,166 @@
                 }
             }
         },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "/orders \u8ba2\u5355"
+                ],
+                "summary": "\u83b7\u53d6\u8ba2\u5355\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/orders/search": {
+            "get": {
+                "tags": [
+                    "/orders \u8ba2\u5355"
+                ],
+                "summary": "\u641c\u7d22\u8ba2\u5355",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/orders/info": {
+            "get": {
+                "tags": [
+                    "/orders \u8ba2\u5355"
+                ],
+                "summary": "\u83b7\u53d6\u8ba2\u5355\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8ba2\u5355ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/orders/detail": {
+            "get": {
+                "tags": [
+                    "/orders \u8ba2\u5355"
+                ],
+                "summary": "\u83b7\u53d6\u8ba2\u5355\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8ba2\u5355ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/orders/share": {
+            "get": {
+                "tags": [
+                    "/orders \u8ba2\u5355"
+                ],
+                "summary": "\u83b7\u53d6\u8ba2\u5355\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u8ba2\u5355ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/pages": {
             "get": {
                 "tags": [
@@ -1860,6 +2180,166 @@
                 }
             }
         },
+        "/payments": {
+            "get": {
+                "tags": [
+                    "/payments \u652f\u4ed8\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u652f\u4ed8\u65b9\u5f0f\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/payments/search": {
+            "get": {
+                "tags": [
+                    "/payments \u652f\u4ed8\u65b9\u5f0f"
+                ],
+                "summary": "\u641c\u7d22\u652f\u4ed8\u65b9\u5f0f",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/payments/info": {
+            "get": {
+                "tags": [
+                    "/payments \u652f\u4ed8\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u652f\u4ed8\u65b9\u5f0f\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u652f\u4ed8\u65b9\u5f0fID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/payments/detail": {
+            "get": {
+                "tags": [
+                    "/payments \u652f\u4ed8\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u652f\u4ed8\u65b9\u5f0f\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u652f\u4ed8\u65b9\u5f0fID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/payments/share": {
+            "get": {
+                "tags": [
+                    "/payments \u652f\u4ed8\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u652f\u4ed8\u65b9\u5f0f\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u652f\u4ed8\u65b9\u5f0fID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
         "/questions": {
             "get": {
                 "tags": [
@@ -2006,6 +2486,166 @@
                         "name": "id",
                         "in": "query",
                         "description": "\u95ee\u7b54ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/ships": {
+            "get": {
+                "tags": [
+                    "/ships \u7269\u6d41\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u7269\u6d41\u65b9\u5f0f\u5217\u8868",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/ships/search": {
+            "get": {
+                "tags": [
+                    "/ships \u7269\u6d41\u65b9\u5f0f"
+                ],
+                "summary": "\u641c\u7d22\u7269\u6d41\u65b9\u5f0f",
+                "parameters": [
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "\u7ad9\u70b9ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "\u641c\u7d22\u6807\u9898",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5927\u5c0f",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "\u5206\u9875\u5e8f\u53f7",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/ships/info": {
+            "get": {
+                "tags": [
+                    "/ships \u7269\u6d41\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u7269\u6d41\u65b9\u5f0f\u4fe1\u606f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u7269\u6d41\u65b9\u5f0fID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/ships/detail": {
+            "get": {
+                "tags": [
+                    "/ships \u7269\u6d41\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u7269\u6d41\u65b9\u5f0f\u8be6\u60c5\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u7269\u6d41\u65b9\u5f0fID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u67e5\u8be2\u6210\u529f"
+                    },
+                    "404": {
+                        "description": "\u6ca1\u6709\u627e\u5230"
+                    }
+                }
+            }
+        },
+        "/ships/share": {
+            "get": {
+                "tags": [
+                    "/ships \u7269\u6d41\u65b9\u5f0f"
+                ],
+                "summary": "\u83b7\u53d6\u7269\u6d41\u65b9\u5f0f\u5206\u4eab\u9875",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "\u7269\u6d41\u65b9\u5f0fID",
                         "required": true,
                         "type": "string"
                     }

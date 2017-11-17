@@ -31,7 +31,7 @@
                                         </div>
                                         {!! Form::label('use_category', '是否用栏目:', ['class' => 'control-label col-sm-2']) !!}
                                         <div class="col-sm-4">
-                                            {!! Form::checkbox('use_category', 1, null, ['class' => 'switch']) !!}
+                                            {!! Form::checkbox('use_category', 0, null, ['class' => 'switch']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
