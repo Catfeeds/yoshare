@@ -6,6 +6,7 @@ use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Address;
 use App\Models\Category;
+use App\Models\Dictionary;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
+use DB;
 
 /**
  * 地址
@@ -76,8 +78,20 @@ class AddressController extends Controller
         }
 
         $title = '添加收货地址';
+        //查询字典中的省份
+        $provinces = Dictionary::where('parent_id', Address::COUNTRY_ID)->get();
 
-        return view('themes.'. $domain->theme->name .'.address.create', ['title' => $title]);
+        return view('themes.'. $domain->theme->name .'.address.create', ['title' => $title, 'provinces'=> $provinces]);
+    }
+
+    public function region()
+    {
+        $input = Request::all();
+
+        $regions = Dictionary::where('parent_id', $input['parent_id'])
+            ->where('code', $input['code'])
+            ->get();
+        return $regions;
     }
 
     public function edit($id)

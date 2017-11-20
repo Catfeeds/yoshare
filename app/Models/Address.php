@@ -27,9 +27,11 @@ class Address extends BaseModule
         9 => '@address-publish',
     ];
 
+    const COUNTRY_ID = 1;
+
     protected $table = 'addresses';
 
-    protected $fillable = ['site_id', 'member_id', 'name', 'phone', 'province', 'city', 'district', 'detail', 'is_default', 'published_at'];
+    protected $fillable = ['site_id', 'member_id', 'name', 'phone', 'postcode', 'province', 'city', 'district', 'detail', 'is_default', 'published_at'];
 
     protected $dates = ['published_at'];
 

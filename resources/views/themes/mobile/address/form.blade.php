@@ -1,25 +1,45 @@
 <ul class="content form">
-    <li><span>收 货 人：</span><input name="name" type="text" value="" class="a-form"></li>
-    <li><span>联系电话：</span><input name="link" type="text" value="" class="a-form"></li>
+    <li><span>收 货 人 ：</span><input name="name" type="text" value="" class="a-form"></li>
+    <li><span>联系电话：</span><input name="phone" type="text" value="" class="a-form"></li>
+    <li><span>邮　　编：</span><input name="postcode" type="text" value="" class="a-form"></li>
     <li><span>省：</span>
-        <select name="province">
-            <option>北京</option>
-            <option>上海</option>
-            <option>广州</option>
+        <select name="province" id="province" onchange="loadRegion('province', 'city')">
+            <option value="0" selected>省份/直辖市</option>
+            @foreach($provinces as $province)
+                <option value="{{ $province->id }}" >{{ $province->name }}</option>
+            @endforeach
         </select>
         <span>市：</span>
-        <select name="city">
-            <option>保定</option>
-            <option>石家庄</option>
-            <option>株洲</option>
+        <select name="city" id="city" onchange="loadRegion('city', 'town');">
+            <option value="0">市/县</option>
         </select>
     </li>
     <li><span>区：</span>
-        <select name="district">
-            <option>海淀区</option>
-            <option>朝阳区</option>
-            <option>昌平区</option>
+        <select name="town" id="town">
+            <option value="0">镇/区</option>
         </select>
     </li>
     <li><span>详细地址：</span><textarea name="address"></textarea></li>
 </ul>
+<script>
+    function loadRegion(sel, subset){
+        $("#"+subset+" option").each(function(){
+            jQuery(this).remove();
+        });
+        $("<option value=0>请选择</option>").appendTo($("#"+subset));
+        if(jQuery("#"+sel).val()==0){
+            return;
+        }
+        $.getJSON('region',{parent_id:$("#"+sel).val(),code:subset},
+            function(data){
+                if(data){
+                    $.each(data,function(idx,item){
+                        $("<option value="+item.id+">"+item.name+"</option>").appendTo($("#"+subset));
+                    });
+                }else{
+                    $("<option value='0'>请选择</option>").appendTo($("#"+subset));
+                }
+            }
+        );
+    }
+</script>

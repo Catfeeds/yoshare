@@ -2,9 +2,6 @@
     position: fixed;
     height: 280px;
 }
-.m-fixed{
-    height: 170px;
-}
 .o-fixed .o-header{
     height: 140px;
     background: #edc84d;
