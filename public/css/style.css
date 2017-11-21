@@ -30,7 +30,7 @@ a:link,a:visited{text-decoration: none;}
 	padding-left: 80px;
 }
 button{
-	width: 940px;
+	width: 720px;
 	height: 130px;
 	background: #ffcc42;
 	font-size: 40px;
@@ -43,7 +43,8 @@ a.homehref{
 }
 .b-center{
 	text-align: center;
-	margin-top: 220px;
+	margin: 0 auto;
+	padding: 160px 0;
 }
 .h-nav-bg{
 	width: 100%;

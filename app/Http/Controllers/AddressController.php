@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MemberLogEvent;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Address;
 use App\Models\Category;
 use App\Models\Dictionary;
 use App\Models\Domain;
+use App\Models\Member;
+use App\Models\MemberLog;
 use App\Models\Module;
 use App\Models\UserLog;
-use Auth;
 use Carbon\Carbon;
 use Gate;
 use Request;
 use Response;
-use DB;
 
 /**
  * 地址
  */
 class AddressController extends Controller
 {
-    protected $base_url = '/admin/addresses';
-    protected $view_path = 'admin.addresses';
+    protected $base_url = '/address/index.html';
     protected $module;
 
     public function __construct()
@@ -52,12 +52,13 @@ class AddressController extends Controller
             return abort(501);
         }
 
-        //$addresses = $user->addresses(); TODO
-        $addresses = '';
+        $addresses = Member::getMember()->addresses()->get();
+
         $mark = 'member';
         $title = '管理收货地址';
+        $back = '/member';
 
-        return view('themes.' . $domain->theme->name . '.address.index', ['title' => $title, 'module' => $this->module, 'addresses' => $addresses, 'mark' => $mark]);
+        return view('themes.' . $domain->theme->name . '.address.index', ['title' => $title, 'back' => $back, 'addresses' => $addresses, 'mark' => $mark ]);
     }
 
     public function index()
@@ -78,10 +79,21 @@ class AddressController extends Controller
         }
 
         $title = '添加收货地址';
+        $back = '/address/index.html';
         //查询字典中的省份
-        $provinces = Dictionary::where('parent_id', Address::COUNTRY_ID)->get();
+        $provinces = Dictionary::where('parent_id', Address::COUNTRY_ID)
+            ->pluck('name', 'id')
+            ->toarray();
+        //查询北京市
+        $cities = Dictionary::where('parent_id', Address::PROVINCE_BJ)
+            ->pluck('name', 'id')
+            ->toarray();
+        //查询北京市所管辖的区
+        $towns = Dictionary::where('parent_id', Address::CITY_BJ)
+            ->pluck('name', 'id')
+            ->toarray();
 
-        return view('themes.'. $domain->theme->name .'.address.create', ['title' => $title, 'provinces'=> $provinces]);
+        return view('themes.'. $domain->theme->name .'.address.create', ['title' => $title, 'back' => $back, 'provinces'=> $provinces, 'cities'=> $cities, 'towns'=> $towns]);
     }
 
     public function region()
@@ -94,40 +106,48 @@ class AddressController extends Controller
         return $regions;
     }
 
-    public function edit($id)
+    public function edit(Domain $domain, $id)
     {
-        if (Gate::denies('@address-edit')) {
-            \Session::flash('flash_warning', '无此操作权限');
-            return redirect()->back();
-        }
+        $title = '编辑收货地址';
+        $back = '/address/index.html';
 
-        $module = Module::transform($this->module->id);
+        $address = Address::find($id);
+        //查询字典中的省份
+        $provinces = Dictionary::where('parent_id', Address::COUNTRY_ID)
+            ->pluck('name', 'id')
+            ->toarray();
+        //查询同级城市
+        $cities = Dictionary::where('parent_id', $address->province)
+            ->pluck('name', 'id')
+            ->toarray();
+        //查询同级乡镇
+        $towns = Dictionary::where('parent_id', $address->city)
+            ->pluck('name', 'id')
+            ->toarray();
 
-        $address = call_user_func([$this->module->model_class, 'find'], $id);
-        $address->images = null;
-        $address->videos = null;
-        $address->audios = null;
-        $address->tags = $address->tags()->pluck('name')->toArray();
-
-        return view('admin.contents.edit', ['module' => $module, 'content' => $address, 'base_url' => $this->base_url]);
+        return view('themes.'. $domain->theme->name .'.address.edit', ['title' => $title, 'back' => $back, 'address' => $address, 'provinces'=> $provinces, 'cities'=> $cities, 'towns'=> $towns]);
     }
 
     public function store()
     {
         $input = Request::all();
-        $input['site_id'] = Auth::member()->site_id;
-        $input['member'] = Auth::member()->id;
+        $member = Member::getMember();
 
-        $validator = Module::validate($this->module, $input);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        $input['site_id'] = $member->site_id;
+        //查询是否有默认地址，无则设置，有则设置is_default=0
+        $address = Address::where('member_id',$member->id)
+            ->where('is_default', Address::IS_DEFAULT)
+            ->first();
+        if($address){
+            $input['is_default'] = Address::NO_DEFAULT;
+        }else{
+            $input['is_default'] = Address::IS_DEFAULT;
         }
 
         $address = Address::stores($input);
 
-        event(new UserLogEvent(UserLog::ACTION_CREATE . '地址', $address->id, $this->module->model_class));
+        event(new MemberLogEvent(MemberLog::ACTION_CREATE . '地址', $address->id, $this->module->model_class));
 
-        \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url);
     }
 
@@ -135,17 +155,22 @@ class AddressController extends Controller
     {
         $input = Request::all();
 
-        $validator = Module::validate($this->module, $input);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         $address = Address::updates($id, $input);
 
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '地址', $address->id, $this->module->model_class));
 
-        \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url);
+    }
+
+    public function destroy($id)
+    {
+        $address = Address::find($id);
+        $result = $address->delete();
+        if($result){
+            return redirect($this->base_url);
+        }else{
+
+        }
     }
 
     public function comments($refer_id)

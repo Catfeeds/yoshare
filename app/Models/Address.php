@@ -6,7 +6,6 @@ use Exception;
 use Request;
 use Response;
 
-
 class Address extends BaseModule
 {
     const STATE_DELETED = 0;
@@ -28,10 +27,14 @@ class Address extends BaseModule
     ];
 
     const COUNTRY_ID = 1;
+    const PROVINCE_BJ = 2;
+    const CITY_BJ = 52;
+    const IS_DEFAULT = 1;
+    const NO_DEFAULT = 0;
 
     protected $table = 'addresses';
 
-    protected $fillable = ['site_id', 'member_id', 'name', 'phone', 'postcode', 'province', 'city', 'district', 'detail', 'is_default', 'published_at'];
+    protected $fillable = ['site_id', 'member_id', 'name', 'phone', 'postcode', 'province', 'city', 'town', 'detail', 'is_default', 'published_at'];
 
     protected $dates = ['published_at'];
 
@@ -61,30 +64,8 @@ class Address extends BaseModule
 
     public static function stores($input)
     {
-        $input['state'] = static::STATE_NORMAL;
-
-        $address = static::create($input);
-
-        //保存图片集
-        if (isset($input['images'])) {
-            Item::sync(Item::TYPE_IMAGE, $address, $input['images']);
-
-        }
-
-        //保存音频集
-        if (isset($input['audios'])) {
-            Item::sync(Item::TYPE_AUDIO, $address, $input['audios']);
-        }
-
-        //保存视频集
-        if (isset($input['videos'])) {
-            Item::sync(Item::TYPE_VIDEO, $address, $input['videos']);
-        }
-
-        //保存标签
-        if (isset($input['tags'])) {
-            Tag::sync($address, $input['tags']);
-        }
+        $member = Member::getMember();
+        $address = $member->addresses()->create($input);
 
         return $address;
     }

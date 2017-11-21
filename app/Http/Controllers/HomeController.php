@@ -20,6 +20,17 @@ class HomeController extends Controller
         return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'mark' => $mark]);
     }
 
+    public function set(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+        $title = '系统设置';
+        $back = '/member';
+
+        return view('themes.' . $domain->theme->name . '.set.index', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
+    }
+
     public function cart(Domain $domain)
     {
         if (empty($domain->site)) {

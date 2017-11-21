@@ -20,7 +20,7 @@ class MemberLog extends Model
         'refer_type',
         'action',
         'ip',
-        'user_id',
+        'member_id',
     ];
 
     public function site()
@@ -28,9 +28,9 @@ class MemberLog extends Model
         return $this->belongsTo(Site::class);
     }
 
-    public function user()
+    public function Member()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Member::class);
     }
 
     public function refer()
@@ -40,7 +40,7 @@ class MemberLog extends Model
 
     public function scopeOwns($query)
     {
-        $query->where('site_id', Auth::user()->site_id);
+        $query->where('site_id', Member::getMember()->site_id);
     }
 
     public function scopeFilter($query, $filters)
@@ -49,8 +49,8 @@ class MemberLog extends Model
             empty($filters['mobile']) ?: $query->where('mobile', $filters['mobile']);
             empty($filters['start_date']) ?: $query->where('created_at', '>=', $filters['start_date']);
             empty($filters['end_date']) ?: $query->where('created_at', '<=', $filters['end_date']);
-            empty($filters['user_id']) ?: $query->whereHas('user', function ($query) use ($filters) {
-                $query->where('id', $filters['user_id']);
+            empty($filters['member_id']) ?: $query->whereHas('user', function ($query) use ($filters) {
+                $query->where('id', $filters['member_id']);
             });
         });
     }
@@ -58,12 +58,12 @@ class MemberLog extends Model
     public static function record($action, $refer_id = 0, $refer_type = '')
     {
         static::create([
-            'site_id' => auth()->check() ? auth()->user()->site_id : 0,
+            'site_id' => Member::checkLogin() ? Member::getMember()->site_id : 0,
             'action' => $action,
             'refer_id' => $refer_id,
             'refer_type' => $refer_type,
             'ip' => get_client_ip(),
-            'user_id' => auth()->check() ? auth()->user()->id : 0,
+            'member_id' => Member::checkLogin() ? Member::getMember()->id : 0,
         ]);
     }
 }

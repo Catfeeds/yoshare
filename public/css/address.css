@@ -18,10 +18,11 @@ body{
     height: 246px;
 }
 .address textarea{
-    height: 230px;
+    height: 200px;
     width: 764px;
     float: left;
     font-size: 40px;
+    padding-top: 28px;
 }
 h3{
     text-align: center;
@@ -76,10 +77,15 @@ ul.list li .addr-detail{
     height: 118px;
     border-bottom: 2px solid #eff0f1;
 }
-ul.list li .a-left{
+ul.list li .a-active{
     float: left;
     padding-left: 76px;
-    background: url('../images/users/addr-default.png') no-repeat 10px 37px;
+    background: url('../images/members/addr-default.png') no-repeat 10px 37px;
+}
+ul.list li .a-no{
+    float: left;
+    padding-left: 76px;
+    background: url('../images/members/s-address.png') no-repeat 10px 37px;
 }
 ul.list li .a-right{
     float: right;

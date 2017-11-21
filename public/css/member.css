@@ -24,7 +24,7 @@ body{
     position: relative;
 }
 .head .avatar i{
-    background: url('../images/users/vip.png') no-repeat;
+    background: url('../images/members/vip.png') no-repeat;
     position: absolute;
     top: -27px;
     left: -27px;
@@ -52,7 +52,7 @@ body{
     line-height: 145px;
     border-bottom: 2px solid #eff0f1;
     padding-left: 64px;
-    background: url('../images/users/all-order.png') no-repeat 0 51px;
+    background: url('../images/members/all-order.png') no-repeat 0 51px;
 }
 .order .o-title a{
     float: right;
@@ -64,16 +64,16 @@ body{
     text-align: center;
 }
 .order ul li:first-child{
-    background: url('../images/users/wait-pay.png') no-repeat center 43px;
+    background: url('../images/members/wait-pay.png') no-repeat center 43px;
 }
 .order ul li:nth-child(2){
-    background: url('../images/users/wait-send.png') no-repeat center 43px;
+    background: url('../images/members/wait-send.png') no-repeat center 43px;
 }
 .order ul li:nth-child(3){
-    background: url('../images/users/wait-receive.png') no-repeat center 43px;
+    background: url('../images/members/wait-receive.png') no-repeat center 43px;
 }
 .order ul li:nth-child(4){
-    background: url('../images/users/wait-back.png') no-repeat center 43px;
+    background: url('../images/members/wait-back.png') no-repeat center 43px;
 }
 .order ul li:last-child{
     margin-right: 0;
@@ -89,7 +89,7 @@ body{
     line-height: 145px;
     border-bottom: 2px solid #eff0f1;
     padding-left: 64px;
-    background: url('../images/users/wallet.png') no-repeat 0 51px;
+    background: url('../images/members/wallet.png') no-repeat 0 51px;
 }
 .wallet ul li{
     float: left;
@@ -115,17 +115,17 @@ body{
     border-bottom: 2px solid #eff0f1;
 }
 .set ul li:first-child{
-    background: url('../images/users/s-address.png') no-repeat 0 48px;
+    background: url('../images/members/s-address.png') no-repeat 0 48px;
 }
 .set ul li:nth-child(2){
-    background: url('../images/users/s-vip.png') no-repeat 0 48px;
+    background: url('../images/members/s-vip.png') no-repeat 0 48px;
 }
 .set ul li:nth-child(3){
-    background: url('../images/users/s-phone.png') no-repeat 0 48px;
+    background: url('../images/members/s-phone.png') no-repeat 0 48px;
 }
 .set ul li.s-user{
     margin-top: 30px;
-    background: url('../images/users/s-user.png') no-repeat 0 48px;
+    background: url('../images/members/s-user.png') no-repeat 0 48px;
 }
 .vip-text {
     background: #fff;
@@ -151,7 +151,7 @@ body{
 }
 .take-out{
     height: 114px;
-    background: #fff url('../images/users/take_out.png') no-repeat 968px 36px;
+    background: #fff url('../images/members/take_out.png') no-repeat 968px 36px;
     line-height: 114px;
     margin-top: 28px;
     padding: 0 86px;

@@ -1,0 +1,40 @@
+body{
+    background: #eee;
+}
+ul.set{
+    padding-top: 156px;
+    background: #eee;
+}
+ul li{
+    background: #fff url('../images/members/li_bg_2.png') no-repeat top right;
+    margin-top: 10px;
+    height: 130px;
+    line-height: 130px;
+    padding: 0 70px;
+}
+ul li:first-child{
+    background: #fff url('../images/members/li_bg.png') no-repeat top right;
+    height: 290px;
+}
+ul li .avatar{
+    height: 160px;
+    width: 160px;
+    border-radius: 80px;
+    -moz-border-radius: 80px;
+    -webkit-border-radius: 80px;
+    float: left;
+    margin-top: 70px;
+    background: #eee;
+    text-align: center;
+}
+ul li .name{
+    width: 660px;
+    float: left;
+    margin: 80px 0 0 80px;
+    line-height: 80px;
+}
+ul li:last-child{
+    background: #fff;
+    text-align: center;
+    margin-top: 580px;
+}

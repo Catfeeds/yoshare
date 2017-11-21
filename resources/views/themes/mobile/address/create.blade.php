@@ -7,16 +7,16 @@
 @section('content')
     <div class="u-wrapper">
 
-        @include('themes.mobile.address.header')
+        @include('themes.mobile.layouts.header')
 
         <div class="address">
 
             {!! Form::open(['url' => '/address', 'method' => 'post']) !!}
                 {!! csrf_field() !!}
                 @include('themes.mobile.address.form')
+                <div class="b-center"><button type="submit">添加</button></div>
             {!! Form::close() !!}
         </div>
-        <div class="b-center"><button type="submit">添加</button></div>
     </div>
 @endsection
 @section('js')

@@ -4,7 +4,7 @@
 }
 .o-fixed .o-header{
     height: 140px;
-    background: #edc84d;
+    background: #ffcc42;
 }
 .o-fixed .o-header .title{
     width: 560px;
@@ -16,10 +16,10 @@
     color: #fff;
 }
 .o-fixed .o-header .c-title{
-    width: 650px;
+    width: 680px;
     float: left;
-    height: 140px;
-    line-height: 140px;
+    height: 166px;
+    line-height: 166px;
     text-align: center;
     font-size: 48px;
     color: #fff;

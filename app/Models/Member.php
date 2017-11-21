@@ -73,4 +73,17 @@ class Member extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
+    public static function checkLogin()
+    {
+        if (!is_null(self::getMember())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getMember()
+    {
+        return Auth::guard('web')->user();
+    }
 }
