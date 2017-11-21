@@ -58,7 +58,7 @@ class AddressController extends Controller
         $title = '管理收货地址';
         $back = '/member';
 
-        return view('themes.' . $domain->theme->name . '.address.index', ['title' => $title, 'back' => $back, 'addresses' => $addresses, 'mark' => $mark ]);
+        return view('themes.' . $domain->theme->name . '.address.index', ['title' => $title, 'back' => $back, 'addresses' => $addresses, 'mark' => $mark]);
     }
 
     public function index()
@@ -93,7 +93,7 @@ class AddressController extends Controller
             ->pluck('name', 'id')
             ->toarray();
 
-        return view('themes.'. $domain->theme->name .'.address.create', ['title' => $title, 'back' => $back, 'provinces'=> $provinces, 'cities'=> $cities, 'towns'=> $towns]);
+        return view('themes.' . $domain->theme->name . '.address.create', ['title' => $title, 'back' => $back, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
     }
 
     public function region()
@@ -125,7 +125,7 @@ class AddressController extends Controller
             ->pluck('name', 'id')
             ->toarray();
 
-        return view('themes.'. $domain->theme->name .'.address.edit', ['title' => $title, 'back' => $back, 'address' => $address, 'provinces'=> $provinces, 'cities'=> $cities, 'towns'=> $towns]);
+        return view('themes.' . $domain->theme->name . '.address.edit', ['title' => $title, 'back' => $back, 'address' => $address, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
     }
 
     public function store()
@@ -135,18 +135,19 @@ class AddressController extends Controller
 
         $input['site_id'] = $member->site_id;
         //查询是否有默认地址，无则设置，有则设置is_default=0
-        $address = Address::where('member_id',$member->id)
+        $address = Address::where('member_id', $member->id)
             ->where('is_default', Address::IS_DEFAULT)
             ->first();
-        if($address){
+        if ($address) {
             $input['is_default'] = Address::NO_DEFAULT;
-        }else{
+        } else {
             $input['is_default'] = Address::IS_DEFAULT;
         }
 
         $address = Address::stores($input);
 
-        event(new MemberLogEvent(MemberLog::ACTION_CREATE . '地址', $address->id, $this->module->model_class));
+        //TODO
+        //event(new MemberLogEvent(MemberLog::ACTION_CREATE . '地址', $address->id, $this->module->model_class));
 
         return redirect($this->base_url);
     }
@@ -166,10 +167,10 @@ class AddressController extends Controller
     {
         $address = Address::find($id);
         $result = $address->delete();
-        if($result){
+        if ($result) {
             return redirect($this->base_url);
-        }else{
-
+        } else {
+            //TODO
         }
     }
 
@@ -195,11 +196,17 @@ class AddressController extends Controller
         return Address::sort();
     }
 
-    public function top($id)
+    public function setDefault($id)
     {
+        //取消原本默认地址
+        $default = Address::where('is_default', Address::IS_DEFAULT)->first();
+        $default->is_default = Address::NO_DEFAULT;
+        $default->save();
         $address = Address::find($id);
-        $address->top = !$address->top;
+        $address->is_default = !$address->top;
         $address->save();
+
+        return redirect($this->base_url);
     }
 
     public function tag($id)

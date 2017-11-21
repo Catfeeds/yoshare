@@ -22,9 +22,9 @@
                 </div>
                 <div class="addr-set clear">
                     @if($address->is_default == \App\Models\Address::IS_DEFAULT)
-                        <a class="a-active" href="#" onclick="setAddr()">默认地址</a>
+                        <a class="a-active" href="#">默认地址</a>
                     @else
-                        <a class="a-no" href="#" onclick="setAddr()">设为默认</a>
+                        <a class="a-no" href="javascript:void(0)" onclick="setAddr({{ $address->id }})">设为默认</a>
                     @endif
                     <a href="javascript:void(0)" onclick="ask({{ $address->id }})" class="a-right">删除</a>
                     <a href="/address/{{ $address->id }}/edit" class="a-right" style="margin-right: 143px;">编辑</a>
@@ -43,10 +43,14 @@
             content: '您确定要删除此地址吗？'
             ,btn: ['确定', '取消']
             ,yes: function(index){
-                location.href = '/address/'+id+'/delete';
+                location.href = '/address/'+id+'delete';
                 layer.close(index);
             }
         });
+    }
+
+    function setAddr(id) {
+        location.href = '/address/default/'+id;
     }
 </script>
 @endsection
