@@ -39,8 +39,8 @@ body{
 }
 .content{
     background: #fff;
-    width: 980px;
     margin: 0 auto;
+    padding: 0 50px;
 }
 .order{
     height: 356px;

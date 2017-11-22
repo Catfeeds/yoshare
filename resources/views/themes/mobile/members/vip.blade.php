@@ -12,7 +12,7 @@
 
         <div class="vip-text">
             <h3>什么是高级用户？</h3>
-            <div class="content" style="width: 920px;text-indent: 80px;padding-top: 40px;">
+            <div class="content" style="text-indent: 80px;padding-top: 40px;">
                 高级用户的解释, 高级用户的解释, 高级用户的 高级用户的解释, 高级用户的解释, 高级用户的 高级用户的解释, 高级用户的解
             </div>
         </div>

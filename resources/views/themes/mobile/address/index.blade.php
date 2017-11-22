@@ -9,7 +9,6 @@
 
         @include('themes.mobile.layouts.header')
 
-        <div class="title">我的收货地址</div>
         <ul class="list">
             @foreach($addresses as $address)
             <li>

@@ -54,6 +54,10 @@ select{
     line-height: 168px;
     background: #fff;
 }
+ul.list{
+    padding-top: 176px;
+    width: 1080px;
+}
 ul.list li{
     background: #fff;
     margin-top: 16px;
