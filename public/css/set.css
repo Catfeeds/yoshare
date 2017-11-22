@@ -17,10 +17,10 @@ ul li:first-child{
     height: 290px;
 }
 ul li .avatar{
-    height: 160px;
-    width: 160px;
-    border-radius: 80px;
-    -moz-border-radius: 80px;
+    max-height: 160px;
+    width: 16%;
+    border-radius: 7.2%;
+    -moz-border-radius: 7.2%;
     -webkit-border-radius: 80px;
     float: left;
     margin-top: 70px;
@@ -28,9 +28,9 @@ ul li .avatar{
     text-align: center;
 }
 ul li .name{
-    width: 660px;
+    width: 61%;
     float: left;
-    margin: 80px 0 0 80px;
+    margin: 7.4% 0 0 7.4%;
     line-height: 80px;
 }
 ul li:last-child{

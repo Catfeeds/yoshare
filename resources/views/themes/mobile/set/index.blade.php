@@ -15,8 +15,8 @@
                     <img src="" alt="avatar">
                 </div>
                 <div class="name">
-                    <p>Yo-jd-4457c96a97bc8</p>
-                    <p>用户名：Yo-jd-4457c96a97bc8</p>
+                    <p>Yo-jd-4457c</p>
+                    <p>用户名：Yo-jd-4457c</p>
                 </div>
                 <div class="clear"></div>
             </li>

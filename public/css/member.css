@@ -10,7 +10,6 @@ body{
     color: #555;
 }
 .head{
-    width: 1080px;
     height: 350px;
     background: #ffcc42;
     padding-top: 47px;
@@ -40,6 +39,7 @@ body{
 .content{
     background: #fff;
     margin: 0 auto;
+    padding: 0 4.5%;
 }
 .order{
     height: 356px;
@@ -59,7 +59,7 @@ body{
 .order ul li{
     float: left;
     padding-top: 126px;
-    margin-right: 162px;
+    margin-right: 15%;
     text-align: center;
 }
 .order ul li:first-child{
@@ -92,7 +92,7 @@ body{
 }
 .wallet ul li{
     float: left;
-    width: 326px;
+    width: 32.8%;
     text-align: center;
     font-size: 40px;
 }
