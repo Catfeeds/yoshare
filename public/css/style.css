@@ -1,7 +1,7 @@
 body,div,ul,li,ol,input,h1,h2,h3,h4,h5,h6,dl,dt,dd,form,p,button{margin:0;padding:0;}
 body{
 	font-size: 40px;
-	width: 1080px;
+	width: 100%;
 	margin: 0 auto;
 	font-family:"Microsoft YaHei";
 	color:#666;
