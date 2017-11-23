@@ -38,13 +38,11 @@
 <script src="{{ url('/js/layer.js') }}"></script>
 <script>
     function ask(id) {
-        layer.open({
-            content: '您确定要删除此地址吗？'
-            ,btn: ['确定', '取消']
-            ,yes: function(index){
-                location.href = '/address/'+id+'delete';
-                layer.close(index);
-            }
+        layer.confirm('您确定要删除此地址吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            location.href = '/address/'+id+'delete';
+            layer.msg('删除成功');
         });
     }
 

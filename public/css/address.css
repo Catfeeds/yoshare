@@ -19,7 +19,7 @@ body{
 }
 .address textarea{
     height: 200px;
-    width: 764px;
+    width: 73%;
     float: left;
     font-size: 40px;
     padding-top: 28px;
@@ -29,19 +29,19 @@ h3{
 }
 .a-form{
     float: left;
-    width: 770px;
+    width: 73%;
     height: 112px;
     font-size: 40px;
 }
 .address ul.form li span{
     display: inline-block;
     float: left;
-    width: 200px;
+    width: 25%;
     height: 120px;
     line-height: 120px;
 }
 select{
-    width: 290px;
+    width: 25%;
     height: 120px;
     float: left;
     font-size: 40px;
