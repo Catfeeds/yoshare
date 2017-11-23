@@ -32,14 +32,14 @@
 <script src="{{ url('/js/layer.js') }}"></script>
 <script>
     function exit() {
-        layer.open({
-            content: '您确定要退出登录吗？'
-            ,btn: ['确定', '取消']
-            ,yes: function(index){
+        function ask(id) {
+            layer.confirm('您确定要退出登录吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
                 location.href = '/logout';
-                layer.close(index);
-            }
-        });
+                layer.msg('退出成功');
+            });
+        }
     }
 </script>
 @endsection
