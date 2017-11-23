@@ -1,6 +1,7 @@
 .o-fixed{
     position: fixed;
     height: 280px;
+    width: 100%;
 }
 .o-fixed .o-header{
     height: 166px;

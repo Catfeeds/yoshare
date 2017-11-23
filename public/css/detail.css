@@ -43,7 +43,6 @@
     background: #ff5000;
 }
 .content{
-    width: 1080px;
     padding-bottom: 130px;
 }
 .summary{
@@ -107,6 +106,9 @@
     font-size: 35px;
     color: #1b1b1b;
     padding: 0 32px;
+}
+.detail .text p img{
+    width: 100%;
 }
 .video{
     text-align: center;

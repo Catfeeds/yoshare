@@ -6,7 +6,9 @@
 @endsection
 
 @section('content')
+
     @include('themes.mobile.cart.header')
+
     <div class="c-goods">
         <div class="all"><a href="javascript:void(0)" onclick="" class="all-checked"></a><span class="words">全选</span></div>
         <ul>

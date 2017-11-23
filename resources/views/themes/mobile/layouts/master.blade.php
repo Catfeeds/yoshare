@@ -2,7 +2,7 @@
 
 @section('body')
 
-    <body class="hold-transition skin-red sidebar-mini">
+    <body class="hold-transition skin-red sidebar-mini" scroll="no">
 
         @yield('css')
 

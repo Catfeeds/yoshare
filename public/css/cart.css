@@ -1,7 +1,7 @@
 .c-goods{
     padding: 176px 0;
     background: #eee;
-    min-height: 1800px;
+    min-height: 1400px;
 }
 .c-goods .all{
     height: 100px;
@@ -42,7 +42,7 @@
 }
 .c-goods ul li{
     height: 300px;
-    padding-left: 86px;
+    margin-left: 7.9%;
 }
 .c-goods ul li .c-radio{
     border-radius: 27px;
@@ -58,15 +58,15 @@
     float: left;
     height: 200px;
     width: 200px;
-    margin-left: 50px;
+    margin-left: 4.6%;
     margin-top: 50px;
 }
 .c-goods ul li .g-desc{
     float: left;
     height: 300px;
     font-size: 28px;
-    padding-left: 50px;
-    width: 300px;
+    margin-left: 4.6%;
+    width: 27.7%;
 }
 .c-goods ul li .g-desc .name{
     color: #242d32;
@@ -86,7 +86,7 @@
     width: 140px;
     height: 300px;
     line-height: 300px;
-    margin-left: 55px;
+    margin-left: 4.7%;
     position: relative;
 }
 .c-goods ul li .num .i-num{
@@ -116,7 +116,7 @@
 }
 .c-goods ul li .action{
     float: left;
-    width: 145px;
+    width: 13.4%;
     line-height: 300px;
     text-align: center;
 }

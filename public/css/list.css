@@ -1,8 +1,8 @@
 .c-wrapper{
-    width: 1080px;
     margin: 0 auto;
     background: #eee;
     padding-bottom: 180px;
+    width: 1080px;
 }
 .c-wrapper .category{
     padding: 15px 30px;
@@ -36,7 +36,7 @@
     height: 634px;
 }
 .c-wrapper .products ul li{
-    margin-right: 110px;
+    margin-right: 10%;
     height: 508px;
     float: left;
     color: #1b1b1b;
@@ -47,8 +47,8 @@
     padding-left: 80px;
 }
 .c-wrapper .products ul li a img{
-    width: 400px;
-    height: 400px;
+    width: 84%;
+    height: 65%;
 }
 .c-wrapper .products ul li:nth-child(2){
     margin-right: 0;

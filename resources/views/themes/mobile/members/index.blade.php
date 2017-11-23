@@ -4,7 +4,7 @@
     <link href="{{ url('css/member.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
-    <div class="u-wrapper">
+    <div class="u-wrapper" style="padding-bottom: 180px;">
         <div class="head">
             <div class="avatar">
                 <i></i><img src="#" alt="avatar"></div>
