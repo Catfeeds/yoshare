@@ -2,7 +2,7 @@
 
 namespace App\Api\Controllers;
 
-use App\Libraries\Sms;
+use App\Libraries\SmsAli;
 use App\Models\Favorite;
 use App\Models\Member;
 use App\Models\Message;
@@ -10,6 +10,7 @@ use Cache;
 use Carbon\Carbon;
 use Exception;
 use Request;
+use Auth;
 
 class MemberController extends BaseController
 {
@@ -423,7 +424,7 @@ class MemberController extends BaseController
                 throw new Exception('请输入正确的手机号', -1);
             }
 
-            //判断此手机号24小时内发送短信是否过多
+            //判断此手机号24小时内发送短信是否过多-------其实阿里自己有限制
             $times = Cache::get('captcha_times_' . $mobile);
             if (!isset($times)) {
                 Cache::add('captcha_times_' . $mobile, 1, 24 * 60);
@@ -433,11 +434,20 @@ class MemberController extends BaseController
                 Cache::increment('captcha_times_' . $mobile, 1);
             }
 
-            $sms = new Sms($site_id);
-            $code = random(4);
-            $content = $sms->getContent($type, $code);
-            $ret = $sms->send($mobile, $content);
-            if (!$ret) {
+            $signName = config("site.".$site_id.".smsAli.sign");
+            $templateCode = config("site.".$site_id.".smsAli.template.".$type);
+            $code = random(6);
+
+            $response = SmsAli::sendSms(
+                $signName,
+                $templateCode,
+                $mobile, // 短信接收者
+                Array(  // 短信模板中字段的值
+                    "code"=> $code
+                )
+            );
+
+            if ($response->Code !== 'OK') {
                 throw new Exception('短信验证码发送失败', -1);
             }
 
@@ -473,7 +483,8 @@ class MemberController extends BaseController
         $captcha = Request::get('captcha');
 
         try {
-            $member = \JWTAuth::parseToken()->authenticate();
+            $member = Auth::guard('web')->user();
+
             if (!$member) {
                 return $this->responseError('无效的token,请重新登录');
             }

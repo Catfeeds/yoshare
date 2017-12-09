@@ -9,20 +9,21 @@
     @include('themes.mobile.widgets.header')
     <div class="c-wrapper">
         <div class="category">
-            <ul>
-                <li><a href="/goods/category-2.html">射击游戏</a></li>
-                <li><a href="/goods/category-3.html">格斗游戏</a></li>
-                <li><a href="/goods/category-4.html">赛车游戏</a></li>
-                <li><a href="/goods/category-5.html">体育游戏</a></li>
-                <div class="clear"></div>
-            </ul>
-            <ul>
-                <li><a href="/goods/category-6.html">动作游戏</a></li>
-                <li><a href="/goods/category-7.html">冒险游戏</a></li>
-                <li><a href="/goods/category-8.html">角色扮演</a></li>
-                <li><a href="/goods/category-9.html">沙盒游戏</a></li>
-                <div class="clear"></div>
-            </ul>
+            @foreach($lists as $key => $val)
+                @if($key%4 == 2)
+                    <ul>
+                @endif
+                    <li @if($category->id == $key)
+                            class = "active";
+                        @endif >
+                        <a href="/goods/category-{{ $key }}.html">{{ $val }}</a>
+                    </li>
+
+                @if($key%4 == 1)
+                        <div class="clear"></div>
+                    </ul>
+                @endif
+            @endforeach
         </div>
         <div class="products">
             @foreach($category->goods()->where('state', \App\Models\Goods::STATE_PUBLISHED)->orderBy('sort')->get() as $goods)

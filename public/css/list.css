@@ -22,6 +22,12 @@
     text-align: center;
     background: #fff;
 }
+.c-wrapper .category ul li.active{
+    background: #000;
+}
+.c-wrapper .category ul li.active a{
+    color: #fff;
+}
 .c-wrapper .category ul li a{
     font-size: 40px;
     color: #555;
@@ -33,22 +39,21 @@
     background: #fff;
 }
 .c-wrapper .products ul{
-    height: 634px;
+    height: 756px;
 }
 .c-wrapper .products ul li{
     margin-right: 10%;
-    height: 508px;
+    height: 624px;
     float: left;
     color: #1b1b1b;
     position: relative;
     padding-top: 65px;
 }
 .c-wrapper .products ul li:first-child{
-    padding-left: 80px;
+    padding-left: 12%;
 }
 .c-wrapper .products ul li a img{
-    width: 84%;
-    height: 65%;
+    width: 100%;
 }
 .c-wrapper .products ul li:nth-child(2){
     margin-right: 0;

@@ -36,5 +36,28 @@ ul li .name{
 ul li:last-child{
     background: #fff;
     text-align: center;
-    margin-top: 580px;
+    margin-top: 450px;
+}
+.a-form{
+    float: left;
+    width: 71%;
+    height: 112px;
+    font-size: 40px;
+}
+select{
+    width: 290px;
+    height: 120px;
+    float: left;
+    font-size: 40px;
+    color: #555;
+    background: #fff;
+    padding: 5px;
+    margin-top: 8px;
+}
+ul li span{
+    display: inline-block;
+    float: left;
+    width: 25%;
+    height: 120px;
+    line-height: 120px;
 }

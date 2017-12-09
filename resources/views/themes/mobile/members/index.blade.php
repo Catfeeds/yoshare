@@ -43,7 +43,7 @@
         <div class="set">
             <div class="content">
                 <ul>
-                    <li class="s-user"><a href="/set">系统设置</a></li>
+                    <li class="s-user"><a href="/system">系统设置</a></li>
                 </ul>
             </div>
         </div>

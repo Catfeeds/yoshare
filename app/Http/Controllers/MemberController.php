@@ -10,6 +10,8 @@ use Exception;
 use Gate;
 use Request;
 use Response;
+use Cache;
+use Auth;
 
 class MemberController extends Controller
 {
@@ -208,5 +210,76 @@ class MemberController extends Controller
         $title = 'VIP管理';
 
         return view('themes.' . $domain->theme->name . '.members.vip', ['title' => $title, 'site' => $domain->site, 'mark' => $mark]);
+    }
+
+    public function phone(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = Domain::MARK_MEMBER;
+        $title = '绑定我的手机';
+
+        return view('themes.' . $domain->theme->name . '.members.phone', ['title' => $title, 'site' => $domain->site, 'mark' => $mark]);
+    }
+
+    public function bindMobile()
+    {
+        $mobile = Request::get('mobile');
+        $captcha = Request::get('captcha');
+
+        try {
+            $member = Member::getMember();
+
+            if (!$member) {
+                return $this->responseError('无效的token,请重新登录');
+            }
+        } catch (Exception $e) {
+            return $this->responseError('无效的token,请重新登录');
+        }
+
+        try {
+            if (!preg_match("/1[34578]{1}\d{9}$/", $mobile)) {
+                throw new Exception('请输入正确的手机号', -1);
+            }
+
+            //比较验证码
+            $key = 'captcha_' . $mobile;
+            if (Cache::get($key) != $captcha) {
+                throw new Exception('手机验证码错误', -1);
+            }
+
+            $count = Member::where('mobile', $mobile)->count();
+            if ($count > 0) {
+                throw new Exception('此手机号已经被其他账号绑定', -1);
+            }
+
+            $member->mobile = $mobile;
+            $member->save();
+
+            //移除验证码
+            Cache::forget($key);
+
+            return $this->responseSuccess($member);
+        } catch (Exception $e) {
+            return $this->responseError($e->getMessage());
+        }
+    }
+
+    public function detail(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = Domain::MARK_MEMBER;
+        $title = '个人信息页';
+        $back = '/system';
+
+        $member = Member::getMember();
+        $member->sexOptions = Member::SEX;
+
+        return view('themes.' . $domain->theme->name . '.system.member', ['title' => $title, 'member' => $member, 'mark' => $mark, 'back' => $back]);
     }
 }

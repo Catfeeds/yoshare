@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Domain;
+use App\Models\Member;
 
 class HomeController extends Controller
 {
@@ -20,15 +21,27 @@ class HomeController extends Controller
         return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'mark' => $mark]);
     }
 
-    public function set(Domain $domain)
+    public function system(Domain $domain)
     {
         if (empty($domain->site)) {
             return abort(501);
         }
         $title = '系统设置';
         $back = '/member';
+        $member = Member::getMember();
 
-        return view('themes.' . $domain->theme->name . '.set.index', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
+        return view('themes.' . $domain->theme->name . '.system.index', ['member' => $member, 'title' => $title, 'back' => $back]);
+    }
+
+    public function about(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+        $title = '关于我们';
+        $back = '/system';
+
+        return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
     }
 
     public function cart(Domain $domain)

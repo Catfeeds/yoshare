@@ -19,10 +19,10 @@ a:link,a:visited{text-decoration: none;}
 	clear: both;
 }
 .wrapper{
-	padding: 0 70px;
+	padding: 0 6.4%;
 }
 .i-form{
-	width: 860px;
+	width: 100%;
 	height: 130px;
 	color: #878787;
 	border-bottom: 1px solid #555;
@@ -35,6 +35,8 @@ button{
 	background: #ffcc42;
 	font-size: 40px;
 	color: #fff;
+	margin: 0 auto;
+	display: block;
 }
 a.homehref{
 	margin: 62px 0 140px;
@@ -119,14 +121,14 @@ a.homehref{
 }
 .f-back{
 	display: inline-block;
-	width: 120px;
+	width: 10%;
 	height: 140px;
 	line-height: 102px;
 	text-align: center;
 	font-size: 60px;
 	background: url(../images/back.png) no-repeat 0px 50px;
 	z-index: 99;
-	margin-left: 80px;
+	margin-left: 8.4%;
 	float: left;
 }
 .g-back{

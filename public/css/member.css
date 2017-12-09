@@ -9,6 +9,10 @@ body{
 .u-wrapper a{
     color: #555;
 }
+.logo{
+    padding: 266px 0 136px;
+    text-align: center;
+}
 .head{
     height: 350px;
     background: #ffcc42;
@@ -40,6 +44,7 @@ body{
     background: #fff;
     margin: 0 auto;
     padding: 0 4.5%;
+    text-align: justify;
 }
 .order{
     height: 356px;
@@ -128,7 +133,7 @@ body{
 }
 .vip-text {
     background: #fff;
-    padding: 240px 80px 80px;
+    padding: 240px 2.5% 80px;
 }
 /**** wallet ****/
 .w-wrapper{

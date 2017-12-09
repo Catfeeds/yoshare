@@ -27,13 +27,15 @@ Route::get('/phone/login', 'Member\LoginController@phoneLogin');
 Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('index.html', 'HomeController@index');
-
-    Route::get('/set', 'HomeController@set');
+    //系统设置
+    Route::get('/system', 'HomeController@system');
+    Route::get('/about/us', 'HomeController@about');
     //会员管理
     Route::get('/member', 'MemberController@show');
     Route::get('/member/phone', 'MemberController@phone');
-    Route::get('/member/bind', 'MemberController@bind');
+    Route::get('/member/bind/phone', 'MemberController@bindMobile');
     Route::get('/member/vip', 'MemberController@vip');
+    Route::get('/member/detail', 'MemberController@detail');
     //会员地址
     Route::get('address/index.html', 'AddressController@lists');
     Route::get('address/region', 'AddressController@region');

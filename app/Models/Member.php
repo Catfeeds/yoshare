@@ -21,9 +21,15 @@ class Member extends Authenticatable
         1 => '普通会员',
     ];
 
+    const SEX = [
+        0 => '男',
+        1 => '女'
+    ];
+
     protected $fillable = [
         'username',
         'password',
+        'sex',
         'email',
         'mobile',
         'avatar_url',

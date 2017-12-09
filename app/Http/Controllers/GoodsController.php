@@ -91,6 +91,8 @@ class GoodsController extends Controller
             return abort(501);
         }
 
+        $lists = Category::where('parent_id', Category::GOODS_ID)->pluck( 'name','id');
+
         $category = Category::find($category_id);
         if (empty($category)) {
             return abort(404);
@@ -103,7 +105,7 @@ class GoodsController extends Controller
             ->get();
 
         $mark = Domain::MARK_GOODS;
-        return view('themes.' . $domain->theme->name . '.goods.category', ['site' => $domain->site, 'category' => $category, 'goods' => $goods, 'mark' => $mark]);
+        return view('themes.' . $domain->theme->name . '.goods.category', ['lists' => $lists, 'category' => $category, 'goods' => $goods, 'mark' => $mark]);
     }
 
     public function index()
