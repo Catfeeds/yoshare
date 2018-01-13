@@ -11,7 +11,6 @@ use Gate;
 use Request;
 use Response;
 use Cache;
-use Auth;
 
 class MemberController extends Controller
 {
@@ -95,27 +94,21 @@ class MemberController extends Controller
         return view('admin.members.edit', compact('member'));
     }
 
-    public function update($id, MemberRequest $request)
+    public function update($id)
     {
         $member = Member::find($id);
 
-        if ($member == null) {
-            \Session::flash('flash_warning', '无此记录');
-            return redirect()->to($this->getRedirectUrl())
-                ->withInput($request->input());
-        }
-
         $input = Request::all();
-        if (!empty($input['new_password'])) {
-            //重置密码
-            $new_password = $input['new_password'];
-            $input['password'] = md5(md5($new_password) . $member->salt);
-        }
 
-        $member->update($input);
+        $member->avatar_url = $input['avatar_url'];
+        $member->username   = $input['username'];
+        $member->sex        = $input['sex'];
+        $member->email      = $input['email'];
+
+        $member->save();
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect('/admin/members');
+        return redirect('/member');
     }
 
     public function message($member_id)
@@ -279,7 +272,9 @@ class MemberController extends Controller
 
         $member = Member::getMember();
         $member->sexOptions = Member::SEX;
+        $member->avatarOptions = Member::AVATAR;
 
         return view('themes.' . $domain->theme->name . '.system.member', ['title' => $title, 'member' => $member, 'mark' => $mark, 'back' => $back]);
     }
+
 }

@@ -30,14 +30,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
     Route::get('sms/logs/table', 'SmsController@logTable');
 
     /**
-     * 会员管理
-     */
-    Route::get('members/table', 'MemberController@table');
-    Route::get('members/state/{state}', 'MemberController@state');
-    Route::resource('members', 'MemberController');
-    Route::get('members/messages/{member_id}', 'MemberController@message');
-
-    /**
      * 消息管理
      */
     Route::get('messages/table', 'MessageController@table');

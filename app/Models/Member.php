@@ -10,6 +10,7 @@ class Member extends Authenticatable
 {
     use Notifiable;
     const ID_ADMIN = 1;
+    const SITE_ID = 1;
 
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
@@ -26,7 +27,16 @@ class Member extends Authenticatable
         1 => '女'
     ];
 
+    const AVATAR = [
+        0 => '小鲜肉',
+        1 => '小仙女',
+        2 => '大叔',
+        3 => '小学生',
+        4 => '文艺青年',
+    ];
+
     protected $fillable = [
+        'site_id',
         'username',
         'password',
         'sex',

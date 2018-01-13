@@ -32,6 +32,10 @@
             <h4>租赁流程</h4>
             <img src="{{ url('images/goods/process.png') }}" alt="租赁流程">
         </div>
+        <div>
+            <input type="hidden" id="goods_id" value="{{ $goods->id }}">
+            <input type="hidden" id="sale_price" value="{{ $goods->sale_price }}">
+        </div>
         <div class="tips">
             <h4>租期计算方式</h4>
             <p>{{ $goods->summary }}</p>

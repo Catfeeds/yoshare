@@ -36,6 +36,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/bind/phone', 'MemberController@bindMobile');
     Route::get('/member/vip', 'MemberController@vip');
     Route::get('/member/detail', 'MemberController@detail');
+
     //会员地址
     Route::get('address/index.html', 'AddressController@lists');
     Route::get('address/region', 'AddressController@region');
@@ -46,7 +47,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/wallet/{type}', 'UserController@wallet');
     Route::get('/wallet/coupon', 'UserController@coupon');
 
+    //商品模块
     Route::get('/orders', 'GoodsController@order');
-    Route::get('/cart', 'HomeController@cart');
+    Route::get('/cart', 'CartController@cart');
+    Route::get('/cart/add/{goods_id}', 'CartController@add');
 
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    Route::resource('members', 'MemberController');
 });

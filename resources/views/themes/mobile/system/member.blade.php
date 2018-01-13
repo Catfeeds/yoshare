@@ -3,6 +3,7 @@
 @section('css')
     <link href="{{ url('css/set.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
+
     <style>
         ul li{
             background: #fff;
@@ -17,13 +18,11 @@
 
         @include('themes.mobile.layouts.header')
         {!! Form::model($member, ['id' => 'form', 'method' => 'PATCH', 'action' => ['MemberController@update', $member->id],'class' => 'form-horizontal']) !!}
-
         <ul class="set">
             <li onclick="" style="height: 220px;">
                 <span style="line-height: 220px;">头　　像：</span>
-                <div class="avatar" style="margin-top: 50px;">
-                    {!! Form::hidden('image_url', null, ['class' => 'form-control']) !!}
-                    <input id="image_file" name="image_file" type="file" class="file" data-upload-url="/files/upload?type=image">
+                <div>
+                    {!! Form::select('avatar_url', $member->avatarOptions, isset($member) ? $member->avatar_url: '', ['class' => 'a-form', 'style'=>'margin-top: 50px;']) !!}
                 </div>
                 <div class="clear"></div>
             </li>
@@ -31,7 +30,7 @@
             <li><span>性　　别：</span>{!! Form::select('sex', $member->sexOptions, isset($member) ? $member->sex: '', ['class' => 'a-form']) !!}</li>
             <li><span>邮　　箱：</span>{!! Form::text('email', null, ['class' => 'a-form']) !!}</li>
             <li><span>手机号码：</span>{!! Form::text('mobile', null, ['class' => 'a-form']) !!}</li>
-            <li>保存</li>
+            <li style="background: #ffcc42"><button type="submit">保存</button></li>
         </ul>
         {!! Form::close() !!}
     </div>
@@ -49,5 +48,6 @@
             }
         });
     }
+
 </script>
 @endsection

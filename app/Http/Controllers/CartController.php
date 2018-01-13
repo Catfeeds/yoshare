@@ -9,6 +9,8 @@ use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
+use App\Models\Member;
+use App\Models\Goods;
 use Auth;
 use Carbon\Carbon;
 use Gate;
@@ -224,5 +226,81 @@ class CartController extends Controller
     public function categories()
     {
         return Response::json(Category::tree('', 0, $this->module->id));
+    }
+
+
+    public function cart(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $mark = 'cart';
+        $member_id = Member::getMember()->id;
+        $goods_ids = Cart::where('member_id', $member_id)
+            ->pluck('goods_id')
+            ->toArray();
+
+        $goodses = Goods::whereIn('id', $goods_ids)
+                    ->get();
+
+        $numbers = Cart::where('member_id', $member_id)
+            ->pluck('number')
+            ->toArray();
+
+        $number = !empty($numbers) ? array_sum($numbers) : 0;
+
+        return view('themes.' . $domain->theme->name . '.cart.index', ['number' => $number, 'mark' => $mark, 'goodses' => $goodses]);
+    }
+
+    public function add($goods_id)
+    {
+        $input = Request::all();
+
+        try {
+            $member = Auth::guard('web')->user();
+
+            if (!$member) {
+                return $this->responseError('登录已失效,请重新登录');
+            }
+        } catch (Exception $e) {
+            return $this->responseError('登录已失效,请重新登录');
+        }
+
+        try {
+            $input['goods_id'] = $goods_id;
+            $input['site_id'] = Member::getMember()->site_id;
+            $input['member_id'] = Member::getMember()->id;
+            $type = Member::getMember()->type;
+
+            //查询此用户会员等级，普通=0（额外0），黄金=1（额外1），钻石=2（额外2）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
+            $numbers = Cart::where('member_id', $input['member_id'])
+                ->pluck('number')
+                ->toArray();
+
+            $number = !empty($numbers) ? array_sum($numbers) : 0;
+
+            if($number == $type+1){
+                return $this->responseError('已达到您的租盘上限！');
+            }
+
+            if($number > 0 && $number < $type+1 ){
+                Cart::where('goods_id', $goods_id)
+                    ->where('member_id', $input['member_id'])
+                    ->increment('number');
+
+                $carts = Cart::where('member_id', $input['member_id'])
+                    ->get();
+            } else{
+                Cart::stores($input);
+
+                $carts = Cart::where('member_id', $input['member_id'])
+                    ->get();
+            }
+
+            return $this->responseSuccess($carts);
+        } catch (Exception $e) {
+            return $this->responseError($e->getMessage());
+        }
     }
 }

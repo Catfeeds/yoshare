@@ -26,6 +26,11 @@ class HomeController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+
+        if (empty(Member::checkLogin())) {
+            return view('auth.login');
+        }
+
         $title = '系统设置';
         $back = '/member';
         $member = Member::getMember();
@@ -44,13 +49,4 @@ class HomeController extends Controller
         return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
     }
 
-    public function cart(Domain $domain)
-    {
-        if (empty($domain->site)) {
-            return abort(501);
-        }
-
-        $mark = 'cart';
-        return view('themes.' . $domain->theme->name . '.cart.index', ['site' => $domain->site, 'mark' => $mark]);
-    }
 }
