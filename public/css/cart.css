@@ -41,7 +41,7 @@
     background: #fff;
 }
 .c-goods ul li{
-    height: 300px;
+    height: 350px;
     margin-left: 7.9%;
 }
 .c-goods ul li .c-radio{
@@ -56,10 +56,14 @@
 }
 .c-goods ul li .g-img{
     float: left;
-    height: 200px;
+    height: 250px;
     width: 200px;
     margin-left: 4.6%;
     margin-top: 50px;
+}
+.c-goods ul li .g-img img{
+    height: 250px;
+    width: 200px;
 }
 .c-goods ul li .g-desc{
     float: left;
@@ -96,6 +100,8 @@
     position: absolute;
     top: 134px;
     left: 31px;
+    text-align: center;
+    font-size: 30px;
 }
 .c-goods ul li .num i{
     display: inline-block;

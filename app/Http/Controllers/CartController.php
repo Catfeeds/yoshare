@@ -231,8 +231,15 @@ class CartController extends Controller
 
     public function cart(Domain $domain)
     {
+        $total_price = 0;
+        $carts = [];
+
         if (empty($domain->site)) {
             return abort(501);
+        }
+
+        if (empty(Member::checkLogin())) {
+            return view('auth.login');
         }
 
         $mark = 'cart';
@@ -245,12 +252,24 @@ class CartController extends Controller
                     ->get();
 
         $numbers = Cart::where('member_id', $member_id)
-            ->pluck('number')
+            ->pluck('number', 'goods_id')
             ->toArray();
 
+        $prices = Cart::where('member_id', $member_id)
+            ->pluck('number', 'price')
+            ->toArray();
+
+        foreach ($prices as $k => $v){
+            $total_price += $k * $v;
+        }
+        //购物车总数量
         $number = !empty($numbers) ? array_sum($numbers) : 0;
 
-        return view('themes.' . $domain->theme->name . '.cart.index', ['number' => $number, 'mark' => $mark, 'goodses' => $goodses]);
+        $carts['number']  = $number;
+        $carts['numbers'] = $numbers;
+        $carts['total_price'] = $total_price;
+
+        return view('themes.' . $domain->theme->name . '.cart.index', ['carts' => $carts, 'mark' => $mark, 'goodses' => $goodses]);
     }
 
     public function add($goods_id)
@@ -261,10 +280,10 @@ class CartController extends Controller
             $member = Auth::guard('web')->user();
 
             if (!$member) {
-                return $this->responseError('登录已失效,请重新登录');
+                return $this->responseError('登录已失效,请重新登录', 401);
             }
         } catch (Exception $e) {
-            return $this->responseError('登录已失效,请重新登录');
+            return $this->responseError('登录已失效,请重新登录', 401);
         }
 
         try {
@@ -280,17 +299,19 @@ class CartController extends Controller
 
             $number = !empty($numbers) ? array_sum($numbers) : 0;
 
-            if($number == $type+1){
-                return $this->responseError('已达到您的租盘上限！');
-            }
+            $carts = Cart::where('member_id', $input['member_id'])->first();
 
-            if($number > 0 && $number < $type+1 ){
+            $cart_goods_id = empty($carts) ? 0 : $carts->goods_id;
+
+            if($number > 0 && $number < $type+1 && $goods_id == $cart_goods_id){
                 Cart::where('goods_id', $goods_id)
                     ->where('member_id', $input['member_id'])
                     ->increment('number');
 
                 $carts = Cart::where('member_id', $input['member_id'])
                     ->get();
+            } elseif ($number >= $type+1){
+                return $this->responseError('已达到您的租盘上限！');
             } else{
                 Cart::stores($input);
 

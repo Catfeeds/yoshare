@@ -27,6 +27,7 @@ Route::get('/phone/login', 'Member\LoginController@phoneLogin');
 Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('index.html', 'HomeController@index');
+    Route::get('/checkLogin', 'HomeController@checkLogin');
     //系统设置
     Route::get('/system', 'HomeController@system');
     Route::get('/about/us', 'HomeController@about');

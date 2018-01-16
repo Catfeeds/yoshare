@@ -1,7 +1,7 @@
 <div class="h-nav-bg">
     <div class="h-wrapper">
         <a herf="#" onclick="javascript:history.back(-1);" class="back"></a>
-        <a herf="/cart" onclick="" class="cart"></a>
+        <a herf="/cart" onclick="ahref('cart')" class="cart"></a>
         <a herf="#" onclick="" class="m-nav"></a>
     </div>
 </div>

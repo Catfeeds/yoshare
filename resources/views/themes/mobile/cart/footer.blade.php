@@ -2,7 +2,7 @@
     <button class="payment">去结算</button>
     <div class="price">
         <p>
-            合计：<span>￥30 </span><br />
+            合计：<span>￥{{ $carts['total_price'] }}</span><br />
             <i>（不含运费）</i>
         </p>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Domain;
 use App\Models\Member;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -47,6 +48,19 @@ class HomeController extends Controller
         $back = '/system';
 
         return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
+    }
+
+    public function checkLogin()
+    {
+        try {
+            $member = Auth::guard('web')->user();
+
+            if (!$member) {
+                return $this->responseError('登录已失效,请重新登录', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('登录已失效,请重新登录', 401);
+        }
     }
 
 }

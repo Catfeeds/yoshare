@@ -26,18 +26,22 @@
             success:function(data){
                 msg = data.message;
                 if(msg == 'success'){
-                    layer.open({
-                        content: '购物车加入成功！'
-                        ,skin: 'msg'
-                        ,time: 2 //2秒后自动关闭
-                    });
-                } else {
+                    msg = '购物车加入成功！';
+                }
+                statusCode = data.status_code;
+                if (statusCode == 401){
                     layer.open({
                         content: msg,
                         btn: ['确认', '取消'],
                         yes: function(index, layero) {
                             window.location.href='/login';
                         }
+                    });
+                } else {
+                    layer.open({
+                        content: msg
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
                     });
                 }
             }
