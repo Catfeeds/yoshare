@@ -25,6 +25,7 @@
                     <i class="i-sub"></i>
                     <input type="text" class="i-num" value="{{ $carts['numbers'][$goods->id] }}">
                     <i class="i-add"></i>
+                    <input type="hidden" value="{{ $goods->id }}" class="goods_id">
                 </div>
                 <div class="action">
                     <a class="c-button">删除</a>
@@ -37,8 +38,90 @@
 @endsection
 
 @section('js')
-    <script>
+<script src="{{ url('/js/layer.js') }}"></script>
+<script type="text/javascript">
 
-    </script>
+    $('.i-add').click(function(){
+        var goods_id = $(this).siblings('.goods_id').val();
+        var index = $(this).parents('li').index();
+
+        $.ajax({
+            url  : '/cart/add/'+goods_id,
+            type : 'get',
+            data : {
+                'number'  : 1
+            },
+            success:function(data){
+                msg = data.message;
+
+                if(msg == 'success'){
+                    msg = '购物车加入成功！';
+                    //修改添加后的盘的数量
+                    $(this).parent('.num').children('.i-num').val(data.data[index]['number']);
+                    console.log($(this).parent('.num').children('.i-num').val());
+                }
+
+                statusCode = data.status_code;
+                if (statusCode == 401){
+                    layer.open({
+                        content: msg,
+                        btn: ['确认', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href='/login';
+                        }
+                    });
+                } else {
+                    layer.open({
+                        content: msg
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
+                    location.reload();
+                }
+            }
+        })
+
+    });
+
+    $('.i-sub').click(function(){
+        var goods_id = $(this).siblings('.goods_id').val();
+        var index = $(this).parents('li').index();
+
+        $.ajax({
+            url  : '/cart/sub/'+goods_id,
+            type : 'get',
+            data : {
+                'number'  : 1
+            },
+            success:function(data){
+                msg = data.message;
+
+                if(msg == 'success'){
+                    msg = '购物车修改成功！';
+                }
+
+                statusCode = data.status_code;
+                if (statusCode == 401){
+                    layer.open({
+                        content: msg,
+                        btn: ['确认', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href='/login';
+                        }
+                    });
+                } else {
+                    layer.open({
+                        content: msg
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
+                    location.reload();
+                }
+            }
+        })
+
+    });
+
+</script>
 @endsection
 

@@ -324,4 +324,46 @@ class CartController extends Controller
             return $this->responseError($e->getMessage());
         }
     }
+
+
+    public function sub($goods_id)
+    {
+        $input = Request::all();
+
+        try {
+            $member = Auth::guard('web')->user();
+
+            if (!$member) {
+                return $this->responseError('登录已失效,请重新登录', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('登录已失效,请重新登录', 401);
+        }
+
+        try {
+            $input['goods_id'] = $goods_id;
+            $input['site_id'] = Member::getMember()->site_id;
+            $input['member_id'] = Member::getMember()->id;
+            $type = Member::getMember()->type;
+
+            //查询此用户会员等级，普通=0（额外0），黄金=1（额外1），钻石=2（额外2）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
+            $carts = Cart::where('member_id', $input['member_id'])
+                ->where('goods_id', $goods_id)
+                ->pluck('number');
+            $number = $carts[0];
+            if($number > 1){
+                Cart::where('goods_id', $goods_id)
+                    ->where('member_id', $input['member_id'])
+                    ->decrement('number');
+            }else{
+                Cart::where('goods_id', $goods_id)
+                    ->where('member_id', $input['member_id'])
+                    ->delete();
+            }
+
+            return $this->responseSuccess();
+        } catch (Exception $e) {
+            return $this->responseError($e->getMessage());
+        }
+    }
 }
