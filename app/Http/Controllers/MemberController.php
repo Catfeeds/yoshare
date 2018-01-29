@@ -188,8 +188,8 @@ class MemberController extends Controller
 
         $member = Member::getMember();
         //菜单栏标记
-        $mark = Domain::MARK_MEMBER;
-        return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'mark' => $mark]);
+        $system['mark'] = Domain::MARK_MEMBER;
+        return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
 
     }
 
@@ -199,10 +199,10 @@ class MemberController extends Controller
             return abort(501);
         }
 
-        $mark = Domain::MARK_MEMBER;
-        $title = 'VIP管理';
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = 'VIP管理';
 
-        return view('themes.' . $domain->theme->name . '.members.vip', ['title' => $title, 'site' => $domain->site, 'mark' => $mark]);
+        return view('themes.' . $domain->theme->name . '.members.vip', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function phone(Domain $domain)
@@ -211,10 +211,10 @@ class MemberController extends Controller
             return abort(501);
         }
 
-        $mark = Domain::MARK_MEMBER;
-        $title = '绑定我的手机';
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '绑定我的手机';
 
-        return view('themes.' . $domain->theme->name . '.members.phone', ['title' => $title, 'site' => $domain->site, 'mark' => $mark]);
+        return view('themes.' . $domain->theme->name . '.members.phone', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function bindMobile()
@@ -266,15 +266,15 @@ class MemberController extends Controller
             return abort(501);
         }
 
-        $mark = Domain::MARK_MEMBER;
-        $title = '个人信息页';
-        $back = '/system';
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '个人信息页';
+        $system['back'] = '/system';
 
         $member = Member::getMember();
         $member->sexOptions = Member::SEX;
         $member->avatarOptions = Member::AVATAR;
 
-        return view('themes.' . $domain->theme->name . '.system.member', ['title' => $title, 'member' => $member, 'mark' => $mark, 'back' => $back]);
+        return view('themes.' . $domain->theme->name . '.system.member', ['member' => $member, 'system' => $system]);
     }
 
 }

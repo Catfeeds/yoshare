@@ -8,10 +8,10 @@
     background: #ffcc42;
 }
 .o-fixed .o-header .title{
-    width: 560px;
+    width: 620px;
     float: left;
-    height: 140px;
-    line-height: 140px;
+    height: 168px;
+    line-height: 168px;
     text-align: center;
     font-size: 48px;
     color: #fff;
@@ -45,4 +45,32 @@
 }
 .o-fixed ul li.active a{
     color: #e71f19;
+}
+
+
+ul.list li{
+    background: #fff;
+    margin-top: 16px;
+    padding: 48px;
+}
+ul.list li span{
+    display: inline-block;
+}
+ul.list li .w-addr{
+    height: 90px;
+    line-height: 90px;
+    font-weight: bold;
+}
+ul.list li .receiver{
+    float: left;
+}
+ul.list li .tel{
+    float: right;
+}
+ul.list li .addr-detail{
+    height: 90px;
+    color: #7c7c7d;
+    font-size: 30px;
+    background: url('../images/addr_bg.png') no-repeat 0 0;
+    padding-left: 36px;
 }

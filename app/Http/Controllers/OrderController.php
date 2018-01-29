@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
+use App\Models\Dictionary;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
+use App\Models\Member;
+use App\Models\Cart;
+use App\Models\Goods;
+use App\Models\Address;
 use Auth;
 use Carbon\Carbon;
 use Gate;
@@ -60,17 +65,106 @@ class OrderController extends Controller
         return view('themes.' . $domain->theme->name . '.orders.detail', ['site' => $domain->site, 'order' => $order]);
     }
 
+    public function buildOrderNum()
+    {
+        //生成流水号并保存至$file文件中
+        $file = "order.txt";
+        if(!file_exists($file)){
+            if($handle = fopen($file,"a+")){
+                $textTime = date("mdY");
+                $num_order_new = str_pad($textTime,9,'0',STR_PAD_RIGHT);
+                fwrite($handle,$num_order_new);
+                $content = $num_order_new;
+                fclose($handle);
+            }else{
+                $msg = '流水号创建失败！!';// TODO:
+                $this->responseError($msg, 404);
+            }
+        }else{
+            if($handle = fopen($file,"r+")){
+                $content = file_get_contents($file);
+                $new = $content+1;
+                if(!fwrite($handle,$new)){
+                    $msg = 'ERROR!';
+                    $this->responseError($msg, 500);
+                }
+                fclose($handle);
+            }
+        }
+        return $content.rand(100, 999);
+
+    }
+
+    public function place(Domain $domain)
+    {
+        $total_price = 0;
+        $carts = [];
+
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        if (empty(Member::checkLogin())) {
+            return view('auth.login');
+        }
+
+        $system['mark'] = 'orders';
+        $system['title'] = '提交订单';
+        $member_id = Member::getMember()->id;
+
+        //查询默认地址
+        $address = Address::where('member_id', $member_id)
+            ->where('is_default', Address::IS_DEFAULT)
+            ->first();
+        //拼接地址
+        $province = Dictionary::find($address->province)->name;
+        $city = Dictionary::find($address->city)->name;
+        $town = Dictionary::find($address->town)->name;
+        if($city !== $province){
+            $address->detail = $province.'省'.$city.'市'.$town.$address->detail;
+        }else{
+            $address->detail = $city.'市'.$town.$address->detail;
+        }
+
+        $goods_ids = Cart::where('member_id', $member_id)
+            ->pluck('goods_id')
+            ->toArray();
+
+        $goodses = Goods::whereIn('id', $goods_ids)
+            ->get();
+
+        $numbers = Cart::where('member_id', $member_id)
+            ->pluck('number', 'goods_id')
+            ->toArray();
+
+        $prices = Cart::where('member_id', $member_id)
+            ->pluck('number', 'price')
+            ->toArray();
+
+        foreach ($prices as $k => $v){
+            $total_price += $k * $v;
+        }
+        //购物车总数量
+        $number = !empty($numbers) ? array_sum($numbers) : 0;
+
+        $carts['number']  = $number;
+        $carts['numbers'] = $numbers;
+        $carts['total_price'] = $total_price;
+
+        return view('themes.' . $domain->theme->name . '.orders.place', ['address' => $address, 'carts' => $carts, 'system' => $system, 'goodses' => $goodses]);
+
+    }
+
     public function lists(Domain $domain)
     {
         if (empty($domain->site)) {
             return abort(501);
         }
 
-        $orders = Order::where('state', Order::STATE_PUBLISHED)
-            ->orderBy('sort', 'desc')
-            ->get();
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '全部订单';
 
-        return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'module' => $this->module, 'orders' => $orders]);
+        return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function index()
@@ -117,20 +211,21 @@ class OrderController extends Controller
     public function store()
     {
         $input = Request::all();
-        $input['site_id'] = Auth::user()->site_id;
-        $input['user_id'] = Auth::user()->id;
 
-        $validator = Module::validate($this->module, $input);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        $input['order_num'] = $this->buildOrderNum();
+        $input['site_id'] = Member::getMember()->site_id;
+        $input['member_id'] = Member::getMember()->id;
 
         $order = Order::stores($input);
 
-        event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
+        if($order){
+            //修改购物车order_id
+            $order_id = $order->id;
 
-        \Session::flash('flash_success', '添加成功');
-        return redirect($this->base_url);
+            return $this->responseSuccess($order);
+        }
+        //event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
+
     }
 
     public function update($id)
@@ -225,4 +320,5 @@ class OrderController extends Controller
     {
         return Response::json(Category::tree('', 0, $this->module->id));
     }
+
 }

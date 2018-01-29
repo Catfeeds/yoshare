@@ -54,11 +54,12 @@ class AddressController extends Controller
 
         $addresses = Member::getMember()->addresses()->get();
 
-        $mark = 'member';
-        $title = '管理收货地址';
-        $back = '/member';
 
-        return view('themes.' . $domain->theme->name . '.address.index', ['title' => $title, 'back' => $back, 'addresses' => $addresses, 'mark' => $mark]);
+        $system['title'] = '管理收货地址';
+        $system['back'] = '/member';
+        $system['mark'] = 'member';
+
+        return view('themes.' . $domain->theme->name . '.address.index', ['system' => $system, 'addresses' => $addresses]);
     }
 
     public function index()
@@ -78,8 +79,8 @@ class AddressController extends Controller
             return abort(501);
         }
 
-        $title = '添加收货地址';
-        $back = '/address/index.html';
+        $system['title'] = '添加收货地址';
+        $system['back'] = '/address/index.html';
         //查询字典中的省份
         $provinces = Dictionary::where('parent_id', Address::COUNTRY_ID)
             ->pluck('name', 'id')
@@ -93,7 +94,7 @@ class AddressController extends Controller
             ->pluck('name', 'id')
             ->toarray();
 
-        return view('themes.' . $domain->theme->name . '.address.create', ['title' => $title, 'back' => $back, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
+        return view('themes.' . $domain->theme->name . '.address.create', ['system' => $system, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
     }
 
     public function region()
@@ -108,8 +109,8 @@ class AddressController extends Controller
 
     public function edit(Domain $domain, $id)
     {
-        $title = '编辑收货地址';
-        $back = '/address/index.html';
+        $system['title'] = '编辑收货地址';
+        $system['back'] = '/address/index.html';
 
         $address = Address::find($id);
         //查询字典中的省份
@@ -125,7 +126,7 @@ class AddressController extends Controller
             ->pluck('name', 'id')
             ->toarray();
 
-        return view('themes.' . $domain->theme->name . '.address.edit', ['title' => $title, 'back' => $back, 'address' => $address, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
+        return view('themes.' . $domain->theme->name . '.address.edit', ['system' => $system, 'address' => $address, 'provinces' => $provinces, 'cities' => $cities, 'towns' => $towns]);
     }
 
     public function store()

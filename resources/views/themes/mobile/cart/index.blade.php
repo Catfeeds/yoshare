@@ -10,11 +10,12 @@
     @include('themes.mobile.cart.header')
 
     <div class="c-goods">
-        <div class="all"><a href="javascript:void(0)" onclick="" class="all-checked"></a><span class="words">全选</span></div>
+        <div class="all"><a href="javascript:void(0)" onclick="checkAll()" class="all-checked"></a><span class="words">全选</span></div>
         <ul>
             @foreach( $goodses as $goods )
             <li>
                 <input type="radio" class="c-radio" >
+                <input type="hidden" value="{{ $carts['ids'][$goods->id] }}" class="cart_id" >
                 <div class="g-img"><img src='{{ $goods->image_url }}' alt="商品图片"></div>
                 <div class="g-desc">
                     <h4 class="name">{{ $goods->name }}</h4>
@@ -28,7 +29,7 @@
                     <input type="hidden" value="{{ $goods->id }}" class="goods_id">
                 </div>
                 <div class="action">
-                    <a class="c-button">删除</a>
+                    <a class="c-button" onclick="cartsDel({{ $goods->id }})">删除</a>
                 </div>
                 <div class="clear"></div>
             </li>
@@ -121,6 +122,21 @@
         })
 
     });
+    
+    function cartsDel(goods_id) {
+        layer.open({
+            content: '您确定从购物车删除此光盘吗？'
+            ,btn: ['确定', '取消']
+            ,yes: function(index){
+                location.href = '/cart/'+goods_id+'/delete';
+                layer.close(index);
+            }
+        });
+    }
+    
+    function checkAll() {
+        $("input[type='radio']").attr("checked","checked" );
+    }
 
 </script>
 @endsection

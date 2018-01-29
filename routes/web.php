@@ -49,10 +49,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/wallet/coupon', 'UserController@coupon');
 
     //商品模块
-    Route::get('/orders', 'GoodsController@order');
+    Route::get('/order/lists', 'OrderController@lists');
+    Route::get('/order/place', 'OrderController@place');
+    Route::get('/order/store', 'OrderController@store');
     Route::get('/cart', 'CartController@cart');
     Route::get('/cart/add/{goods_id}', 'CartController@add');
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');
+    Route::get('/cart/{id}/delete', 'CartController@destroy');
 
 });
 

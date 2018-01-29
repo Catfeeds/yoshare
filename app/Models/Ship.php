@@ -123,7 +123,6 @@ class Ship extends BaseModule
         $ds = new DataSource();
         $ships = static::with('user')
             ->filter($filters)
-            ->orderBy('top', 'desc')
             ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
@@ -147,7 +146,6 @@ class Ship extends BaseModule
                 $attributes[$date] = empty($ship->$date) ? '' : $ship->$date->toDateTimeString();
             }
             $attributes['tags'] = implode(',', $ship->tags()->pluck('name')->toArray());
-            $attributes['state_name'] = $ship->stateName();
             $attributes['created_at'] = empty($ship->created_at) ? '' : $ship->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($ship->updated_at) ? '' : $ship->updated_at->toDateTimeString();
             return $attributes;

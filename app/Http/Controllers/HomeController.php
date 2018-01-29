@@ -18,8 +18,8 @@ class HomeController extends Controller
             return abort(501);
         }
 
-        $mark = 'index';
-        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'mark' => $mark]);
+        $system['mark'] = 'index';
+        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function system(Domain $domain)
@@ -32,11 +32,12 @@ class HomeController extends Controller
             return view('auth.login');
         }
 
-        $title = '系统设置';
-        $back = '/member';
+        $system['title'] = '系统设置';
+        $system['back'] = '/member';
+
         $member = Member::getMember();
 
-        return view('themes.' . $domain->theme->name . '.system.index', ['member' => $member, 'title' => $title, 'back' => $back]);
+        return view('themes.' . $domain->theme->name . '.system.index', ['member' => $member,  'system' => $system]);
     }
 
     public function about(Domain $domain)

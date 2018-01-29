@@ -12,7 +12,7 @@
         </div>
         <div class="order">
             <div class="content">
-                <div class="o-title clear">全部订单 <a href="/orders" alt="orders">查看全部订单 ></a></div>
+                <div class="o-title clear">全部订单 <a href="/order/lists" alt="orders">查看全部订单 ></a></div>
                 <ul class="clear">
                     <li><a href="#">待支付</a></li>
                     <li><a href="#">待发货</a></li>

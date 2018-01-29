@@ -148,6 +148,16 @@
     float: right;
     margin-right: 150px;
 }
+.c-fixed .place-btn{
+    height: 130px;
+    width: 360px;
+    border-radius: 5px;
+    background: #ffcc42;
+    line-height: 130px;
+    text-align: center;
+    float: right;
+    padding-right: 80px;
+}
 .c-fixed .price{
     float: right;
     margin-right: 54px;

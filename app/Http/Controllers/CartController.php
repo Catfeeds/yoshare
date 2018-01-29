@@ -242,10 +242,13 @@ class CartController extends Controller
             return view('auth.login');
         }
 
-        $mark = 'cart';
+        $system['mark'] = 'cart';
         $member_id = Member::getMember()->id;
         $goods_ids = Cart::where('member_id', $member_id)
             ->pluck('goods_id')
+            ->toArray();
+        $ids = Cart::where('member_id', $member_id)
+            ->pluck('id', 'goods_id')
             ->toArray();
 
         $goodses = Goods::whereIn('id', $goods_ids)
@@ -267,9 +270,10 @@ class CartController extends Controller
 
         $carts['number']  = $number;
         $carts['numbers'] = $numbers;
+        $carts['ids'] = $ids;
         $carts['total_price'] = $total_price;
 
-        return view('themes.' . $domain->theme->name . '.cart.index', ['carts' => $carts, 'mark' => $mark, 'goodses' => $goodses]);
+        return view('themes.' . $domain->theme->name . '.cart.index', ['carts' => $carts,  'system' => $system, 'goodses' => $goodses]);
     }
 
     public function add($goods_id)
@@ -364,6 +368,17 @@ class CartController extends Controller
             return $this->responseSuccess();
         } catch (Exception $e) {
             return $this->responseError($e->getMessage());
+        }
+    }
+
+    public function destroy($goods_id)
+    {
+        $cart = Cart::where('goods_id', $goods_id)->first();
+        $result = $cart->delete();
+        if ($result) {
+            return redirect('/cart');
+        } else {
+            //TODO
         }
     }
 }
