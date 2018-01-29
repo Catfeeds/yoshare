@@ -133,9 +133,17 @@
             }
         });
     }
-    
+
     function checkAll() {
-        $("input[type='radio']").attr("checked","checked" );
+        $("input[type='radio']").attr("checked", true );
+        $('.all-checked').attr('onclick', 'cancelAll()');
+        $('.words').text('取消全选');
+    }
+
+    function cancelAll() {
+        $("input[type='radio']").removeAttr("checked");
+        $('.all-checked').attr('onclick', 'checkAll()');
+        $('.words').text('全选');
     }
 
 </script>
