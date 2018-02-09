@@ -245,8 +245,10 @@ class CartController extends Controller
         $system['mark'] = 'cart';
         $member_id = Member::getMember()->id;
         $goods_ids = Cart::where('member_id', $member_id)
+            ->where('order_id', Cart::ORDER_ID)
             ->pluck('goods_id')
             ->toArray();
+
         $ids = Cart::where('member_id', $member_id)
             ->pluck('id', 'goods_id')
             ->toArray();
@@ -255,16 +257,18 @@ class CartController extends Controller
                     ->get();
 
         $numbers = Cart::where('member_id', $member_id)
+            ->where('order_id', Cart::ORDER_ID)
             ->pluck('number', 'goods_id')
             ->toArray();
 
         $prices = Cart::where('member_id', $member_id)
-            ->pluck('number', 'price')
+            ->get()
             ->toArray();
 
         foreach ($prices as $k => $v){
-            $total_price += $k * $v;
+            $total_price += $v['number'] * $v['price'];
         }
+
         //购物车总数量
         $number = !empty($numbers) ? array_sum($numbers) : 0;
 

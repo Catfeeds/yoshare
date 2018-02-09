@@ -9,6 +9,7 @@
 <script src="{{ url('/js/layer.js') }}"></script>
 <script type="text/javascript">
     $('#place').click(function(){
+        var ids = $('#ids').val();
         var name = $('#name').text();
         var phone = $('#phone').text();
         var address = $('#address').text();
@@ -18,6 +19,7 @@
             url  : '/order/store/',
             type : 'get',
             data : {
+                'ids'           : ids,
                 'name'          : name,
                 'phone'         : phone,
                 'address'       : address,

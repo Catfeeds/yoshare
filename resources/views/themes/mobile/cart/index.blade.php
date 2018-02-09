@@ -13,9 +13,13 @@
         <div class="all"><a href="javascript:void(0)" onclick="checkAll()" class="all-checked"></a><span class="words">全选</span></div>
         <ul>
             @foreach( $goodses as $goods )
-            <li>
-                <input type="radio" class="c-radio" >
-                <input type="hidden" value="{{ $carts['ids'][$goods->id] }}" class="cart_id" >
+            <li class="cart_li">
+                <label class="demo--label">
+                    <input class="demo--radio c-btn" type="checkbox" name="demo-checkbox{{ $carts['ids'][$goods->id] }}">
+                    <span class="demo--checkbox demo--radioInput"></span>
+                    <input type="hidden" value="{{ $carts['ids'][$goods->id] }}" class="cart_id" >
+                    <input type="hidden" value="{{ $carts['numbers'][$goods->id]*$goods->sale_price }}" class="h-price" >
+                </label>
                 <div class="g-img"><img src='{{ $goods->image_url }}' alt="商品图片"></div>
                 <div class="g-desc">
                     <h4 class="name">{{ $goods->name }}</h4>
@@ -135,15 +139,17 @@
     }
 
     function checkAll() {
-        $("input[type='radio']").attr("checked", true );
+        $("input[type='checkbox']").prop("checked", 'checked' );
         $('.all-checked').attr('onclick', 'cancelAll()');
         $('.words').text('取消全选');
+        $('#total_price').text('{{ $carts['total_price'] }}');
     }
 
     function cancelAll() {
-        $("input[type='radio']").removeAttr("checked");
+        $("input[type='checkbox']").removeAttr("checked");
         $('.all-checked').attr('onclick', 'checkAll()');
         $('.words').text('全选');
+        $('#total_price').text('0');
     }
 
 </script>

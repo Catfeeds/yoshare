@@ -10,15 +10,21 @@ use Response;
 class Order extends BaseModule
 {
     const STATE_DELETED = 0;
-    const STATE_NORMAL = 1;
-    const STATE_CANCELED = 2;
-    const STATE_PUBLISHED = 9;
+    const STATE_NOPAY = 1;
+    const STATE_PAID = 2;
+    const STATE_SENDED = 3;
+    const STATE_CLOSED = 4;
+    const STATE_SUCCESS = 5;
+    const STATE_REFUND = 6;
 
     const STATES = [
         0 => '已删除',
-        1 => '未发布',
-        2 => '已撤回',
-        9 => '已发布',
+        1 => '未付款',
+        2 => '已付款，待发货',
+        3 => '已发货',
+        4 => '交易关闭',
+        5 => '交易成功',
+        6 => '退款中',
     ];
 
     const STATE_PERMISSIONS = [
@@ -55,7 +61,7 @@ class Order extends BaseModule
 
     public static function stores($input)
     {
-        $input['state'] = static::STATE_NORMAL;
+        $input['state'] = static::STATE_NOPAY;
 
         $order = static::create($input);
 
@@ -121,10 +127,9 @@ class Order extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
+
         $orders = static::with('user')
             ->filter($filters)
-            ->orderBy('top', 'desc')
-            ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
             ->get();

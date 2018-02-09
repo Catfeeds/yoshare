@@ -14,7 +14,6 @@ use App\Models\Member;
 use App\Models\Cart;
 use App\Models\Goods;
 use App\Models\Address;
-use Auth;
 use Carbon\Carbon;
 use Gate;
 use Request;
@@ -95,10 +94,13 @@ class OrderController extends Controller
 
     }
 
-    public function place(Domain $domain)
+    public function place(Domain $domain, $ids)
     {
         $total_price = 0;
         $carts = [];
+
+        //分割购物车ID字符串为数组
+        $cart_ids = explode(',', $ids);
 
         if (empty($domain->site)) {
             return abort(501);
@@ -120,33 +122,36 @@ class OrderController extends Controller
         $province = Dictionary::find($address->province)->name;
         $city = Dictionary::find($address->city)->name;
         $town = Dictionary::find($address->town)->name;
+
         if($city !== $province){
             $address->detail = $province.'省'.$city.'市'.$town.$address->detail;
         }else{
             $address->detail = $city.'市'.$town.$address->detail;
         }
 
-        $goods_ids = Cart::where('member_id', $member_id)
+        $goods_ids = Cart::whereIn('id', $cart_ids)
             ->pluck('goods_id')
             ->toArray();
 
         $goodses = Goods::whereIn('id', $goods_ids)
             ->get();
 
-        $numbers = Cart::where('member_id', $member_id)
+        $numbers = Cart::whereIn('id', $cart_ids)
             ->pluck('number', 'goods_id')
             ->toArray();
 
-        $prices = Cart::where('member_id', $member_id)
-            ->pluck('number', 'price')
+        $prices = Cart::whereIn('id', $cart_ids)
+            ->get()
             ->toArray();
 
         foreach ($prices as $k => $v){
-            $total_price += $k * $v;
+            $total_price += $v['number'] * $v['price'];
         }
+
         //购物车总数量
         $number = !empty($numbers) ? array_sum($numbers) : 0;
 
+        $carts['ids'] = $ids;
         $carts['number']  = $number;
         $carts['numbers'] = $numbers;
         $carts['total_price'] = $total_price;
@@ -221,8 +226,16 @@ class OrderController extends Controller
         if($order){
             //修改购物车order_id
             $order_id = $order->id;
+            $ids = array_filter(explode(',', $input['ids']));
+
+            foreach($ids as $v){
+                $cart = Cart::find($v);
+                $data['order_id'] = $order_id;
+                $result = $cart->update($data);
+            }
 
             return $this->responseSuccess($order);
+
         }
         //event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
 
