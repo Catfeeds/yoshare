@@ -33,7 +33,7 @@ class Controller extends BaseController
     {
         return $this->response([
             'status_code' => 200,
-            'message' => 'scucess',
+            'message' => 'success',
             'data' => $data,
         ]);
     }

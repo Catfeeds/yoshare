@@ -302,16 +302,17 @@ class CartController extends Controller
 
             //查询此用户会员等级，普通=0（额外0），黄金=1（额外1），钻石=2（额外2）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
             $numbers = Cart::where('member_id', $input['member_id'])
+                ->where('order_id', Cart::ORDER_ID)
                 ->pluck('number')
                 ->toArray();
 
             $number = !empty($numbers) ? array_sum($numbers) : 0;
 
-            $carts = Cart::where('member_id', $input['member_id'])->first();
+            $cart_goods_id = Cart::where('member_id', $input['member_id'])
+                ->pluck('goods_id')
+                ->toArray();
 
-            $cart_goods_id = empty($carts) ? 0 : $carts->goods_id;
-
-            if($number > 0 && $number < $type+1 && $goods_id == $cart_goods_id){
+            if($number > 0 && $number < $type+1 && in_array($goods_id, $cart_goods_id)){
                 Cart::where('goods_id', $goods_id)
                     ->where('member_id', $input['member_id'])
                     ->increment('number');

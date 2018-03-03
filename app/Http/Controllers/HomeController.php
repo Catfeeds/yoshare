@@ -45,10 +45,11 @@ class HomeController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
-        $title = '关于我们';
-        $back = '/system';
 
-        return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'title' => $title, 'back' => $back]);
+        $system['title'] = '关于我们';
+        $system['back'] = '/system';
+
+        return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function checkLogin()

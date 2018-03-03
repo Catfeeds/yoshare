@@ -25,10 +25,12 @@
             },
             success:function(data){
                 msg = data.message;
+                statusCode = data.status_code;
+
                 if(msg == 'success'){
                     msg = '购物车加入成功！';
                 }
-                statusCode = data.status_code;
+
                 if (statusCode == 401){
                     layer.open({
                         content: msg,

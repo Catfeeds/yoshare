@@ -30,6 +30,7 @@
     height: 140px;
     margin: 0 auto;
     border-bottom: 1px solid #1b1b1b;
+    background: #fff;
 }
 .o-fixed ul li{
     width: 200px;
@@ -46,7 +47,6 @@
 .o-fixed ul li.active a{
     color: #e71f19;
 }
-
 
 ul.list li{
     background: #fff;
@@ -73,4 +73,33 @@ ul.list li .addr-detail{
     font-size: 30px;
     background: url('../images/addr_bg.png') no-repeat 0 0;
     padding-left: 36px;
+}
+.c-goods ul{
+    position: relative;
+}
+.c-goods .status{
+    color: #e60012ba;
+    display: inline-block;
+    width: 160px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 40px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 2px solid #eee;
+}
+.c-goods ul li.op{
+    height: 150px;
+    border-top: 2px solid #eee;
+    margin-left: 0;
+}
+.c-goods ul li.op .action{
+    float: right;
+    line-height: 90px;
+    margin-right: 2%;
+    width: 15%;
+    border: 2px solid #eee;
+    margin-top: 30px;
 }

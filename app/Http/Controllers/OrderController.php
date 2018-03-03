@@ -165,11 +165,24 @@ class OrderController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+        $member_id = Member::getMember()->id;
+
+        $orders = Order::where('member_id', $member_id)
+            ->get();
+
+        foreach($orders as $key => $order){
+            $goods_ids = Cart::where('order_id', $order->id)
+                ->pluck('goods_id')
+                ->toArray();
+
+            $orders[$key]['goodses'] = Goods::whereIn('id', $goods_ids)
+                ->get();
+        }
 
         $system['mark'] = Domain::MARK_MEMBER;
         $system['title'] = '全部订单';
 
-        return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'system' => $system, 'orders' => $orders]);
     }
 
     public function index()
@@ -332,6 +345,18 @@ class OrderController extends Controller
     public function categories()
     {
         return Response::json(Category::tree('', 0, $this->module->id));
+    }
+
+    public function destroy($id)
+    {
+        $order = Order::where('id', $id)->first();
+        $result = $order->delete();
+
+        if ($result) {
+            return redirect('/order/lists');
+        } else {
+            //TODO
+        }
     }
 
 }

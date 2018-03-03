@@ -52,6 +52,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/order/lists', 'OrderController@lists');
     Route::get('/order/place/{cart_ids}', 'OrderController@place');
     Route::get('/order/store', 'OrderController@store');
+    Route::get('/order/{id}/delete', 'OrderController@destroy');
+
     Route::get('/cart', 'CartController@cart');
     Route::get('/cart/add/{goods_id}', 'CartController@add');
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');
