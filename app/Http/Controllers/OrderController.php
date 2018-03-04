@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
+use App\Models\Payment;
 use App\Models\UserLog;
 use App\Models\Member;
 use App\Models\Cart;
@@ -357,6 +358,26 @@ class OrderController extends Controller
         } else {
             //TODO
         }
+    }
+
+    public function pay(Domain $domain, $id)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $order = Order::find($id);
+        $price = $order['total_price']+$order['ship_price'];
+        $payments = Payment::where('state', Payment::STATE_PUBLISHED)
+            ->orderBy('sort', 'desc')
+            ->get();
+
+
+        $system['title'] = '支付页';
+        $system['back'] = '/order/lists';
+        $system['mark'] = 'member';
+
+        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'price' => $price, 'payments' => $payments]);
     }
 
 }

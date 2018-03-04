@@ -29,7 +29,7 @@ class Payment extends BaseModule
 
     protected $table = 'payments';
 
-    protected $fillable = ['site_id', 'name', 'pic', 'intro', 'content', 'type', 'sort', 'published_at'];
+    protected $fillable = ['site_id', 'name', 'pic', 'intro', 'content', 'type', 'sort','state', 'published_at'];
 
     protected $dates = ['published_at'];
 
@@ -123,7 +123,6 @@ class Payment extends BaseModule
         $ds = new DataSource();
         $payments = static::with('user')
             ->filter($filters)
-            ->orderBy('top', 'desc')
             ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)

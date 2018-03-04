@@ -29,7 +29,7 @@
                     </div>
                     @if($order['state'] == \App\Models\Order::STATE_NOPAY)
                     <div class="action">
-                        <a class="c-button" onclick="pay({{ $order->id }})">立即支付</a>
+                        <a class="c-button" href="/order/pay/{{ $order->id }}">立即支付</a>
                     </div>
                     @endif
                 </li>
