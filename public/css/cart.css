@@ -159,8 +159,3 @@
 .c-fixed .price i{
     color: #555;
 }
-
-.demo--radio{display:none;margin-top: 138px;width: 40px;height:40px;}
-.demo--radioInput{float:left;background-color:#fff;border:3px solid #c0bfbe;border-radius:50%;display:inline-block;height:48px;margin-right:10px;margin-top:139px;vertical-align:middle;width:48px;line-height:1}
-.demo--radio:checked + .demo--radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:40px;margin:4px;width:40px}
-.demo--checkbox.demo--radioInput,.demo--radio:checked + .demo--checkbox.demo--radioInput:after{border-radius:0}

@@ -69,6 +69,7 @@ class GoodsController extends Controller
         }
 
         $goods = Goods::where('state', Goods::STATE_PUBLISHED)
+            ->orderBy('top', 'desc')
             ->orderBy('sort', 'desc')
             ->get();
 

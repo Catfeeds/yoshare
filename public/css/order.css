@@ -117,6 +117,24 @@ ul.pay li h5{
     color: #393a3f;
     display: inline-block;
 }
+
+ul.pay li .payment{
+    float: left;
+    display: inline-block;
+    width: 500px;
+    line-height: 130px;
+    height: 130px;
+    position: relative;
+}
+ul.pay li .payment .pay-img{
+    display: inline-block;
+}
+ul.pay li .payment .payname{
+    display: inline-block;
+    position: absolute;
+    top: -27px;
+    left: 100px;
+}
 ul.pay li .price{
     width: 460px;
     height: 200px;

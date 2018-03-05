@@ -9,15 +9,11 @@
     <div  class="product">
         <div class="banner swiper-container">
             <div class="swiper-wrapper" id="banner_swiper">
+                @foreach($goods->images() as $img)
                 <div class="swiper-slide">
-                    <img src="/images/detail.png" alt="">
+                    <img src="{{ $img->url }}" alt="">
                 </div>
-                <div class="swiper-slide">
-                    <img src="/images/detail.png" alt="">
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/detail.png" alt="">
-                </div>
+                @endforeach
             </div>
             <div class="swiper-pagination"></div>
         </div>

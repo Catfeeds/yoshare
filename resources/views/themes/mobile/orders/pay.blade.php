@@ -19,11 +19,18 @@
             <li>
                 <h5>选择支付方式</h5>
                 @foreach($payments as $payment)
-                    <div>
-                        <img src="{{ $payment->pic }}" alt="icon">{{ $payment->name }}支付
-
-                        <input class="demo--radio c-btn" type="checkbox" name="demo-checkbox{{ $payment->id }}}">
-                        <span class="demo--checkbox demo--radioInput"></span>
+                    <div class="payments">
+                        <div class="payment">
+                            <span class="pay-img">
+                                <img src="{{ $payment->pic }}" alt="icon">
+                            </span>
+                            <span class="payname">{{ $payment->name.'支付' }}</span>
+                        </div>
+                        <label class="demo--label" style="float:right; display: inline-block">
+                            <input class="demo--radio c-btn" type="radio" name="demo-checkbox">
+                            <span class="demo--checkbox demo--radioInput" style="margin-top: 0px"></span>
+                        </label>
+                        <div class="clear"></div>
                     </div>
                 @endforeach
             </li>
