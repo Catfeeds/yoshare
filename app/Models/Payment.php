@@ -14,6 +14,9 @@ class Payment extends BaseModule
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
+    const TYPE_DEPOSIT = 0;
+    const TYPE_BALANCE = 1;
+    const TYPE_ORDER = 2;
     const STATES = [
         0 => '已删除',
         1 => '未发布',
@@ -29,7 +32,7 @@ class Payment extends BaseModule
 
     protected $table = 'payments';
 
-    protected $fillable = ['site_id', 'name', 'pic', 'intro', 'content', 'type', 'sort','state', 'published_at'];
+    protected $fillable = ['site_id', 'name', 'pic', 'payurl', 'content', 'type', 'sort','state', 'published_at'];
 
     protected $dates = ['published_at'];
 

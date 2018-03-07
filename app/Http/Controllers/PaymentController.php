@@ -225,4 +225,5 @@ class PaymentController extends Controller
     {
         return Response::json(Category::tree('', 0, $this->module->id));
     }
+
 }

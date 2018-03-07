@@ -105,9 +105,11 @@ ul.list li .addr-detail{
 }
 ul.pay{
     padding-top: 168px;
+    width: 1080px;
 }
 ul.pay li{
     padding: 30px 60px;
+    height: 450px;
 }
 ul.pay li h5{
     width: 200px;

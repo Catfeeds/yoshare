@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\WePay\lib\WxPayApi;
+use App\Libraries\WePay\lib\JsApiPay;
+use App\Libraries\WePay\Example\Log;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Dictionary;
@@ -367,17 +370,56 @@ class OrderController extends Controller
         }
 
         $order = Order::find($id);
-        $price = $order['total_price']+$order['ship_price'];
+        $order['price'] = $order['total_price']+$order['ship_price'];
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
+
+        ini_set('date.timezone','Asia/Shanghai');
+        //error_reporting(E_ERROR);
+
+        //初始化日志
+        $logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
+        $log = Log::Init($logHandler, 15);
+
+        //打印输出数组信息
+        function printf_info($data)
+        {
+            foreach($data as $key=>$value){
+                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            }
+        }
+
+        //①、获取用户openid
+        $tools = new JsApiPay();
+        $openId = $tools->GetOpenid();
+
+        //②、统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody("test");
+        $input->SetAttach("test");
+        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetTotal_fee("1");
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("test");
+        $input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = WxPayApi::unifiedOrder($input);
+        echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
+        printf_info($order);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        //获取共享收货地址js函数参数
+        $editAddress = $tools->GetEditAddressParameters();
 
 
         $system['title'] = '支付页';
         $system['back'] = '/order/lists';
         $system['mark'] = 'member';
 
-        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'price' => $price, 'payments' => $payments]);
+        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'order' => $order, 'payments' => $payments]);
     }
 
 }
