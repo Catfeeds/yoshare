@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\WePay\lib\WxPayApi;
-use App\Libraries\WePay\lib\JsApiPay;
+use App\Libraries\wePay\lib\WxPayApi;
+use App\Libraries\wePay\lib\JsApiPay;
+use App\Libraries\wePay\lib\WxPayUnifiedOrder;
+use App\Libraries\WePay\Example\CLogFileHandler;
 use App\Libraries\WePay\Example\Log;
+use App\Libraries\WePay\WxPayConfig;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Dictionary;
@@ -379,16 +382,8 @@ class OrderController extends Controller
         //error_reporting(E_ERROR);
 
         //初始化日志
-        $logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
+        $logHandler= new CLogFileHandler(storage_path().'/logs/'.date('Y-m-d').'.log');
         $log = Log::Init($logHandler, 15);
-
-        //打印输出数组信息
-        function printf_info($data)
-        {
-            foreach($data as $key=>$value){
-                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
-            }
-        }
 
         //①、获取用户openid
         $tools = new JsApiPay();
@@ -414,12 +409,14 @@ class OrderController extends Controller
         //获取共享收货地址js函数参数
         $editAddress = $tools->GetEditAddressParameters();
 
+        $data['jsApiParameters'] = $jsApiParameters;
+        $data['editAddress'] = $editAddress;
 
         $system['title'] = '支付页';
         $system['back'] = '/order/lists';
         $system['mark'] = 'member';
 
-        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'order' => $order, 'payments' => $payments]);
+        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'order' => $order, 'payments' => $payments, 'data' => $data]);
     }
 
 }

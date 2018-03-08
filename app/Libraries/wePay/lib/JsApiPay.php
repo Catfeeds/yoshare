@@ -1,5 +1,5 @@
 <?php
-namespace App\Libraries\WePay\Lib;
+namespace App\Libraries\wePay\lib;
 
 require_once "WxPay.Api.php";
 /**

@@ -1,5 +1,5 @@
 <?php
-namespace App\Libraries\WePay\lib;
+namespace App\Libraries\wePay\lib;
 
 require_once "WxPay.Exception.php";
 require_once "WxPay.Config.php";

@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Libraries\WePay\lib;
+
 /**
 * 	配置账号信息
 */
