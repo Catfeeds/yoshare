@@ -7,7 +7,7 @@ use App\Libraries\wePay\lib\JsApiPay;
 use App\Libraries\wePay\lib\WxPayUnifiedOrder;
 use App\Libraries\WePay\Example\CLogFileHandler;
 use App\Libraries\WePay\Example\Log;
-use App\Libraries\WePay\WxPayConfig;
+use App\Libraries\WePay\lib\WxPayConfig;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Dictionary;

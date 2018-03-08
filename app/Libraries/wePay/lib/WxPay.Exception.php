@@ -5,6 +5,8 @@
  * @author widyhu
  *
  */
+
+
 class WxPayException extends Exception {
 	public function errorMessage()
 	{
