@@ -382,13 +382,13 @@ class OrderController extends Controller
         //error_reporting(E_ERROR);
 
         //初始化日志
-        $logHandler= new CLogFileHandler(storage_path().'/logs/'.date('Y-m-d').'.log');
-        $log = Log::Init($logHandler, 15);
+        //$logHandler= new CLogFileHandler(storage_path().'/logs/'.date('Y-m-d').'.log');
+        //$log = Log::Init($logHandler, 15);
 
         //①、获取用户openid
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
-
+        dd(WxPayConfig::SSLCERT_PATH);
         //②、统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("test");

@@ -1,8 +1,8 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
-require_once "WxPay.Exception.php";
-require_once "WxPay.Config.php";
+require_once "WxpayException.php";
+require_once "WxPayConfig.php";
 require_once "WxPay.Data.php";
 
 /**
@@ -536,9 +536,16 @@ class WxPayApi
 			curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
 		}
 		curl_setopt($ch,CURLOPT_URL, $url);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
-		//设置header
+        if(stripos($url,"https://")!==FALSE){
+            curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }    else    {
+            curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE);
+            curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
+        }
+
+        //设置header
 		curl_setopt($ch, CURLOPT_HEADER, FALSE);
 		//要求结果为字符串且输出到屏幕上
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

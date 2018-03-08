@@ -5,7 +5,9 @@
  * @author widyhu
  *
  */
+namespace App\Libraries\wePay\lib;
 
+use EasyWeChat\Core\Exception;
 
 class WxPayException extends Exception {
 	public function errorMessage()
