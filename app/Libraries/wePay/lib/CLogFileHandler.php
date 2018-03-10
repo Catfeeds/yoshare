@@ -1,7 +1,7 @@
 <?php
-namespace App\Libraries\WePay\Example;
+namespace WePay\lib;
 
-use  App\Libraries\WePay\Example\ILogHandler;
+use  WePay\Example\ILogHandler;
 
 class CLogFileHandler implements ILogHandler
 {

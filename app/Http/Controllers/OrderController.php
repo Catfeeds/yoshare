@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Libraries\wePay\lib\WxPayApi;
 use App\Libraries\wePay\lib\JsApiPay;
 use App\Libraries\wePay\lib\WxPayUnifiedOrder;
-use App\Libraries\WePay\Example\CLogFileHandler;
-use App\Libraries\WePay\Example\Log;
+use WePay\lib\CLogFileHandler;
+use WePay\Example\Log;
 use App\Libraries\WePay\lib\WxPayConfig;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
@@ -395,12 +395,13 @@ class OrderController extends Controller
             ->orderBy('sort', 'desc')
             ->get();
 
-        dd(dirname('http://'.$_SERVER['HTTP_HOST']).'/wxpay/notify');
+        //初始化日志
+        $logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
+        $log = Log::Init($logHandler, 15);
 
         // 统一下单
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
-
 
         $input = new WxPayUnifiedOrder();
         $input->SetBody("test");
@@ -410,10 +411,11 @@ class OrderController extends Controller
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
-        $input->SetNotify_url(dirname('http://'.$_SERVER['HTTP_HOST']).'/wxpay/notify');
+        $input->SetNotify_url('http://'.$_SERVER['HTTP_HOST'].'/wxpay/notify');
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
+        dd($order);
         $jsApiParameters = $tools->GetJsApiParameters($order);
 
         $editAddress = $tools->GetEditAddressParameters();

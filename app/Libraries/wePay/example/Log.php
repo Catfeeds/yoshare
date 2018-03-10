@@ -1,6 +1,6 @@
 <?php
 //以下为日志
-namespace App\Libraries\WePay\Example;
+namespace WePay\Example;
 
 class Log
 {
