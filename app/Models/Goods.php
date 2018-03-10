@@ -14,6 +14,12 @@ class Goods extends BaseModule
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
+    const NO_TOP = 0;
+    const IS_TOP = 1;
+    const TOP_NUM = 4;
+
+    const TAG_GOODS = 'App\Models\Goods';
+
     const STATES = [
         0 => '已删除',
         1 => '未发布',
@@ -29,7 +35,7 @@ class Goods extends BaseModule
 
     protected $table = 'goods';
 
-    protected $fillable = ['site_id', 'category_id', 'type', 'name', 'subtitle', 'price', 'discount', 'sale_price', 'tags', 'summary', 'image_url', 'video_url', 'content', 'top', 'member_id', 'user_id', 'sort', 'state', 'published_at'];
+    protected $fillable = ['site_id', 'category_id', 'type', 'name', 'subtitle', 'price', 'discount', 'sale_price', 'tags', 'summary', 'pic_url', 'image_url', 'video_url', 'content', 'top', 'member_id', 'user_id', 'sort', 'state', 'published_at'];
 
     protected $dates = ['published_at'];
 
@@ -56,6 +62,12 @@ class Goods extends BaseModule
     public static function stores($input)
     {
         $input['state'] = static::STATE_NORMAL;
+        //处理标签
+        $tags = '';
+        foreach($input['tags'] as $key => $val){
+            $tags = $val.','.$tags;
+        }
+        $input['tags'] = $tags;
 
         $good = static::create($input);
 
@@ -86,6 +98,13 @@ class Goods extends BaseModule
     public static function updates($id, $input)
     {
         $good = static::find($id);
+
+        //处理标签
+        $tags = '';
+        foreach($input['tags'] as $key => $val){
+            $tags = $val.','.$tags;
+        }
+        $input['tags'] = $tags;
 
         $good->update($input);
 

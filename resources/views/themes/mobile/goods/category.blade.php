@@ -26,7 +26,7 @@
             @endforeach
         </div>
         <div class="products">
-            @foreach($category->goods()->where('state', \App\Models\Goods::STATE_PUBLISHED)->orderBy('top', 'desc')->orderBy('sort', 'desc')->get() as $goods)
+            @foreach($category->goods()->where('state', \App\Models\Goods::STATE_PUBLISHED)->orderBy('sort', 'desc')->get() as $goods)
                 @if($loop->index%2 == 0)
                     <ul>
                         @endif

@@ -10,6 +10,7 @@ use Response;
 class Tag extends Model
 {
     const RECOMMEND = '推荐';
+    const HOT = '热租';
 
     protected $fillable = [
         'site_id',

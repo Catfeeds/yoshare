@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Domain;
+use App\Models\Goods;
 use App\Models\Member;
+use App\Models\Tag;
 use Auth;
 
 class HomeController extends Controller
@@ -18,8 +20,16 @@ class HomeController extends Controller
             return abort(501);
         }
 
+        $recommends = Tag::where('name', Tag::RECOMMEND)
+            ->where('refer_type', Goods::TAG_GOODS)
+            ->pluck('refer_id');
+
+        $hots = Tag::where('name', Tag::HOT)
+            ->where('refer_type', Goods::TAG_GOODS)
+            ->pluck('refer_id');
+
         $system['mark'] = 'index';
-        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.index', ['site' => $domain->site, 'system' => $system, 'recommends' => $recommends, 'hots' => $hots]);
     }
 
     public function system(Domain $domain)

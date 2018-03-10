@@ -11,7 +11,7 @@
                     data-editable="{{ $column->editable }}">{{ $column->label }}</th>
             @endif
         @endforeach
-        <th data-field="action" data-align="center" data-width="160" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+        <th data-field="action" data-align="center" data-width="192" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
     </tr>
     </thead>
 </table>

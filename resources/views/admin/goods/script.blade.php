@@ -47,7 +47,8 @@
     function titleFormatter(value, row, index) {
         return '<a href="/goods/detail-' + row.id + '.html" target="_blank">' + row.name + '</a>' +
             (row.top ? '<span class="badge badge-default pull-right"> 置顶</span>' : '') +
-            (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '')
+            (row.tags.indexOf('{{\App\Models\Tag::RECOMMEND}}') >= 0 ? '<span class="badge badge-default pull-right"> 推荐</span>' : '') +
+            (row.tags.indexOf('{{\App\Models\Tag::HOT}}') >= 0 ? '<span class="badge badge-default pull-right"> 热租</span>' : '')
     }
 
     function actionFormatter(value, row, index) {
@@ -59,6 +60,9 @@
 
         //推荐
         html += '<button class="btn btn-primary btn-xs margin-r-5 tag" data-toggle="tooltip" data-placement="top" title="推荐"><i class="fa fa-hand-o-right"></i></button>';
+
+        //热租
+        html += '<button class="btn btn-primary btn-xs margin-r-5 hot" data-toggle="tooltip" data-placement="top" title="热租"><i class="glyphicon glyphicon-header"></i></button>';
 
         //评论
         html += '<button class="btn btn-info btn-xs margin-r-5 comment" data-toggle="modal" data-target="#modal_comment"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="查看评论"></i></button>';
@@ -106,6 +110,21 @@
                 url: '/admin/goods/' + row.id + '/tag',
                 type: 'post',
                 data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::RECOMMEND  }}'},
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {
+                    toast('error', '操作失败');
+                }
+            })
+        },
+
+
+        'click .hot': function (e, value, row, index) {
+            $.ajax({
+                url: '/admin/goods/' + row.id + '/tag',
+                type: 'post',
+                data: {'_token': '{{ csrf_token() }}', 'tag': '{{ App\Models\Tag::HOT  }}'},
                 success: function (data) {
                     $('#table').bootstrapTable('refresh');
                 },

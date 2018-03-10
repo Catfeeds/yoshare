@@ -50,10 +50,16 @@ Route::group(['middleware' => 'web'], function () {
 
     //商品模块
     Route::get('/order/lists', 'OrderController@lists');
+    Route::get('/order/lists/{state}', 'OrderController@lists');
     Route::get('/order/place/{cart_ids}', 'OrderController@place');
     Route::get('/order/store', 'OrderController@store');
     Route::get('/order/{id}/delete', 'OrderController@destroy');
     Route::get('/order/pay/{id}', 'OrderController@pay');
+
+    //支付
+    Route::get('/pay/wxpay/{order_id}', 'OrderController@wxPay');
+    Route::get('/wxpay/notify', 'WxpayController@notify');
+
 
     Route::get('/cart', 'CartController@cart');
     Route::get('/cart/add/{goods_id}', 'CartController@add');

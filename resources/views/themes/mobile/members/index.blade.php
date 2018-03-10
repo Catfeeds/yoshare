@@ -14,10 +14,10 @@
             <div class="content">
                 <div class="o-title clear">全部订单 <a href="/order/lists" alt="orders">查看全部订单 ></a></div>
                 <ul class="clear">
-                    <li><a href="#">待支付</a></li>
-                    <li><a href="#">待发货</a></li>
-                    <li><a href="#">待收货</a></li>
-                    <li><a href="#">待归还</a></li>
+                    <li><a href="/order/lists/nopay">待支付</a></li>
+                    <li><a href="/order/lists/nosend">待发货</a></li>
+                    <li><a href="/order/lists/sended">待收货</a></li>
+                    <li><a href="/order/lists/success">已完成</a></li>
                 </ul>
             </div>
         </div>

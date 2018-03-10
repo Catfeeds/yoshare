@@ -1,4 +1,5 @@
 <?php
+namespace App\Libraries\wePay\lib;
 /**
  * 
  * 回调基础类

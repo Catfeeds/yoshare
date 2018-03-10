@@ -27,85 +27,38 @@
         <div class="activity wrapper">
             <div class="top"><h3>活动专区</h3> <a class="more" href="" alt="more">更多活动</a><div class="clear"></div></div>
             <ul>
+                @foreach(\App\Models\Goods::where('top', \App\Models\Goods::IS_TOP)->limit(\App\Models\Goods::TOP_NUM)->orderBy('sort', 'desc')->get() as $goods)
                 <li>
-                    <h4>仁王</h4>
-                    <span class="price">15元/月</span><span class="hot-tag"></span>
-                    <div class="img"><a href="#"><img src="{{ url('images/index/activity.png') }}" alt="activity"/></a></div>
+                    <h4>{{ $goods->name }}</h4>
+                    <span class="price">{{ $goods->price }}元/月</span><span class="hot-tag"></span>
+                    <div class="img"><a href="goods/detail-{{ $goods->id }}.html"><img src="{{ $goods->pic_url }}" alt="activity"/></a></div>
                 </li>
-                <li>
-                    <h4>仁王</h4>
-                    <span class="price">15元/月</span><span class="hot-tag"></span>
-                    <div class="img"><a href="#"><img src="{{ url('images/index/activity.png') }}" alt="activity"/></a></div>
-                </li>
-                <li>
-                    <h4>仁王</h4>
-                    <span class="price">15元/月</span><span class="hot-tag"></span>
-                    <div class="img"><a href="#"><img src="{{ url('images/index/activity.png') }}" alt="activity"/></a></div>
-                </li>
-                <li>
-                    <h4>仁王</h4>
-                    <span class="price">15元/月</span><span class="hot-tag"></span>
-                    <div class="img"><a href="#"><img src="{{ url('images/index/activity.png') }}" alt="activity"/></a></div>
-                </li>
+                @endforeach
                 <div class="clear"></div>
             </ul>
         </div>
         <div class="hot wrapper">
             <div class="top"><h3>热租排行</h3> <a class="more" href="" alt="more">更多热租</a><div class="clear"></div></div>
             <ul>
+                @foreach(\App\Models\Goods::whereIn('id', $hots)->orderBy('sort', 'desc')->get() as $goods)
                 <li>
-                    <div class="img"><img src="{{ url('images/index/hot.png') }}" alt="hot"/></div>
+                    <div class="img"><img src="{{ $goods->pic_url }}" alt="hot"/></div>
                     <div class="text">
-                        <h4>街头斗士</h4>
-                        <div class="intro">这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍</div>
-                        <span class="price">20元/月</span><a href="#" alt="buy">立即选购</a>
+                        <h4>{{ $goods->name }}</h4>
+                        <div class="intro">{!! $goods->summary !!}</div>
+                        <span class="price">{{ $goods->price }}元/月</span><a href="goods/detail-{{ $goods->id }}.html" alt="buy">立即选购</a>
                     </div>
                     <div class="clear"></div>
                 </li>
-                <li>
-                    <div class="img"><img src="{{ url('images/index/hot.png') }}" alt="hot"/></div>
-                    <div class="text">
-                        <h4>街头斗士</h4>
-                        <div class="intro">这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍</div>
-                        <span class="price">20元/月</span><a href="#" alt="buy">立即选购</a>
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li>
-                    <div class="img"><img src="{{ url('images/index/hot.png') }}" alt="hot"/></div>
-                    <div class="text">
-                        <h4>街头斗士</h4>
-                        <div class="intro">这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍</div>
-                        <span class="price">20元/月</span><a href="#" alt="buy">立即选购</a>
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li>
-                    <div class="img"><img src="{{ url('images/index/hot.png') }}" alt="hot"/></div>
-                    <div class="text">
-                        <h4>街头斗士</h4>
-                        <div class="intro">这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍这是游戏介绍这是游戏介绍
-                            这是游戏介绍这是游戏介绍</div>
-                        <span class="price">20元/月</span><a href="#" alt="buy">立即选购</a>
-                    </div>
-                </li>
+                @endforeach
             </ul>
         </div>
         <div class="news">
             <div class="top"><h3 style="margin-left: 56px;">新游推荐</h3> <a style="margin-right: 56px;" class="more" href="" alt="more">更多推荐</a><div class="clear"></div></div>
             <ul>
-                <li><a href="#" alt="recommend"><img src="{{ url('images/index/new.png') }}" alt=""/></a></li>
-                <li><a href="#" alt="recommend"><img src="{{ url('images/index/new.png') }}" alt=""/></a></li>
-                <li><a href="#" alt="recommend"><img src="{{ url('images/index/new.png') }}" alt=""/></a></li>
-                <li><a href="#" alt="recommend"><img src="{{ url('images/index/new.png') }}" alt=""/></a></li>
-                <li><a href="#" alt="recommend"><img src="{{ url('images/index/new.png') }}" alt=""/></a></li>
+                @foreach(\App\Models\Goods::whereIn('id', $recommends)->orderBy('sort', 'desc')->get() as $goods)
+                    <li><a href="goods/detail-{{ $goods->id }}.html" alt="recommend"><img src="{{ $goods->pic_url }}" width="1080px" height="440px" alt=""/></a></li>
+                @endforeach
             </ul>
         </div>
     </div>
