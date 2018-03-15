@@ -42,8 +42,10 @@
                     </div>
                 </li>
             </ul>
+            <input type="hidden" name="address_id" value="{{ $address->id }}" id="aid">
         @else
             <div class="a-wrapper" style="padding: 20px 0;"><a href="/address/create" class="a-default" style="background: #fff;">添加收货地址</a></div>
+            <input type="hidden" name="address_id" value="0" id="aid">
         @endif
         <input type="hidden" id="ids" value="{{ $carts['ids'] }}" />
         <ul class="p-ul">

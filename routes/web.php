@@ -39,10 +39,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/detail', 'MemberController@detail');
 
     //会员地址
-    Route::get('address/index.html', 'AddressController@lists');
-    Route::get('address/region', 'AddressController@region');
-    Route::get('address/default/{id}', 'AddressController@setDefault');
-    Route::get('address/{id}/delete', 'AddressController@destroy');
+    Route::get('/address/index.html', 'AddressController@lists');
+    Route::get('/address/region', 'AddressController@region');
+    Route::get('/address/default/{id}', 'AddressController@setDefault');
+    Route::get('/address/{id}/delete', 'AddressController@destroy');
     Route::resource('address', 'AddressController');
     //会员钱包
     Route::get('/wallet/{type}', 'UserController@wallet');

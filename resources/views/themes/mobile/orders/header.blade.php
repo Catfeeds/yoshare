@@ -8,21 +8,23 @@
         <a class="h-nav" herf="#"></a>
         <div class="clear"></div>
     </div>
-    <ul class="order">
-        <li @if($state == '')
-                class = "active";
-            @endif ><a href="/order/lists">全部</a></li>
-        <li @if($state == 'nopay')
-                class = "active";
-            @endif><a href="/order/lists/nopay">待付款</a></li>
-        <li @if($state == 'nosend')
-                class = "active";
-            @endif><a href="/order/lists/nosend">待发货</a></li>
-        <li @if($state == 'sended')
-                class = "active";
-            @endif><a href="/order/lists/sended">待收货</a></li>
-        <li @if($state == 'success')
-                class = "active";
-            @endif><a href="/order/lists/success">已完成</a></li>
-    </ul>
+    @if(isset($state))
+        <ul class="order">
+            <li @if($state == '')
+                    class = "active";
+                @endif ><a href="/order/lists">全部</a></li>
+            <li @if($state == 'nopay')
+                    class = "active";
+                @endif><a href="/order/lists/nopay">待付款</a></li>
+            <li @if($state == 'nosend')
+                    class = "active";
+                @endif><a href="/order/lists/nosend">待发货</a></li>
+            <li @if($state == 'sended')
+                    class = "active";
+                @endif><a href="/order/lists/sended">待收货</a></li>
+            <li @if($state == 'success')
+                    class = "active";
+                @endif><a href="/order/lists/success">已完成</a></li>
+        </ul>
+    @endif
 </div>

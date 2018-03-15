@@ -9,6 +9,16 @@
 <script src="{{ url('/js/layer.js') }}"></script>
 <script type="text/javascript">
     $('#place').click(function(){
+        var aid = $('#aid').val();
+        if(aid == 0){
+            layer.open({
+                content: '您还没有添加收货地址，无法提交订单',
+                btn: ['去添加', '取消'],
+                yes: function(index, layero) {
+                    window.location.href='/address/create/';
+                }
+            });
+        }
         var ids = $('#ids').val();
         var name = $('#name').text();
         var phone = $('#phone').text();
@@ -28,6 +38,7 @@
             success:function(data){
                 msg = data.message;
                 statusCode = data.status_code;
+                order = data.data;
 
                 if(statusCode == 200){
                     msg = '成功提交订单！';
@@ -46,7 +57,7 @@
                         content: msg,
                         btn: ['去支付', '取消'],
                         yes: function(index, layero) {
-                            window.location.href='/pay';
+                            window.location.href='/order/pay/'+order.id;
                         }
                     });
                 } else {

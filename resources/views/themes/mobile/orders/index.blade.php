@@ -7,6 +7,7 @@
 
 @section('content')
     @include('themes.mobile.orders.header')
+
     <div class="c-goods">
         @foreach($orders as $order)
             <ul>

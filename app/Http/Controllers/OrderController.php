@@ -107,7 +107,7 @@ class OrderController extends Controller
         $carts = [];
 
         //分割购物车ID字符串为数组
-        $cart_ids = explode(',', $ids);
+        $cart_ids = explode('/', $ids);
 
         if (empty($domain->site)) {
             return abort(501);
@@ -126,15 +126,19 @@ class OrderController extends Controller
             ->where('is_default', Address::IS_DEFAULT)
             ->first();
         //拼接地址
-        $province = Dictionary::find($address->province)->name;
-        $city = Dictionary::find($address->city)->name;
-        $town = Dictionary::find($address->town)->name;
+        if(!empty($address)){
 
-        if($city !== $province){
-            $address->detail = $province.'省'.$city.'市'.$town.$address->detail;
-        }else{
-            $address->detail = $city.'市'.$town.$address->detail;
+            $province = Dictionary::find($address->province)->name;
+            $city = Dictionary::find($address->city)->name;
+            $town = Dictionary::find($address->town)->name;
+
+            if($city !== $province){
+                $address->detail = $province.'省'.$city.'市'.$town.$address->detail;
+            }else{
+                $address->detail = $city.'市'.$town.$address->detail;
+            }
         }
+
 
         $goods_ids = Cart::whereIn('id', $cart_ids)
             ->pluck('goods_id')

@@ -42,7 +42,7 @@
             content: '您确定要删除此地址吗？'
             ,btn: ['确定', '取消']
             ,yes: function(index){
-                location.href = '/address/'+id+'delete';
+                location.href = '/address/'+id+'/delete';
                 layer.close(index);
             }
         });

@@ -20,7 +20,7 @@
         var ids = '';
 
         $('.demo--radio:checked').each(function () {
-            ids = $(this).siblings('.cart_id').val()+','+ids;
+            ids = $(this).siblings('.cart_id').val()+'/'+ids;
         });
 
         if(ids == ''){
