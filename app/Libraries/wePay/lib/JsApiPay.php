@@ -51,8 +51,12 @@ class JsApiPay
 			exit();
 		} else {
 			//获取code码，以获取openid
-		    $code = $_GET['code'];
-			$openid = $this->getOpenidFromMp($code);
+		    $code = trim($_GET['code']);
+		    if(empty($_COOKIE['openId'])){
+                $openid = $this->getOpenidFromMp($code);
+            }else{
+                $openid = $_COOKIE['openId'];
+            }
 			return $openid;
 		}
 	}
@@ -95,8 +99,9 @@ class JsApiPay
 	public function GetOpenidFromMp($code)
 	{
 		$url = $this->__CreateOauthUrlForOpenid($code);
+
 		//初始化curl
-		$ch = curl_init();
+		$ch = curl_init($url);
 		//设置超时
 		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -104,21 +109,22 @@ class JsApiPay
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,FALSE);
 		curl_setopt($ch, CURLOPT_HEADER, FALSE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0" 
-			&& WxPayConfig::CURL_PROXY_PORT != 0){
-			curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
-			curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
-		}
+		curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+
 		//运行curl，结果以jason形式返回
 		$res = curl_exec($ch);
 		curl_close($ch);
+
 		//取出openid
 		$data = json_decode($res,true);
-		$this->data = $data;
+
+     	$this->data = $data;
 		$openid = $data['openid'];
+        setCookie('oepnId',$openid,time()+3600*24);
+
 		return $openid;
 	}
-	
+
 	/**
 	 * 
 	 * 拼接签名字符串

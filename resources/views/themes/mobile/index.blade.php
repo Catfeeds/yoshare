@@ -14,13 +14,13 @@
         <div class="category">
             <ul>
                 <li><a href="/goods/category-2.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>射击游戏</h5></li>
-                <li><a href="/goods/category-3.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>格斗游戏</h5></li>
-                <li><a href="/goods/category-4.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>赛车游戏</h5></li>
-                <li><a href="/goods/category-5.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>体育游戏</h5></li>
-                <li><a href="/goods/category-6.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>动作游戏</h5></li>
-                <li><a href="/goods/category-7.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>冒险游戏</h5></li>
-                <li><a href="/goods/category-8.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>角色扮演</h5></li>
-                <li><a href="/goods/category-9.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>沙盒游戏</h5></li>
+                <li><a href="/goods/category-3.html"><img src="{{ url('images/index/fight.png') }}" alt=""/></a><h5>格斗游戏</h5></li>
+                <li><a href="/goods/category-4.html"><img src="{{ url('images/index/racing.png') }}" alt=""/></a><h5>赛车游戏</h5></li>
+                <li><a href="/goods/category-5.html"><img src="{{ url('images/index/sports.png') }}" alt=""/></a><h5>体育游戏</h5></li>
+                <li><a href="/goods/category-6.html"><img src="{{ url('images/index/action.png') }}" alt=""/></a><h5>动作游戏</h5></li>
+                <li><a href="/goods/category-7.html"><img src="{{ url('images/index/adventure.png') }}" alt=""/></a><h5>冒险游戏</h5></li>
+                <li><a href="/goods/category-8.html"><img src="{{ url('images/index/role.png') }}" alt=""/></a><h5>角色扮演</h5></li>
+                <li><a href="/goods/category-9.html"><img src="{{ url('images/index/Sandbox.png') }}" alt=""/></a><h5>沙盒游戏</h5></li>
                 <div class="clear"></div>
             </ul>
         </div>

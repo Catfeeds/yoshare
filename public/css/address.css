@@ -4,11 +4,12 @@ body{
 .u-wrapper{
     background: #eee;
     color: #555;
-    width: 1080px;
+    width: 100%;
+    min-height: 1450px;
 }
 .address{
     background: #fff;
-    padding: 190px 50px 50px;
+    padding: 50px 50px;
     padding-bottom: 0;
 }
 .address ul.form li{
@@ -30,7 +31,7 @@ h3{
 }
 .a-form{
     float: left;
-    width: 770px;
+    width: 71.2%;
     height: 112px;
     font-size: 40px;
 }
@@ -42,7 +43,7 @@ h3{
     line-height: 120px;
 }
 select{
-    width: 290px;
+    width: 26.8%;
     height: 120px;
     float: left;
     font-size: 40px;
@@ -56,7 +57,8 @@ select{
     background: #fff;
 }
 ul.list{
-    padding-top: 176px;
+
+    width: 100%;
 }
 ul.list li{
     background: #fff;

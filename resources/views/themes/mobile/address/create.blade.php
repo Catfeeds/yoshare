@@ -5,10 +5,10 @@
     <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
+
+    @include('themes.mobile.layouts.header')
+
     <div class="u-wrapper">
-
-        @include('themes.mobile.layouts.header')
-
         <div class="address">
 
             {!! Form::open(['url' => '/address', 'method' => 'post']) !!}

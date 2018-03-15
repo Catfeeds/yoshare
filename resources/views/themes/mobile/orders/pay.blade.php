@@ -5,10 +5,10 @@
     <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
+
+    @include('themes.mobile.layouts.header')
+
     <div class="u-wrapper">
-
-        @include('themes.mobile.layouts.header')
-
         <ul class="pay">
             <li>
                 <h5>支付金额</h5>
@@ -37,7 +37,7 @@
                 @endforeach
             </li>
         </ul>
-        <div class="a-wrapper" style="padding-top: 220px"><a onclick="callpay()" class="a-default">立即支付</a></div>
+        <div class="a-wrapper" style="padding-top: 170px"><button onclick="callpay()" class="a-default">立即支付</button></div>
     </div>
 @endsection
 @section('js')
@@ -54,30 +54,14 @@
                 }
             });
         }
-        function pay(oid){
-            if(pid == 1){
-            //微信支付
-                if (typeof WeixinJSBridge == "undefined"){
-                    if( document.addEventListener ){
-                        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                    }else if (document.attachEvent){
-                        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                    }
-                }else{
-                    jsApiCall();
-                }
-            }else{
-            //支付宝支付
 
-            }
-        }
 
     </script>
     <script type="text/javascript">
         //调用微信JS api 支付
         function jsApiCall()
         {
+            alert(1234);return false;
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
                 {{ $data['jsApiParameters'] }},

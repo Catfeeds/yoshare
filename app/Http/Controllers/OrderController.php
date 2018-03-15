@@ -389,25 +389,26 @@ class OrderController extends Controller
             return abort(501);
         }
 
+        $tools = new JsApiPay();
+        $openId = $tools->GetOpenid();
+
         $result = Order::find($id);
         $result['price'] = $result['total_price']+$result['ship_price'];
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        //初始化日志
-        $logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
-        $log = Log::Init($logHandler, 15);
+        //初始化日
+        //$logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
+        //$log = Log::Init($logHandler, 15);
 
         // 统一下单
-        $tools = new JsApiPay();
-        $openId = $tools->GetOpenid();
 
         $input = new WxPayUnifiedOrder();
-        $input->SetBody("test");
+        $input->SetBody("yoshare_order");
         //$input->SetAttach("test");
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee("1");
+        $input->SetTotal_fee($result['price']);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
@@ -415,7 +416,7 @@ class OrderController extends Controller
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
-        dd($order);
+
         $jsApiParameters = $tools->GetJsApiParameters($order);
 
         $editAddress = $tools->GetEditAddressParameters();

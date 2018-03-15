@@ -6,10 +6,10 @@
     <link href="{{ url('css/cart.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
+
+    @include('themes.mobile.members.header')
+
     <div class="u-wrapper">
-
-        @include('themes.mobile.members.header')
-
         <div class="vip-text">
             <h3>什么是高级用户？</h3>
             <div class="content" style="text-indent: 80px;padding-top: 40px;">

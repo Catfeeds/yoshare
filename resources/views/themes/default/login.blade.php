@@ -1,5 +1,10 @@
-@extends('templates.master')
+@extends('themes.mobile.master')
 @section('title', '登录-北京优享科技有限公司')
+
+@section('css')
+    <link href="{{ url('css/home.css') }}" rel="stylesheet" type="text/css">
+@endsection
+
 @section('content')
     <div class="wrapper">
         <div class="logo"><img src="{{url('images/logo.png')}}" alt="logo"></div>
@@ -19,22 +24,7 @@
     </div>
 @endsection
 @section('js')
-<script>
-    if (self != top) {
-        parent.location.href = 'index.php';
-    }
-    function CheckRegister(obj) {
-        if (obj.username.value == '') {
-            alert('请输入用户名');
-            obj.username.focus();
-            return false;
-        }
-        if (obj.password.value == '') {
-            alert('请输入登录密码');
-            obj.password.focus();
-            return false;
-        }
-        return true;
-    }
-</script>
+    <script>
+
+    </script>
 @endsection

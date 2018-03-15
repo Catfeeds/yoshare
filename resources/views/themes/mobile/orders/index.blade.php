@@ -7,7 +7,7 @@
 
 @section('content')
     @include('themes.mobile.orders.header')
-    <div class="c-goods" style="padding-top: 310px">
+    <div class="c-goods">
         @foreach($orders as $order)
             <ul>
                 <span class="status">{{ \App\Models\Order::STATES[$order['state']] }}</span>
@@ -19,8 +19,6 @@
                             <div class="subtitle">{{ $goods->subtitle }}</div>
                             <div class="price">￥{{ $goods->sale_price }}/月</div>
                         </div>
-
-                        <div class="clear"></div>
                     </li>
                 @endforeach
                 <li class="op">

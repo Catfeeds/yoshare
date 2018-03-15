@@ -14,9 +14,10 @@
     </style>
 @endsection
 @section('content')
-    <div class="u-wrapper">
 
-        @include('themes.mobile.layouts.header')
+    @include('themes.mobile.layouts.header')
+
+    <div class="u-wrapper">
         {!! Form::model($member, ['id' => 'form', 'method' => 'PATCH', 'action' => ['MemberController@update', $member->id],'class' => 'form-horizontal']) !!}
         <ul class="set">
             <li onclick="" style="height: 220px;">

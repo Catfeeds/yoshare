@@ -10,6 +10,7 @@
 @section('body')
     @include('themes.default.layouts.header')
 
+    <h2>移动端</h2>
     <ul>
         @foreach($articles as $article)
             <li><a href="{{ "detail-$article->id.html" }}">{{ $article->title }}</a></li>
@@ -20,7 +21,5 @@
 @endsection
 
 @section('js')
-    <script>
 
-    </script>
 @endsection

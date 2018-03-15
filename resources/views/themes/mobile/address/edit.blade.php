@@ -5,10 +5,10 @@
     <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
+
+    @include('themes.mobile.layouts.header')
+
     <div class="u-wrapper">
-
-        @include('themes.mobile.layouts.header')
-
         <div class="address">
             {!! Form::model($address, ['id' => 'form', 'method' => 'PATCH', 'action' => ['AddressController@update', $address->id],'class' => 'form-horizontal']) !!}
                 {!! csrf_field() !!}

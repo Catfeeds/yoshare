@@ -1,4 +1,4 @@
-@extends('themes.default.layouts.master')
+@extends('themes.mobile.layouts.master')
 
 @section('title', $article->title . ' - ' . $site->title)
 
@@ -10,12 +10,13 @@
 @section('body')
     @include('themes.default.layouts.header')
 
+    <h2>移动端</h2>
     <h2>{{ $article->title }}</h2>
     <div>
         {!! $article->content !!}
     </div>
 
-    @include('themes.default.layouts.footer')
+    @include('themes.mobile.layouts.footer')
 @endsection
 
 @section('js')

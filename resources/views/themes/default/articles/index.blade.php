@@ -1,6 +1,6 @@
 @extends('themes.default.layouts.master')
 
-@section('title', $site->title)
+@section('title', $module->title . ' - ' . $site->title)
 
 @section('head')
     <link href="{{ asset('themes/default/css/index.css') }}" rel="stylesheet">
@@ -10,6 +10,7 @@
 @section('body')
     @include('themes.default.layouts.header')
 
+    <h2>移动端</h2>
     <ul>
         @foreach($site->categories as $category)
             <li><a href="{{ "category-$category->id.html" }}">{{ $category->name }}</a></li>
@@ -20,7 +21,5 @@
 @endsection
 
 @section('js')
-    <script>
 
-    </script>
 @endsection

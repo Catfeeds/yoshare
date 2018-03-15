@@ -63,11 +63,13 @@ class Goods extends BaseModule
     {
         $input['state'] = static::STATE_NORMAL;
         //处理标签
-        $tags = '';
-        foreach($input['tags'] as $key => $val){
-            $tags = $val.','.$tags;
+        if(!empty($input['tags'])){
+            $tags = '';
+            foreach($input['tags'] as $key => $val){
+                $tags = $val.','.$tags;
+            }
+            $input['tags'] = $tags;
         }
-        $input['tags'] = $tags;
 
         $good = static::create($input);
 
@@ -100,11 +102,13 @@ class Goods extends BaseModule
         $good = static::find($id);
 
         //处理标签
-        $tags = '';
-        foreach($input['tags'] as $key => $val){
-            $tags = $val.','.$tags;
+        if(!empty($input['tags'])){
+            $tags = '';
+            foreach($input['tags'] as $key => $val){
+                $tags = $val.','.$tags;
+            }
+            $input['tags'] = $tags;
         }
-        $input['tags'] = $tags;
 
         $good->update($input);
 

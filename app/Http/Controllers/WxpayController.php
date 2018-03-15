@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 ini_set('date.timezone','Asia/Shanghai');
 error_reporting(E_ERROR);
 
-use App\Libraries\WePay\Example\CLogFileHandler;
+use WePay\lib\CLogFileHandler;
 use App\Libraries\wePay\lib\PayNotifyCallBack;
-use App\Libraries\WePay\Example\Log;
+use WePay\Example\Log;
 
 class WxpayController extends Controller{
     public function notify(){

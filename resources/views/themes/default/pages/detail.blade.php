@@ -1,4 +1,4 @@
-@extends('themes.default.layouts.master')
+@extends('themes.mobile.layouts.master')
 
 @section('title', $page->title . ' - ' . $site->title)
 
@@ -10,6 +10,7 @@
 @section('body')
     @include('themes.default.layouts.header')
 
+    <h2>移动端</h2>
     <h2>{{ $page->title }}</h2>
     <div>
         {!! $page->content !!}
