@@ -5,12 +5,17 @@
 @endsection
 @section('content')
     @include('themes.mobile.widgets.header')
-    <div class="banner swiper-container">
+    <div class="banner swiper-container" style="width: 1080px">
         <div class="swiper-wrapper" id="banner_swiper">
         </div>
         <div class="swiper-pagination"></div>
     </div>
     <div class="main">
+        <div class="banner swiper-container">
+            <div class="swiper-wrapper" id="banner_swiper">
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
         <div class="category">
             <ul>
                 <li><a href="/goods/category-2.html"><img src="{{ url('images/index/shoot.png') }}" alt=""/></a><h5>射击游戏</h5></li>
@@ -20,7 +25,7 @@
                 <li><a href="/goods/category-6.html"><img src="{{ url('images/index/action.png') }}" alt=""/></a><h5>动作游戏</h5></li>
                 <li><a href="/goods/category-7.html"><img src="{{ url('images/index/adventure.png') }}" alt=""/></a><h5>冒险游戏</h5></li>
                 <li><a href="/goods/category-8.html"><img src="{{ url('images/index/role.png') }}" alt=""/></a><h5>角色扮演</h5></li>
-                <li><a href="/goods/category-9.html"><img src="{{ url('images/index/Sandbox.png') }}" alt=""/></a><h5>沙盒游戏</h5></li>
+                <li><a href="/goods/category-9.html"><img src="{{ url('images/index/sandbox.png') }}" alt=""/></a><h5>沙盒游戏</h5></li>
                 <div class="clear"></div>
             </ul>
         </div>
@@ -68,9 +73,9 @@
     <script>
         function getBanners(page_size, page) {
             $.ajax({
-                url: '/api/contents/list',
+                url: '/api/categories',
                 data: {
-                    'category_id': 5,
+                    'category_id': 10,
                     'page_size': page_size,
                     'page': page,
                 },
@@ -81,11 +86,16 @@
                             var url = '/contents/show/' + obj.id;
                             if (obj.link_type == 1) {
                                 url = obj.link;
+
+                                html += '<div class="swiper-slide">' +
+                                    '<a href="'+url+'"><img src="' + obj.image_url + '" width="1080px"> </a>' +
+                                    '</div>';
+                            }else{
+                                html += '<div class="swiper-slide">' +
+                                    '<img src="' + obj.image_url + '" width="1080px">' +
+                                    '</div>';
                             }
 
-                            html += '<div class="swiper-slide">' +
-                                '<img src="' + obj.image_url + '">' +
-                                '</div>';
                         });
                         $('#banner_swiper').html(html);
                         banners = new Swiper('.banner.swiper-container', {
@@ -102,7 +112,7 @@
             });
         }
 
-        getBanners(20, 1);
+        getBanners(3, 1);
 
     </script>
 @endsection
