@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\wePay\lib\WxPayApi;
-use App\Libraries\wePay\lib\JsApiPay;
-use App\Libraries\wePay\lib\WxPayUnifiedOrder;
-use WePay\lib\CLogFileHandler;
-use WePay\Example\Log;
-use App\Libraries\WePay\lib\WxPayConfig;
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
 use App\Models\Dictionary;
@@ -15,7 +9,6 @@ use App\Models\Order;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
-use App\Models\Payment;
 use App\Models\UserLog;
 use App\Models\Member;
 use App\Models\Cart;
@@ -69,36 +62,6 @@ class OrderController extends Controller
         $order->incrementClick();
 
         return view('themes.' . $domain->theme->name . '.orders.detail', ['site' => $domain->site, 'order' => $order]);
-    }
-
-    public function buildOrderNum()
-    {
-        //生成流水号并保存至$file文件中
-        $file = "order.txt";
-        if(!file_exists($file)){
-            if($handle = fopen($file,"a+")){
-                $textTime = date("mdY");
-                $num_order_new = str_pad($textTime,9,'0',STR_PAD_RIGHT);
-                fwrite($handle,$num_order_new);
-                $content = $num_order_new;
-                fclose($handle);
-            }else{
-                $msg = '流水号创建失败！!';// TODO:
-                $this->responseError($msg, 404);
-            }
-        }else{
-            if($handle = fopen($file,"r+")){
-                $content = file_get_contents($file);
-                $new = $content+1;
-                if(!fwrite($handle,$new)){
-                    $msg = 'ERROR!';
-                    $this->responseError($msg, 500);
-                }
-                fclose($handle);
-            }
-        }
-        return $content.rand(100, 999);
-
     }
 
     public function place(Domain $domain, $ids)
@@ -254,6 +217,36 @@ class OrderController extends Controller
         return view('admin.contents.edit', ['module' => $module, 'content' => $order, 'base_url' => $this->base_url]);
     }
 
+    public function buildOrderNum()
+    {
+        //生成流水号并保存至$file文件中
+        $file = "order.txt";
+        if(!file_exists($file)){
+            if($handle = fopen($file,"a+")){
+                $textTime = date("mdY");
+                $num_order_new = str_pad($textTime,9,'0',STR_PAD_RIGHT);
+                fwrite($handle,$num_order_new);
+                $content = $num_order_new;
+                fclose($handle);
+            }else{
+                $msg = '流水号创建失败！!';// TODO:
+                $this->responseError($msg, 404);
+            }
+        }else{
+            if($handle = fopen($file,"r+")){
+                $content = file_get_contents($file);
+                $new = $content+1;
+                if(!fwrite($handle,$new)){
+                    $msg = 'ERROR!';
+                    $this->responseError($msg, 500);
+                }
+                fclose($handle);
+            }
+        }
+        return $content.rand(100, 999);
+
+    }
+
     public function store()
     {
         $input = Request::all();
@@ -386,53 +379,5 @@ class OrderController extends Controller
             //TODO
         }
     }
-
-    public function pay(Domain $domain, $id)
-    {
-        if (empty($domain->site)) {
-            return abort(501);
-        }
-
-        $tools = new JsApiPay();
-        $openId = $tools->GetOpenid();
-
-        $result = Order::find($id);
-        $result['price'] = $result['total_price']+$result['ship_price'];
-        $payments = Payment::where('state', Payment::STATE_PUBLISHED)
-            ->orderBy('sort', 'desc')
-            ->get();
-
-        //初始化日
-        //$logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
-        //$log = Log::Init($logHandler, 15);
-
-        // 统一下单
-
-        $input = new WxPayUnifiedOrder();
-        $input->SetBody("yoshare_order");
-        //$input->SetAttach("test");
-        $input->SetOut_trade_no($result['order_num'].date("YmdHis"));
-        $input->SetTotal_fee($result['price']*100);
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("test");
-        $input->SetNotify_url('http://'.$_SERVER['HTTP_HOST'].'/wxpay/notify');
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-        $order = WxPayApi::unifiedOrder($input);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-
-        $editAddress = $tools->GetEditAddressParameters();
-
-        $data['jsApiParameters'] = $jsApiParameters;
-        $data['editAddress'] = $editAddress;
-
-        $system['title'] = '支付页';
-        $system['back'] = '/order/lists';
-        $system['mark'] = 'member';
-
-        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
-    }
-
 
 }

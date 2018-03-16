@@ -18,8 +18,10 @@ class Member extends Authenticatable
     const TYPE_NORMAL = 1;
     const TYPE_EXPERT = 2;
 
-    const TYPES = [
-        1 => '普通会员',
+    const LEVEL = [
+        0 => '300',
+        1 => '600',
+        2 => '900',
     ];
 
     const SEX = [
