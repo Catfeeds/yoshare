@@ -251,4 +251,17 @@ class GoodsController extends Controller
     {
         return Response::json(Category::tree('', 0, $this->module->id, false));
     }
+
+    public function search()
+    {
+        $input = request()->all();
+
+        $res = Goods::where('name', 'like', '%'.$input['name'].'%')->first();
+
+        if($res){
+            return $this->responseSuccess($res['id']);
+        }else{
+            return $this->responseError('此游戏暂未上架呦，敬请期待！');
+        }
+    }
 }

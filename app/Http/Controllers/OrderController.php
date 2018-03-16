@@ -107,7 +107,7 @@ class OrderController extends Controller
         $carts = [];
 
         //分割购物车ID字符串为数组
-        $cart_ids = explode('/', $ids);
+        $cart_ids = explode('-', $ids);
 
         if (empty($domain->site)) {
             return abort(501);
@@ -267,7 +267,7 @@ class OrderController extends Controller
         if($order){
             //修改购物车order_id
             $order_id = $order->id;
-            $ids = array_filter(explode(',', $input['ids']));
+            $ids = array_filter(explode('-', $input['ids']));
 
             foreach($ids as $v){
                 $cart = Cart::find($v);
@@ -411,8 +411,8 @@ class OrderController extends Controller
         $input = new WxPayUnifiedOrder();
         $input->SetBody("yoshare_order");
         //$input->SetAttach("test");
-        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee($result['price']);
+        $input->SetOut_trade_no($result['order_num'].date("YmdHis"));
+        $input->SetTotal_fee($result['price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
@@ -420,7 +420,6 @@ class OrderController extends Controller
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
-
         $jsApiParameters = $tools->GetJsApiParameters($order);
 
         $editAddress = $tools->GetEditAddressParameters();
@@ -434,5 +433,6 @@ class OrderController extends Controller
 
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
+
 
 }

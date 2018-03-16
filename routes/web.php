@@ -54,13 +54,16 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/order/place/{cart_ids}', 'OrderController@place');
     Route::get('/order/store', 'OrderController@store');
     Route::get('/order/{id}/delete', 'OrderController@destroy');
-    Route::get('/order/pay/{id}', 'OrderController@pay');
 
     //支付
-    Route::get('/pay/wxpay/{order_id}', 'OrderController@wxPay');
+    Route::get('/order/pay/{id}', 'WxpayController@orderPay');
     Route::get('/wxpay/notify', 'WxpayController@notify');
+    Route::get('/vip/pay', 'WxpayController@vipPay');
 
+    //搜索
+    Route::post('/goods/search', 'GoodsController@search');
 
+    //购物车
     Route::get('/cart', 'CartController@cart');
     Route::get('/cart/add/{goods_id}', 'CartController@add');
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');

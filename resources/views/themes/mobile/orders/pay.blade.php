@@ -61,13 +61,20 @@
         //调用微信JS api 支付
         function jsApiCall()
         {
-            alert(1234);return false;
+
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
-                {{ $data['jsApiParameters'] }},
+                <?php echo $data['jsApiParameters'];?>,
                 function(res){
-                    WeixinJSBridge.log(res.err_msg);
-                    alert(res.err_code+res.err_desc+res.err_msg);
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                        window.history.go(-2);
+                        //支付失败
+                    }else if(res.err_msg == "get_brand_wcpay_request:fail" ){
+                        alert('支付失败');
+                        window.location.href="/order/pay/"+{{ $result['id'] }};
+                    }else{
+                        alert('取消支付');
+                    }
                 }
             );
         }

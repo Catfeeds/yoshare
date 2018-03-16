@@ -20,9 +20,9 @@
         var ids = '';
 
         $('.demo--radio:checked').each(function () {
-            ids = $(this).siblings('.cart_id').val()+'/'+ids;
+            ids = $(this).siblings('.cart_id').val()+'-'+ids;
         });
-
+        ids = ids.trim("-");
         if(ids == ''){
             layer.open({
                 content: '您还没有选择宝贝哦'

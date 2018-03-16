@@ -12,8 +12,8 @@ class WxpayController extends Controller{
     public function notify(){
 
         //初始化日志
-        $logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
-        $log = Log::Init($logHandler, 15);
+        //$logHandler= new CLogFileHandler("/storage/logs/wechat/".date('Y-m-d').'.log');
+        //$log = Log::Init($logHandler, 15);
         Log::DEBUG("begin notify");
 
         $notify = new PayNotifyCallBack();
