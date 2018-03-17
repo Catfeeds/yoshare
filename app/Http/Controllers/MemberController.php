@@ -107,7 +107,22 @@ class MemberController extends Controller
 
         $member->save();
 
-        \Session::flash('flash_success', '修改成功!');
+        return redirect('/admin/members');
+    }
+
+    public function save($id)
+    {
+        $member = Member::find($id);
+
+        $input = Request::all();
+
+        $member->avatar_url = $input['avatar_url'];
+        $member->username   = $input['username'];
+        $member->sex        = $input['sex'];
+        $member->email      = $input['email'];
+
+        $member->save();
+
         return redirect('/member');
     }
 

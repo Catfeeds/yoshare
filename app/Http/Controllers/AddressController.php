@@ -192,6 +192,20 @@ class AddressController extends Controller
         $address->update(Request::all());
     }
 
+
+    public function updates($id)
+    {
+        $address = Address::find($id);
+
+        if (empty($address)) {
+            return;
+        }
+
+        $address->update(Request::all());
+
+        return redirect('/address/index.html');
+    }
+
     public function sort()
     {
         return Address::sort();

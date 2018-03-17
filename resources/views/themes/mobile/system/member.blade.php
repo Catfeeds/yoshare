@@ -18,7 +18,7 @@
     @include('themes.mobile.layouts.header')
 
     <div class="u-wrapper">
-        {!! Form::model($member, ['id' => 'form', 'method' => 'PATCH', 'action' => ['MemberController@update', $member->id],'class' => 'form-horizontal']) !!}
+        {!! Form::model($member, ['id' => 'form', 'method' => 'PATCH', 'url' => '/member/'.$member->id,'class' => 'form-horizontal']) !!}
         <ul class="set">
             <li onclick="" style="height: 220px;">
                 <span style="line-height: 220px;">头　　像：</span>

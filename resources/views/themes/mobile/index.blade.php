@@ -30,7 +30,7 @@
             </ul>
         </div>
         <div class="activity wrapper">
-            <div class="top"><h3>活动专区</h3> <a class="more" href="" alt="more">更多活动</a><div class="clear"></div></div>
+            <div class="top"><h3>活动专区</h3> <!--<a class="more" href="" alt="more">更多活动</a>--><div class="clear"></div></div>
             <ul>
                 @foreach(\App\Models\Goods::where('top', \App\Models\Goods::IS_TOP)->limit(\App\Models\Goods::TOP_NUM)->orderBy('sort', 'desc')->get() as $goods)
                 <li>
@@ -43,7 +43,7 @@
             </ul>
         </div>
         <div class="hot wrapper">
-            <div class="top"><h3>热租排行</h3> <a class="more" href="" alt="more">更多热租</a><div class="clear"></div></div>
+            <div class="top"><h3>热租排行</h3> <!--<a class="more" href="" alt="more">更多热租</a>--><div class="clear"></div></div>
             <ul>
                 @foreach(\App\Models\Goods::whereIn('id', $hots)->orderBy('sort', 'desc')->get() as $goods)
                 <li>
@@ -59,7 +59,7 @@
             </ul>
         </div>
         <div class="news">
-            <div class="top"><h3 style="margin-left: 56px;">新游推荐</h3> <a style="margin-right: 56px;" class="more" href="" alt="more">更多推荐</a><div class="clear"></div></div>
+            <div class="top"><h3 style="margin-left: 56px;">最新上架</h3> <!--<a style="margin-right: 56px;" class="more" href="" alt="more">更多推荐</a>--><div class="clear"></div></div>
             <ul>
                 @foreach(\App\Models\Goods::whereIn('id', $recommends)->orderBy('sort', 'desc')->get() as $goods)
                     <li><a href="goods/detail-{{ $goods->id }}.html" alt="recommend"><img src="{{ $goods->pic_url }}" width="1080px" height="440px" alt=""/></a></li>

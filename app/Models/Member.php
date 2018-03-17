@@ -30,11 +30,8 @@ class Member extends Authenticatable
     ];
 
     const AVATAR = [
-        0 => '小鲜肉',
+        0 => '文艺青年',
         1 => '小仙女',
-        2 => '大叔',
-        3 => '小学生',
-        4 => '文艺青年',
     ];
 
     protected $fillable = [

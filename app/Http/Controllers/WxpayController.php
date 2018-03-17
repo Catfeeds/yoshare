@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 use App\Libraries\wePay\lib\WxPayApi;
 use App\Libraries\wePay\lib\JsApiPay;
 use App\Libraries\wePay\lib\WxPayUnifiedOrder;
+use App\Libraries\wePay\lib\PayNotifyCallBack;
+use App\Models\Domain;
+use App\Models\Order;
 use App\Models\Member;
 use App\Models\Payment;
-use App\Libraries\wePay\lib\PayNotifyCallBack;
-use App\Models\Order;
 use Request;
 
 ini_set('date.timezone','Asia/Shanghai');
@@ -55,9 +56,8 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
-    public function vipPay(Domain $domain, $id)
+    public function vipPay(Domain $domain, $type)
     {
-        $input =Request::all();
         if (empty($domain->site)) {
             return abort(501);
         }
@@ -66,7 +66,7 @@ class WxpayController extends Controller{
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
-        $price = Member::LEVEL[$input['type']];
+        $price = Member::LEVEL[$type];
         //生成押金流水号
         $order = new OrderController();
         $vip_pay_num = $order->buildOrderNum();
@@ -98,12 +98,14 @@ class WxpayController extends Controller{
         $system['back'] = '/member/vip';
         $system['mark'] = 'member';
 
-        return view('themes.' . $domain->theme->name . '.members.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
+        return view('themes.' . $domain->theme->name . '.members.pay', ['system' => $system, 'payments' => $payments, 'data' => $data]);
     }
 
     public function notify(){
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
         //商户处理回调结果
+
+
     }
 }

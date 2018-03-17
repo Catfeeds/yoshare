@@ -64,9 +64,10 @@
 .summary .price span{
     font-size: 28px;
     display: inline-block;
-    width: 120px;
-    height: 30px;
-    line-height: 30px;
+    width: 174px;
+    line-height: 44px;
+    text-align: center;
+    height: 44px;
 }
 .summary .price span:first-child{
     border: 1px solid #ff5000;

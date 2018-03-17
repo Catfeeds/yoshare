@@ -7,7 +7,11 @@
     <div class="u-wrapper" style="padding-bottom: 180px;">
         <div class="head">
             <div class="avatar">
-                <i></i><img src="#" alt="avatar"></div>
+                @if($member->sex == 0)
+                    <i></i><img src={{ url('images/avatar/boy.png') }} alt="avatar"></div>
+                @else
+                    <i></i><img src={{ url('images/avatar/girl.png') }} alt="avatar"></div>
+                @endif
             <h3>{{ $member->username }}</h3>
         </div>
         <div class="order">
