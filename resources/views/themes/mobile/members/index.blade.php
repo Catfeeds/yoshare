@@ -7,7 +7,7 @@
     <div class="u-wrapper" style="padding-bottom: 180px;">
         <div class="head">
             <div class="avatar">
-                @if($member->sex == 0)
+                @if($member->avatar_url == 0)
                     <i></i><img src={{ url('images/avatar/boy.png') }} alt="avatar"></div>
                 @else
                     <i></i><img src={{ url('images/avatar/girl.png') }} alt="avatar"></div>

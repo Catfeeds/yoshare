@@ -12,7 +12,11 @@
         <ul class="set">
             <li onclick="jump('/member/detail')">
                 <div class="avatar">
-                    <img src="{{ $member->avatar }}" alt="avatar">
+                    @if($member->avatar_url == 0)
+                        <img src={{ url('images/avatar/boy.png') }} alt="avatar">
+                    @else
+                        <img src={{ url('images/avatar/girl.png') }} alt="avatar">
+                    @endif
                 </div>
                 <div class="name">
                     <p>用户名：{{ $member->username }}</p>
