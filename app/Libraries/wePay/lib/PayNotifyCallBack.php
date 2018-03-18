@@ -3,7 +3,6 @@ namespace App\Libraries\wePay\lib;
 
 use App\Models\Order;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 ini_set('date.timezone','Asia/Shanghai');
 error_reporting(E_ERROR);
