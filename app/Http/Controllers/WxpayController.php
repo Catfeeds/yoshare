@@ -9,7 +9,7 @@ use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Member;
 use App\Models\Payment;
-use Request;
+use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
 
@@ -104,8 +104,31 @@ class WxpayController extends Controller{
     public function notify(){
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
+
+
         //商户处理回调结果
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $res = $this->xmlToArray($xml);
+
+        if ($res->data["return_code"] == "SUCCESS") {
+            $order = Order::where('order_num', $res->data["out_trade_no"])->first();
+            $input['total_pay'] = $res->data["total_fee"];
+            $input['paid_at'] = Carbon::now();
+            $input['state'] = Order::STATE_PAID;
+            $order->update($input);
+        }
+
+    }
 
 
+    public function xmlToArray($xml)
+    {
+        libxml_disable_entity_loader(true);
+
+        $xmlstring = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        $val = json_decode(json_encode($xmlstring),true);
+
+        return $val;
     }
 }

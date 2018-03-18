@@ -1,16 +1,9 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
-ini_set('date.timezone','Asia/Shanghai');
-error_reporting(E_ERROR);
-
 use App\Libraries\wePay\lib\WxPayApi;
 use App\Libraries\wePay\lib\WxPayNotify;
-use App\Libraries\WePay\Example\Log;
-
-//初始化日志
-$logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
-$log = Log::Init($logHandler, 15);
+use WePay\Example\Log;
 
 class PayNotifyCallBack extends WxPayNotify
 {
@@ -48,8 +41,5 @@ class PayNotifyCallBack extends WxPayNotify
         }
         return true;
     }
-}
 
-Log::DEBUG("begin notify");
-$notify = new PayNotifyCallBack();
-$notify->Handle(false);
+}
