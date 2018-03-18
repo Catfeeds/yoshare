@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Libraries\wePay\lib\WxPayApi;
-use App\Libraries\wePay\lib\JsApiPay;
-use App\Libraries\wePay\lib\WxPayUnifiedOrder;
-use App\Libraries\wePay\lib\PayNotifyCallBack;
+use wePay\lib\WxPayApi;
+use wePay\lib\JsApiPay;
+use wePay\lib\WxPayUnifiedOrder;
+use wePay\lib\PayNotifyCallBack;
 use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Member;
