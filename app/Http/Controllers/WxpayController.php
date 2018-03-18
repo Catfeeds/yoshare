@@ -9,7 +9,6 @@ use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Member;
 use App\Models\Payment;
-use Request;
 
 ini_set('date.timezone','Asia/Shanghai');
 
@@ -33,7 +32,7 @@ class WxpayController extends Controller{
         // 统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("yoshare_order");
-        $input->SetOut_trade_no($result['order_num'].date("YmdHis"));
+        $input->SetOut_trade_no($result["order_num"]);
         $input->SetTotal_fee($result['price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
@@ -102,10 +101,21 @@ class WxpayController extends Controller{
     }
 
     public function notify(){
+
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
-        //商户处理回调结果
+
+    }
 
 
+    public function xmlToArray($xml)
+    {
+        libxml_disable_entity_loader(true);
+
+        $xmlstring = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        $val = json_decode(json_encode($xmlstring),true);
+
+        return $val;
     }
 }

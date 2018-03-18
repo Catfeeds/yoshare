@@ -1,16 +1,12 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
+use App\Models\Order;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 ini_set('date.timezone','Asia/Shanghai');
 error_reporting(E_ERROR);
-
-use App\Libraries\wePay\lib\WxPayApi;
-use App\Libraries\wePay\lib\WxPayNotify;
-use App\Libraries\WePay\Example\Log;
-
-//初始化日志
-$logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
-$log = Log::Init($logHandler, 15);
 
 class PayNotifyCallBack extends WxPayNotify
 {
@@ -20,11 +16,8 @@ class PayNotifyCallBack extends WxPayNotify
         $input = new WxPayOrderQuery();
         $input->SetTransaction_id($transaction_id);
         $result = WxPayApi::orderQuery($input);
-        Log::DEBUG("query:" . json_encode($result));
-        if(array_key_exists("return_code", $result)
-            && array_key_exists("result_code", $result)
-            && $result["return_code"] == "SUCCESS"
-            && $result["result_code"] == "SUCCESS")
+        //Log::DEBUG("query:" . json_encode($result));
+        if(array_key_exists("return_code", $result) && $result["result_code"] == "SUCCESS")
         {
             return true;
         }
@@ -34,7 +27,7 @@ class PayNotifyCallBack extends WxPayNotify
     //重写回调处理函数
     public function NotifyProcess($data, &$msg)
     {
-        Log::DEBUG("call back:" . json_encode($data));
+        //Log::DEBUG("call back:" . json_encode($data));
         $notfiyOutput = array();
 
         if(!array_key_exists("transaction_id", $data)){
@@ -46,10 +39,16 @@ class PayNotifyCallBack extends WxPayNotify
             $msg = "订单查询失败";
             return false;
         }
+
+        //商户处理回调结果
+        if ($data["return_code"] == "SUCCESS") {
+            $order = Order::where('order_num', $data["out_trade_no"])->first();
+            $input['total_pay'] = $data["total_fee"]/100;
+            $input['paid_at'] = Carbon::now();
+            $input['state'] = Order::STATE_PAID;
+            $order->update($input);
+        }
+
         return true;
     }
 }
-
-Log::DEBUG("begin notify");
-$notify = new PayNotifyCallBack();
-$notify->Handle(false);

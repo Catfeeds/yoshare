@@ -1,5 +1,7 @@
 <?php
 namespace App\Libraries\wePay\lib;
+
+require_once "WxPayApi.php";
 /**
  * 
  * 回调基础类
@@ -76,7 +78,7 @@ class WxPayNotify extends WxPayNotifyReply
 	{
 		//如果需要签名
 		if($needSign == true && 
-			$this->GetReturn_code($return_code) == "SUCCESS")
+			$this->GetReturn_code() == "SUCCESS")
 		{
 			$this->SetSign();
 		}

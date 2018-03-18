@@ -1,5 +1,5 @@
 <?php
-namespace WePay\Example;
+namespace App\Libraries\wePay\lib;
 
 interface ILogHandler
 {

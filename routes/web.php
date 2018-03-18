@@ -60,7 +60,7 @@ Route::group(['middleware' => 'web'], function () {
 
     //支付
     Route::get('/order/pay/{id}', 'WxpayController@orderPay');
-    Route::get('/wxpay/notify', 'WxpayController@notify');
+    Route::post('/wxpay/notify', 'WxpayController@notify');
     Route::get('/vip/pay', 'WxpayController@vipPay');
 
     //搜索
