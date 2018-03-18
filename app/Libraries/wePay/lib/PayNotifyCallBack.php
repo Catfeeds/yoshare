@@ -1,8 +1,8 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
-use App\Libraries\wePay\lib\WxPayApi;
-use App\Libraries\wePay\lib\WxPayNotify;
+use wePay\lib\WxPayApi;
+use wePay\lib\WxPayNotify;
 use WePay\Example\Log;
 
 class PayNotifyCallBack extends WxPayNotify

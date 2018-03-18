@@ -105,7 +105,6 @@ class WxpayController extends Controller{
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
 
-
         //商户处理回调结果
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $res = $this->xmlToArray($xml);

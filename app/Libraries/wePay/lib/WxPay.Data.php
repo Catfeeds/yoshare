@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Libraries\wePay\lib;
+namespace wePay\lib;
 /**
 * 2015-06-29 修复签名问题
 **/

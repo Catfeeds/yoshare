@@ -1,7 +1,7 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
-require_once "WxPay.Api.php";
+require_once "WxPayApi.php";
 /**
  * 
  * JSAPI支付实现类
