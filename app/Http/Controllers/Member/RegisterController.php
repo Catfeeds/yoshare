@@ -66,6 +66,7 @@ class RegisterController extends Controller
             'site_id' => Member::SITE_ID,
             'username' => $data['name'],
             'email' => $data['email'],
+            'state' => Member::STATE_ENABLED,
             'password' => bcrypt($data['password']),
         ]);
     }

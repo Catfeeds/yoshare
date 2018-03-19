@@ -50,7 +50,7 @@
                         <div class="action">
                             <a class="c-button" onclick="received({{ $order->id }})">确认收货</a>
                         </div>
-                    @else
+                    @elseif($order['state'] == \App\Models\Order::STATE_REFUND)
                         <div class="action">
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
@@ -166,7 +166,7 @@
             ,title: '申请归还'
             ,content: html
             ,anim: 'up'
-            ,style: 'position:fixed; top:600px; left:4%; width: 92%; height: 750px; border:none;'
+            ,style: 'position:fixed; top:400px; left:4%; width: 92%; height: 750px; border:none;'
         });
 
     }

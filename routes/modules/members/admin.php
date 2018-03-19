@@ -3,7 +3,7 @@
 /**
 * 地址
 */
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
     Route::get('members/table', 'MemberController@table');
     Route::post('members/state', 'MemberController@state');
     Route::get('members/sort', 'MemberController@sort');

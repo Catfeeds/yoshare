@@ -74,7 +74,3 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cart/{id}/delete', 'CartController@destroy');
 
 });
-
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
-    Route::resource('members', 'MemberController');
-});

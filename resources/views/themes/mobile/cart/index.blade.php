@@ -38,6 +38,9 @@
                 <div class="clear"></div>
             </li>
             @endforeach
+            @if(empty($goods))
+                <p style="padding: 100px 80px;">购物车空空的，去<a style="font-weight: bold;color: red;" href="/goods/category-2.html">选购</a></p>
+            @endif
         </ul>
     </div>
 @endsection
