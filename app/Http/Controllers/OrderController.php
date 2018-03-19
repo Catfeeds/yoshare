@@ -339,14 +339,25 @@ class OrderController extends Controller
         }
     }
 
-    public function state($id)
+    public function updates($id)
     {
+        $input = Request::all();
         $order = Order::find($id);
-        $res = $order->update(Request::all());
-        if($res){
-            return $this->responseSuccess();
+
+        if(!isset($input['ship_num2'])){
+            $res = $order->update($input);
+
+            if($res){
+                return $this->responseSuccess();
+            }else{
+                return $this->responseError('操作失败，请稍候再试！');
+            }
         }else{
-            return $this->responseError('操作失败，请稍候再试！');
+            $res = $order->update($input);
+
+            if($res){
+                return redirect('/order/lists/success');
+            }
         }
     }
 
