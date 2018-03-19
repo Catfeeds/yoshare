@@ -2,6 +2,7 @@
 namespace App\Libraries\wePay\lib;
 
 use App\Models\Order;
+use App\Models\Payment;
 use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
@@ -44,6 +45,7 @@ class PayNotifyCallBack extends WxPayNotify
             $order = Order::where('order_num', $data["out_trade_no"])->first();
             $input['total_pay'] = $data["total_fee"]/100;
             $input['paid_at'] = Carbon::now();
+            $input['pay_id'] = Payment::WeChatID;
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
         }

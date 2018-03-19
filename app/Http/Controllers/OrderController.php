@@ -283,6 +283,9 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+        if(!empty($input['ship_num'])){
+            $input['state'] = Order::STATE_SENDED;
+        }
 
         $order = Order::updates($id, $input);
 
@@ -336,25 +339,14 @@ class OrderController extends Controller
         }
     }
 
-    public function state()
+    public function state($id)
     {
-        $input = request()->all();
-        Order::state($input);
-
-        $ids = $input['ids'];
-        $stateName = Order::getStateName($input['state']);
-
-        //记录日志
-        foreach ($ids as $id) {
-            event(new UserLogEvent('变更' . '订单' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
-        }
-
-        //发布页面
-        $site = auth()->user()->site;
-        if ($input['state'] == Order::STATE_PUBLISHED) {
-            foreach ($ids as $id) {
-                $this->dispatch(new PublishPage($site, $this->module, $id));
-            }
+        $order = Order::find($id);
+        $res = $order->update(Request::all());
+        if($res){
+            return $this->responseSuccess();
+        }else{
+            return $this->responseError('操作失败，请稍候再试！');
         }
     }
 

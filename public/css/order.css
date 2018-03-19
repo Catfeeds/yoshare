@@ -76,15 +76,15 @@ ul.list li .addr-detail{
 .c-goods .status{
     color: #e60012ba;
     display: inline-block;
-    width: 160px;
     height: 60px;
     line-height: 60px;
     text-align: center;
     font-size: 40px;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 9px;
+    right: 9px;
     border: 2px solid #eee;
+    padding: 2px 4px;
 }
 .c-goods ul li.op{
     height: 150px;

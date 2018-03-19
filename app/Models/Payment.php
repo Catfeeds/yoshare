@@ -24,6 +24,9 @@ class Payment extends BaseModule
         9 => '已发布',
     ];
 
+    const WeChatID = 1;
+    const AliPayID = 2;
+
     const STATE_PERMISSIONS = [
         0 => '@payment-delete',
         2 => '@payment-cancel',

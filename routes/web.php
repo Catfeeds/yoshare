@@ -51,11 +51,12 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/wallet/{type}', 'UserController@wallet');
     Route::get('/wallet/coupon', 'UserController@coupon');
 
-    //商品模块
+    //订单模块
     Route::get('/order/lists', 'OrderController@lists');
     Route::get('/order/lists/{state}', 'OrderController@lists');
     Route::get('/order/place/{cart_ids}', 'OrderController@place');
     Route::get('/order/store', 'OrderController@store');
+    Route::get('/order/state/{id}', 'OrderController@state');
     Route::get('/order/{id}/delete', 'OrderController@destroy');
 
     //支付
