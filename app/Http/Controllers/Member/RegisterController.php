@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Member;
 
 use App\Models\Member;
+use App\Models\Wallet;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -62,12 +63,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Member::create([
+        $member = Member::create([
             'site_id' => Member::SITE_ID,
             'username' => $data['name'],
             'email' => $data['email'],
             'state' => Member::STATE_ENABLED,
             'password' => bcrypt($data['password']),
         ]);
+
+        Wallet::create([
+            'member_id' => $member['id'],
+            'deposit'   => Wallet::START_MONEY,
+            'balance'   => Wallet::START_MONEY,
+            'coupon'    => Wallet::START_COUPON,
+            'state'     => Wallet::STATE_NORMAL,
+        ]);
+
+        return $member;
     }
 }

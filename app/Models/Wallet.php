@@ -14,6 +14,9 @@ class Wallet extends BaseModule
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
+    const START_MONEY = 0;
+    const START_COUPON = 15;
+
     const STATES = [
         0 => '已删除',
         1 => '未发布',
@@ -29,7 +32,7 @@ class Wallet extends BaseModule
 
     protected $table = 'wallets';
 
-    protected $fillable = ['site_id', 'member_id', 'deposit', 'balance', 'coupon', 'state', 'published_at'];
+    protected $fillable = ['site_id', 'member_id', 'deposit', 'balance', 'coupon', 'state'];
 
     protected $dates = ['published_at'];
 

@@ -91,6 +91,10 @@ class Member extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
+    public function wallet(){
+        return $this->hasOne(Wallet::class);
+    }
+
     public static function checkLogin()
     {
         if (!is_null(self::getMember())) {
