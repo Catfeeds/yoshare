@@ -46,6 +46,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/address/{id}/delete', 'AddressController@destroy');
     Route::get('/address/{id}/edit', 'AddressController@edit');
     Route::patch('/address/{id}', 'AddressController@updates');
+    Route::resource('address', 'AddressController');
 
     //会员钱包
     Route::get('/wallet/{type}', 'UserController@wallet');
@@ -72,5 +73,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cart/add/{goods_id}', 'CartController@add');
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');
     Route::get('/cart/{id}/delete', 'CartController@destroy');
+
+    //钱包
+    Route::get('wallets/{type}', 'WalletController@show');
 
 });

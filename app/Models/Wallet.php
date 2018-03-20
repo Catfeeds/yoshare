@@ -17,6 +17,12 @@ class Wallet extends BaseModule
     const START_MONEY = 0;
     const START_COUPON = 15;
 
+    const TYPE = [
+        'deposit' => '我的押金',
+        'balance' => '我的余额',
+        'coupon' => '我的优惠券',
+    ];
+
     const STATES = [
         0 => '已删除',
         1 => '未发布',

@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
+use App\Models\Member;
 use Auth;
 use Carbon\Carbon;
 use Gate;
@@ -29,19 +30,25 @@ class WalletController extends Controller
         $this->module = Module::where('name', 'Wallet')->first();
     }
 
-    public function show(Domain $domain, $id)
+    public function show(Domain $domain, $type)
     {
         if (empty($domain->site)) {
             return abort(501);
         }
+        $member = Member::getMember();
+        $wallet = $member->wallet()->first();
 
-        $wallet = Wallet::find($id);
         if (empty($wallet)) {
             return abort(404);
         }
-        $wallet->incrementClick();
 
-        return view('themes.' . $domain->theme->name . '.wallets.detail', ['site' => $domain->site, 'wallet' => $wallet]);
+        $system['title'] = Wallet::TYPE[$type];
+        $system['back'] = '/member';
+        $system['mark'] = 'member';
+        $system['money'] = $wallet[$type];
+        $system['vip_level'] = $member['type'];
+
+        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system]);
     }
 
     public function slug(Domain $domain, $slug)

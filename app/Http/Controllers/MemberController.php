@@ -202,8 +202,8 @@ class MemberController extends Controller
         }
 
         $member = Member::getMember();
-        $wallet = $member->wallet();
-        dd($wallet);
+        $wallet = $member->wallet()->first();
+
         //菜单栏标记
         $system['mark'] = Domain::MARK_MEMBER;
         return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'wallet' => $wallet, 'system' => $system]);

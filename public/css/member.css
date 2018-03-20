@@ -160,3 +160,14 @@ body{
     margin-top: 28px;
     padding: 0 86px;
 }
+ul.refund{
+    margin-top: 30px;
+    background: #eee;
+}
+ul.refund li{
+    background: #fff url(../images/members/li_bg_2.png) no-repeat top right;
+    margin-top: 10px;
+    height: 130px;
+    line-height: 130px;
+    padding: 0 70px;
+}

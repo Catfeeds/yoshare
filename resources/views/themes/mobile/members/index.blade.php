@@ -29,9 +29,9 @@
             <div class="content">
                 <div class="w-title">我的钱包</div>
                 <ul class="clear">
-                    <li><h5>{{ $wallet->deposit }}</h5><a href="/wallet/deposit">押金</a></li>
-                    <li><h5>￥{{ $wallet->balance }}</h5><a href="/wallet/balance">余额</a></li>
-                    <li><h5>{{ $wallet->coupon }}</h5><a href="/wallet/coupon">优惠券</a></li>
+                    <li><h5>{{ $wallet->deposit }}</h5><a href="/wallets/deposit">押金</a></li>
+                    <li><h5>￥{{ $wallet->balance }}</h5><a href="/wallets/balance">余额</a></li>
+                    <li><h5>{{ $wallet->coupon }}</h5><a href="/wallets/coupon">优惠券</a></li>
                 </ul>
             </div>
         </div>
