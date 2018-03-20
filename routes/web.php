@@ -48,10 +48,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::patch('/address/{id}', 'AddressController@updates');
     Route::resource('address', 'AddressController');
 
-    //会员钱包
-    Route::get('/wallet/{type}', 'UserController@wallet');
-    Route::get('/wallet/coupon', 'UserController@coupon');
-
     //订单模块
     Route::get('/order/lists', 'OrderController@lists');
     Route::get('/order/lists/{state}', 'OrderController@lists');
@@ -63,7 +59,8 @@ Route::group(['middleware' => 'web'], function () {
     //支付
     Route::get('/order/pay/{id}', 'WxpayController@orderPay');
     Route::post('/wxpay/notify', 'WxpayController@notify');
-    Route::get('/vip/pay', 'WxpayController@vipPay');
+    Route::get('/wallets/pay', 'WxpayController@show');
+    Route::get('/wallets/pay/{type}', 'WxpayController@walletPay');
 
     //搜索
     Route::post('/goods/search', 'GoodsController@search');
@@ -74,7 +71,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');
     Route::get('/cart/{id}/delete', 'CartController@destroy');
 
-    //钱包
+    //会员钱包
     Route::get('wallets/{type}', 'WalletController@show');
 
 });

@@ -41,7 +41,7 @@ class PayNotifyCallBack extends WxPayNotify
         }
 
         //商户处理回调结果
-        if ($data["return_code"] == "SUCCESS") {
+        if ($data["return_code"] == "SUCCESS" && $data["out_trade_no"]) {
             $order = Order::where('order_num', $data["out_trade_no"])->first();
             $input['total_pay'] = $data["total_fee"]/100;
             $input['paid_at'] = Carbon::now();
