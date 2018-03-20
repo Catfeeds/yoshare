@@ -30,6 +30,20 @@ class Wallet extends BaseModule
         9 => '已发布',
     ];
 
+    const VALUE = [
+        'deposit' => [
+            0 => 300,
+            1 => 600,
+            2 => 900,
+        ],
+        'balance' => [
+            0 => 15,
+            1 => 30,
+            2 => 50,
+            3 => 100,
+        ]
+    ];
+
     const STATE_PERMISSIONS = [
         0 => '@wallet-delete',
         2 => '@wallet-cancel',

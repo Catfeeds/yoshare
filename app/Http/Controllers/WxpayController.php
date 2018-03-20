@@ -9,6 +9,7 @@ use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Member;
 use App\Models\Payment;
+use App\Models\Wallet;
 
 ini_set('date.timezone','Asia/Shanghai');
 
@@ -55,7 +56,27 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
-    public function vipPay(Domain $domain, $type)
+    public function show(Domain $domain, $type)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $payments = Payment::where('state', Payment::STATE_PUBLISHED)
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        $chooses = Wallet::VALUE[$type];
+
+        $system['title'] = '支付页';
+        $system['back'] = '/wallets/'.$type;
+        $system['mark'] = 'member';
+
+        return view('themes.' . $domain->theme->name . '.members.pay', ['system' => $system, 'payments' => $payments, 'chooses' => $chooses]);
+    }
+
+
+    public function walletPay(Domain $domain, $type)
     {
         if (empty($domain->site)) {
             return abort(501);

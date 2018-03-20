@@ -21,8 +21,10 @@
                 <li onclick="jump('deposit/refund')">退押金</li>
             </ul>
         @endif
-        @if($system['title'] !== '我的优惠券')
-            <div class="a-wrapper" style="padding-top: 270px"><a href="/vip/pay" class="a-default">立即充值</a></div>
+        @if($system['title'] == '我的押金')
+            <div class="a-wrapper" style="padding-top: 270px"><a href="/wallets/pay/deposit" class="a-default">立即充值</a></div>
+        @elseif($system['title'] == '我的余额')
+            <div class="a-wrapper" style="padding-top: 270px"><a href="/wallets/pay/balance" class="a-default">立即充值</a></div>
         @endif
     </div>
 @endsection
