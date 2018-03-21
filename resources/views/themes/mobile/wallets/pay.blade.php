@@ -14,9 +14,8 @@
                 <h5>支付金额</h5>
                 @foreach($chooses as $val)
                     <div class="price">
-                        {{ $val }}元
+                        <span class="val">{{ $val }}</span>元
                     </div>
-                    <input type="hidden" value="{{ $val }}" name="price" id="price">
                 @endforeach
             </li>
             <li>
@@ -45,49 +44,18 @@
 @section('js')
     <script src="{{ url('/js/layer.js') }}"></script>
     <script>
+        $('.price').click(function () {
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+        });
 
-        function ask(id) {
-            layer.open({
-                content: '您确定要删除此地址吗？'
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    location.href = '/address/'+id+'delete';
-                    layer.close(index);
-                }
-            });
-        }
-
-
-    </script>
-    <script type="text/javascript">
-        //调用微信JS api 支付
-        function jsApiCall()
-        {
-
-            WeixinJSBridge.invoke(
-                'getBrandWCPayRequest',
-                <?php echo $data['jsApiParameters'];?>,
-                function(res){
-                    if(res.err_msg == "get_brand_wcpay_request:ok" ){
-                        window.history.go(-2);
-                        //支付失败
-                    }else if(res.err_msg == "get_brand_wcpay_request:fail" ){
-                        alert('支付失败');
-                        window.location.href="/order/pay/"+{{ $result['id'] }};
-                    }else{
-                        alert('取消支付');
-                    }
-                }
-            );
-        }
-
-    </script>
-    <script type="text/javascript">
-        function callpay()
-        {
+        function callpay() {
+            var price = $('div.active').children('span.val').text();
             var pid = $('input[name="demo-radio"]:checked').val();
+
             //微信支付
             if(pid == 1){
+                getJsApiData(price);
                 if (typeof WeixinJSBridge == "undefined"){
                     if( document.addEventListener ){
                         document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -99,10 +67,49 @@
                     jsApiCall();
                 }
             }else{
-            //TODO 支付宝支付
+                //TODO 支付宝支付
 
             }
+        }
 
+        function getJsApiData(price) {
+            $.ajax({
+                url  : '/wallets/pay',
+                type : 'get',
+                data : {
+                    'price' : price,
+                    'type'  : {{ $system['type'] }},
+                },
+                success:function(data){
+                    statusCode = data.status_code;
+                    data = data.data;
+                    if(statusCode == '200'){
+                        jsApiCall(data);
+                    }
+
+                }
+            })
+        }
+
+        //调用微信JS api 支付
+        function jsApiCall(data)
+        {
+
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                data['jsApiParameters'],
+                function(res){
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                        window.history.go(-2);
+                        //支付失败
+                    }else if(res.err_msg == "get_brand_wcpay_request:fail" ){
+                        alert('支付失败');
+                        window.location.href="/wallets/pay/"+{{ $system['type'] }};
+                    }else{
+                        alert('取消支付');
+                    }
+                }
+            );
         }
 
     </script>

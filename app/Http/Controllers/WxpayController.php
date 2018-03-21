@@ -7,9 +7,9 @@ use App\Libraries\wePay\lib\WxPayUnifiedOrder;
 use App\Libraries\wePay\lib\PayNotifyCallBack;
 use App\Models\Domain;
 use App\Models\Order;
-use App\Models\Member;
 use App\Models\Payment;
 use App\Models\Wallet;
+use Request;
 
 ini_set('date.timezone','Asia/Shanghai');
 
@@ -33,6 +33,7 @@ class WxpayController extends Controller{
         // 统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("yoshare_order");
+        $input->SetAttach("yoshare_order");
         $input->SetOut_trade_no($result["order_num"]);
         $input->SetTotal_fee($result['price']*100);
         $input->SetTime_start(date("YmdHis"));
@@ -72,24 +73,21 @@ class WxpayController extends Controller{
         $system['back'] = '/wallets/'.$type;
         $system['mark'] = 'member';
 
-        return view('themes.' . $domain->theme->name . '.members.pay', ['system' => $system, 'payments' => $payments, 'chooses' => $chooses]);
+        return view('themes.' . $domain->theme->name . '.wallets.pay', ['system' => $system, 'payments' => $payments, 'chooses' => $chooses]);
     }
 
 
-    public function walletPay(Domain $domain, $type)
+    public function walletPay()
     {
-        if (empty($domain->site)) {
-            return abort(501);
-        }
+        $gets = Request::all();
 
         //下单准备
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
-        $price = Member::LEVEL[$type];
-        //生成押金流水号
-        $order = new OrderController();
-        $vip_pay_num = $order->buildOrderNum();
+        //生成账单流水号
+        $bill = new BillController();
+        $billNum = $bill->buildOrderNum();
 
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
@@ -97,9 +95,10 @@ class WxpayController extends Controller{
 
         // 统一下单
         $input = new WxPayUnifiedOrder();
-        $input->SetBody("yoshare_vip_pay");
-        $input->SetOut_trade_no($vip_pay_num.date("YmdHis"));
-        $input->SetTotal_fee($price*100);
+        $input->SetBody("yoshare_".$gets['type']);
+        $input->SetAttach("yoshare_".$gets['type']);
+        $input->SetOut_trade_no($billNum);
+        $input->SetTotal_fee($gets['price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
@@ -108,17 +107,12 @@ class WxpayController extends Controller{
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-
         $editAddress = $tools->GetEditAddressParameters();
 
         $data['jsApiParameters'] = $jsApiParameters;
         $data['editAddress'] = $editAddress;
 
-        $system['title'] = '支付页';
-        $system['back'] = '/member/vip';
-        $system['mark'] = 'member';
-
-        return view('themes.' . $domain->theme->name . '.members.pay', ['system' => $system, 'payments' => $payments, 'data' => $data]);
+        return $this->responseSuccess($data);
     }
 
     public function notify(){

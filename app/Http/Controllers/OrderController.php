@@ -243,7 +243,7 @@ class OrderController extends Controller
                 fclose($handle);
             }
         }
-        return $content.rand(100, 999);
+        return 'o'.$content.rand(100, 999);
 
     }
 

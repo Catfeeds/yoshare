@@ -59,8 +59,8 @@ Route::group(['middleware' => 'web'], function () {
     //支付
     Route::get('/order/pay/{id}', 'WxpayController@orderPay');
     Route::post('/wxpay/notify', 'WxpayController@notify');
-    Route::get('/wallets/pay', 'WxpayController@show');
-    Route::get('/wallets/pay/{type}', 'WxpayController@walletPay');
+    Route::get('/wallets/pay/{type}', 'WxpayController@show');
+    Route::get('/wallets/pay/', 'WxpayController@walletPay');
 
     //搜索
     Route::post('/goods/search', 'GoodsController@search');

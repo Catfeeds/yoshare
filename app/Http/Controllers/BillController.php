@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
-use App\Models\Wallet;
+use App\Models\Bill;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
-use App\Models\Member;
 use Auth;
 use Carbon\Carbon;
 use Gate;
@@ -17,39 +16,32 @@ use Request;
 use Response;
 
 /**
- * 钱包
+ * 账单表
  */
-class WalletController extends Controller
+class BillController extends Controller
 {
-    protected $base_url = '/admin/wallets';
-    protected $view_path = 'admin.wallets';
+    protected $base_url = '/admin/bills';
+    protected $view_path = 'admin.bills';
     protected $module;
 
     public function __construct()
     {
-        $this->module = Module::where('name', 'Wallet')->first();
+        $this->module = Module::where('name', 'Bill')->first();
     }
 
-    public function show(Domain $domain, $type)
+    public function show(Domain $domain, $id)
     {
         if (empty($domain->site)) {
             return abort(501);
         }
-        $member = Member::getMember();
-        $wallet = $member->wallet()->first();
 
-        if (empty($wallet)) {
+        $bill = Bill::find($id);
+        if (empty($bill)) {
             return abort(404);
         }
+        $bill->incrementClick();
 
-        $system['title'] = Wallet::TYPE[$type];
-        $system['back'] = '/member';
-        $system['mark'] = 'member';
-        $system['money'] = $wallet[$type];
-        $system['type'] = $type;
-        $system['vip_level'] = $member['type'];
-
-        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.bills.detail', ['site' => $domain->site, 'bill' => $bill]);
     }
 
     public function slug(Domain $domain, $slug)
@@ -58,14 +50,14 @@ class WalletController extends Controller
             return abort(501);
         }
 
-        $wallet = Wallet::where('slug', $slug)
+        $bill = Bill::where('slug', $slug)
             ->first();
-        if (empty($wallet)) {
+        if (empty($bill)) {
             return abort(404);
         }
-        $wallet->incrementClick();
+        $bill->incrementClick();
 
-        return view('themes.' . $domain->theme->name . '.wallets.detail', ['site' => $domain->site, 'wallet' => $wallet]);
+        return view('themes.' . $domain->theme->name . '.bills.detail', ['site' => $domain->site, 'bill' => $bill]);
     }
 
     public function lists(Domain $domain)
@@ -74,16 +66,16 @@ class WalletController extends Controller
             return abort(501);
         }
 
-        $wallets = Wallet::where('state', Wallet::STATE_PUBLISHED)
+        $bills = Bill::where('state', Bill::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
 
-        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'module' => $this->module, 'wallets' => $wallets]);
+        return view('themes.' . $domain->theme->name . '.bills.index', ['site' => $domain->site, 'module' => $this->module, 'bills' => $bills]);
     }
 
     public function index()
     {
-        if (Gate::denies('@wallet')) {
+        if (Gate::denies('@bill')) {
             return abort(403);
         }
 
@@ -94,7 +86,7 @@ class WalletController extends Controller
 
     public function create()
     {
-        if (Gate::denies('@wallet-create')) {
+        if (Gate::denies('@bill-create')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
@@ -106,20 +98,20 @@ class WalletController extends Controller
 
     public function edit($id)
     {
-        if (Gate::denies('@wallet-edit')) {
+        if (Gate::denies('@bill-edit')) {
             \Session::flash('flash_warning', '无此操作权限');
             return redirect()->back();
         }
 
         $module = Module::transform($this->module->id);
 
-        $wallet = call_user_func([$this->module->model_class, 'find'], $id);
-        $wallet->images = null;
-        $wallet->videos = null;
-        $wallet->audios = null;
-        $wallet->tags = $wallet->tags()->pluck('name')->toArray();
+        $bill = call_user_func([$this->module->model_class, 'find'], $id);
+        $bill->images = null;
+        $bill->videos = null;
+        $bill->audios = null;
+        $bill->tags = $bill->tags()->pluck('name')->toArray();
 
-        return view('admin.contents.edit', ['module' => $module, 'content' => $wallet, 'base_url' => $this->base_url]);
+        return view('admin.contents.edit', ['module' => $module, 'content' => $bill, 'base_url' => $this->base_url]);
     }
 
     public function store()
@@ -133,9 +125,9 @@ class WalletController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $wallet = Wallet::stores($input);
+        $bill = Bill::stores($input);
 
-        event(new UserLogEvent(UserLog::ACTION_CREATE . '钱包', $wallet->id, $this->module->model_class));
+        event(new UserLogEvent(UserLog::ACTION_CREATE . '账单表', $bill->id, $this->module->model_class));
 
         \Session::flash('flash_success', '添加成功');
         return redirect($this->base_url);
@@ -150,9 +142,9 @@ class WalletController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $wallet = Wallet::updates($id, $input);
+        $bill = Bill::updates($id, $input);
 
-        event(new UserLogEvent(UserLog::ACTION_UPDATE . '钱包', $wallet->id, $this->module->model_class));
+        event(new UserLogEvent(UserLog::ACTION_UPDATE . '账单表', $bill->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
         return redirect($this->base_url);
@@ -166,36 +158,36 @@ class WalletController extends Controller
 
     public function save($id)
     {
-        $wallet = Wallet::find($id);
+        $bill = Bill::find($id);
 
-        if (empty($wallet)) {
+        if (empty($bill)) {
             return;
         }
 
-        $wallet->update(Request::all());
+        $bill->update(Request::all());
     }
 
     public function sort()
     {
-        return Wallet::sort();
+        return Bill::sort();
     }
 
     public function top($id)
     {
-        $wallet = Wallet::find($id);
-        $wallet->top = !$wallet->top;
-        $wallet->save();
+        $bill = Bill::find($id);
+        $bill->top = !$bill->top;
+        $bill->save();
     }
 
     public function tag($id)
     {
         $tag = request('tag');
-        $wallet = Wallet::find($id);
-        if ($wallet->tags()->where('name', $tag)->exists()) {
-            $wallet->tags()->where('name', $tag)->delete();
+        $bill = Bill::find($id);
+        if ($bill->tags()->where('name', $tag)->exists()) {
+            $bill->tags()->where('name', $tag)->delete();
         } else {
-            $wallet->tags()->create([
-                'site_id' => $wallet->site_id,
+            $bill->tags()->create([
+                'site_id' => $bill->site_id,
                 'name' => $tag,
                 'sort' => strtotime(Carbon::now()),
             ]);
@@ -205,19 +197,19 @@ class WalletController extends Controller
     public function state()
     {
         $input = request()->all();
-        Wallet::state($input);
+        Bill::state($input);
 
         $ids = $input['ids'];
-        $stateName = Wallet::getStateName($input['state']);
+        $stateName = Bill::getStateName($input['state']);
 
         //记录日志
         foreach ($ids as $id) {
-            event(new UserLogEvent('变更' . '钱包' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+            event(new UserLogEvent('变更' . '账单表' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
         }
 
         //发布页面
         $site = auth()->user()->site;
-        if ($input['state'] == Wallet::STATE_PUBLISHED) {
+        if ($input['state'] == Bill::STATE_PUBLISHED) {
             foreach ($ids as $id) {
                 $this->dispatch(new PublishPage($site, $this->module, $id));
             }
@@ -226,11 +218,41 @@ class WalletController extends Controller
 
     public function table()
     {
-        return Wallet::table();
+        return Bill::table();
     }
 
     public function categories()
     {
         return Response::json(Category::tree('', 0, $this->module->id));
+    }
+
+    public function buildBillNum()
+    {
+        //生成流水号并保存至$file文件中
+        $file = "bill.txt";
+        if(!file_exists($file)){
+            if($handle = fopen($file,"a+")){
+                $textTime = date("mdY");
+                $num_order_new = str_pad($textTime,9,'0',STR_PAD_RIGHT);
+                fwrite($handle,$num_order_new);
+                $content = $num_order_new;
+                fclose($handle);
+            }else{
+                $msg = '流水号创建失败！!';// TODO:
+                $this->responseError($msg, 404);
+            }
+        }else{
+            if($handle = fopen($file,"r+")){
+                $content = file_get_contents($file);
+                $new = $content+1;
+                if(!fwrite($handle,$new)){
+                    $msg = 'ERROR!';
+                    $this->responseError($msg, 500);
+                }
+                fclose($handle);
+            }
+        }
+        return 'b'.$content.rand(100, 999);
+
     }
 }

@@ -1,8 +1,10 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
+use App\Models\Member;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Bill;
 use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
@@ -40,14 +42,43 @@ class PayNotifyCallBack extends WxPayNotify
             return false;
         }
 
+        $member = Member::getMember();
         //商户处理回调结果
-        if ($data["return_code"] == "SUCCESS" && $data["out_trade_no"]) {
+        if ($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_order') {
+            //修改订单信息
             $order = Order::where('order_num', $data["out_trade_no"])->first();
             $input['total_pay'] = $data["total_fee"]/100;
             $input['paid_at'] = Carbon::now();
             $input['pay_id'] = Payment::WeChatID;
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
+            //加入流水表
+            Bill::create([
+                'site_id' => Member::SITE_ID,
+                'member_id' => $member['id'],
+                'bill_num' => $data["out_trade_no"],
+                'type' => Bill::TYPE_ORDER,
+                'money' => $data["total_fee"]/100,
+                'state' => Bill::STATE_NORMAL,
+            ]);
+        }elseif($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_deposit'){
+            Bill::create([
+                'site_id' => Member::SITE_ID,
+                'member_id' => $member['id'],
+                'bill_num' => $data["out_trade_no"],
+                'type' => Bill::TYPE_DEPOSIT,
+                'money' => $data["total_fee"]/100,
+                'state' => Bill::STATE_NORMAL,
+            ]);
+        } elseif($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_balance'){
+            Bill::create([
+                'site_id' => Member::SITE_ID,
+                'member_id' => $member['id'],
+                'bill_num' => $data["out_trade_no"],
+                'type' => Bill::TYPE_BALANCE,
+                'money' => $data["total_fee"]/100,
+                'state' => Bill::STATE_NORMAL,
+            ]);
         }
 
         return true;
