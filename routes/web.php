@@ -59,8 +59,7 @@ Route::group(['middleware' => 'web'], function () {
     //支付
     Route::get('/order/pay/{id}', 'WxpayController@orderPay');
     Route::post('/wxpay/notify', 'WxpayController@notify');
-    Route::get('/wallets/pay/{type}', 'WxpayController@show');
-    Route::get('/wallets/pay/', 'WxpayController@walletPay');
+    Route::get('/wallets/pay/{price}', 'WxpayController@walletPay');
 
     //搜索
     Route::post('/goods/search', 'GoodsController@search');
@@ -73,5 +72,6 @@ Route::group(['middleware' => 'web'], function () {
 
     //会员钱包
     Route::get('wallets/{type}', 'WalletController@show');
+    Route::get('wallets/{type}/price', 'WalletController@price');
 
 });

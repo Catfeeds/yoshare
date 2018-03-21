@@ -120,7 +120,7 @@ class JsApiPay
 
      	$this->data = $data;
 		$openid = $data['openid'];
-        setCookie('oepnId',$openid,time()+3600*24);
+        setCookie('oepnId',$openid,3600*24*7);
 
 		return $openid;
 	}

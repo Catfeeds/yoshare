@@ -57,29 +57,19 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
-    public function show(Domain $domain, $type)
+    public function walletPay(Domain $domain, $price)
     {
         if (empty($domain->site)) {
             return abort(501);
         }
-
+        if($price > 100){
+            $type = 'deposit';
+        }else{
+            $type = 'balance';
+        }
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
             ->get();
-
-        $chooses = Wallet::VALUE[$type];
-
-        $system['title'] = '支付页';
-        $system['back'] = '/wallets/'.$type;
-        $system['mark'] = 'member';
-
-        return view('themes.' . $domain->theme->name . '.wallets.pay', ['system' => $system, 'payments' => $payments, 'chooses' => $chooses]);
-    }
-
-
-    public function walletPay()
-    {
-        $gets = Request::all();
 
         //下单准备
         $tools = new JsApiPay();
@@ -87,18 +77,14 @@ class WxpayController extends Controller{
 
         //生成账单流水号
         $bill = new BillController();
-        $billNum = $bill->buildOrderNum();
-
-        $payments = Payment::where('state', Payment::STATE_PUBLISHED)
-            ->orderBy('sort', 'desc')
-            ->get();
+        $billNum = $bill->buildBillNum();
 
         // 统一下单
         $input = new WxPayUnifiedOrder();
-        $input->SetBody("yoshare_".$gets['type']);
-        $input->SetAttach("yoshare_".$gets['type']);
+        $input->SetBody("yoshare_".$type);
+        $input->SetAttach("yoshare_".$type);
         $input->SetOut_trade_no($billNum);
-        $input->SetTotal_fee($gets['price']*100);
+        $input->SetTotal_fee($price*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
@@ -111,8 +97,14 @@ class WxpayController extends Controller{
 
         $data['jsApiParameters'] = $jsApiParameters;
         $data['editAddress'] = $editAddress;
+        $data['price'] = $price;
 
-        return $this->responseSuccess($data);
+        $system['title'] = '支付页';
+        $system['back'] = '/wallets/'.$type;
+        $system['mark'] = 'member';
+        $system['type'] = $type;
+
+        return view('themes.' . $domain->theme->name . '.wallets.pay', ['system' => $system, 'payments' => $payments, 'data' => $data]);
     }
 
     public function notify(){

@@ -70,10 +70,18 @@
                         window.history.go(-2);
                         //支付失败
                     }else if(res.err_msg == "get_brand_wcpay_request:fail" ){
-                        alert('支付失败');
+                        layer.open({
+                            content: '支付失败'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
                         window.location.href="/order/pay/"+{{ $result['id'] }};
                     }else{
-                        alert('取消支付');
+                        layer.open({
+                            content: '取消支付'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
                     }
                 }
             );

@@ -46,10 +46,26 @@ class WalletController extends Controller
         $system['back'] = '/member';
         $system['mark'] = 'member';
         $system['money'] = $wallet[$type];
-        $system['type'] = $type;
         $system['vip_level'] = $member['type'];
 
         return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system]);
+    }
+
+
+    public function price(Domain $domain, $type)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $chooses = Wallet::VALUE[$type];
+
+        $system['title'] = '充值页';
+        $system['back'] = '/wallets/'.$type;
+        $system['mark'] = 'member';
+        $system['type'] = $type;
+
+        return view('themes.' . $domain->theme->name . '.wallets.price', ['system' => $system, 'chooses' => $chooses]);
     }
 
     public function slug(Domain $domain, $slug)
