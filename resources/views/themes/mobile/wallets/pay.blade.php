@@ -74,7 +74,7 @@
                             ,skin: 'msg'
                             ,time: 2 //2秒后自动关闭
                         });
-                        window.location.href="/order/pay/"+{{ $result['id'] }};
+                        window.location.href="/wallets/pay/"+{{ $data['price'] }};
                     }else{
                         layer.open({
                             content: '取消支付'

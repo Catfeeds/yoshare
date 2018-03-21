@@ -5,6 +5,7 @@ use App\Models\Member;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Bill;
+use App\Models\Wallet;
 use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
@@ -43,8 +44,10 @@ class PayNotifyCallBack extends WxPayNotify
         }
 
         $member = Member::getMember();
+        $wallet = Wallet::where('member_id', $member['id'])->first();
+
         //商户处理回调结果
-        if ($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_order') {
+        if ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_order') {
             //修改订单信息
             $order = Order::where('order_num', $data["out_trade_no"])->first();
             $input['total_pay'] = $data["total_fee"]/100;
@@ -52,34 +55,22 @@ class PayNotifyCallBack extends WxPayNotify
             $input['pay_id'] = Payment::WeChatID;
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
-            //加入流水表
-            Bill::create([
-                'site_id' => Member::SITE_ID,
-                'member_id' => $member['id'],
-                'bill_num' => $data["out_trade_no"],
-                'type' => Bill::TYPE_ORDER,
-                'money' => $data["total_fee"]/100,
-                'state' => Bill::STATE_NORMAL,
-            ]);
-        }elseif($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_deposit'){
-            Bill::create([
-                'site_id' => Member::SITE_ID,
-                'member_id' => $member['id'],
-                'bill_num' => $data["out_trade_no"],
-                'type' => Bill::TYPE_DEPOSIT,
-                'money' => $data["total_fee"]/100,
-                'state' => Bill::STATE_NORMAL,
-            ]);
-        } elseif($data["return_code"] == "SUCCESS" && $data["attach"] == 'yoshare_balance'){
-            Bill::create([
-                'site_id' => Member::SITE_ID,
-                'member_id' => $member['id'],
-                'bill_num' => $data["out_trade_no"],
-                'type' => Bill::TYPE_BALANCE,
-                'money' => $data["total_fee"]/100,
-                'state' => Bill::STATE_NORMAL,
-            ]);
+        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit'){
+            $input['deposit'] = $data["total_fee"]/100;
+            $wallet->update($input);
+        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
+            $input['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
+            $wallet->update($input);
         }
+
+        //更新流水表
+        $bill = [
+            'member_id' => $member['id'],
+            'bill_num' => $data["out_trade_no"],
+            'type' => Bill::TYPES[$data['attach']],
+            'money' => $data["total_fee"]/100,
+        ];
+        Bill::stores($bill);
 
         return true;
     }

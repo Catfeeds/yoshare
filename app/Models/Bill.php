@@ -9,15 +9,18 @@ use Response;
 
 class Bill extends BaseModule
 {
+    const SITE_ID = 1;
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
-    const TYPE_ORDER = 0;
-    const TYPE_DEPOSIT = 1;
-    const TYPE_BALANCE = 2;
-    const TYPE_REFUND = 3;
+    const TYPES = [
+        'yoshare_order'     => 0,
+        'yoshare_deposit'   => 1,
+        'yoshare_balance'   => 2,
+        'yoshare_refund'    => 3,
+    ];
 
     const STATES = [
         0 => '已删除',
@@ -60,6 +63,7 @@ class Bill extends BaseModule
 
     public static function stores($input)
     {
+        $input['site_id'] = static::SITE_ID;
         $input['state'] = static::STATE_NORMAL;
 
         $bill = static::create($input);
