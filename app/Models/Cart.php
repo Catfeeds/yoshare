@@ -14,7 +14,7 @@ class Cart extends BaseModule
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
-    const ORDER_ID = 0;
+    const ORDER_ID_NO = 0;
 
     const STATES = [
         0 => '已删除',

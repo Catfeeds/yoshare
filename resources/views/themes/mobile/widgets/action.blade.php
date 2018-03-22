@@ -2,7 +2,7 @@
     <ul>
         <li><a href="">加入收藏</a></li>
         <li><a href="javascript:void(0)" id="addcart">加入购物车</a></li>
-        <li><a href="">立即购买</a></li>
+        <li><a href="javascript:void(0)" id="buynow">立即购买</a></li>
         <div class="clear"></div>
     </ul>
 </div>
@@ -27,16 +27,20 @@
                 msg = data.message;
                 statusCode = data.status_code;
 
-                if(msg == 'success'){
+                if(statusCode == 200){
                     msg = '购物车加入成功！';
+                }else if(statusCode == 401){
+                    url = '/login';
+                }else{
+                    url = '/member/vip';
                 }
 
-                if (statusCode == 401){
+                if (statusCode == 401 || statusCode == 407){
                     layer.open({
                         content: msg,
                         btn: ['确认', '取消'],
                         yes: function(index, layero) {
-                            window.location.href='/login';
+                            window.location.href = url;
                         }
                     });
                 } else {
@@ -50,5 +54,34 @@
         })
 
     });
+    $('#buynow').click(function(){
+        var goods_id = $('#goods_id').val();
+        var sale_price = $('#sale_price').val();
 
+        $.ajax({
+            url  : '/cart/add/'+goods_id,
+            type : 'get',
+            data : {
+                'price' : sale_price,
+                'number'  : 1
+            },
+            success:function(data){
+                msg = data.message;
+                statusCode = data.status_code;
+
+                if (statusCode == 401){
+                    layer.open({
+                        content: msg,
+                        btn: ['确认', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href='/login';
+                        }
+                    });
+                } else {
+                    location.href = '/cart';
+                }
+            }
+        })
+
+    });
 </script>

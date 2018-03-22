@@ -245,7 +245,7 @@ class CartController extends Controller
         $system['mark'] = 'cart';
         $member_id = Member::getMember()->id;
         $goods_ids = Cart::where('member_id', $member_id)
-            ->where('order_id', Cart::ORDER_ID)
+            ->where('order_id', Cart::ORDER_ID_NO)
             ->pluck('goods_id')
             ->toArray();
 
@@ -257,13 +257,14 @@ class CartController extends Controller
                     ->get();
 
         $numbers = Cart::where('member_id', $member_id)
-            ->where('order_id', Cart::ORDER_ID)
+            ->where('order_id', Cart::ORDER_ID_NO)
             ->pluck('number', 'goods_id')
             ->toArray();
 
         $prices = Cart::where('member_id', $member_id)
-            ->get()
-            ->toArray();
+                    ->where('order_id', Cart::ORDER_ID_NO)
+                    ->get()
+                    ->toArray();
 
         foreach ($prices as $k => $v){
             $total_price += $v['number'] * $v['price'];
@@ -300,9 +301,14 @@ class CartController extends Controller
             $input['member_id'] = Member::getMember()->id;
             $type = Member::getMember()->type;
 
-            //查询此用户会员等级，普通=0（额外0），黄金=1（额外1），钻石=2（额外2）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
+            //普通用户跳转至押金缴纳页
+            if($type == 0){
+                return $this->responseError('您还未缴纳押金，立即缴纳荣升VIP！', 407);
+            }
+
+            //查询此用户会员等级，普通=0（额外0），黄金=1（租1），铂金=2（租2），钻石=3（租3）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
             $numbers = Cart::where('member_id', $input['member_id'])
-                ->where('order_id', Cart::ORDER_ID)
+                ->where('order_id', Cart::ORDER_ID_NO)
                 ->pluck('number')
                 ->toArray();
 
@@ -312,14 +318,14 @@ class CartController extends Controller
                 ->pluck('goods_id')
                 ->toArray();
 
-            if($number > 0 && $number < $type+1 && in_array($goods_id, $cart_goods_id)){
+            if($number > 0 && $number < $type && in_array($goods_id, $cart_goods_id)){
                 Cart::where('goods_id', $goods_id)
                     ->where('member_id', $input['member_id'])
                     ->increment('number');
 
                 $carts = Cart::where('member_id', $input['member_id'])
                     ->get();
-            } elseif ($number >= $type+1){
+            } elseif ($number >= $type){
                 return $this->responseError('已达到您的租盘上限！');
             } else{
                 Cart::stores($input);
@@ -353,7 +359,6 @@ class CartController extends Controller
             $input['goods_id'] = $goods_id;
             $input['site_id'] = Member::getMember()->site_id;
             $input['member_id'] = Member::getMember()->id;
-            $type = Member::getMember()->type;
 
             //查询此用户会员等级，普通=0（额外0），黄金=1（额外1），钻石=2（额外2）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
             $carts = Cart::where('member_id', $input['member_id'])

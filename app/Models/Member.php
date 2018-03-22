@@ -16,9 +16,10 @@ class Member extends Authenticatable
     const STATE_ENABLED = 1;
 
     const TYPES = [
-        0 => '黄金会员',
-        1 => '铂金会员',
-        2 => '钻石会员',
+        0 => '普通用户',
+        1 => '黄金会员',
+        2 => '铂金会员',
+        3 => '钻石会员',
     ];
 
     const LEVEL = [

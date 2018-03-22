@@ -71,6 +71,8 @@ class PayNotifyCallBack extends WxPayNotify
             'money' => $data["total_fee"]/100,
         ];
         Bill::stores($bill);
+        //更新用户积分
+        $wallet->increment('points', $data["total_fee"]/100);
 
         return true;
     }

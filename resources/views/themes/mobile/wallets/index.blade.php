@@ -12,7 +12,7 @@
         <div class="vip-text">
             <div class="content" style="text-align: center">
                 <p><b style="color: #ffcc42;font-size: 80px">{{ App\Models\Member::TYPES[$system['vip_level']] }}</b> </p>
-                <p>(每次可租盘上限：<b>{{ $system['vip_level']+1 }}本</b>)</p>
+                <p>(每次可租盘上限：<b>{{ $system['vip_level'] }}本</b>)</p>
                 <p style="font-size: 60px;padding: 100px;">{{ $system['money'] }}元</p>
              </div>
         </div>
