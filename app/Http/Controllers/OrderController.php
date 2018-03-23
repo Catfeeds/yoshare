@@ -141,19 +141,16 @@ class OrderController extends Controller
         }
         if($state == 'nopay'){
             $filters['state'] = Order::STATE_NOPAY;
-            $system['title'] = '待付款订单';
         }elseif($state == 'nosend'){
             $filters['state'] = Order::STATE_PAID;
-            $system['title'] = '待发货订单';
         }elseif($state == 'sended'){
             $filters['state'] = Order::STATE_SENDED;
-            $system['title'] = '待收货订单';
+        }elseif($state == 'return'){
+            $filters['state'] = Order::STATE_RETURN;
         }elseif($state == 'success'){
             $filters['state'] = Order::STATE_SUCCESS;
-            $system['title'] = '已完成订单';
         }else{
             $filters['state'] = $state;
-            $system['title'] = '全部订单';
         }
 
         $member_id = Member::getMember()->id;
@@ -172,6 +169,7 @@ class OrderController extends Controller
         }
 
         $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '订单页';
 
         return view('themes.' . $domain->theme->name . '.orders.index', ['site' => $domain->site, 'system' => $system, 'orders' => $orders, 'state' => $state]);
     }

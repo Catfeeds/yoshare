@@ -32,6 +32,7 @@
                         <div class="action">
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
+                    @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
                         <div class="action">
                             <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->ship_num2 }})">申请归还</a>
                         </div>

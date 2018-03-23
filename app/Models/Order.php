@@ -14,8 +14,9 @@ class Order extends BaseModule
     const STATE_PAID = 2;
     const STATE_SENDED = 3;
     const STATE_CLOSED = 4;
-    const STATE_SUCCESS = 5;
-    const STATE_REFUND = 6;
+    const STATE_RETURN = 5;
+    const STATE_SUCCESS = 6;
+    const STATE_REFUND = 7;
 
     const STATES = [
         0 => '已删除',
@@ -23,8 +24,9 @@ class Order extends BaseModule
         2 => '已付款，待发货',
         3 => '已发货',
         4 => '交易关闭',
-        5 => '交易成功',
-        6 => '退款中',
+        5 => '待归还',
+        6 => '交易成功',
+        7 => '退款中',
     ];
 
     const STATE_PERMISSIONS = [

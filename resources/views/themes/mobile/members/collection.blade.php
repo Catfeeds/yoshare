@@ -57,11 +57,6 @@
                     statusCode = data.status_code;
 
                     if (statusCode == 200){
-                        layer.open({
-                            content: '取消成功'
-                            ,skin: 'msg'
-                            ,time: 3 //2秒后自动关闭
-                        });
                         location.reload();
                     }else{
                         layer.open({

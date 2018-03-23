@@ -42,7 +42,7 @@
             </div>
             <div class="text">{!! $goods->content !!}</div>
         </div>
-        <div class="video">
+        <div class="video" style="display: none">
             <video src="{{ $goods->video_url }}" controls="controls">
                 您的浏览器不支持 video 标签。
             </video>
