@@ -26,6 +26,7 @@ class Payment extends BaseModule
 
     const WeChatID = 1;
     const AliPayID = 2;
+    const BalanceID = 3;
 
     const STATE_PERMISSIONS = [
         0 => '@payment-delete',

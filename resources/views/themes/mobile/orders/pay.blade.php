@@ -120,7 +120,7 @@
                         if (parseInt(balance) < parseInt(price)) {
                             layer.open({
                                 content: '当前余额为'+balance+',无法使用余额！',
-                                btn: ['去充值', '取消'],
+                                btn: ['去充值', '其他支付'],
                                 yes: function (index, layero) {
                                     window.location.href = '/wallets/balance/price';
                                 }
@@ -158,6 +158,7 @@
                 url  : '/balance/pay',
                 type : 'get',
                 data : {
+                    'order_id'      : {{ $result['id'] }},
                     'price'         : price,
                 },
                 success:function(data){

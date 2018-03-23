@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
+use App\Models\Order;
 use App\Models\Wallet;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
 use App\Models\UserLog;
 use App\Models\Member;
+use App\Models\Payment;
 use Auth;
 use Carbon\Carbon;
 use Gate;
@@ -277,6 +279,14 @@ class WalletController extends Controller
         $input['balance'] = $wallet['balance']-$price;
         $res = $wallet->update($input);
         if($res){
+            //处理订单
+            $order = Order::find($input['order_id']);
+            $input['total_pay'] = $price;
+            $input['paid_at'] = Carbon::now();
+            $input['pay_id'] = Payment::BalanceID;
+            $input['state'] = Order::STATE_PAID;
+            $order->update($input);
+
             return $this->responseSuccess($res);
         }
     }
