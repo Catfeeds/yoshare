@@ -20,11 +20,6 @@ class Favorite extends Model
         return $this->morphTo();
     }
 
-    public function member()
-    {
-        return $this->belongsTo(Member::class);
-    }
-
     public static function count($site_id, $member_id)
     {
         return static::where('site_id', $site_id)

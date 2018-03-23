@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MemberRequest;
 use App\Models\DataSource;
 use App\Models\Domain;
+use App\Models\Favorite;
 use App\Models\Member;
+use App\Models\Goods;
 use Exception;
 use Gate;
 use Request;
@@ -292,6 +294,51 @@ class MemberController extends Controller
         $member->avatarOptions = Member::AVATAR;
 
         return view('themes.' . $domain->theme->name . '.system.member', ['member' => $member, 'system' => $system]);
+    }
+
+    public function collect()
+    {
+        $input = Request::all();
+        try {
+            $member = Member::getMember();
+
+            if (!$member) {
+                return $this->responseError('无效的token,请重新登录');
+            }
+        } catch (Exception $e) {
+            return $this->responseError('无效的token,请重新登录');
+        }
+
+        $goods = Goods::find($input['goods_id']);
+        $favorite = $goods->favorites()->where('member_id', $member->id)->exists();
+
+        if($favorite){
+            return $this->responseError('您已收藏此盘');
+        }else{
+
+            $res = $goods->favorites()->create([
+                'site_id' => $member->site_id,
+                'member_id' => $member->id,
+            ]);
+
+            return $this->responseSuccess($res);
+        }
+    }
+
+    public function collections(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '我的收藏';
+
+        $favorites = Member::getMember()->favorites()->pluck('refer_id')->toArray();
+        $goodses = Goods::whereIn('id', $favorites)->get();
+
+        return view('themes.' . $domain->theme->name . '.members.collection', ['goodses' => $goodses, 'system' => $system]);
+
     }
 
 }

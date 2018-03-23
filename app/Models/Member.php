@@ -12,6 +12,8 @@ class Member extends Authenticatable
     const ID_ADMIN = 1;
     const SITE_ID = 1;
 
+    const REFER_TYPE = 'App\Models\Member';
+
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 
@@ -94,6 +96,10 @@ class Member extends Authenticatable
 
     public function wallet(){
         return $this->hasOne(Wallet::class);
+    }
+
+    public function favorites(){
+        return $this->hasMany(Favorite::class);
     }
 
     public static function checkLogin()

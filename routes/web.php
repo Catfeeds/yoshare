@@ -37,6 +37,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/bind/phone', 'MemberController@bindMobile');
     Route::get('/member/vip', 'MemberController@vip');
     Route::get('/member/detail', 'MemberController@detail');
+    Route::get('/member/collect', 'MemberController@collect');
+    Route::get('/member/collections', 'MemberController@collections');
     Route::patch('/member/{id}', 'MemberController@save');
 
     //会员地址

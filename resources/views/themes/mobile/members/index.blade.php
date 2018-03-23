@@ -47,7 +47,7 @@
         <div class="set">
             <div class="content">
                 <ul>
-                    <li class="s-user"><a href="/likes">我的收藏</a></li>
+                    <li class="s-user"><a href="/member/collections">我的收藏</a></li>
                     <li class="s-user" style="margin-top: 0;"><a href="/system">系统设置</a></li>
                 </ul>
             </div>

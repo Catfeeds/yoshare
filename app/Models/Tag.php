@@ -51,7 +51,6 @@ class Tag extends Model
         });
     }
 
-
     public static function sync($content, $tags)
     {
         if (is_array($tags)) {
