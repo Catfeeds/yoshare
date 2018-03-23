@@ -107,7 +107,7 @@
             }else if(pid == 3){
                 var price = {{ $result['price'] }};
                 $.ajax({
-                    url  : '/wallets/balance/',
+                    url  : '/wallets/get/balance/',
                     type : 'get',
                     data : {
                         'price'         : price,
@@ -116,6 +116,7 @@
                         msg = data.message;
                         statusCode = data.status_code;
                         balance = data.data;
+                        var type = 'balance';
 
                         if (parseInt(balance) < parseInt(price)) {
                             layer.open({
@@ -130,7 +131,7 @@
                                 content: '当前余额为'+balance,
                                 btn: ['支付', '取消'],
                                 yes: function (index, layero) {
-                                    pay(price);
+                                    pay(type, price);
                                 }
                             });
                         }
@@ -146,20 +147,65 @@
                         }
                     }
                 })
-            }else{
+            }else if(pid == 4){
+                var price = {{ $result['price'] }};
+                $.ajax({
+                    url  : '/wallets/get/coupon/',
+                    type : 'get',
+                    data : {
+                        'price'         : price,
+                    },
+                    success:function(data){
+                        msg = data.message;
+                        statusCode = data.status_code;
+                        coupon = data.data;
+                        var type = 'coupon';
+
+                        if (parseInt(coupon) < parseInt(price)) {
+                            layer.open({
+                                content: '您的优惠券为'+coupon+'元,无法使用！',
+                                btn: ['去充值', '其他支付'],
+                                yes: function (index, layero) {
+                                    window.location.href = '/wallets/balance/price';
+                                }
+                            });
+                        }else{
+                            layer.open({
+                                content: '当前优惠券为'+coupon,
+                                btn: ['支付', '取消'],
+                                yes: function (index, layero) {
+                                    pay(type, price);
+                                }
+                            });
+                        }
+
+                        if (statusCode == 401){
+                            layer.open({
+                                content: msg,
+                                btn: ['确认', '取消'],
+                                yes: function(index, layero) {
+                                    window.location.href='/login';
+                                }
+                            });
+                        }
+                    }
+                })
+            } else{
                 //TODO 支付宝支付
 
             }
 
         }
 
-        function pay(price) {
+        function pay(type, price) {
+
             $.ajax({
-                url  : '/balance/pay',
+                url  : '/wallets/pay',
                 type : 'get',
                 data : {
                     'order_id'      : {{ $result['id'] }},
                     'price'         : price,
+                    'type'          : type,
                 },
                 success:function(data){
                     msg = data.message;
@@ -169,8 +215,10 @@
                         layer.open({
                             content: '支付成功'
                             ,skin: 'msg'
-                            ,time: 2 //2秒后自动关闭
+                            ,time: 3 //2秒后自动关闭
                         });
+
+                        location.href = '/order/lists/nosend';
                     }else{
                         layer.open({
                             content: msg

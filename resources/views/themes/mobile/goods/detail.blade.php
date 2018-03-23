@@ -32,7 +32,7 @@
             <input type="hidden" id="goods_id" value="{{ $goods->id }}">
             <input type="hidden" id="sale_price" value="{{ $goods->sale_price }}">
         </div>
-        <div class="tips">
+        <div class="tips" style="display: none">
             <h4>租期计算方式</h4>
             <p>{{ $goods->summary }}</p>
         </div>

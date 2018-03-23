@@ -128,8 +128,12 @@ body{
     background: url('../images/members/s-phone.png') no-repeat 0 48px;
 }
 .set ul li.s-user{
-    margin-top: 30px;
+    margin-top: 0px;
     background: url('../images/members/s-user.png') no-repeat 0 48px;
+}
+.set ul li.s-like{
+    margin-top: 30px;
+    background: url('../images/members/s-like.png') no-repeat 0 48px;
 }
 .vip-text {
     background: #fff;

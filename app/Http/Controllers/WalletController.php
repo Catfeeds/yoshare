@@ -252,36 +252,35 @@ class WalletController extends Controller
         return Response::json(Category::tree('', 0, $this->module->id));
     }
 
-    public function balance()
+    public function wallet($type)
     {
-        $input = Request::all();
-
         try {
             $member = Member::getMember();
 
             if (!$member) {
-                return $this->responseError('登录已失效,请重新登录', 401);
+                return $this->responseError('您还未登录,请登录后操作', 401);
             }
         } catch (Exception $e) {
-            return $this->responseError('登录已失效,请重新登录', 401);
+            return $this->responseError('您还未登录,请登录后操作', 401);
         }
 
 
         $wallet = $member->wallet()->first();
 
-        return $this->responseSuccess($wallet['balance']);
+        return $this->responseSuccess($wallet[$type]);
     }
 
-    public function pay($price)
+    public function pay()
     {
         $input = Request::all();
+        $type = $input['type'];
         $wallet = Member::getMember()->wallet()->first();
-        $input['balance'] = $wallet['balance']-$price;
+        $input[$type] = $wallet[$type]-$input['price'];
         $res = $wallet->update($input);
         if($res){
             //处理订单
             $order = Order::find($input['order_id']);
-            $input['total_pay'] = $price;
+            $input['total_pay'] = $input['price'];
             $input['paid_at'] = Carbon::now();
             $input['pay_id'] = Payment::BalanceID;
             $input['state'] = Order::STATE_PAID;

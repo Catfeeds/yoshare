@@ -62,8 +62,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/order/pay/{id}', 'WxpayController@orderPay');
     Route::post('/wxpay/notify', 'WxpayController@notify');
     Route::get('/wallets/recharge/{price}', 'WxpayController@recharge');
-    Route::get('/wallets/balance', 'WalletController@balance');
-    Route::get('/balance/pay', 'WalletController@pay');
+    Route::get('/wallets/get/{type}', 'WalletController@wallet');
+    Route::get('/wallets/pay', 'WalletController@pay');
 
     //搜索
     Route::post('/goods/search', 'GoodsController@search');
@@ -75,7 +75,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cart/{id}/delete', 'CartController@destroy');
 
     //会员钱包
-    Route::get('wallets/{type}', 'WalletController@show');
+    Route::get('wallets/show/{type}', 'WalletController@show');
     Route::get('wallets/{type}/price', 'WalletController@price');
 
 });

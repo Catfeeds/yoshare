@@ -39,7 +39,15 @@
         
         function callpay() {
             var price = $('div.active').children('span.val').text();
-            location.href = '/wallets/recharge/'+price;
+            if( price == '' || price == 'undefined'){
+                layer.open({
+                    content: '请选择金额'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }else{
+                location.href = '/wallets/recharge/'+price;
+            }
         }
 
 

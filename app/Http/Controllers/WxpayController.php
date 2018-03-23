@@ -68,9 +68,10 @@ class WxpayController extends Controller{
             $type = 'balance';
         }
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
+            ->whereNotNull('payurl')
             ->orderBy('sort', 'desc')
             ->get();
-
+        dd($payments);
         //下单准备
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();

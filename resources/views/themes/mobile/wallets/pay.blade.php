@@ -41,21 +41,6 @@
 @endsection
 @section('js')
     <script src="{{ url('/js/layer.js') }}"></script>
-    <script>
-
-        function ask(id) {
-            layer.open({
-                content: '您确定要删除此地址吗？'
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    location.href = '/address/'+id+'delete';
-                    layer.close(index);
-                }
-            });
-        }
-
-
-    </script>
     <script type="text/javascript">
         //调用微信JS api 支付
         function jsApiCall()
