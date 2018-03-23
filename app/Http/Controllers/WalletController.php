@@ -249,4 +249,35 @@ class WalletController extends Controller
     {
         return Response::json(Category::tree('', 0, $this->module->id));
     }
+
+    public function balance()
+    {
+        $input = Request::all();
+
+        try {
+            $member = Member::getMember();
+
+            if (!$member) {
+                return $this->responseError('登录已失效,请重新登录', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('登录已失效,请重新登录', 401);
+        }
+
+
+        $wallet = $member->wallet()->first();
+
+        return $this->responseSuccess($wallet['balance']);
+    }
+
+    public function pay($price)
+    {
+        $input = Request::all();
+        $wallet = Member::getMember()->wallet()->first();
+        $input['balance'] = $wallet['balance']-$price;
+        $res = $wallet->update($input);
+        if($res){
+            return $this->responseSuccess($res);
+        }
+    }
 }

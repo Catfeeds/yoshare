@@ -2,7 +2,7 @@
     <button class="place-btn" id="place">提交订单</button>
     <div class="price" style="margin-top: 40px">
         <p>
-            实付款：<span>￥{{ $carts['total_price']+10 }}</span><br />
+            实付款：<span>￥{{ $carts['total_price'] }}</span><br />
         </p>
     </div>
 </div>

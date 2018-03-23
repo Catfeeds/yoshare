@@ -104,11 +104,81 @@
                 }else{
                     jsApiCall();
                 }
+            }else if(pid == 3){
+                var price = {{ $result['price'] }};
+                $.ajax({
+                    url  : '/wallets/balance/',
+                    type : 'get',
+                    data : {
+                        'price'         : price,
+                    },
+                    success:function(data){
+                        msg = data.message;
+                        statusCode = data.status_code;
+                        balance = data.data;
+
+                        if (parseInt(balance) < parseInt(price)) {
+                            layer.open({
+                                content: '当前余额为'+balance+',无法使用余额！',
+                                btn: ['去充值', '取消'],
+                                yes: function (index, layero) {
+                                    window.location.href = '/wallets/balance/price';
+                                }
+                            });
+                        }else{
+                            layer.open({
+                                content: '当前余额为'+balance,
+                                btn: ['支付', '取消'],
+                                yes: function (index, layero) {
+                                    pay(price);
+                                }
+                            });
+                        }
+
+                        if (statusCode == 401){
+                            layer.open({
+                                content: msg,
+                                btn: ['确认', '取消'],
+                                yes: function(index, layero) {
+                                    window.location.href='/login';
+                                }
+                            });
+                        }
+                    }
+                })
             }else{
-            //TODO 支付宝支付
+                //TODO 支付宝支付
 
             }
 
+        }
+
+        function pay(price) {
+            $.ajax({
+                url  : '/balance/pay',
+                type : 'get',
+                data : {
+                    'price'         : price,
+                },
+                success:function(data){
+                    msg = data.message;
+                    statusCode = data.status_code;
+
+                    if (statusCode == 200){
+                        layer.open({
+                            content: '支付成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }else{
+                        layer.open({
+                            content: msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                }
+            })
         }
 
     </script>

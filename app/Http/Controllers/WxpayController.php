@@ -57,7 +57,7 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
-    public function walletPay(Domain $domain, $price)
+    public function recharge(Domain $domain, $price)
     {
         if (empty($domain->site)) {
             return abort(501);

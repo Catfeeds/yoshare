@@ -39,7 +39,7 @@
         
         function callpay() {
             var price = $('div.active').children('span.val').text();
-            location.href = '/wallets/pay/'+price;
+            location.href = '/wallets/recharge/'+price;
         }
 
 

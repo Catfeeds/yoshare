@@ -245,10 +245,10 @@ class MemberController extends Controller
             $member = Member::getMember();
 
             if (!$member) {
-                return $this->responseError('无效的token,请重新登录');
+                return $this->responseError('登录已失效,请重新登录', 401);
             }
         } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
+            return $this->responseError('登录已失效,请重新登录', 401);
         }
 
         try {
@@ -303,10 +303,10 @@ class MemberController extends Controller
             $member = Member::getMember();
 
             if (!$member) {
-                return $this->responseError('无效的token,请重新登录');
+                return $this->responseError('登录已失效,请重新登录', 401);
             }
         } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
+            return $this->responseError('登录已失效,请重新登录', 401);
         }
 
         $goods = Goods::find($input['goods_id']);

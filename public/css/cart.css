@@ -43,6 +43,7 @@
 .c-goods ul li{
     height: 350px;
     margin-left: 7.9%;
+    border-bottom: 2px solid #eee;
 }
 .c-goods ul li .g-img{
     float: left;

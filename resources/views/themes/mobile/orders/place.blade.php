@@ -88,7 +88,7 @@
             </li>
             <li>
                 <div class="l-left">运费</div>
-                <div class="l-right">￥10.00</div>
+                <div class="l-right">￥0.00</div>
                 <div class="clear"></div>
             </li>
             <li>
