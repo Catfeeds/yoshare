@@ -64,11 +64,19 @@
 .c-goods ul li .g-desc .name{
     color: #242d32;
     height: 50px;
-    margin-top: 50px;
+    margin-top: 64px;
 }
 .c-goods ul li .g-desc .subtitle{
     color: #677e85;
     height: 100px;
+}
+.c-goods ul li .g-desc .subtitle .cancle{
+    float: right;
+    display: inline-block;
+    width: 150px;
+    height: 72px;
+    line-height: 72px;
+    text-align: center;
 }
 .c-goods ul li .g-desc .price{
     color: #ff0b0f;

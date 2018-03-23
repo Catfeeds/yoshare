@@ -28,9 +28,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('index.html', 'HomeController@index');
     Route::get('/checkLogin', 'HomeController@checkLogin');
+
     //系统设置
     Route::get('/system', 'HomeController@system');
     Route::get('/about/us', 'HomeController@about');
+
     //会员管理
     Route::get('/member', 'MemberController@show');
     Route::get('/member/phone', 'MemberController@phone');
@@ -40,6 +42,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/collect', 'MemberController@collect');
     Route::get('/member/collections', 'MemberController@collections');
     Route::patch('/member/{id}', 'MemberController@save');
+
+    //取消收藏
+    Route::get('/collect/cancle', 'MemberController@collectDel');
 
     //会员地址
     Route::get('/address/index.html', 'AddressController@lists');

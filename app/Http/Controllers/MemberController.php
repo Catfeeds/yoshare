@@ -341,4 +341,28 @@ class MemberController extends Controller
 
     }
 
+    public function collectDel()
+    {
+        $input = Request::all();
+        try {
+            $member = Member::getMember();
+
+            if (!$member) {
+                return $this->responseError('您还未登录,请登录后操作', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('您还未登录,请登录后操作', 401);
+        }
+
+        $goods = Goods::find($input['goods_id']);
+        $favorite = $goods->favorites()->where('member_id', $member->id)->exists();
+
+        if($favorite){
+            $res = $goods->favorites()->where('member_id', $member->id)->delete();
+            return $this->responseSuccess($res);
+        }else{
+            return $this->responseError('收藏的光盘不存在,请刷新重试');
+        }
+    }
+
 }
