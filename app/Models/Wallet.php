@@ -32,9 +32,9 @@ class Wallet extends BaseModule
 
     const VALUE = [
         'deposit' => [
-            '黄金会员' => 3,
-            '铂金会员' => 6,
-            '钻石会员' => 9,
+            '黄金会员' => 0.3,
+            '铂金会员' => 0.6,
+            '钻石会员' => 0.9,
         ],
         'balance' => [
             0 => 15,

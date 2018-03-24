@@ -252,7 +252,7 @@ class BillController extends Controller
                 fclose($handle);
             }
         }
-        return 'b'.$content.rand(100, 999);
 
+        return 'b'.$content.rand(100, 999);
     }
 }

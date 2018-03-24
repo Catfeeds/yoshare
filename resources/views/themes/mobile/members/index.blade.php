@@ -31,7 +31,7 @@
                 <ul class="clear">
                     <li><h5>{{ $wallet->deposit }}</h5><a href="/wallets/show/deposit">押金</a></li>
                     <li><h5>￥{{ $wallet->balance }}</h5><a href="/wallets/show/balance">余额</a></li>
-                    <li><h5>{{ $wallet->coupon }}</h5><a href="/wallets/coupon">优惠券</a></li>
+                    <li><h5>{{ $wallet->coupon }}</h5><a href="/wallets/show/coupon">优惠券</a></li>
                 </ul>
             </div>
         </div>

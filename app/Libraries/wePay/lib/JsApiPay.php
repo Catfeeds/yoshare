@@ -1,6 +1,8 @@
 <?php
 namespace App\Libraries\wePay\lib;
 
+use App\Models\Member;
+
 require_once "WxPayApi.php";
 /**
  * 
@@ -56,6 +58,12 @@ class JsApiPay
                 $openid = $this->getOpenidFromMp($code);
             }else{
                 $openid = $_COOKIE['openId'];
+            }
+            //用户表保存openId,支付回调结果使用
+            $member = Member::getMember();
+            if(empty($member['open_id'])){
+                $input['open_id'] = $openid;
+                $member->update($input);
             }
 			return $openid;
 		}

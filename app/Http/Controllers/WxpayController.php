@@ -8,8 +8,9 @@ use App\Libraries\wePay\lib\PayNotifyCallBack;
 use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Wallet;
-use Request;
+use App\Models\Member;
+use App\Models\Bill;
+use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
 
@@ -38,7 +39,7 @@ class WxpayController extends Controller{
         $input->SetTotal_fee($result['price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("test");
+        $input->SetGoods_tag("order");
         $input->SetNotify_url('http://'.$_SERVER['HTTP_HOST'].'/wxpay/notify');
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
@@ -62,11 +63,17 @@ class WxpayController extends Controller{
         if (empty($domain->site)) {
             return abort(501);
         }
-        if($price > 100){
+        //todo
+        if($price < 1){
             $type = 'deposit';
         }else{
             $type = 'balance';
         }
+
+        //生成账单流水号
+        $bill = new BillController();
+        $billNum = $bill->buildBillNum();
+
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->whereNotNull('payurl')
             ->orderBy('sort', 'desc')
@@ -76,10 +83,6 @@ class WxpayController extends Controller{
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
-        //生成账单流水号
-        $bill = new BillController();
-        $billNum = $bill->buildBillNum();
-
         // 统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("yoshare_".$type);
@@ -88,10 +91,11 @@ class WxpayController extends Controller{
         $input->SetTotal_fee($price*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("test");
+        $input->SetGoods_tag($type);
         $input->SetNotify_url('http://'.$_SERVER['HTTP_HOST'].'/wxpay/notify');
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
+
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         $editAddress = $tools->GetEditAddressParameters();
@@ -108,11 +112,46 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.wallets.pay', ['system' => $system, 'payments' => $payments, 'data' => $data]);
     }
 
-    public function notify(){
-
+    public function notify()
+    {
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
+    }
+    public function handle($data)
+    {
+        $member = Member::where('open_id', $data['openid'])->first();
+        $wallet = $member->wallet()->first();
 
+        if ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_order') {
+            //修改订单信息
+            $order = Order::where('order_num', $data["out_trade_no"])->first();
+            $input['total_pay'] = $data["total_fee"]/100;
+            $input['paid_at'] = Carbon::now();
+            $input['pay_id'] = Payment::WeChatID;
+            $input['state'] = Order::STATE_PAID;
+            $order->update($input);
+        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit'){
+            $input['deposit'] = $data["total_fee"]/100;
+            //更新钱包押金
+            $wallet->update($input);
+            //更新会员等级
+            $data['type'] = array_search($data["total_fee"]/100, Member::LEVEL);
+            $member->update($data);
+        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
+            $input['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
+            $wallet->update($input);
+        }
+
+        //更新流水表
+        $bill = [
+            'member_id' => $member['id'],
+            'bill_num' => $data["out_trade_no"],
+            'type' => Bill::TYPES[$data['attach']],
+            'money' => $data["total_fee"]/100,
+        ];
+        Bill::stores($bill);
+        //更新用户积分
+        $wallet->increment('points', $data["total_fee"]/100);
     }
 
 }
