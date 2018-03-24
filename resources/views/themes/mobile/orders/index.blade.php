@@ -94,7 +94,7 @@
 
     function received(orderId) {
 
-        var state = {{ \App\Models\Order::STATE_SUCCESS }};
+        var state = {{ \App\Models\Order::STATE_RETURN }};
 
         layer.open({
             content: '您确认已收到游戏盘了吗？',
@@ -156,8 +156,8 @@
 
         var html  = '<p>收件人：付先生</p>'+
                     '<p>电话：010-50976059</p>'+
-                    '<p>邮编：10000</p>'+
-                    '<p>地址：北京市朝阳区建国路93号万达广场6号楼3206</p>'+
+                    '<p>邮编：102600</p>'+
+                    '<p>回寄地址：北京市大兴区鸿坤曦望山2号楼2单元304 </p>'+
                     '<form method="get" action="/order/edit/'+orderId+'">'+
                         '物流单号：<input type="text" name="ship_num2" value="'+shipNum2+'" class="i-form" style="padding-left: 20px;width: 70%;"/>'+
                         '<button type="submit" style="width: 20%;margin-top: 30px;height: 106px;border-radius: 10px;">提交</button>'+

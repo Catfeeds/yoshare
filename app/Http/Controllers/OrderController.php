@@ -269,7 +269,7 @@ class OrderController extends Controller
             return $this->responseSuccess($order);
 
         }
-        //event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
+        event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
 
     }
 
@@ -379,6 +379,21 @@ class OrderController extends Controller
         } else {
             //TODO
         }
+    }
+
+    public function state()
+    {
+        $input = request()->all();
+        Order::state($input);
+
+        $ids = $input['ids'];
+        $stateName = Order::getStateName($input['state']);
+
+        //记录日志
+        foreach ($ids as $id) {
+            event(new UserLogEvent('变更' . '订单' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
+        }
+
     }
 
 }

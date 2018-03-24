@@ -71,7 +71,7 @@ class WxpayController extends Controller{
             ->whereNotNull('payurl')
             ->orderBy('sort', 'desc')
             ->get();
-        dd($payments);
+
         //下单准备
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();

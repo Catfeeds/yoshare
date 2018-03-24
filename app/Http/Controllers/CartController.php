@@ -303,7 +303,7 @@ class CartController extends Controller
 
             //普通用户跳转至押金缴纳页
             if($type == 0){
-                return $this->responseError('您还未缴纳押金，立即缴纳荣升VIP！', 407);
+                return $this->responseError('您还未缴纳押金，立即缴纳！', 407);
             }
 
             //查询此用户会员等级，普通=0（额外0），黄金=1（租1），铂金=2（租2），钻石=3（租3）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；

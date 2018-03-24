@@ -21,9 +21,7 @@
                 <li id="refund">退押金</li>
             </ul>
         @endif
-        @if($system['title'] == '我的押金')
-            <div class="a-wrapper" style="padding-top: 170px"><a href="/wallets/deposit/price" class="a-default">立即充值</a></div>
-        @elseif($system['title'] == '我的余额')
+        @if($system['title'] == '我的余额')
             <div class="a-wrapper" style="padding-top: 270px"><a href="/wallets/balance/price" class="a-default">立即充值</a></div>
         @endif
     </div>

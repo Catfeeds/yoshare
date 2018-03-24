@@ -22,7 +22,7 @@
         <div class="summary">
             <p class="subtitle">{{ $goods->subtitle }}</p>
             <h3 class="title">{{ $goods->name }}</h3>
-            <p class="price">￥{{ $goods->sale_price }}/月<span class="time">畅玩无期限</span><span class="rent">原价{{ $goods->price }}元/月</span></p>
+            <p class="price">￥{{ $goods->sale_price }}/月<span class="time">无期限畅玩</span><span class="rent">原价{{ $goods->price }}元/月</span></p>
         </div>
         <div class="procedure">
             <h4>租赁流程</h4>

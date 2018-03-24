@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading"><a href="login">登录</a>/<a href="register">注册</a></div>
+                    <div class="panel-heading"><a style="font-size: larger;color: #ffcc42;" href="login">登录</a>/<a href="register">注册</a></div>
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                             {{ csrf_field() }}

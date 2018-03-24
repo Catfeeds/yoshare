@@ -63,7 +63,7 @@ class WalletController extends Controller
         $chooses = Wallet::VALUE[$type];
 
         $system['title'] = '充值页';
-        $system['back'] = '/wallets/'.$type;
+        $system['back'] = '/wallets/show/'.$type;
         $system['mark'] = 'member';
         $system['type'] = $type;
 

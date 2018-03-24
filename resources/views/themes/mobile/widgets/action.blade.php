@@ -2,7 +2,7 @@
     <ul>
         <li><a href="javascript:void(0)" id="collect">加入收藏</a></li>
         <li><a href="javascript:void(0)" id="addcart">加入购物车</a></li>
-        <li><a href="javascript:void(0)" id="buynow">立即购买</a></li>
+        <li><a href="javascript:void(0)" id="buynow">立即租赁</a></li>
         <div class="clear"></div>
     </ul>
 </div>
@@ -78,8 +78,22 @@
                             window.location.href='/login';
                         }
                     });
-                } else {
+                } else if (statusCode == 200){
                     location.href = '/cart';
+                } else if (statusCode == 407) {
+                    layer.open({
+                        content: msg,
+                        btn: ['确认', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href='/member/vip';
+                        }
+                    });
+                } else{
+                    layer.open({
+                        content: msg
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
                 }
             }
         })

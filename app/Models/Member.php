@@ -25,9 +25,9 @@ class Member extends Authenticatable
     ];
 
     const LEVEL = [
-        0 => '300',
-        1 => '600',
-        2 => '900',
+        1 => '3',
+        2 => '6',
+        3 => '9',
     ];
 
     const SEX = [

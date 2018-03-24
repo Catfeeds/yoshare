@@ -60,7 +60,7 @@ class PayNotifyCallBack extends WxPayNotify
             //更新钱包押金
             $wallet->update($input);
             //更新会员等级
-            $data['type'] = array_search($data["total_fee"]/100, Member::LEVEL)+1;
+            $data['type'] = array_search($data["total_fee"]/100, Member::LEVEL);
             $member->update($data);
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
             $input['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
