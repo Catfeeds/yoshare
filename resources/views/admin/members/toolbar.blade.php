@@ -11,6 +11,9 @@
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger"
             value="{{ \App\Models\Member::STATE_DISABLED }}">已禁用
     </button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning"
+            value="{{ \App\Models\Member::STATE_REFUNDING }}">退款申请
+    </button>
     <button type="button" class="btn btn-default btn-xs margin-r-5" id="query" data-toggle="modal" data-target="#modal_query">查询</button>
 </div>
 

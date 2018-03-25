@@ -64,7 +64,7 @@
 
 
     function refundFormatter(value, row, index) {
-        if(row.state !== {{ \App\Models\Wallet::STATE_NORMAL }}){
+        if(row.state == {{ \App\Models\Wallet::STATE_REFUNDING }}){
             var disabled_del = '';
             switch (row.state_name) {
                 case '已退还':
@@ -72,7 +72,7 @@
                     break;
             }
             return [
-                '<a class="refund" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' >退款</button></a>'
+                '<a class="refund" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + '  onclick="confirm('+row.id+')">退款</button></a>'
             ].join('');
         }
     }
@@ -103,29 +103,9 @@
                 }
             });
         },
-        'click .refund': function (e, value, row, index) {
-
-            var url = '/admin/wallets/refund/' + row.id;
-            $.ajax({
-                url: url,
-                type: "post",
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                },
-                success: function (data) {
-                    msg = data.message;
-                    statusCode = data.statusCode;
-                    if(statusCode == 200){
-                        toast('success', '退款成功！');
-                    }else{
-                        toast('fail', '退款失败！');
-                    }
-                }
-            });
-        }
     };
 
-    function confirm() {
+    function confirm(id) {
         toastr.options = {
             'closeButton': true,
             'showDuration': 100,
@@ -134,43 +114,27 @@
             'extendedTimeOut': 0,
             'positionClass': 'toast-top-center',
         };
-        toastr['info']('您确定退还该用户押金吗？&nbsp;&nbsp;&nbsp;<span onclick="commit();" style="text-decoration: underline;">确定</span>');
+        toastr['info']('您确定退还该用户押金吗？&nbsp;&nbsp;&nbsp;<span onclick="refund('+id+');" style="text-decoration: underline;">确定</span>');
     }
 
-    function commit() {
-        var content_val = $.trim($('#content').val());
-        if (content_val == '') {
-            toast('warning', '请输入评论内容，再提交！');
-            return false;
-        }
-
-        {{--$.ajax({--}}
-            {{--url: '{{ "/admin/comments/$member_id/reply" }}',--}}
-            {{--type: 'post',--}}
-            {{--data: {--}}
-                {{--'content': $('#content').val(),--}}
-                {{--'_token': '{{ csrf_token() }}'--}}
-            {{--},--}}
-            {{--success: function (data) {--}}
-                {{--if (data.status_code == 200) {--}}
-                    {{--$('#comment_table').bootstrapTable('selectPage', 1);--}}
-                    {{--$('#comment_table').bootstrapTable('refresh', {silent: true});--}}
-                    {{--$('#content').val('');--}}
-                    {{--toast('success', '评论成功！');--}}
-
-                {{--} else {--}}
-                    {{--toast('error', data.message);--}}
-                {{--}--}}
-            {{--},--}}
-            {{--error: function () {--}}
-                {{--toast('warning', '系统繁忙！');--}}
-            {{--}--}}
-        {{--});--}}
+    function refund(id) {
+        var url = '/admin/wallets/refund/'+id;
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                '_token': '{{ csrf_token() }}',
+            },
+            success: function (data) {
+                msg = data.message;
+                statusCode = data.statusCode;
+                if(statusCode == 200){
+                    toast('success', '退款成功！');
+                }else{
+                    toast('error', '退款失败！');
+                }
+            }
+        });
     }
 
-    function commentTitleFormatter(value, row, index) {
-        return [
-            '<p class="content_title" data-toggle="tooltip" data-placement="top" title="' + row.content + '">' + row.content + '</p>',
-        ]
-    }
 </script>

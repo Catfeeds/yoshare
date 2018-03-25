@@ -146,7 +146,8 @@ class MemberController extends Controller
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
 
-        $members = Member::filter($filters)
+        $members = Member::with('wallet')
+            ->filter($filters)
             ->orderBy('id', 'desc')
             ->skip($offset)
             ->limit($limit)
@@ -161,12 +162,14 @@ class MemberController extends Controller
                 'id' => $member->id,
                 'name' => $member->name,
                 'username' => $member->username,
+                'points' => empty($member->wallet) ? 0 : $member->wallet->points,
                 'mobile' => $member->mobile,
                 'avatar_url' => $member->avatar_url,
                 'points' => $member->points,
                 'ip' => $member->ip,
                 'type_name' => $member->typeName(),
                 'state_name' => $member->stateName(),
+                'deposit' => empty($member->wallet)?'':$member->wallet->stateName(),
                 'signed_at' => $member->signed_at,
                 'created_at' => empty($member->created_at) ? '' : $member->created_at->toDateTimeString(),
                 'updated_at' => empty($member->updated_at) ? '' : $member->updated_at->toDateTimeString(),

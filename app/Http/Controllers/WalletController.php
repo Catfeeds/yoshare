@@ -181,6 +181,7 @@ class WalletController extends Controller
         //微信退款
         $wePay = new WxpayController();
         $wallet = Wallet::find($id);
+        $member = Member::find($wallet['member_id']);
 
         //生成账单流水号,用以记录账单历史
         $bill = new BillController();
@@ -193,17 +194,27 @@ class WalletController extends Controller
             ->first();
 
         if($bill){
-            $data['total_fee'] = $wallet['deposit'];
-            $data['refund_fee'] = $bill['money'];
+            //注意：total_fee和refund_fee均为分。
+            $data['total_fee'] = $wallet['deposit']*100;
+            $data['refund_fee'] = $bill['money']*100;
             $data['out_trade_no'] = $bill['bill_num'];
+            $data['out_refund_no'] = $billNum;
             $res = $wePay->refund($data);
+
             if($res['return_code'] == 'SUCCESS'){
+                //更新用户状态
+                $data['state'] = Member::STATE_REFUNDED;
+                $member->update($data);
+
+                //添加账单流水
                 Bill::stores([
                     'member_id' => $wallet['member_id'],
                     'bill_num' => $billNum,
                     'type' => Bill::TYPES['yoshare_refund'],
                     'money' => $wallet['deposit'],
                 ]);
+
+                return $this->responseSuccess($res);
             }
         }else{
             //多次性升级会员，查询账单中押金充值记录
@@ -218,9 +229,11 @@ class WalletController extends Controller
 
             if(array_sum($money) == $wallet['deposit']){
                 foreach ($bills as $bill){
-                    $data['total_fee'] = $bill['money'];
-                    $data['refund_fee'] = $bill['money'];
+                    //注意：total_fee和refund_fee均为分。
+                    $data['total_fee'] = $wallet['deposit']*100;
+                    $data['refund_fee'] = $bill['money']*100;
                     $data['out_trade_no'] = $bill['bill_num'];
+                    $data['out_refund_no'] = $billNum;
                     $res = $wePay->refund($data);
                     if($res['return_code'] == 'SUCCESS'){
                         Bill::stores([
@@ -231,6 +244,9 @@ class WalletController extends Controller
                         ]);
                     }
                 }
+
+                return $this->responseSuccess();
+
             }
         }
 
@@ -281,6 +297,13 @@ class WalletController extends Controller
         $res = $wallet->update($input);
 
         if($res){
+            if($input['state'] == Wallet::STATE_REFUNDING){
+                //更新用户状态
+                $member = Member::find($wallet['member_id']);
+                $data['state'] = Member::STATE_REFUNDING;
+                $member->update($data);
+            }
+
             return $this->responseSuccess($res);
         }else{
             return $this->responseError('申请失败，请稍候再试');

@@ -163,15 +163,16 @@ class WxpayController extends Controller{
             $out_trade_no = $data["out_trade_no"];
             $total_fee = $data["total_fee"];
             $refund_fee = $data["refund_fee"];
+            $out_refund_no = $data["out_refund_no"];
 
             $input = new WxPayRefund();
             $input->SetOut_trade_no($out_trade_no);
             $input->SetTotal_fee($total_fee);
             $input->SetRefund_fee($refund_fee);
-            $input->SetOut_refund_no(WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetOut_refund_no($out_refund_no);
             $input->SetOp_user_id(WxPayConfig::MCHID);
 
-            WxPayApi::refund($input);
+            return WxPayApi::refund($input);
         }
     }
 

@@ -62,6 +62,28 @@ class Wallet extends BaseModule
 
     protected $entities = [];
 
+
+    public function stateName()
+    {
+        switch ($this->state) {
+            case static::STATE_DELETED:
+                return '已删除';
+                break;
+            case static::STATE_NORMAL:
+                return '正常';
+                break;
+            case static::STATE_REFUNDING:
+                return '申请退款';
+                break;
+            case static::STATE_REFUNDED:
+                return '已退款';
+                break;
+            case static::STATE_FREEZE:
+                return '冻结';
+                break;
+        }
+    }
+
     public function previous()
     {
         return static::where('site_id', $this->site_id)
