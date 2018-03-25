@@ -62,6 +62,18 @@ class HomeController extends Controller
         return view('themes.' . $domain->theme->name . '.system.about', ['site' => $domain->site, 'system' => $system]);
     }
 
+    public function help(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $system['title'] = '帮助与反馈';
+        $system['back'] = '/system';
+
+        return view('themes.' . $domain->theme->name . '.system.help', ['site' => $domain->site, 'system' => $system]);
+    }
+
     public function checkLogin()
     {
         try {

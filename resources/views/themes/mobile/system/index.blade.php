@@ -25,7 +25,7 @@
                 <div class="clear"></div>
             </li>
             <li onclick="jump('password/reset')">密码修改</li>
-            <li onclick="">帮助与反馈</li>
+            <li onclick="jump('/help')">帮助与反馈</li>
             <li onclick="jump('/about/us')">关于我们</li>
             <li onclick="exit()">退出登录</li>
         </ul>

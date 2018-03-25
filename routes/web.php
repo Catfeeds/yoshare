@@ -31,6 +31,7 @@ Route::group(['middleware' => 'web'], function () {
 
     //系统设置
     Route::get('/system', 'HomeController@system');
+    Route::get('/help', 'HomeController@help');
     Route::get('/about/us', 'HomeController@about');
 
     //会员管理

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
-use App\Jobs\PublishPage;
 use App\Models\Dictionary;
 use App\Models\Order;
 use App\Models\Category;
@@ -15,6 +14,7 @@ use App\Models\Cart;
 use App\Models\Goods;
 use App\Models\Address;
 use Carbon\Carbon;
+use Exception;
 use Gate;
 use Request;
 use Response;
@@ -139,6 +139,16 @@ class OrderController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+
+        try {
+            $member = Member::getMember();
+            if (!$member) {
+                return redirect('/login');
+            }
+        } catch (Exception $e) {
+            return redirect('/login');
+        }
+
         if($state == 'nopay'){
             $filters['state'] = Order::STATE_NOPAY;
         }elseif($state == 'nosend'){

@@ -51,7 +51,7 @@
                     <div class="text">
                         <h4>{{ $goods->name }}</h4>
                         <div class="intro">{!! $goods->summary !!}</div>
-                        <span class="price">{{ $goods->price }}元/月</span><a href="goods/detail-{{ $goods->id }}.html" alt="buy">立即选购</a>
+                        <span class="price">{{ $goods->price }}元/月</span><a href="goods/detail-{{ $goods->id }}.html" alt="buy">立即租赁</a>
                     </div>
                     <div class="clear"></div>
                 </li>

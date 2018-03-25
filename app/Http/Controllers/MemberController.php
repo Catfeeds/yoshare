@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MemberRequest;
 use App\Models\DataSource;
 use App\Models\Domain;
-use App\Models\Favorite;
 use App\Models\Member;
 use App\Models\Goods;
 use Exception;

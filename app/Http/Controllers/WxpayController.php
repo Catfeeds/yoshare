@@ -134,12 +134,12 @@ class WxpayController extends Controller{
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit'){
-            $input['deposit'] = $data["total_fee"]/100;
+            $input['deposit'] = $wallet['deposit']+$data["total_fee"]/100;
             $input['state'] = Wallet::STATE_NORMAL;
             //更新钱包押金
             $wallet->update($input);
             //更新会员等级
-            $data['type'] = array_search($data["total_fee"]/100, Member::LEVEL);
+            $data['type'] = array_search($input['deposit']/100, Member::LEVEL);
             $member->update($data);
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
             $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
