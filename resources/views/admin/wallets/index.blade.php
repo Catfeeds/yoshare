@@ -127,7 +127,7 @@
             },
             success: function (data) {
                 msg = data.message;
-                statusCode = data.statusCode;
+                statusCode = data.status_code;
                 if(statusCode == 200){
                     toast('success', '退款成功！');
                 }else{

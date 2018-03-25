@@ -47,6 +47,16 @@ class Wallet extends BaseModule
         ]
     ];
 
+    const VALUE_UP = [
+        1 => [
+            '铂金会员' => 0.3,
+            '钻石会员' => 0.6,
+        ],
+        2 => [
+            '钻石会员' => 0.3,
+        ],
+    ];
+
     const STATE_PERMISSIONS = [
         0 => '@wallet-delete',
         2 => '@wallet-refunding',

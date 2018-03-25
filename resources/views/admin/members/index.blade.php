@@ -31,7 +31,6 @@
                                     <th data-field="source" data-width="60" data-align="center">注册来源</th>
                                     <th data-field="type_name" data-align="center" data-width="60">会员类型</th>
                                     <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
-                                    <th data-field="deposit" data-width="120" data-align="center">押金情况</th>
                                     <th data-field="created_at" data-width="120" data-align="center">注册时间</th>
                                     <th data-field="action" data-width="100" data-align="center" data-formatter="actionFormatter" data-events="actionEvents"> 操作</th>
                                 </tr>
@@ -73,6 +72,9 @@
             var state_html = '';
             switch (row.state_name) {
                 case '已启用':
+                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" title="禁用">禁</button></a>';
+                    break;
+                case '退款待审核':
                     state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" title="禁用">禁</button></a>';
                     break;
                 case '已禁用':

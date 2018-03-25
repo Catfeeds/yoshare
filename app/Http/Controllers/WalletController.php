@@ -60,8 +60,13 @@ class WalletController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+        $level = Member::getMember()->type;
 
-        $chooses = Wallet::VALUE[$type];
+        if($type == 'balance' || $level == Member::TYPE_ORDINARY ){
+            $chooses = Wallet::VALUE[$type];
+        }else{
+            $chooses = Wallet::VALUE_UP[$level];
+        }
 
         $system['title'] = '充值页';
         $system['back'] = '/wallets/show/'.$type;
@@ -202,9 +207,14 @@ class WalletController extends Controller
             $res = $wePay->refund($data);
 
             if($res['return_code'] == 'SUCCESS'){
-                //更新用户状态
+                //更新用户状态以及用户等级
                 $data['state'] = Member::STATE_REFUNDED;
+                $data['type'] = Member::TYPE_ORDINARY;
                 $member->update($data);
+                //更新用户钱包
+                $input['deposit'] = $wallet['deposit']-$bill['money'];
+                $input['state'] = Wallet::STATE_REFUNDED;
+                $wallet->update($input);
 
                 //添加账单流水
                 Bill::stores([
@@ -236,6 +246,12 @@ class WalletController extends Controller
                     $data['out_refund_no'] = $billNum;
                     $res = $wePay->refund($data);
                     if($res['return_code'] == 'SUCCESS'){
+
+                        //更新用户钱包
+                        $input['deposit'] = $wallet['deposit']-$bill['money'];
+                        $input['state'] = Wallet::STATE_REFUNDED;
+                        $wallet->update($input);
+
                         Bill::stores([
                             'member_id' => $wallet['member_id'],
                             'bill_num' => $billNum,
@@ -244,6 +260,11 @@ class WalletController extends Controller
                         ]);
                     }
                 }
+
+                //更新用户状态以及用户等级
+                $data['state'] = Member::STATE_REFUNDED;
+                $data['type'] = Member::TYPE_ORDINARY;
+                $member->update($data);
 
                 return $this->responseSuccess();
 

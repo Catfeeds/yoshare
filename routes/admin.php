@@ -65,7 +65,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
      * 会员管理
      */
     Route::get('members/table', 'MemberController@table');
-    Route::post('members/state', 'MemberController@state');
+    Route::get('members/state/{id}', 'MemberController@state');
     Route::get('members/sort', 'MemberController@sort');
     Route::get('members/comments/{id}','MemberController@comments');
     Route::get('members/wallet/{id}','MemberController@wallet');

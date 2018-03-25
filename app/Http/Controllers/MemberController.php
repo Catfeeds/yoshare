@@ -169,7 +169,6 @@ class MemberController extends Controller
                 'ip' => $member->ip,
                 'type_name' => $member->typeName(),
                 'state_name' => $member->stateName(),
-                'deposit' => empty($member->wallet)?'':$member->wallet->stateName(),
                 'signed_at' => $member->signed_at,
                 'created_at' => empty($member->created_at) ? '' : $member->created_at->toDateTimeString(),
                 'updated_at' => empty($member->updated_at) ? '' : $member->updated_at->toDateTimeString(),
