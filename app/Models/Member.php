@@ -17,6 +17,11 @@ class Member extends Authenticatable
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;
 
+    const TYPE_ORDINARY = 0;
+    const TYPE_GOLD = 1;
+    const TYPE_PLATINUM = 2;
+    const TYPE_DIAMOND = 3;
+
     const TYPES = [
         0 => '普通用户',
         1 => '黄金会员',

@@ -69,6 +69,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'state' => Member::STATE_ENABLED,
             'password' => bcrypt($data['password']),
+            'type' => Member::TYPE_ORDINARY,
         ]);
 
         Wallet::create([

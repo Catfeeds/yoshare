@@ -73,18 +73,20 @@
             var state_html = '';
             switch (row.state_name) {
                 case '已启用':
-                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal">禁用</button></a>';
+                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" title="禁用">禁</button></a>';
                     break;
                 case '已禁用':
-                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal">启用</button></a>';
+                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" title="启用">启</button></a>';
                     break;
             }
             return [
-                '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs">编辑</button></a>',
+                '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button></a>',
                 '<span> </span>',
                 state_html,
                 '<span> </span>',
-                '<a class="message" href="javascript:void(0)"><button class="btn btn-info btn-xs"  data-toggle="modal" data-target="#modal_message">消息</button></a>',
+                '<a class="wallet" href="javascript:void(0)"><button class="btn btn-success btn-xs"  data-toggle="modal" data-target="#modal_message"><i class="glyphicon glyphicon-yen" data-toggle="tooltip" data-placement="top" title="钱包"></i></button></a>',
+                '<span> </span>',
+                '<a class="message" href="javascript:void(0)"><button class="btn btn-info btn-xs"  data-toggle="modal" data-target="#modal_message"><i class="fa fa-comment" data-toggle="tooltip" data-placement="top" title="回馈消息"></i></button></a>',
             ].join('');
         }
 
@@ -123,6 +125,18 @@
                 $('#msg').html('您确认' + html + '该用户吗？');
                 $('#modal_remove').show();
                 $('#modal_remove').data('id', row.id);
+            },
+            'click .wallet': function (e, value, row, index) {
+                var url = '/admin/members/wallet/' + row.id;
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {'_token': '{{ csrf_token() }}'},
+                    dataType: 'html',
+                    success: function (html) {
+                        $('#contents').html(html);
+                    }
+                });
             },
             'click .message': function (e, value, row, index) {
                 var url = '/admin/members/messages/' + row.id;

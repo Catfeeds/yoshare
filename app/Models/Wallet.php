@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Request;
 use Response;
 
@@ -11,8 +12,9 @@ class Wallet extends BaseModule
 {
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
-    const STATE_CANCELED = 2;
-    const STATE_PUBLISHED = 9;
+    const STATE_REFUNDING = 2;
+    const STATE_REFUNDED = 3;
+    const STATE_FREEZE = 4;
 
     const START_MONEY = 0;
     const START_COUPON = 15;
@@ -25,9 +27,10 @@ class Wallet extends BaseModule
 
     const STATES = [
         0 => '已删除',
-        1 => '未发布',
-        2 => '已撤回',
-        9 => '已发布',
+        1 => '正常',
+        2 => '申请退还',
+        3 => '已退还',
+        4 => '已冻结',
     ];
 
     const VALUE = [
@@ -46,8 +49,9 @@ class Wallet extends BaseModule
 
     const STATE_PERMISSIONS = [
         0 => '@wallet-delete',
-        2 => '@wallet-cancel',
-        9 => '@wallet-publish',
+        2 => '@wallet-refunding',
+        3 => '@wallet-refunded',
+        4 => '@wallet-freeze',
     ];
 
     protected $table = 'wallets';
@@ -144,15 +148,13 @@ class Wallet extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
-        $wallets = static::with('user')
-            ->filter($filters)
-            ->orderBy('top', 'desc')
-            ->orderBy('sort', 'desc')
+        $wallets = static::with('member')
+            ->where('member_id', $filters['member_id'])
             ->skip($offset)
             ->limit($limit)
             ->get();
 
-        $ds->total = static::filter($filters)
+        $ds->total = static::where('member_id', $filters['member_id'])
             ->count();
 
         $wallets->transform(function ($wallet) {
@@ -165,11 +167,12 @@ class Wallet extends BaseModule
                 $attributes[$entity_map] = empty($wallet->$entity) ? '' : $wallet->$entity->name;
             }
 
+
             //日期类型
             foreach ($wallet->dates as $date) {
                 $attributes[$date] = empty($wallet->$date) ? '' : $wallet->$date->toDateTimeString();
             }
-            $attributes['tags'] = implode(',', $wallet->tags()->pluck('name')->toArray());
+            $attributes['username'] = $wallet->member->username;
             $attributes['state_name'] = $wallet->stateName();
             $attributes['created_at'] = empty($wallet->created_at) ? '' : $wallet->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($wallet->updated_at) ? '' : $wallet->updated_at->toDateTimeString();

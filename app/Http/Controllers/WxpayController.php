@@ -5,11 +5,14 @@ use App\Libraries\wePay\lib\WxPayApi;
 use App\Libraries\wePay\lib\JsApiPay;
 use App\Libraries\wePay\lib\WxPayUnifiedOrder;
 use App\Libraries\wePay\lib\PayNotifyCallBack;
+use App\Libraries\wePay\lib\WxPayRefund;
+use App\Libraries\wePay\lib\WxPayConfig;
 use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Member;
 use App\Models\Bill;
+use App\Models\Wallet;
 use Carbon\Carbon;
 
 ini_set('date.timezone','Asia/Shanghai');
@@ -120,7 +123,7 @@ class WxpayController extends Controller{
     public function handle($data)
     {
         $member = Member::where('open_id', $data['openid'])->first();
-        $wallet = $member->wallet()->first();
+        $wallet = Wallet::where('member_id', $member['id'])->first();
 
         if ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_order') {
             //修改订单信息
@@ -138,8 +141,8 @@ class WxpayController extends Controller{
             $data['type'] = array_search($data["total_fee"]/100, Member::LEVEL);
             $member->update($data);
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
-            $input['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
-            $wallet->update($input);
+            $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
+            $wallet->update($data);
         }
 
         //更新流水表
@@ -152,6 +155,24 @@ class WxpayController extends Controller{
         Bill::stores($bill);
         //更新用户积分
         $wallet->increment('points', $data["total_fee"]/100);
+    }
+
+    public function refund($data)
+    {
+        if(isset($data["out_trade_no"]) && $data["out_trade_no"] != ""){
+            $out_trade_no = $data["out_trade_no"];
+            $total_fee = $data["total_fee"];
+            $refund_fee = $data["refund_fee"];
+
+            $input = new WxPayRefund();
+            $input->SetOut_trade_no($out_trade_no);
+            $input->SetTotal_fee($total_fee);
+            $input->SetRefund_fee($refund_fee);
+            $input->SetOut_refund_no(WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetOp_user_id(WxPayConfig::MCHID);
+
+            WxPayApi::refund($input);
+        }
     }
 
 }

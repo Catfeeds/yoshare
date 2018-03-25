@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
     Route::resource('profiles', 'ProfileController');
 
     /**
-     * 用户管理
+     * 后台用户管理
      */
     Route::post('users/category/{id}', 'UserController@category');
     Route::get('users/tree/{id}', 'UserController@tree');
@@ -60,6 +60,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
     Route::get('users/logs/table', 'UserController@logTable');
     Route::get('users/{id}/delete', 'UserController@destroy');
     Route::resource('users', 'UserController');
+
+    /**
+     * 会员管理
+     */
+    Route::get('members/table', 'MemberController@table');
+    Route::post('members/state', 'MemberController@state');
+    Route::get('members/sort', 'MemberController@sort');
+    Route::get('members/comments/{id}','MemberController@comments');
+    Route::get('members/wallet/{id}','MemberController@wallet');
+    Route::post('members/{id}/top', 'MemberController@top');
+    Route::post('members/{id}/tag', 'MemberController@tag');
+    Route::resource('members', 'MemberController');
 
     /**
      * 角色管理

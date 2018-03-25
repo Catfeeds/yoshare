@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
 use App\Jobs\PublishPage;
+use App\Models\Bill;
 use App\Models\Order;
 use App\Models\Wallet;
 use App\Models\Category;
@@ -47,10 +48,10 @@ class WalletController extends Controller
         $system['title'] = Wallet::TYPE[$type];
         $system['back'] = '/member';
         $system['mark'] = 'member';
-        $system['money'] = $wallet[$type];
+        $system['type'] = $type;
         $system['vip_level'] = $member['type'];
 
-        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system, 'wallet' => $wallet]);
     }
 
 
@@ -92,8 +93,7 @@ class WalletController extends Controller
             return abort(501);
         }
 
-        $wallets = Wallet::where('state', Wallet::STATE_PUBLISHED)
-            ->orderBy('sort', 'desc')
+        $wallets = Wallet::orderBy('sort', 'desc')
             ->get();
 
         return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'module' => $this->module, 'wallets' => $wallets]);
@@ -176,10 +176,64 @@ class WalletController extends Controller
         return redirect($this->base_url);
     }
 
-    public function comments($refer_id)
+    public function refund($id)
     {
-        $refer_type = $this->module->model_class;
-        return view('admin.comments.list', compact('refer_id', 'refer_type'));
+        //微信退款
+        $wePay = new WxpayController();
+        $wallet = Wallet::find($id);
+
+        //生成账单流水号,用以记录账单历史
+        $bill = new BillController();
+        $billNum = $bill->buildBillNum();
+
+        //一次性充值押金
+        $bill = Bill::where('member_id', $wallet['member_id'])
+            ->where('type', Bill::TYPES['yoshare_deposit'])
+            ->where('money', $wallet['deposit'])
+            ->first();
+
+        if($bill){
+            $data['total_fee'] = $wallet['deposit'];
+            $data['refund_fee'] = $bill['money'];
+            $data['out_trade_no'] = $bill['bill_num'];
+            $res = $wePay->refund($data);
+            if($res['return_code'] == 'SUCCESS'){
+                Bill::stores([
+                    'member_id' => $wallet['member_id'],
+                    'bill_num' => $billNum,
+                    'type' => Bill::TYPES['yoshare_refund'],
+                    'money' => $wallet['deposit'],
+                ]);
+            }
+        }else{
+            //多次性升级会员，查询账单中押金充值记录
+            $money = Bill::where('member_id', $wallet['member_id'])
+                ->where('type', Bill::TYPES['yoshare_deposit'])
+                ->pluck('money')
+                ->toArray();
+
+            $bills = Bill::where('member_id', $wallet['member_id'])
+                ->where('type', Bill::TYPES['yoshare_deposit'])
+                ->get();
+
+            if(array_sum($money) == $wallet['deposit']){
+                foreach ($bills as $bill){
+                    $data['total_fee'] = $bill['money'];
+                    $data['refund_fee'] = $bill['money'];
+                    $data['out_trade_no'] = $bill['bill_num'];
+                    $res = $wePay->refund($data);
+                    if($res['return_code'] == 'SUCCESS'){
+                        Bill::stores([
+                            'member_id' => $wallet['member_id'],
+                            'bill_num' => $billNum,
+                            'type' => Bill::TYPES['yoshare_refund'],
+                            'money' => $wallet['deposit'],
+                        ]);
+                    }
+                }
+            }
+        }
+
     }
 
     public function save($id)
@@ -220,25 +274,16 @@ class WalletController extends Controller
         }
     }
 
-    public function state()
+    public function state($id)
     {
         $input = request()->all();
-        Wallet::state($input);
+        $wallet = Wallet::find($id);
+        $res = $wallet->update($input);
 
-        $ids = $input['ids'];
-        $stateName = Wallet::getStateName($input['state']);
-
-        //记录日志
-        foreach ($ids as $id) {
-            event(new UserLogEvent('变更' . '钱包' . UserLog::ACTION_STATE . ':' . $stateName, $id, $this->module->model_class));
-        }
-
-        //发布页面
-        $site = auth()->user()->site;
-        if ($input['state'] == Wallet::STATE_PUBLISHED) {
-            foreach ($ids as $id) {
-                $this->dispatch(new PublishPage($site, $this->module, $id));
-            }
+        if($res){
+            return $this->responseSuccess($res);
+        }else{
+            return $this->responseError('申请失败，请稍候再试');
         }
     }
 

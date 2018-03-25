@@ -18,7 +18,19 @@
                 <p><b style="color: #ffcc42">钻石会员</b> </p><p style="text-indent: 80px">押金金额 900元 每次可租盘上限：<b>3本</b></p>
              </div>
         </div>
-        <div class="a-wrapper" style="padding-top: 320px;"><a href="/wallets/deposit/price" class="a-default">立即成为VIP</a></div>
+        <div class="a-wrapper" style="padding-top: 320px;">
+                @if($type == \App\Models\Member::TYPE_ORDINARY)
+                    <a href="/wallets/deposit/price" class="a-default">
+                        立即成为VIP
+                @elseif($type == \App\Models\Member::TYPE_GOLD || $type == \App\Models\Member::TYPE_PLATINUM)
+                    <a href="/wallets/deposit/price" class="a-default">
+                        立即升级VIP
+                @else
+                    <a href="#" class="a-default">
+                        您已是顶级VIP
+                @endif
+            </a>
+        </div>
     </div>
 @endsection
 @section('js')

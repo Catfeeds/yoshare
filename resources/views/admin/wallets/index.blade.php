@@ -1,34 +1,176 @@
-@extends('admin.layouts.master')
-
-@section('content')
-    <div class="content-wrapper">
-        <section class="content-header">
-            <h1>
-                {{ $module->title }}管理
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="/index"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">{{ $module->title }}管理</li>
-            </ol>
-        </section>
-        <section class="content">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-info">
-                        <div class="box-body">
-                            @include('admin.layouts.confirm', ['message' => '您确认删除该条信息吗？'])
-                            @include('admin.layouts.flash')
-                            @include('admin.layouts.modal', ['id' => 'modal_comment'])
-                            @include('admin.wallets.toolbar')
-                            @include('admin.wallets.query')
-                            @include('admin.contents.table')
-                            @include('admin.contents.push')
-                            @include('admin.contents.script')
-                            @include('admin.wallets.script')
-                        </div>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-info">
+            @include('admin.comments.reply')
+            <div class="box-body">
+                <table id="comment_table" data-toggle="table" style="word-break:break-all;">
+                    <thead>
+                    <tr>
+                        <th data-field="id" data-width="60">ID</th>
+                        <th data-field="username" data-width="100">会员</th>
+                        <th data-field="points" data-width="125">积分</th>
+                        <th data-field="deposit" data-width="120">押金</th>
+                        <th data-field="balance" data-width="120">余额</th>
+                        <th data-field="coupon" data-width="120">优惠券</th>
+                        <th data-field="state_name" data-width="60" data-align="center" data-formatter="walletStateFormatter">状态</th>
+                        <th data-field="state_name" data-width="60" data-align="center" data-formatter="refundFormatter">押金操作</th>
+                        <th data-field="created_at" data-width="130">创建时间</th>
+                        <th data-field="action" data-width="100" data-align="center" data-formatter="commentActionFormatter"
+                            data-events="commentActionEvents"> 操作
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
             </div>
-        </section>
+        </div>
     </div>
-@endsection
+</div>
+
+<script>
+    $('#comment_table').bootstrapTable({
+        method: 'get',
+        url: '/admin/wallets/table',
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 8,
+        pageList: [10, 25, 50, 100],
+        sidePagination: 'server',
+        clickToSelect: true,
+        striped: true,
+        queryParams: function (params) {
+            params.member_id = '{{ $member_id }}';
+            params._token = '{{ csrf_token() }}';
+            return params;
+        },
+    });
+
+    function walletStateFormatter(value, row, index) {
+        var style = 'label-primary';
+        switch (row.state_name) {
+            case '申请退还':
+                style = 'label-primary';
+                break;
+            case '已退还':
+                style = 'label-success';
+                break;
+            case '已删除':
+                style = 'label-danger';
+                break;
+        }
+        return [
+            '<span class="label ' + style + '">' + row.state_name + '</span>',
+        ].join('');
+    }
+
+
+    function refundFormatter(value, row, index) {
+        if(row.state !== {{ \App\Models\Wallet::STATE_NORMAL }}){
+            var disabled_del = '';
+            switch (row.state_name) {
+                case '已退还':
+                    disabled_del = 'disabled="disabled"';
+                    break;
+            }
+            return [
+                '<a class="refund" href="javascript:void(0)"><button class="btn btn-danger btn-xs" ' + disabled_del + ' >退款</button></a>'
+            ].join('');
+        }
+    }
+
+    function commentActionFormatter(value, row, index) {
+        var disabled_del = '';
+        switch (row.state_name) {
+            case '已删除':
+                disabled_del = 'disabled="disabled"';
+                break;
+        }
+        return [
+            '<a class="edit" href="javascript:void(0)"><button class="btn btn-primary btn-xs" ' + disabled_del + ' >修改</button></a>'
+        ].join('');
+    }
+
+    window.commentActionEvents = {
+        'click .edit': function (e, value, row, index) {
+            var ids = [row.id];
+            $.ajax({
+                url: '/admin/comments/state',
+                type: 'POST',
+                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Wallet::STATE_DELETED }}'},
+                success: function () {
+                    $('#comment_table').bootstrapTable('selectPage', 1);
+                    $('#comment_table').bootstrapTable('refresh');
+
+                }
+            });
+        },
+        'click .refund': function (e, value, row, index) {
+
+            var url = '/admin/wallets/refund/' + row.id;
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function (data) {
+                    msg = data.message;
+                    statusCode = data.statusCode;
+                    if(statusCode == 200){
+                        toast('success', '退款成功！');
+                    }else{
+                        toast('fail', '退款失败！');
+                    }
+                }
+            });
+        }
+    };
+
+    function confirm() {
+        toastr.options = {
+            'closeButton': true,
+            'showDuration': 100,
+            'hideDuration': 0,
+            'timeOut': 0,
+            'extendedTimeOut': 0,
+            'positionClass': 'toast-top-center',
+        };
+        toastr['info']('您确定退还该用户押金吗？&nbsp;&nbsp;&nbsp;<span onclick="commit();" style="text-decoration: underline;">确定</span>');
+    }
+
+    function commit() {
+        var content_val = $.trim($('#content').val());
+        if (content_val == '') {
+            toast('warning', '请输入评论内容，再提交！');
+            return false;
+        }
+
+        {{--$.ajax({--}}
+            {{--url: '{{ "/admin/comments/$member_id/reply" }}',--}}
+            {{--type: 'post',--}}
+            {{--data: {--}}
+                {{--'content': $('#content').val(),--}}
+                {{--'_token': '{{ csrf_token() }}'--}}
+            {{--},--}}
+            {{--success: function (data) {--}}
+                {{--if (data.status_code == 200) {--}}
+                    {{--$('#comment_table').bootstrapTable('selectPage', 1);--}}
+                    {{--$('#comment_table').bootstrapTable('refresh', {silent: true});--}}
+                    {{--$('#content').val('');--}}
+                    {{--toast('success', '评论成功！');--}}
+
+                {{--} else {--}}
+                    {{--toast('error', data.message);--}}
+                {{--}--}}
+            {{--},--}}
+            {{--error: function () {--}}
+                {{--toast('warning', '系统繁忙！');--}}
+            {{--}--}}
+        {{--});--}}
+    }
+
+    function commentTitleFormatter(value, row, index) {
+        return [
+            '<p class="content_title" data-toggle="tooltip" data-placement="top" title="' + row.content + '">' + row.content + '</p>',
+        ]
+    }
+</script>

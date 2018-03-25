@@ -217,11 +217,11 @@ class MemberController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
-
+        $type = Member::getMember()->type;
         $system['mark'] = Domain::MARK_MEMBER;
         $system['title'] = 'VIP管理';
 
-        return view('themes.' . $domain->theme->name . '.members.vip', ['site' => $domain->site, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.members.vip', ['type' => $type, 'system' => $system]);
     }
 
     public function phone(Domain $domain)
@@ -363,6 +363,11 @@ class MemberController extends Controller
         }else{
             return $this->responseError('收藏的光盘不存在,请刷新重试');
         }
+    }
+
+    public function wallet($member_id)
+    {
+        return view('admin.wallets.index', compact('member_id'));
     }
 
 }

@@ -70,6 +70,14 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/wallets/get/{type}', 'WalletController@wallet');
     Route::get('/wallets/pay', 'WalletController@pay');
 
+    //会员钱包
+    Route::get('wallets/show/{type}', 'WalletController@show');
+    Route::get('wallets/{type}/price', 'WalletController@price');
+
+    //退押金
+    Route::post('deposit/apply/{id}', 'WalletController@state');
+    Route::get('deposit/refund', 'WalletController@refund');
+
     //搜索
     Route::post('/goods/search', 'GoodsController@search');
 
@@ -78,9 +86,5 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cart/add/{goods_id}', 'CartController@add');
     Route::get('/cart/sub/{goods_id}', 'CartController@sub');
     Route::get('/cart/{id}/delete', 'CartController@destroy');
-
-    //会员钱包
-    Route::get('wallets/show/{type}', 'WalletController@show');
-    Route::get('wallets/{type}/price', 'WalletController@price');
 
 });
