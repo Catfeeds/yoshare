@@ -270,7 +270,7 @@ class MemberController extends Controller
     public function reset()
     {
         $input = Request::all();
-        dd($input);
+
         $member = Member::getMember();
 
         if($input['password'] !== $input['password2']){

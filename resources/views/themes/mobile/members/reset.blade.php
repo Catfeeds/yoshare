@@ -82,7 +82,8 @@ body{
             },
             success:function(data){
                 msg = data.message;
-                if(msg == 'success'){
+                statusCode = data.status_code;
+                if(statusCode == '200'){
                     layer.open({
                         content: '密码修改成功，用新密码登录'
                         ,btn: ['确定', '取消']
