@@ -25,6 +25,19 @@
                 @endif
             </ul>
         @endif
+        @if($member['type'] == \App\Models\Member::TYPE_ORDINARY)
+            <a href="/wallets/deposit/price" class="a-default">
+                立即成为VIP
+            </a>
+        @elseif($member['type'] == \App\Models\Member::TYPE_GOLD || $type == \App\Models\Member::TYPE_PLATINUM)
+            <a href="/wallets/deposit/price" class="a-default">
+                立即升级VIP
+            </a>
+        @else
+            <a href="#" class="a-default">
+                您已是顶级VIP
+            </a>
+        @endif
         @if($system['title'] == '我的余额')
             <div class="a-wrapper" style="padding-top: 270px"><a href="/wallets/balance/price" class="a-default">立即充值</a></div>
         @endif

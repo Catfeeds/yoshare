@@ -50,7 +50,7 @@ class WalletController extends Controller
         $system['type'] = $type;
         $system['vip_level'] = $member['type'];
 
-        return view('themes.' . $domain->theme->name . '.wallets.index', ['site' => $domain->site, 'system' => $system, 'wallet' => $wallet]);
+        return view('themes.' . $domain->theme->name . '.wallets.index', ['member' => $member, 'system' => $system, 'wallet' => $wallet]);
     }
 
 

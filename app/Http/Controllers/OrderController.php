@@ -82,10 +82,10 @@ class OrderController extends Controller
 
         $system['mark'] = 'orders';
         $system['title'] = '提交订单';
-        $member_id = Member::getMember()->id;
+        $member = Member::getMember();
 
         //查询默认地址
-        $address = Address::where('member_id', $member_id)
+        $address = Address::where('member_id', $member->id)
             ->where('is_default', Address::IS_DEFAULT)
             ->first();
         //拼接地址
