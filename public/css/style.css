@@ -60,28 +60,30 @@ a.homehref{
 	width: 100%;
 	z-index: 9;
 }
-.h-nav-bg .h-wrapper .header-nav{
+.header-nav{
 	width: 40%;
 	position: absolute;
 	right: 0;
 	top: 282px;
 	background: #fff;
 	border-radius: 8px;
+	z-index: 80;
+	border: 2px solid #eee;;
 	display: none;
 }
-.h-nav-bg .h-wrapper .header-nav li{
+.header-nav li{
 	height: 140px;
 	line-height: 140px;
 	padding-left: 150px;
 	border-bottom: 2px solid #eee;;
 }
-.h-nav-bg .h-wrapper .header-nav li:first-child{
+.header-nav li:first-child{
 	background: url(../images/icon_index.png) no-repeat 50px 40px;
 }
-.h-nav-bg .h-wrapper .header-nav li:nth-child(2){
+.header-nav li:nth-child(2){
 	background: url(../images/icon_mine.png) no-repeat 50px 40px;
 }
-.h-nav-bg .h-wrapper .header-nav li:last-child{
+.header-nav li:last-child{
 	background: url(../images/icon_help.png) no-repeat 50px 40px;
 }
 .back{
@@ -133,7 +135,7 @@ a.homehref{
 }
 .h-fixed ul{
 	float: left;
-	margin-left: 110px;
+	margin-left: 80px;
 	width: 450px;
 	height: 140px;
 	line-height: 140px;

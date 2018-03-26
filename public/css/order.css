@@ -24,24 +24,27 @@
     font-size: 48px;
     color: #fff;
 }
-.o-fixed ul{
+.o-fixed ul.order{
     width: 100%;
     height: 140px;
     margin: 0 auto;
     border-bottom: 1px solid #1b1b1b;
     background: #fff;
 }
-.o-fixed ul li{
+.o-fixed ul.order li{
     width: 20%;
     float: left;
     text-align: center;
     line-height: 140px;
 }
-.o-fixed ul li.active{
+.o-fixed ul.order li.active{
     border-bottom: 2px solid #e71f19;
 }
-.o-fixed ul li.active a{
+.o-fixed ul.order li.active a{
     color: #e71f19;
+}
+.o-fixed .header-nav{
+    top: 165px;
 }
 
 ul.list li{

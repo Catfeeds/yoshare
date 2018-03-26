@@ -2,7 +2,7 @@
     <div class="h-wrapper">
         <a herf="#" onclick="javascript:history.back(-1);" class="back"></a>
         <a herf="/cart" onclick="ahref('cart')" class="cart"></a>
-        <a herf="#" onclick="" class="m-nav"></a>
+        <a herf="#" onclick="" class="m-nav dis-nav"></a>
         <ul class="header-nav">
             <li onclick="jump('/')">首页</li>
             <li onclick="jump('/member')">我的</li>
@@ -17,7 +17,6 @@
         <li><a href="#detail">详情</a></li>
         <li><a href="#">评价</a></li>
     </ul>
-    <a class="g-nav" herf="#" ></a>
     <div class="clear"></div>
 </div>
 <script>
@@ -31,7 +30,7 @@
         }
     });
 
-    $('.m-nav').click(function () {
+    $('.dis-nav').click(function () {
         var mark = $(this).siblings('.header-nav').attr('style');
 
         if(typeof mark == 'undefined' || mark == 'display:none'){
