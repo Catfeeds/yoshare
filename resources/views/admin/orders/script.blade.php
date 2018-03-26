@@ -2,14 +2,20 @@
     function stateFormatter(value, row, index) {
         var style = 'label-primary';
         switch (row.state_name) {
-            case '未发布':
+            case '未付款':
+                style = 'label-default';
+                break;
+            case '已付款，待发货':
                 style = 'label-primary';
                 break;
-            case '已发布':
-                style = 'label-success';
+            case '已发货':
+                style = 'label-info';
                 break;
-            case '已撤回':
+            case '待归还':
                 style = 'label-warning';
+                break;
+            case '交易成功':
+                style = 'label-success';
                 break;
             case '已删除':
                 style = 'label-danger';

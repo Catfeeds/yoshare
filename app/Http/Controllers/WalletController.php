@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserLogEvent;
-use App\Jobs\PublishPage;
 use App\Models\Bill;
 use App\Models\Order;
 use App\Models\Wallet;
@@ -137,10 +136,6 @@ class WalletController extends Controller
         $module = Module::transform($this->module->id);
 
         $wallet = call_user_func([$this->module->model_class, 'find'], $id);
-        $wallet->images = null;
-        $wallet->videos = null;
-        $wallet->audios = null;
-        $wallet->tags = $wallet->tags()->pluck('name')->toArray();
 
         return view('admin.contents.edit', ['module' => $module, 'content' => $wallet, 'base_url' => $this->base_url]);
     }
@@ -178,7 +173,8 @@ class WalletController extends Controller
         event(new UserLogEvent(UserLog::ACTION_UPDATE . '钱包', $wallet->id, $this->module->model_class));
 
         \Session::flash('flash_success', '修改成功!');
-        return redirect($this->base_url);
+
+        return redirect('/admin/members');
     }
 
     public function refund($id)

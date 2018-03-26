@@ -15,6 +15,11 @@ class Bill extends BaseModule
     const STATE_CANCELED = 2;
     const STATE_PUBLISHED = 9;
 
+    const TYPE_ORDER = 0;
+    const TYPE_DEPOSIT = 1;
+    const TYPE_BALANCE = 2;
+    const TYPE_REFUND = 3;
+
     const TYPES = [
         'yoshare_order'     => 0,
         'yoshare_deposit'   => 1,
@@ -29,6 +34,7 @@ class Bill extends BaseModule
         9 => '已发布',
     ];
 
+
     const STATE_PERMISSIONS = [
         0 => '@bill-delete',
         2 => '@bill-cancel',
@@ -42,6 +48,24 @@ class Bill extends BaseModule
     protected $dates = [];
 
     protected $entities = ['member_id'];
+
+    public function typeName()
+    {
+        switch ($this->type) {
+            case static::TYPE_ORDER:
+                return '订单支付';
+                break;
+            case static::TYPE_DEPOSIT:
+                return '押金充值';
+                break;
+            case static::TYPE_BALANCE:
+                return '余额充值';
+                break;
+            case static::TYPE_REFUND:
+                return '押金退款';
+                break;
+        }
+    }
 
     public function previous()
     {
@@ -130,10 +154,8 @@ class Bill extends BaseModule
         $limit = Request::get('limit') ? Request::get('limit') : 20;
 
         $ds = new DataSource();
-        $bills = static::with('user')
+        $bills = static::with('member')
             ->filter($filters)
-            ->orderBy('top', 'desc')
-            ->orderBy('sort', 'desc')
             ->skip($offset)
             ->limit($limit)
             ->get();
@@ -156,6 +178,8 @@ class Bill extends BaseModule
                 $attributes[$date] = empty($bill->$date) ? '' : $bill->$date->toDateTimeString();
             }
             $attributes['tags'] = implode(',', $bill->tags()->pluck('name')->toArray());
+            $attributes['type'] = $bill->typeName();
+            $attributes['member_id'] = $bill->member->username;
             $attributes['state_name'] = $bill->stateName();
             $attributes['created_at'] = empty($bill->created_at) ? '' : $bill->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($bill->updated_at) ? '' : $bill->updated_at->toDateTimeString();

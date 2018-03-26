@@ -8,9 +8,9 @@
 </div>
 <div class="btn-group margin-bottom pull-right">
     <button type="button" class="btn btn-info btn-xs margin-r-5 filter" data-active="btn-info" value="">全部</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \App\Models\Order::STATE_NOPAY }}">未付款</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\Order::STATE_PAID }}">已付款，未发货</button>
-    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \App\Models\Order::STATE_SENDED }}">已发货</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-default" value="{{ \App\Models\Order::STATE_NOPAY }}">未付款</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-primary" value="{{ \App\Models\Order::STATE_PAID }}">已付款，未发货</button>
+    <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-info" value="{{ \App\Models\Order::STATE_SENDED }}">已发货</button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-danger" value="{{ \App\Models\Order::STATE_CLOSED }}">交易关闭</button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-warning" value="{{ \App\Models\Order::STATE_RETURN }}">待归还</button>
     <button type="button" class="btn btn-default btn-xs margin-r-5 filter" data-active="btn-success" value="{{ \App\Models\Order::STATE_SUCCESS }}">交易成功</button>

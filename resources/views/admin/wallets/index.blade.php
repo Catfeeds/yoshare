@@ -50,8 +50,8 @@
             case '申请退还':
                 style = 'label-primary';
                 break;
-            case '已退还':
-                style = 'label-success';
+            case '已退款':
+                style = 'label-warning';
                 break;
             case '已删除':
                 style = 'label-danger';
@@ -91,17 +91,7 @@
 
     window.commentActionEvents = {
         'click .edit': function (e, value, row, index) {
-            var ids = [row.id];
-            $.ajax({
-                url: '/admin/comments/state',
-                type: 'POST',
-                data: {'_token': '{{ csrf_token() }}', 'ids': ids, 'state': '{{ \App\Models\Wallet::STATE_DELETED }}'},
-                success: function () {
-                    $('#comment_table').bootstrapTable('selectPage', 1);
-                    $('#comment_table').bootstrapTable('refresh');
-
-                }
-            });
+            window.location.href = '/admin/wallets/' + row.id + '/edit';
         },
     };
 

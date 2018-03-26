@@ -77,6 +77,9 @@
                 case '退款待审核':
                     state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" title="禁用">禁</button></a>';
                     break;
+                case '已退款':
+                    state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" title="禁用">禁</button></a>';
+                    break;
                 case '已禁用':
                     state_html = '<a class="disabled" href="javascript:void(0)"><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" title="启用">启</button></a>';
                     break;
@@ -167,7 +170,7 @@
                     style = 'label-primary';
                     break;
                 case '已退款':
-                    style = 'label-success';
+                    style = 'label-warning';
                     break;
             }
             return [
