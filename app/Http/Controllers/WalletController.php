@@ -184,10 +184,6 @@ class WalletController extends Controller
         $wallet = Wallet::find($id);
         $member = Member::find($wallet['member_id']);
 
-        //生成账单流水号,用以记录账单历史
-        $billObj = new BillController();
-        $billNum = $billObj->buildBillNum();
-
         //一次性充值押金
         $bill = Bill::where('member_id', $wallet['member_id'])
             ->where('type', Bill::TYPES['yoshare_deposit'])
@@ -195,6 +191,10 @@ class WalletController extends Controller
             ->first();
 
         if($bill){
+            //生成账单流水号,用以记录账单历史
+            $billObj = new BillController();
+            $billNum = $billObj->buildBillNum();
+
             //注意：total_fee和refund_fee均为分。
             $data['total_fee'] = $wallet['deposit']*100;
             $data['refund_fee'] = $bill['money']*100;
@@ -212,16 +212,16 @@ class WalletController extends Controller
                 $input['state'] = Wallet::STATE_REFUNDED;
                 $wallet->update($input);
 
-                //软删掉之前的押金充值流水订单
-                $bill->delete();
-
                 //添加账单流水
                 Bill::stores([
                     'member_id' => $wallet['member_id'],
                     'bill_num' => $billNum,
                     'type' => Bill::TYPES['yoshare_refund'],
-                    'money' => $wallet['deposit'],
+                    'money' => $bill['money'],
                 ]);
+
+                //软删掉之前的押金充值流水订单
+                $bill->delete();
 
                 return $this->responseSuccess($res);
             }
@@ -238,6 +238,11 @@ class WalletController extends Controller
 
             if(array_sum($money) == $wallet['deposit']){
                 foreach ($bills as $bill){
+
+                    //生成账单流水号,用以记录账单历史
+                    $billObj = new BillController();
+                    $billNum = $billObj->buildBillNum();
+
                     //注意：total_fee和refund_fee均为分。
                     $data['total_fee'] = $wallet['deposit']*100;
                     $data['refund_fee'] = $bill['money']*100;
@@ -255,8 +260,10 @@ class WalletController extends Controller
                             'member_id' => $wallet['member_id'],
                             'bill_num' => $billNum,
                             'type' => Bill::TYPES['yoshare_refund'],
-                            'money' => $wallet['deposit'],
+                            'money' => $bill['money'],
                         ]);
+                        //软删掉之前的押金充值流水订单
+                        $bill->delete();
                     }
                 }
 
