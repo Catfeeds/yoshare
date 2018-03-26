@@ -16,8 +16,8 @@ class Wallet extends BaseModule
     const STATE_REFUNDED = 3;
     const STATE_FREEZE = 4;
 
-    const START_MONEY = 0;
-    const START_COUPON = 15;
+    const START_MONEY = 15;
+    const START_ZERO = 0;
 
     const TYPE = [
         'deposit' => '我的押金',

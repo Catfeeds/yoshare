@@ -185,8 +185,8 @@ class WalletController extends Controller
         $member = Member::find($wallet['member_id']);
 
         //生成账单流水号,用以记录账单历史
-        $bill = new BillController();
-        $billNum = $bill->buildBillNum();
+        $billObj = new BillController();
+        $billNum = $billObj->buildBillNum();
 
         //一次性充值押金
         $bill = Bill::where('member_id', $wallet['member_id'])
@@ -211,6 +211,9 @@ class WalletController extends Controller
                 $input['deposit'] = $wallet['deposit']-$bill['money'];
                 $input['state'] = Wallet::STATE_REFUNDED;
                 $wallet->update($input);
+
+                //软删掉之前的押金充值流水订单
+                $bill->delete();
 
                 //添加账单流水
                 Bill::stores([

@@ -75,9 +75,9 @@ class RegisterController extends Controller
         Wallet::create([
             'member_id' => $member['id'],
             'site_id'   => Member::SITE_ID,
-            'deposit'   => Wallet::START_MONEY,
+            'deposit'   => Wallet::START_ZERO,
             'balance'   => Wallet::START_MONEY,
-            'coupon'    => Wallet::START_COUPON,
+            'coupon'    => Wallet::START_ZERO,
             'state'     => Wallet::STATE_NORMAL,
         ]);
 
