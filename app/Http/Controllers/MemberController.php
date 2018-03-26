@@ -231,10 +231,63 @@ class MemberController extends Controller
             return abort(501);
         }
 
-        $system['mark'] = Domain::MARK_MEMBER;
-        $system['title'] = '绑定我的手机';
+        $member = Member::getMember();
 
-        return view('themes.' . $domain->theme->name . '.members.phone', ['site' => $domain->site, 'system' => $system]);
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = empty($member['mobile'])? '绑定手机' : '换绑手机';
+
+        return view('themes.' . $domain->theme->name . '.members.phone', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
+    }
+
+    public function verify(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $member = Member::getMember();
+
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '修改密码';
+
+        return view('themes.' . $domain->theme->name . '.members.verify', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
+    }
+
+    public function showReset(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $member = Member::getMember();
+
+        $system['mark'] = Domain::MARK_MEMBER;
+        $system['title'] = '修改密码';
+
+        return view('themes.' . $domain->theme->name . '.members.reset', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
+    }
+
+    public function reset()
+    {
+        $input = Request::all();
+        dd($input);
+        $member = Member::getMember();
+
+        if($input['password'] !== $input['password2']){
+            return $this->responseError('前后输入的密码不一致，请重新输入');
+        }
+
+        if (bcrypt($input['password']) == $member->password){
+            return $this->responseError('请勿使用旧密码重置密码');
+        }
+
+        $input['password'] = bcrypt($input['password']);
+        $res = $member->update($input);
+
+        if($res){
+            return $this->responseSuccess($res);
+        }
+
     }
 
     public function bindMobile()

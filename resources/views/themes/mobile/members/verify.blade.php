@@ -1,5 +1,5 @@
 @extends('themes.mobile.master')
-@section('title', '绑定手机号-北京优享科技有限公司')
+@section('title', '验证手机号-北京优享科技有限公司')
 
 @section('css')
     <link href="{{ url('css/member.css') }}" type="text/css" rel="stylesheet">
@@ -42,14 +42,11 @@ body{
     <div class="wrapper">
         <div class="logo" style="padding-top: 200px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
-            @if(!empty($member['mobile']))
-                <input name="mobile" type="text" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form account">
-            @endif
-            <input name="mobile" id="mobile" type="text" value="" class="i-form account" @if(!empty($member['mobile'])) placeholder="请输入您要换绑的手机号"  @else  placeholder="请输入您的手机号" @endif>
+            <input name="mobile" id="mobile" type="text" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form account">
             <input name="code" id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
             <input class="phone-btn" type="button" onclick="getCode(this)" value="获取验证码"/>
 
-            <button type="submit" style="margin-top: 200px" onclick="bindMobile()">确定</button>
+            <button type="submit" style="margin-top: 200px" onclick="verify()">下一步</button>
         </div>
     </div>
 @endsection
@@ -93,14 +90,14 @@ body{
             return false;
         }
         settime(obj);
-        //类型0:找回密码,1:注册,2:重置密码,3:绑定手机,4:解除绑定手机
+        //类型 0:找回密码,1:注册,2:重置密码,3:绑定手机,4:解除绑定手机
         $.ajax({
             url  : '/api/members/mobile/captcha',
             type : 'get',
             data : {
                 'site_id' : 1,
                 'mobile'  : mobile,
-                'type'    : {{ \App\Models\Member::CAPTCHA_BIND }}
+                'type'    : {{ \App\Models\Member::CAPTCHA_RESET }}
             },
             success:function(data){
                 msg = data.message;
@@ -114,11 +111,13 @@ body{
         })
     }
 
-    function bindMobile() {
+    function verify() {
+
         var mobile  = $("#mobile").val();
         var captcha = $("#code").val();
+
         $.ajax({
-            url  : '/member/bind/phone',
+            url  : '/api/members/reset/verify',
             type : 'get',
             data : {
                 'captcha' : captcha,
@@ -127,11 +126,7 @@ body{
             success:function(data){
                 msg = data.message;
                 if(msg == 'success'){
-                    layer.open({
-                        content: '绑定成功！'
-                        ,skin: 'msg'
-                        ,time: 2 //2秒后自动关闭
-                    });
+                    location.href = '/password/reset';
                 } else {
                     layer.open({
                         content: msg

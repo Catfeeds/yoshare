@@ -163,7 +163,7 @@ class OrderController extends Controller
             $filters['state'] = $state;
         }
 
-        $member_id = Member::getMember()->id;
+        $member_id = $member->id;
 
         $orders = Order::where('member_id', $member_id)
             ->filter($filters)

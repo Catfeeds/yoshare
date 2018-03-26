@@ -36,7 +36,7 @@
             <h4>租期计算方式</h4>
             <p>{{ $goods->summary }}</p>
         </div>
-        <div class="detail">
+        <div class="detail" name="detail">
             <div class="title">
                 <div class="img"><img src="{{ url('images/goods/detail_bg.png') }}" alt=""></div>
             </div>
