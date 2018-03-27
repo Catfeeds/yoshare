@@ -27,21 +27,13 @@ class Member extends Authenticatable
 
     const TYPE_ORDINARY = 0;
     const TYPE_GOLD = 1;
-    const TYPE_PLATINUM = 2;
-    const TYPE_DIAMOND = 3;
 
     const TYPES = [
         0 => '普通用户',
         1 => '黄金会员',
-        2 => '铂金会员',
-        3 => '钻石会员',
     ];
 
-    const LEVEL = [
-        1 => '0.3',
-        2 => '0.6',
-        3 => '0.9',
-    ];
+    const DEPOSIT_MONEY = 0.3;
 
     const SEX = [
         0 => '男',

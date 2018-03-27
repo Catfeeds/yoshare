@@ -1,7 +1,6 @@
 <ul class="content form">
     <li><span>收 货 人 ：</span>{!! Form::text('name', null, ['class' => 'a-form']) !!}</li>
     <li><span>联系电话：</span>{!! Form::text('phone', null, ['class' => 'a-form']) !!}</li>
-    <li><span>邮　　编：</span>{!! Form::text('postcode', null, ['class' => 'a-form']) !!}</li>
     <li><span>省：</span>
         {!! Form::select('province', $provinces, isset($address) ? $address->province: '',['id' => 'province', 'onchange' => "loadRegion('province', 'city')"]) !!}
         <span>市：</span>

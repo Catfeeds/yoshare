@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Domain;
 use App\Models\Module;
+use App\Models\Order;
 use App\Models\UserLog;
 use App\Models\Member;
 use App\Models\Goods;
@@ -306,27 +307,14 @@ class CartController extends Controller
                 return $this->responseError('您还未缴纳押金，立即缴纳！', 407);
             }
 
-            //查询此用户会员等级，普通=0（额外0），黄金=1（租1），铂金=2（租2），钻石=3（租3）；非普通会员，购物车是否已有此盘，如果有则更新数量+1，没有则添加购物车记录；
-            $numbers = Cart::where('member_id', $input['member_id'])
+            //查询此用户会员等级，普通=0（额外0），黄金=1（租1）；
+            $number = Cart::where('member_id', $input['member_id'])
                 ->where('order_id', Cart::ORDER_ID_NO)
-                ->pluck('number')
-                ->toArray();
-
-            $number = !empty($numbers) ? array_sum($numbers) : 0;
-
-            $cart_goods_id = Cart::where('member_id', $input['member_id'])
-                ->pluck('goods_id')
-                ->toArray();
-
-            if($number > 0 && $number < $type && in_array($goods_id, $cart_goods_id)){
-                Cart::where('goods_id', $goods_id)
-                    ->where('member_id', $input['member_id'])
-                    ->increment('number');
-
-                $carts = Cart::where('member_id', $input['member_id'])
-                    ->get();
-            } elseif ($number >= $type){
-                return $this->responseError('已达到您的租盘上限！');
+                ->count();
+            $order_num = Order::where('member_id', $input['member_id'])
+                            ->count();
+            if ($number >= $type || $order_num >= $type){
+                return $this->responseError('已达到您的租盘上限！请归还游戏盘后再进行操作！');
             } else{
                 Cart::stores($input);
 
@@ -365,6 +353,7 @@ class CartController extends Controller
                 ->where('goods_id', $goods_id)
                 ->pluck('number');
             $number = $carts[0];
+
             if($number > 1){
                 Cart::where('goods_id', $goods_id)
                     ->where('member_id', $input['member_id'])

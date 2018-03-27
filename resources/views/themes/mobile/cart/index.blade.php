@@ -136,7 +136,6 @@
             ,btn: ['确定', '取消']
             ,yes: function(index){
                 location.href = '/cart/'+goods_id+'/delete';
-                layer.close(index);
             }
         });
     }
