@@ -36,7 +36,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member', 'MemberController@show');
     Route::get('/member/phone', 'MemberController@phone');
     Route::get('/member/bind/phone', 'MemberController@bindMobile');
-    Route::get('/member/vip', 'MemberController@vip');
+    Route::get('/member/vip/', 'MemberController@vip');
     Route::get('/member/detail', 'MemberController@detail');
     Route::get('/member/collect', 'MemberController@collect');
     Route::get('/member/collections', 'MemberController@collections');

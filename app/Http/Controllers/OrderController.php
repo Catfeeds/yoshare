@@ -88,6 +88,7 @@ class OrderController extends Controller
         $address = Address::where('member_id', $member->id)
             ->where('is_default', Address::IS_DEFAULT)
             ->first();
+
         //拼接地址
         if(!empty($address)){
 
@@ -140,14 +141,10 @@ class OrderController extends Controller
             return abort(501);
         }
 
-        try {
-            $member = Member::getMember();
-            if (!$member) {
-                return redirect('/login');
-            }
-        } catch (Exception $e) {
-            return redirect('/login');
+        if (empty(Member::checkLogin())) {
+            return view('auth.login');
         }
+        $member = Member::getMember();
 
         if($state == 'nopay'){
             $filters['state'] = Order::STATE_NOPAY;
@@ -259,9 +256,18 @@ class OrderController extends Controller
     {
         $input = Request::all();
 
+        //查询是否有未完成订单，如果有则不能下单；
+        $member = Member::getMember();
+        $order_num = $member->orders()->where('state', '<>', Order::STATE_SUCCESS)
+                        ->where('state', '<>', Order::STATE_CLOSED)
+                        ->count();
+        if($order_num > 0){
+            return $this->responseError('您有未完成的订单，请归还光盘后再操作！');
+        }
+
         $input['order_num'] = $this->buildOrderNum();
-        $input['site_id'] = Member::getMember()->site_id;
-        $input['member_id'] = Member::getMember()->id;
+        $input['site_id'] = $member->site_id;
+        $input['member_id'] = $member->id;
 
         $order = Order::stores($input);
 
@@ -279,8 +285,6 @@ class OrderController extends Controller
             return $this->responseSuccess($order);
 
         }
-        event(new UserLogEvent(UserLog::ACTION_CREATE . '订单', $order->id, $this->module->model_class));
-
     }
 
     public function update($id)

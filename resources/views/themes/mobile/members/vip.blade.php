@@ -18,7 +18,7 @@
         </div>
         <div class="a-wrapper" style="padding-top: 320px;">
             @if($type == \App\Models\Member::TYPE_ORDINARY)
-                <a href="/wallets/deposit/price" class="a-default">
+                <a href="/wallets/recharge/{{ \App\Models\Member::DEPOSIT_MONEY }}" class="a-default">
                     立即成为VIP
                 </a>
             @endif

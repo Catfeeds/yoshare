@@ -218,6 +218,7 @@ class MemberController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+
         $type = Member::getMember()->type;
         $system['mark'] = Domain::MARK_MEMBER;
         $system['title'] = 'VIP管理';

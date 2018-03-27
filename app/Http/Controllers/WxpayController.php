@@ -141,6 +141,12 @@ class WxpayController extends Controller{
             //更新会员等级
             $member->type = Member::TYPE_GOLD;
             $member->save();
+            $back_url = $_COOKIE['BackUrl'];
+            if(!empty($back_url)) {
+                return redirect($back_url);
+            }else{
+                return redirect('/wallets/show/deposit');
+            }
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
             $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
             $wallet->update($data);

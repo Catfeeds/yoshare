@@ -298,22 +298,24 @@ class CartController extends Controller
 
         try {
             $input['goods_id'] = $goods_id;
-            $input['site_id'] = Member::getMember()->site_id;
-            $input['member_id'] = Member::getMember()->id;
-            $type = Member::getMember()->type;
+            $input['site_id'] = $member->site_id;
+            $input['member_id'] = $member->id;
+            $type = $member->type;
 
             //普通用户跳转至押金缴纳页
             if($type == 0){
+                //存储用户充值押金后的原访问商品url
+                setcookie("BackUrl", $input['backurl'], time()+3600);
                 return $this->responseError('您还未缴纳押金，立即缴纳！', 407);
             }
 
             //查询此用户会员等级，普通=0（额外0），黄金=1（租1）；
-            $number = Cart::where('member_id', $input['member_id'])
-                ->where('order_id', Cart::ORDER_ID_NO)
-                ->count();
-            $order_num = Order::where('member_id', $input['member_id'])
+
+            $order_num = $member->orders()->where('state', '<>', Order::STATE_CLOSED)
+                            ->where('state', '<>', Order::STATE_SUCCESS)
                             ->count();
-            if ($number >= $type || $order_num >= $type){
+
+            if ($order_num >= $type){
                 return $this->responseError('已达到您的租盘上限！请归还游戏盘后再进行操作！');
             } else{
                 Cart::stores($input);

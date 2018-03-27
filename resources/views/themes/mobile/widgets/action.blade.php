@@ -15,12 +15,14 @@
     $('#addcart').click(function(){
         var goods_id = $('#goods_id').val();
         var sale_price = $('#sale_price').val();
+        var url = window.location.href;
 
         $.ajax({
             url  : '/cart/add/'+goods_id,
             type : 'get',
             data : {
-                'price' : sale_price,
+                'price'   : sale_price,
+                'backurl' : url,
                 'number'  : 1
             },
             success:function(data){
@@ -58,12 +60,14 @@
     $('#buynow').click(function(){
         var goods_id = $('#goods_id').val();
         var sale_price = $('#sale_price').val();
+        var url = window.location.href;
 
         $.ajax({
             url  : '/cart/add/'+goods_id,
             type : 'get',
             data : {
-                'price' : sale_price,
+                'price'   : sale_price,
+                'backurl' : url,
                 'number'  : 1
             },
             success:function(data){
