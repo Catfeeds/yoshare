@@ -141,12 +141,7 @@ class WxpayController extends Controller{
             //更新会员等级
             $member->type = Member::TYPE_GOLD;
             $member->save();
-            $back_url = $_COOKIE['BackUrl'];
-            if(!empty($back_url)) {
-                return redirect($back_url);
-            }else{
-                return redirect('/wallets/show/deposit');
-            }
+
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
             $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
             $wallet->update($data);
@@ -162,6 +157,19 @@ class WxpayController extends Controller{
         Bill::stores($bill);
         //更新用户积分
         $wallet->increment('points', $data["total_fee"]/100);
+
+        $back_url = $_COOKIE['BackUrl'];
+        if($data['attach'] == 'yoshare_deposit') {
+            if(!empty($back_url)){
+                return redirect($back_url);
+            }else{
+                return redirect('/wallets/show/deposit');
+            }
+        }else if($data['attach'] == 'yoshare_balance'){
+            return redirect('/wallets/show/balance');
+        }else{
+            return redirect('/order/lists/nosend');
+        }
     }
 
     public function refund($data)
