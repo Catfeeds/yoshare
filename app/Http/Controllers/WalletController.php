@@ -218,6 +218,7 @@ class WalletController extends Controller
                     'bill_num' => $billNum,
                     'type' => Bill::TYPES['yoshare_refund'],
                     'money' => $bill['money'],
+                    'state' => Bill::STATE_REFUND,
                 ]);
 
                 //软删掉之前的押金充值流水订单
@@ -225,52 +226,6 @@ class WalletController extends Controller
 
                 return $this->responseSuccess($res);
             }
-        }else{
-            //多次性升级会员，查询账单中押金充值记录
-            $money = Bill::where('member_id', $wallet['member_id'])
-                ->where('type', Bill::TYPES['yoshare_deposit'])
-                ->pluck('money')
-                ->toArray();
-
-            $bills = Bill::where('member_id', $wallet['member_id'])
-                ->where('type', Bill::TYPES['yoshare_deposit'])
-                ->get();
-
-            foreach ($bills as $bill){
-
-                //生成账单流水号,用以记录账单历史
-                $billObj = new BillController();
-                $billNum = $billObj->buildBillNum();
-
-                //注意：total_fee和refund_fee均为分。
-                $data['total_fee'] = $bill['money']*100;
-                $data['refund_fee'] = $bill['money']*100;
-                $data['out_trade_no'] = $bill['bill_num'];
-                $data['out_refund_no'] = $billNum;
-                $res = $wePay->refund($data);
-                if($res['return_code'] == 'SUCCESS'){
-
-                    //更新用户钱包
-                    $input['deposit'] = $wallet['deposit']-$bill['money'];
-                    $input['state'] = Wallet::STATE_REFUNDED;
-                    $wallet->update($input);
-
-                    Bill::stores([
-                        'member_id' => $wallet['member_id'],
-                        'bill_num' => $billNum,
-                        'type' => Bill::TYPES['yoshare_refund'],
-                        'money' => $bill['money'],
-                    ]);
-                    //软删掉之前的押金充值流水订单
-                    $bill->delete();
-                }
-            }
-            //更新用户状态以及用户等级
-            $data['state'] = Member::STATE_REFUNDED;
-            $data['type'] = Member::TYPE_ORDINARY;
-            $member->update($data);
-
-            return $this->responseSuccess();
         }
 
     }

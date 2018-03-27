@@ -12,8 +12,7 @@ class Bill extends BaseModule
     const SITE_ID = 1;
     const STATE_DELETED = 0;
     const STATE_NORMAL = 1;
-    const STATE_CANCELED = 2;
-    const STATE_PUBLISHED = 9;
+    const STATE_REFUND = 2;
 
     const TYPE_ORDER = 0;
     const TYPE_DEPOSIT = 1;
@@ -29,9 +28,8 @@ class Bill extends BaseModule
 
     const STATES = [
         0 => '已删除',
-        1 => '未发布',
-        2 => '已撤回',
-        9 => '已发布',
+        1 => '已充值',
+        2 => '已退款',
     ];
 
 

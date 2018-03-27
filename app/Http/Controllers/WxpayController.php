@@ -153,11 +153,13 @@ class WxpayController extends Controller{
             'bill_num' => $data["out_trade_no"],
             'type' => Bill::TYPES[$data['attach']],
             'money' => $data["total_fee"]/100,
+            'state' => Bill::STATE_NORMAL,
         ];
         Bill::stores($bill);
         //更新用户积分
         $wallet->increment('points', $data["total_fee"]/100);
 
+        //支付成功后的跳转
         $back_url = $_COOKIE['BackUrl'];
         if($data['attach'] == 'yoshare_deposit') {
             if(!empty($back_url)){
