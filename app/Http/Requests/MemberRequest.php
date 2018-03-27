@@ -22,14 +22,14 @@ class MemberRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
+            'username' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => '请输入会员名',
+            'username.required' => '请输入用户名',
         ];
     }
 }
