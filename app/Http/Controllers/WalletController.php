@@ -316,10 +316,20 @@ class WalletController extends Controller
     public function state($id)
     {
         $input = request()->all();
+        //检查是否有未完成订单，再确认是否可以申请退押金
+        $member = Member::getMember();
+        $order_num = $member->orders()->where('state', '<>', Order::STATE_SUCCESS)
+            ->where('state', '<>', Order::STATE_CLOSED)
+            ->count();
+        if($input['state'] == Wallet::STATE_REFUNDING && $order_num > 0){
+            return $this->responseError('您有未完成的订单，请归还光盘后再退押金！');
+        }
+
         $wallet = Wallet::find($id);
         $res = $wallet->update($input);
 
         if($res){
+
             if($input['state'] == Wallet::STATE_REFUNDING){
                 //更新用户状态
                 $member = Member::find($wallet['member_id']);
