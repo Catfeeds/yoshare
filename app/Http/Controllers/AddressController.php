@@ -79,7 +79,6 @@ class AddressController extends Controller
             return abort(501);
         }
         $data = Request::all();
-        dd($data);
 
         if(isset($data['addrBack'])){
             setCookie('AddrBack', $data['addrBack'], time()+3600);

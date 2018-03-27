@@ -64,13 +64,11 @@ class OrderController extends Controller
         return view('themes.' . $domain->theme->name . '.orders.detail', ['site' => $domain->site, 'order' => $order]);
     }
 
-    public function place(Domain $domain, $ids)
+    public function place(Domain $domain, $cart_id)
     {
         $total_price = 0;
         $carts = [];
 
-        //分割购物车ID字符串为数组
-        $cart_ids = explode('-', $ids);
 
         if (empty($domain->site)) {
             return abort(501);
@@ -103,19 +101,18 @@ class OrderController extends Controller
             }
         }
 
-
-        $goods_ids = Cart::whereIn('id', $cart_ids)
+        $goods_id = Cart::where('id', $cart_id)
             ->pluck('goods_id')
             ->toArray();
 
-        $goodses = Goods::whereIn('id', $goods_ids)
+        $goodses = Goods::where('id', $goods_id)
             ->get();
 
-        $numbers = Cart::whereIn('id', $cart_ids)
+        $numbers = Cart::where('id', $cart_id)
             ->pluck('number', 'goods_id')
             ->toArray();
 
-        $prices = Cart::whereIn('id', $cart_ids)
+        $prices = Cart::where('id', $cart_id)
             ->get()
             ->toArray();
 
@@ -126,7 +123,7 @@ class OrderController extends Controller
         //购物车总数量
         $number = !empty($numbers) ? array_sum($numbers) : 0;
 
-        $carts['ids'] = $ids;
+        $carts['id']  = $cart_id;
         $carts['number']  = $number;
         $carts['numbers'] = $numbers;
         $carts['total_price'] = $total_price;
@@ -275,7 +272,7 @@ class OrderController extends Controller
         if($order){
             //修改购物车order_id
             $order_id = $order->id;
-            $cart = Cart::find($input['ids']);
+            $cart = Cart::find($input['id']);
             $data['order_id'] = $order_id;
             $cart->update($data);
 

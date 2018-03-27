@@ -47,7 +47,7 @@
             <div class="a-wrapper" style="padding: 20px 0;"><a href="#" onclick="addAddr()" class="a-default" style="background: #fff;">添加收货地址</a></div>
             <input type="hidden" name="address_id" value="0" id="aid">
         @endif
-        <input type="hidden" id="ids" value="{{ $carts['ids'] }}" />
+        <input type="hidden" id="id" value="{{ $carts['id'] }}" name="id" />
         <ul class="p-ul">
             @foreach( $goodses as $goods )
             <li>

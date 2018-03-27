@@ -11,7 +11,7 @@
     $('#place').click(function(){
         var aid = $('#aid').val();
 
-        var ids = $('#ids').val();
+        var id = $('#id').val();
         var name = $('#name').text();
         var phone = $('#phone').text();
         var address = $('#address').text();
@@ -31,7 +31,7 @@
                 url  : '/order/store/',
                 type : 'get',
                 data : {
-                    'ids'           : ids,
+                    'id'            : id,
                     'name'          : name,
                     'phone'         : phone,
                     'address'       : address,
@@ -68,7 +68,6 @@
                             ,skin: 'msg'
                             ,time: 2 //2秒后自动关闭
                         });
-                        location.reload();
                     }
                 }
             })

@@ -30,14 +30,15 @@
             });
             return false;
         }
-        id = $(this).siblings('.cart_id').val();
+        id = $('.demo--radio:checked').siblings('.cart_id').val();
 
-        if(id == ''){
+        if(id == '' || typeof id == 'undefined'){
             layer.open({
                 content: '您还没有选择宝贝哦'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
+            return false;
         }else{
             location.href = '/order/place/'+id;
         }

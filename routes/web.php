@@ -62,7 +62,7 @@ Route::group(['middleware' => 'web'], function () {
     //订单模块
     Route::get('/order/lists', 'OrderController@lists');
     Route::get('/order/lists/{state}', 'OrderController@lists');
-    Route::get('/order/place/{cart_ids}', 'OrderController@place');
+    Route::get('/order/place/{cart_id}', 'OrderController@place');
     Route::get('/order/store', 'OrderController@store');
     Route::get('/order/edit/{id}', 'OrderController@updates');
     Route::get('/order/{id}/delete', 'OrderController@destroy');
