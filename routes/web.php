@@ -53,6 +53,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/address/index.html', 'AddressController@lists');
     Route::get('/address/region', 'AddressController@region');
     Route::get('/address/default/{id}', 'AddressController@setDefault');
+    Route::get('/address/create/{addrBack}', 'AddressController@destroy');
     Route::get('/address/{id}/delete', 'AddressController@destroy');
     Route::get('/address/{id}/edit', 'AddressController@edit');
     Route::patch('/address/{id}', 'AddressController@updates');

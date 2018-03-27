@@ -31,12 +31,18 @@
             </li>
             @endforeach
         </ul>
-        <div class="a-wrapper"><a href="/address/create" class="a-default">添加收货地址</a></div>
+        <div class="a-wrapper"><a href="#" onclick="addAddr()" class="a-default">添加收货地址</a></div>
     </div>
 @endsection
 @section('js')
 <script src="{{ url('/js/layer.js') }}"></script>
 <script>
+    var addr_back = window.location.href;
+
+    function addAddr() {
+        window.location.href='/address/create?addrBack='+addr_back;
+    }
+
     function ask(id) {
         layer.open({
             content: '您确定要删除此地址吗？'

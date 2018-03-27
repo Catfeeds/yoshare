@@ -63,24 +63,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $member = Member::create([
-            'site_id' => Member::SITE_ID,
-            'username' => $data['name'],
-            'email' => $data['email'],
-            'state' => Member::STATE_ENABLED,
-            'password' => bcrypt($data['password']),
-            'type' => Member::TYPE_ORDINARY,
-        ]);
+        $member = Member::where('username', $data['name'])->get();
+        if(empty($member)){
+            $member = Member::create([
+                'site_id' => Member::SITE_ID,
+                'username' => $data['name'],
+                'email' => $data['email'],
+                'state' => Member::STATE_ENABLED,
+                'password' => bcrypt($data['password']),
+                'type' => Member::TYPE_ORDINARY,
+            ]);
 
-        Wallet::create([
-            'member_id' => $member['id'],
-            'site_id'   => Member::SITE_ID,
-            'deposit'   => Wallet::START_ZERO,
-            'balance'   => Wallet::START_MONEY,
-            'coupon'    => Wallet::START_ZERO,
-            'state'     => Wallet::STATE_NORMAL,
-        ]);
+            Wallet::create([
+                'member_id' => $member['id'],
+                'site_id'   => Member::SITE_ID,
+                'deposit'   => Wallet::START_ZERO,
+                'balance'   => Wallet::START_MONEY,
+                'coupon'    => Wallet::START_ZERO,
+                'state'     => Wallet::STATE_NORMAL,
+            ]);
 
-        return $member;
+            return $member;
+        }
+
+
     }
 }

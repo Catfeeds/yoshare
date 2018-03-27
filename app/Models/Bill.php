@@ -86,7 +86,6 @@ class Bill extends BaseModule
     public static function stores($input)
     {
         $input['site_id'] = static::SITE_ID;
-        $input['state'] = static::STATE_NORMAL;
 
         $bill = static::create($input);
 

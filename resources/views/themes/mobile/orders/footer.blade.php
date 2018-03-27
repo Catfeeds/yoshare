@@ -16,13 +16,14 @@
         var phone = $('#phone').text();
         var address = $('#address').text();
         var total_price = $('#total_price').text();
+        var addr_back = window.location.href;
 
         if(aid == 0){
             layer.open({
                 content: '您还没有添加收货地址，无法提交！',
                 btn: ['去添加', '取消'],
                 yes: function(index, layero) {
-                    window.location.href='/address/create/';
+                    window.location.href='/address/create?addrBack='+addr_back;
                 }
             });
         }else{

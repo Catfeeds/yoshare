@@ -100,6 +100,7 @@ class WxpayController extends Controller{
         $input->SetOpenid($openId);
 
         $order = WxPayApi::unifiedOrder($input);
+
         $jsApiParameters = $tools->GetJsApiParameters($order);
         $editAddress = $tools->GetEditAddressParameters();
 
@@ -134,7 +135,7 @@ class WxpayController extends Controller{
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit'){
-            $input['deposit'] = $wallet['deposit']+$data["total_fee"]/100;
+            $input['deposit'] = $data["total_fee"]/100;
             $input['state'] = Wallet::STATE_NORMAL;
             //更新钱包押金
             $wallet->update($input);

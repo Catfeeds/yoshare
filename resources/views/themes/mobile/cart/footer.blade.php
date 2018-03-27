@@ -17,20 +17,29 @@
     });
 
     $('#place').click(function(){
-        var ids = '';
+        var id_num = 0;
 
         $('.demo--radio:checked').each(function () {
-            ids = $(this).siblings('.cart_id').val()+'-'+ids;
+            id_num++;
         });
-        ids = ids.trim("-");
-        if(ids == ''){
+        if(id_num > 1){
+            layer.open({
+                content: '您只能租赁一本光盘'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }
+        id = $(this).siblings('.cart_id').val();
+
+        if(id == ''){
             layer.open({
                 content: '您还没有选择宝贝哦'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
         }else{
-            location.href = '/order/place/'+ids;
+            location.href = '/order/place/'+id;
         }
     });
 

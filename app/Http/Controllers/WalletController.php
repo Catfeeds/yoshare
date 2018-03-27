@@ -15,6 +15,7 @@ use App\Models\Payment;
 use Auth;
 use Carbon\Carbon;
 use Gate;
+use Illuminate\Support\Facades\DB;
 use Request;
 use Response;
 
@@ -185,10 +186,13 @@ class WalletController extends Controller
         $member = Member::find($wallet['member_id']);
 
         //一次性充值押金
+        //DB::enableQueryLog();
         $bill = Bill::where('member_id', $wallet['member_id'])
             ->where('type', Bill::TYPES['yoshare_deposit'])
             ->where('money', $wallet['deposit'])
             ->first();
+//        dd(DB::getQueryLog());
+//        DB::disableQueryLog();
 
         if($bill){
             //生成账单流水号,用以记录账单历史

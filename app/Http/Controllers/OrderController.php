@@ -261,6 +261,7 @@ class OrderController extends Controller
         $order_num = $member->orders()->where('state', '<>', Order::STATE_SUCCESS)
                         ->where('state', '<>', Order::STATE_CLOSED)
                         ->count();
+
         if($order_num > 0){
             return $this->responseError('您有未完成的订单，请归还光盘后再操作！');
         }
@@ -274,13 +275,9 @@ class OrderController extends Controller
         if($order){
             //修改购物车order_id
             $order_id = $order->id;
-            $ids = array_filter(explode('-', $input['ids']));
-
-            foreach($ids as $v){
-                $cart = Cart::find($v);
-                $data['order_id'] = $order_id;
-                $result = $cart->update($data);
-            }
+            $cart = Cart::find($input['ids']);
+            $data['order_id'] = $order_id;
+            $cart->update($data);
 
             return $this->responseSuccess($order);
 

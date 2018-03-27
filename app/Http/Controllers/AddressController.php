@@ -78,6 +78,12 @@ class AddressController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
+        $data = Request::all();
+        dd($data);
+
+        if(isset($data['addrBack'])){
+            setCookie('AddrBack', $data['addrBack'], time()+3600);
+        }
 
         $system['title'] = '添加收货地址';
         $system['back'] = '/address/index.html';
@@ -146,11 +152,12 @@ class AddressController extends Controller
         }
 
         $address = Address::stores($input);
-
-        //TODO
-        //event(new MemberLogEvent(MemberLog::ACTION_CREATE . '地址', $address->id, $this->module->model_class));
-
-        return redirect($this->base_url);
+        $addrBack = $_COOKIE['AddrBack'];
+        if($addrBack){
+            return redirect($_COOKIE['AddrBack']);
+        }else{
+            return redirect($this->base_url);
+        }
     }
 
     public function update($id)
