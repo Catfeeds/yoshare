@@ -16,7 +16,7 @@
                 <p style="font-size: 60px;padding: 100px;">
                     {{ $wallet[$system['type']] }}
                     @if($system['type'] == 'deposit')
-                        员
+                        元
                     @else
                         U币
                     @endif

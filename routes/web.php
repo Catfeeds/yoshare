@@ -17,7 +17,8 @@ Route::get('login', 'Member\LoginController@showLoginForm');
 Route::post('login', 'Member\LoginController@login');
 Route::get('logout', 'Member\LoginController@logout');
 // Password Reset Routes...
-Route::get('member/verify', 'MemberController@verify');
+Route::get('member/verify', 'MemberController@showVerify');
+Route::get('phone/login', 'MemberController@phoneLogin');
 Route::post('password/email', 'Member\ForgotPasswordController@sendResetLinkEmail');
 
 Route::get('/phone/login', 'Member\LoginController@phoneLogin');
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::patch('/member/{id}', 'MemberController@save');
 
     //重置密码
+    Route::get('/password/forget/verify', 'MemberController@verify');
     Route::get('password/reset', 'MemberController@showReset');
     Route::post('password/reset', 'MemberController@reset');
 

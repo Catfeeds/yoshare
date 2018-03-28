@@ -13,7 +13,7 @@
             <li style="min-height: 660px">
                 <h5>选择金额</h5>
 
-                <p style="padding-bottom: 40px">注：1元=1U币</p>
+                <p style="padding-bottom: 40px">注：1元 = 1U币</p>
                 @foreach($chooses as $key => $val)
                     <div class="price" style="line-height: 100px">
                         充值<span class="val"> {{ $val }} </span>元<br/>

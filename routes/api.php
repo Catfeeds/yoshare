@@ -78,7 +78,6 @@ $api->version('v1', function ($api) {
         $api->get('members/mobile/bind', 'MemberController@bindMobile');
         $api->get('members/mobile/unbind', 'MemberController@unbindMobile');
         $api->get('members/password/change', 'MemberController@changePassword');
-        $api->get('members/reset/verify', 'MemberController@verify');
         $api->get('members/sign/in', 'MemberController@signIn');
         $api->get('members/sign/status', 'MemberController@signStatus');
 

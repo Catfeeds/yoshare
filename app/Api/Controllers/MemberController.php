@@ -520,64 +520,6 @@ class MemberController extends BaseController
         }
     }
 
-
-    /**
-     * @SWG\Get(
-     *   path="/members/reset/verify",
-     *   summary="绑定手机号",
-     *   tags={"/members 会员"},
-     *   @SWG\Parameter(name="mobile", in="query", required=true, description="手机号", type="integer"),
-     *   @SWG\Parameter(name="captcha", in="query", required=true, description="验证码", type="string"),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="绑定成功"
-     *   ),
-     *   @SWG\Response(
-     *     response="404",
-     *     description="没有找到路由"
-     *   )
-     * )
-     */
-    public function verify()
-    {
-        $mobile = Request::get('mobile');
-        $captcha = Request::get('captcha');
-
-        try {
-            $member = Auth::guard('web')->user();
-
-            if (!$member) {
-                return $this->responseError('无效的token,请重新登录');
-            }
-        } catch (Exception $e) {
-            return $this->responseError('无效的token,请重新登录');
-        }
-
-        try {
-            if (!preg_match("/1[34578]{1}\d{9}$/", $mobile)) {
-                throw new Exception('请输入正确的手机号', -1);
-            }
-
-            if ($mobile !== $member->mobile) {
-                throw new Exception('非用户绑定手机，请用绑定手机操作', -1);
-            }
-
-            //比较验证码
-            $key = 'captcha_' . $mobile;
-            if (Cache::get($key) != $captcha) {
-                throw new Exception('手机验证码错误', -1);
-            }else{
-                //移除验证码
-                Cache::forget($key);
-
-                return $this->responseSuccess();
-            }
-
-        } catch (Exception $e) {
-            return $this->responseError($e->getMessage());
-        }
-    }
-
     /**
      * @SWG\Get(
      *   path="/members/mobile/unbind",

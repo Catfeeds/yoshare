@@ -42,7 +42,7 @@ body{
     <div class="wrapper">
         <div class="logo" style="padding-top: 200px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
-            <input name="mobile" id="mobile" type="text" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form account">
+            <input style="color: #333;" name="mobile" id="mobile" type="text" value="{{ $member['mobile'] }}" @if(empty($member['mobile']))  placeholder="您还未绑定手机，请绑定手机后操作" @endif disabled="disabled" class="i-form account">
             <input name="code" id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
             <input class="phone-btn" type="button" onclick="getCode(this)" value="获取验证码"/>
 
@@ -76,7 +76,7 @@ body{
         var mobile = $("#mobile").val();
         if(mobile == ''){
             layer.open({
-                content: '请输入手机号'
+                content: '请绑定手机'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
@@ -117,7 +117,7 @@ body{
         var captcha = $("#code").val();
 
         $.ajax({
-            url  : '/api/members/reset/verify',
+            url  : '/password/forget/verify',
             type : 'get',
             data : {
                 'captcha' : captcha,
@@ -125,9 +125,18 @@ body{
             },
             success:function(data){
                 msg = data.message;
-                if(msg == 'success'){
+                statusCode = data.status_code;
+                if(statusCode == '200'){
                     location.href = '/password/reset';
-                } else {
+                } else if(statusCode == '401') {
+                    layer.open({
+                        content: msg,
+                        btn: ['确认', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else{
                     layer.open({
                         content: msg
                         ,skin: 'msg'

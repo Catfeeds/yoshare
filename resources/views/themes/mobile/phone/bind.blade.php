@@ -40,16 +40,16 @@ body{
 
 @section('content')
     <div class="wrapper">
-        <div class="logo" style="padding-top: 200px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
+        <div class="logo" style="padding-top: 145px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
             @if(!empty($member['mobile']))
-                <input name="mobile" type="text" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form account">
+                <input name="mobile" type="text" style="color: #333;" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form account">
             @endif
             <input name="mobile" id="mobile" type="text" value="" class="i-form account" @if(!empty($member['mobile'])) placeholder="请输入您要换绑的手机号"  @else  placeholder="请输入您的手机号" @endif>
             <input name="code" id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
             <input class="phone-btn" type="button" onclick="getCode(this)" value="获取验证码"/>
 
-            <button type="submit" style="margin-top: 200px" onclick="bindMobile()">确定</button>
+            <button type="submit" style="margin-top: 120px" onclick="bindMobile()">确定</button>
         </div>
     </div>
 @endsection

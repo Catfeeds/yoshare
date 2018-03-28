@@ -53,7 +53,7 @@
                                         登录
                                     </button>
 
-                                    <a class="btn btn-link" href="{{ url('/password/reset') }}">
+                                    <a class="btn btn-link" href="{{ url('/phone/login') }}">
                                         忘记密码?
                                     </a>
                                 </div>

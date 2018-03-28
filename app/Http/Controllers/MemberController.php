@@ -194,6 +194,11 @@ class MemberController extends Controller
         }
     }
 
+    public function phoneLogin(Domain $domain)
+    {
+        return ('themes.' . $domain->theme->name . '.phone.login');
+    }
+
     public function show(Domain $domain)
     {
         if (empty($domain->site)) {
@@ -237,10 +242,10 @@ class MemberController extends Controller
         $system['mark'] = Domain::MARK_MEMBER;
         $system['title'] = empty($member['mobile'])? '绑定手机' : '换绑手机';
 
-        return view('themes.' . $domain->theme->name . '.members.phone', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.phone.bind', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
     }
 
-    public function verify(Domain $domain)
+    public function showVerify(Domain $domain)
     {
         if (empty($domain->site)) {
             return abort(501);
@@ -251,7 +256,7 @@ class MemberController extends Controller
         $system['mark'] = Domain::MARK_MEMBER;
         $system['title'] = '修改密码';
 
-        return view('themes.' . $domain->theme->name . '.members.verify', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.phone.verify', ['site' => $domain->site, 'member' => $member, 'system' => $system]);
     }
 
     public function showReset(Domain $domain)
@@ -289,6 +294,45 @@ class MemberController extends Controller
             return $this->responseSuccess($res);
         }
 
+    }
+
+    public function verify()
+    {
+        $mobile = Request::get('mobile');
+        $captcha = Request::get('captcha');
+
+        try {
+            $member = Member::getMember();
+            if (!$member) {
+                return $this->responseError('登录已过期,请重新登录', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('登录已过期,请重新登录', 401);
+        }
+
+        try {
+            if (!preg_match("/1[34578]{1}\d{9}$/", $mobile)) {
+                throw new Exception('请输入正确的手机号', -1);
+            }
+
+            if ($mobile !== $member->mobile) {
+                throw new Exception('非用户绑定手机，请用绑定手机操作', -1);
+            }
+
+            //比较验证码
+            $key = 'captcha_' . $mobile;
+            if (Cache::get($key) != $captcha) {
+                throw new Exception('手机验证码错误', -1);
+            }else{
+                //移除验证码
+                Cache::forget($key);
+
+                return $this->responseSuccess();
+            }
+
+        } catch (Exception $e) {
+            return $this->responseError($e->getMessage());
+        }
     }
 
     public function bindMobile()
