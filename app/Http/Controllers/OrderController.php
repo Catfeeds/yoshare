@@ -351,7 +351,6 @@ class OrderController extends Controller
         $input = Request::all();
         $order = Order::find($id);
 
-        dd($input);
         if(!isset($input['back_ship_num'])){
             $res = $order->update($input);
 

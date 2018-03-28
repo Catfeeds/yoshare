@@ -13,7 +13,14 @@
             <div class="content" style="text-align: center">
                 <p><b style="color: #ffcc42;font-size: 80px">{{ App\Models\Member::TYPES[$system['vip_level']] }}</b> </p>
                 <p>(每次可租盘上限：<b>{{ $system['vip_level'] }}本</b>)</p>
-                <p style="font-size: 60px;padding: 100px;">{{ $wallet[$system['type']] }}元</p>
+                <p style="font-size: 60px;padding: 100px;">
+                    {{ $wallet[$system['type']] }}
+                    @if($system['type'] == 'deposit')
+                        员
+                    @else
+                        U币
+                    @endif
+                </p>
              </div>
         </div>
         @if($system['title'] == '我的押金')

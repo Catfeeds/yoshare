@@ -140,6 +140,7 @@ class WxpayController extends Controller{
             //更新钱包押金
             $wallet->update($input);
             //更新会员等级
+            $member->state = Member::STATE_ENABLED;
             $member->type = Member::TYPE_GOLD;
             $member->save();
 

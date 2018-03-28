@@ -33,9 +33,15 @@
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
-                        <div class="action">
-                            <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->back_ship_num }})">申请归还</a>
-                        </div>
+                        @if(!empty($order->back_ship_num))
+                            <div class="action">
+                                <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->back_ship_num }})">已申请归还</a>
+                            </div>
+                        @else
+                            <div class="action">
+                                <a class="c-button" onclick="Return({{ $order->id }})">申请归还</a>
+                            </div>
+                        @endif
                     @elseif($order['state'] == \App\Models\Order::STATE_PAID)
                         <div class="action">
                             <a class="c-button" onclick="urge()">催促发货</a>
@@ -151,7 +157,7 @@
     function Return(orderId, back_ship_num) {
 
         if(typeof back_ship_num == 'undefined'){
-            shipNum2 = '';
+            back_ship_num = '';
         }
 
         var html  = '<p>收件人：付先生</p>'+
@@ -167,7 +173,7 @@
             ,title: '申请归还'
             ,content: html
             ,anim: 'up'
-            ,style: 'position:fixed; top:400px; left:4%; width: 92%; height: 750px; border:none;'
+            ,style: 'position:fixed; top:200px; left:4%; width: 92%; height: 750px; border:none;'
         });
 
     }

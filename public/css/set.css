@@ -16,7 +16,7 @@ ul li:first-child{
     height: 290px;
 }
 ul li .avatar{
-    max-height: 160px;
+    max-height: 145px;
     width: 16%;
     border-radius: 7.2%;
     -moz-border-radius: 7.2%;
