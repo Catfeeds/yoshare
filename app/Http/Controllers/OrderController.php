@@ -289,6 +289,7 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         if(!empty($input['ship_num'])){
             $input['state'] = Order::STATE_SENDED;
         }
@@ -350,7 +351,8 @@ class OrderController extends Controller
         $input = Request::all();
         $order = Order::find($id);
 
-        if(!isset($input['ship_num2'])){
+        dd($input);
+        if(!isset($input['back_ship_num'])){
             $res = $order->update($input);
 
             if($res){

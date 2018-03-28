@@ -34,7 +34,7 @@
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
                         <div class="action">
-                            <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->ship_num2 }})">申请归还</a>
+                            <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->back_ship_num }})">申请归还</a>
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_PAID)
                         <div class="action">
@@ -148,9 +148,9 @@
 
     }
 
-    function Return(orderId, shipNum2) {
+    function Return(orderId, back_ship_num) {
 
-        if(typeof shipNum2 == 'undefined'){
+        if(typeof back_ship_num == 'undefined'){
             shipNum2 = '';
         }
 
@@ -159,7 +159,7 @@
                     '<p>邮编：102600</p>'+
                     '<p>回寄地址：北京市大兴区鸿坤曦望山2号楼2单元304 </p>'+
                     '<form method="get" action="/order/edit/'+orderId+'">'+
-                        '物流单号：<input type="text" name="ship_num2" value="'+shipNum2+'" class="i-form" style="padding-left: 20px;width: 70%;"/>'+
+                        '物流单号：<input type="text" name="back_ship_num" value="'+back_ship_num+'" class="i-form" style="padding-left: 20px;width: 70%;"/>'+
                         '<button type="submit" style="width: 20%;margin-top: 30px;height: 106px;border-radius: 10px;">提交</button>'+
                     '</form>';
         layer.open({
