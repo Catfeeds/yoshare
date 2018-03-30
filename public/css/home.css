@@ -4,7 +4,7 @@ body{
 .logo{
     width: 254px;
     height: 156px;
-    margin: 250px auto 250px;
+    margin: 200px auto;
 }
 .forms{
     position: relative;
@@ -39,7 +39,7 @@ body{
     width: 250px;
     height: 90px;
     position: absolute;
-    top: 153px;
+    top: 164px;
     right: 15px;
     background: none;
     color: #878787;

@@ -28,6 +28,7 @@ body{
     border-radius: 5px;
     height: 118px;
     font-size: 40px;
+    text-align: center;
 }
 .back{
     margin-left: 0;
@@ -76,7 +77,7 @@ body{
         var mobile = $("#mobile").val();
         if(mobile == ''){
             layer.open({
-                content: '请绑定手机'
+                content: '请先绑定手机'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });

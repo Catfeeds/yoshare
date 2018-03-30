@@ -21,8 +21,6 @@ Route::get('member/verify', 'MemberController@showVerify');
 Route::get('phone/login', 'MemberController@phoneLogin');
 Route::post('password/email', 'Member\ForgotPasswordController@sendResetLinkEmail');
 
-Route::get('/phone/login', 'Member\LoginController@phoneLogin');
-
 Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('index.html', 'HomeController@index');

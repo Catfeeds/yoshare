@@ -42,8 +42,9 @@ body{
     <div class="wrapper">
         <div class="logo" style="padding-top: 200px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
-            <input name="password" id="password" type="password" value="" class="i-form pass"  placeholder="请输入您的密码">
-            <input name="password2" id="password2" type="password" value="" class="i-form pass" placeholder="请确认您的密码">
+            <input name="oldpass" id="oldpass" type="password" value="" class="i-form pass"  placeholder="请输入您的原密码">
+            <input name="password" id="password" type="password" value="" class="i-form pass"  placeholder="请输入您的新密码">
+            <input name="password2" id="password2" type="password" value="" class="i-form pass" placeholder="请确认您的新密码">
 
             <button type="button" style="margin-top: 200px" id="reset">确定</button>
         </div>
@@ -53,11 +54,20 @@ body{
 <script src="{{ url('/js/layer.js') }}"></script>
 <script>
     $('#reset').click(function () {
+        var oldpass = $("#oldpass").val();
         var password = $("#password").val();
         var password2 = $("#password2").val();
+        if(oldpass == ''){
+            layer.open({
+                content: '您输入旧密码'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }
         if(password == ''){
             layer.open({
-                content: '您输入密码'
+                content: '您输入新密码'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
@@ -76,6 +86,7 @@ body{
             url  : '/password/reset/',
             type : 'post',
             data : {
+                oldpass    : oldpass,
                 password   : password,
                 password2  : password2,
                 _token     : '{{ csrf_token() }}'

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Auth;
+use Cache;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -124,6 +125,19 @@ class Member extends Authenticatable
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static function verify($mobile, $captcha)
+    {
+        //比较验证码
+        $key = 'captcha_' . $mobile;
+        if (Cache::get($key) != $captcha) {
+            return false;
+        }else{
+            //移除验证码
+            Cache::forget($key);
+            return true;
         }
     }
 

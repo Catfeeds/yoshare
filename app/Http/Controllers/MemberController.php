@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\Goods;
 use Exception;
 use Gate;
+use Illuminate\Support\Facades\Hash;
 use Request;
 use Response;
 use Cache;
@@ -103,8 +104,15 @@ class MemberController extends Controller
 
         $member->avatar_url = $input['avatar_url'];
         $member->username   = $input['username'];
-        $member->sex        = $input['sex'];
-        $member->email      = $input['email'];
+        if(isset($input['sex'])){
+            $member->sex        = $input['sex'];
+        }
+        if(isset($input['new_password'])){
+            $member->password        = bcrypt($input['new_password']);
+        }
+        if(isset($input['email'])){
+            $member->email      = $input['email'];
+        }
 
         $member->save();
 
@@ -196,7 +204,11 @@ class MemberController extends Controller
 
     public function phoneLogin(Domain $domain)
     {
-        return ('themes.' . $domain->theme->name . '.phone.login');
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        return view('themes.' . $domain->theme->name . '.phone.login');
     }
 
     public function show(Domain $domain)
@@ -279,6 +291,10 @@ class MemberController extends Controller
 
         $member = Member::getMember();
 
+        if(!Hash::check($input['oldpass'], $member->password)){
+            return $this->responseError('您输入的原密码不正确，请重新输入');
+        }
+
         if($input['password'] !== $input['password2']){
             return $this->responseError('前后输入的密码不一致，请重新输入');
         }
@@ -296,7 +312,7 @@ class MemberController extends Controller
 
     }
 
-    public function verify()
+    public function verify(Request $request)
     {
         $mobile = Request::get('mobile');
         $captcha = Request::get('captcha');
@@ -320,13 +336,10 @@ class MemberController extends Controller
             }
 
             //比较验证码
-            $key = 'captcha_' . $mobile;
-            if (Cache::get($key) != $captcha) {
+            if (!Member::verify($mobile, $captcha)) {
                 throw new Exception('手机验证码错误', -1);
             }else{
                 //移除验证码
-                Cache::forget($key);
-
                 return $this->responseSuccess();
             }
 

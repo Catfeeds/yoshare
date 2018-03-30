@@ -9,24 +9,24 @@
             {!! Form::label('name', '会员名:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
                 @if(isset($member))
-                    <h5>{!! $member->name !!}</h5>
-                    {!! Form::hidden('name', null, ['class' => 'form-control']) !!}
+                    <h5>{!! $member->username !!}</h5>
+                    {!! Form::hidden('username', null, ['class' => 'form-control']) !!}
                 @else
-                    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                    {!! Form::text('username', null, ['class' => 'form-control']) !!}
                 @endif
-            </div>
-        </div>
-
-        <div class="form-group">
-            {!! Form::label('nick_name', '昵称:', ['class' => 'control-label col-sm-1']) !!}
-            <div class="col-sm-5">
-                {!! Form::text('nick_name', null, ['class' => 'form-control']) !!}
             </div>
             {!! Form::label($password, '密码:',['class' => 'control-label col-sm-1']) !!}
             <div class="col-sm-5">
                 {!! Form::password($password, ['class' => 'form-control' ,'placeholder'=>$placeholder]) !!}
             </div>
         </div>
+
+        {{--<div class="form-group">--}}
+            {{--{!! Form::label('nick_name', '昵称:', ['class' => 'control-label col-sm-1']) !!}--}}
+            {{--<div class="col-sm-5">--}}
+                {{--{!! Form::text('nick_name', null, ['class' => 'form-control']) !!}--}}
+            {{--</div>--}}
+        {{--</div>--}}
 
         <div class="form-group">
             {!! Form::label('type', '会员类型:', ['class' => 'control-label col-sm-1']) !!}
