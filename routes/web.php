@@ -19,6 +19,7 @@ Route::get('logout', 'Member\LoginController@logout');
 // Password Reset Routes...
 Route::get('member/verify', 'MemberController@showVerify');
 Route::get('phone/login', 'MemberController@phoneLogin');
+Route::post('phone/login', 'Member\LoginController@login');
 Route::post('password/email', 'Member\ForgotPasswordController@sendResetLinkEmail');
 
 Route::group(['middleware' => 'web'], function () {

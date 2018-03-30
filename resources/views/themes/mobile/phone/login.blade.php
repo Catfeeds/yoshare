@@ -6,11 +6,11 @@
 @section('content')
     <div class="wrapper">
         <div class="logo"><img src="{{url('images/logo.png')}}" alt="logo"></div>
-        <form class="forms" name="login" id="login" method="POST" action="{{ url('/login') }}">
+        <form class="forms" name="login" id="login" method="POST" action="{{ url('/phone/login') }}">
             {!! csrf_field() !!}
-            <input name="mobile" id="mobile" type="text" value="" class="i-form account" placeholder="请输入您的手机号">
-            <input name="code"  id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
-            <button class="phone-btn" onclick="return getCode(this)">获取验证码</button>
+            <input name="username" id="mobile" type="text" value="" class="i-form account" placeholder="请输入您的手机号">
+            <input name="password"  id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
+            <input class="phone-btn" onclick="return getCode(this)" type="button" value="获取验证码">
             <a href="{{url('/login')}}" alt="登录" class="homehref">账号登录</a>
             <button type="submit" onclick="return checkLogin()">登录</button>
             <div class="register-a"><a href="/register">一一一一一　　　注册账号　　　一一一一一</a></div>
@@ -29,11 +29,11 @@
 
         if (countdown == 0) {
             obj.removeAttribute("disabled");
-            obj.text="获取验证码";
+            obj.html="获取验证码";
             countdown = 60;
         }else {
             obj.setAttribute("disabled", true);
-            obj.text="重新发送(" + countdown + ")";
+            obj.html="重新发送(" + countdown + ")";
             countdown--;
         }
         setTimeout(function() {
