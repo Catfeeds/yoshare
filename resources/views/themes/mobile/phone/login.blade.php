@@ -8,11 +8,11 @@
         <div class="logo"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <form class="forms" name="login" id="login" method="POST" action="{{ url('/login') }}">
             {!! csrf_field() !!}
-            <input name="mobile" type="text" value="" class="i-form account" placeholder="请输入您的手机号">
-            <input name="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
-            <button class="phone-btn" onclick="getCode(this)">获取验证码</button>
+            <input name="mobile" id="mobile" type="text" value="" class="i-form account" placeholder="请输入您的手机号">
+            <input name="code"  id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
+            <button class="phone-btn" onclick="return getCode(this)">获取验证码</button>
             <a href="{{url('/login')}}" alt="登录" class="homehref">账号登录</a>
-            <button type="submit">登录</button>
+            <button type="submit" onclick="return checkLogin()">登录</button>
             <div class="register-a"><a href="/register">一一一一一　　　注册账号　　　一一一一一</a></div>
             <ul class="third-party clear" style="display: none">
                 <li><img src="{{url('images/index/alipay_logo.png')}}" alt="alipay"></li>
@@ -66,18 +66,53 @@
             data : {
                 'site_id' : 1,
                 'mobile'  : mobile,
-                'type'    : {{ \App\Models\Member::CAPTCHA_RESET }}
+                'type'    : {{ \App\Models\Member::CAPTCHA_LOGIN }}
             },
             success:function(data){
                 msg = data.message;
-                if(msg == 'success')
+                if(msg == 'success'){
                     layer.open({
                         content: '发送成功，请查收'
                         ,skin: 'msg'
                         ,time: 2 //2秒后自动关闭
                     });
+                    return true;
+                }
+
+
             }
         })
+    }
+
+    function checkLogin() {
+        var mobile = $('#mobile').val();
+        var code = $('#code').val();
+
+        if(mobile == ''){
+            layer.open({
+                content: '请输入手机号'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }else if(mobile.length !== 11){
+            layer.open({
+                content: '请输入正确的手机号'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }
+
+        if(code == ''){
+            layer.open({
+                content: '请输入验证码'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }
+        return true;
     }
 </script>
 @endsection

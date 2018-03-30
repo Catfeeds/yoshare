@@ -19,7 +19,7 @@ class Member extends Authenticatable
     const CAPTCHA_REGISTER = 1;
     const CAPTCHA_RESET = 2;
     const CAPTCHA_BIND = 3;
-    const CAPTCHA_UNBIND = 4;
+    const CAPTCHA_LOGIN = 4;
 
     const STATE_DISABLED = 0;
     const STATE_ENABLED = 1;

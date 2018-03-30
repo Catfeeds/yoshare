@@ -8,6 +8,7 @@
     <!--JQuery-->
     <script src="/plugins/jquery/2.2.4/jquery.min.js"></script>
     <script src="/js/functions.js"></script>
+    <script src="/js/layer.js"></script>
 </head>
 @yield('body')
 </html>
