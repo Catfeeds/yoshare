@@ -34,7 +34,7 @@ class Member extends Authenticatable
         1 => '黄金会员',
     ];
 
-    const DEPOSIT_MONEY = 0.3;
+    const DEPOSIT_MONEY = 300;
 
     const SEX = [
         0 => '男',

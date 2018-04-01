@@ -16,7 +16,7 @@ class Wallet extends BaseModule
     const STATE_REFUNDED = 3;
     const STATE_FREEZE = 4;
 
-    const START_MONEY = 15;
+    const START_MONEY = 20;
     const START_ZERO = 0;
 
     const TYPE = [

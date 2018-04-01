@@ -31,6 +31,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/system', 'HomeController@system');
     Route::get('/help', 'HomeController@help');
     Route::get('/about/us', 'HomeController@about');
+    Route::get('/protocol', 'HomeController@protocol');
 
     //会员管理
     Route::get('/member', 'MemberController@show');

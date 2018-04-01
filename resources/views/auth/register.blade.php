@@ -71,6 +71,10 @@
                                 <button type="submit" class="btn btn-primary">
                                     注册
                                 </button>
+
+                                <label>
+                                    <input type="checkbox" name="protocol" checked="checked"> <a href="/protocol">注册协议</a>
+                                </label>
                             </div>
                         </div>
                     </form>

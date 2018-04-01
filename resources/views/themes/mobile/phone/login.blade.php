@@ -8,8 +8,8 @@
         <div class="logo"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <form class="forms" name="login" id="login" method="POST" action="{{ url('/phone/login') }}">
             {!! csrf_field() !!}
-            <input name="username" id="mobile" type="text" value="" class="i-form account" placeholder="请输入您的手机号">
-            <input name="password"  id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
+            <input name="username" id="mobile" type="text" value="" class="i-form phone" placeholder="请输入您的手机号">
+            <input name="password"  id="code" type="text" value="" class="i-form code" placeholder="请输入您的验证码">
             <input class="phone-btn" onclick="return getCode(this)" type="button" value="获取验证码">
             <a href="{{url('/login')}}" alt="登录" class="homehref">账号登录</a>
             <button type="submit" onclick="return checkLogin()">登录</button>

@@ -35,7 +35,7 @@
                 @foreach(\App\Models\Goods::where('top', \App\Models\Goods::IS_TOP)->limit(\App\Models\Goods::TOP_NUM)->orderBy('sort', 'desc')->get() as $goods)
                 <li>
                     <h4>{{ $goods->name }}</h4>
-                    <span class="price">{{ $goods->price }}元/月</span><span class="hot-tag"></span>
+                    <span class="price">{{ $goods->sale_price }}元/月</span><span class="hot-tag"></span>
                     <div class="img"><a href="goods/detail-{{ $goods->id }}.html"><img src="{{ $goods->pic_url }}" alt="activity"/></a></div>
                 </li>
                 @endforeach
@@ -51,7 +51,7 @@
                     <div class="text">
                         <h4>{{ $goods->name }}</h4>
                         <div class="intro">{!! $goods->summary !!}</div>
-                        <span class="price">{{ $goods->price }}元/月</span><a href="goods/detail-{{ $goods->id }}.html" alt="buy">立即租赁</a>
+                        <span class="price">{{ $goods->sale_price }}元/月</span><a href="goods/detail-{{ $goods->id }}.html" alt="buy">立即租赁</a>
                     </div>
                     <div class="clear"></div>
                 </li>

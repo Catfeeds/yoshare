@@ -74,6 +74,18 @@ class HomeController extends Controller
         return view('themes.' . $domain->theme->name . '.system.help', ['site' => $domain->site, 'system' => $system]);
     }
 
+    public function protocol(Domain $domain)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $system['title'] = '注册协议';
+        $system['back'] = '/register';
+
+        return view('themes.' . $domain->theme->name . '.system.protocol', ['site' => $domain->site, 'system' => $system]);
+    }
+
     public function checkLogin()
     {
         try {

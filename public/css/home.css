@@ -33,6 +33,12 @@ body{
 .pass{
     background: url('../images/index/pass_bg.png') no-repeat 0 30px;
 }
+.phone{
+    background: url('../images/index/phone_bg.png') no-repeat 15px 40px;
+}
+.code{
+    background: url('../images/index/code_bg.png') no-repeat 3px 38px;
+}
 .phone-btn{
     border-radius: 10px;
     border: 1px solid #bebebe;

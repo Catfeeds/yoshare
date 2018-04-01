@@ -12,11 +12,11 @@ body{
 .i-form{
     height: 210px;
 }
-.account{
-    background: url('../../images/index/account_bg.png') no-repeat 0 60px;
+.phone{
+    background: url('../../images/index/phone_bg.png') no-repeat 20px 76px;
 }
-.pass{
-    background: url('../../images/index/pass_bg.png') no-repeat 0 60px;
+.code{
+    background: url('../../images/index/code_bg.png') no-repeat 9px 70px;
 }
 .phone-btn{
     top: 263px;
@@ -43,8 +43,8 @@ body{
     <div class="wrapper">
         <div class="logo" style="padding-top: 200px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
-            <input style="color: #333;" name="mobile" id="mobile" type="text" value="{{ $member['mobile'] }}" @if(empty($member['mobile']))  placeholder="您还未绑定手机，请绑定手机后操作" @endif disabled="disabled" class="i-form account">
-            <input name="code" id="code" type="text" value="" class="i-form pass" placeholder="请输入您的验证码">
+            <input style="color: #333;" name="mobile" id="mobile" type="text" value="{{ $member['mobile'] }}" @if(empty($member['mobile']))  placeholder="您还未绑定手机，请绑定手机后操作" @endif disabled="disabled" class="i-form phone">
+            <input name="code" id="code" type="text" value="" class="i-form code" placeholder="请输入您的验证码">
             <input class="phone-btn" type="button" onclick="getCode(this)" value="获取验证码"/>
 
             <button type="submit" style="margin-top: 200px" onclick="verify()">下一步</button>
