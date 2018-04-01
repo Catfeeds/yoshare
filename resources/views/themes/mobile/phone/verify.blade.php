@@ -1,5 +1,5 @@
 @extends('themes.mobile.master')
-@section('title', '验证手机号-北京优享科技有限公司')
+@section('title', '验证手机号-游享')
 
 @section('css')
     <link href="{{ url('css/member.css') }}" type="text/css" rel="stylesheet">

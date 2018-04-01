@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -68,12 +67,12 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" onclick="return check()" class="btn btn-primary">
                                     注册
                                 </button>
 
                                 <label>
-                                    <input type="checkbox" name="protocol" checked="checked"> <a href="/protocol">注册协议</a>
+                                    <input type="checkbox" name="protocol" id="protocol" checked="checked" value="1" style="margin: 6px"> <a href="/protocol">注册协议</a>
                                 </label>
                             </div>
                         </div>
@@ -84,3 +83,19 @@
     </div>
 </div>
 @endsection
+<script src="{{ url('/js/layer.js') }}"></script>
+<script>
+    function check() {
+        var protocol = $('input[name="protocol"]:checked').val();
+        if(protocol == 1){
+            return true;
+        }else{
+            layer.open({
+                content: '请先同意注册协议'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }
+    }
+</script>

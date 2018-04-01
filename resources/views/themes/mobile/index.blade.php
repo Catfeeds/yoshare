@@ -1,5 +1,5 @@
 @extends('themes.mobile.layouts.master')
-@section('title', '北京优享科技有限公司')
+@section('title', '游享')
 @section('css')
     <link href="{{ url('css/swiper.min.css') }}" rel="stylesheet" type="text/css">
 @endsection

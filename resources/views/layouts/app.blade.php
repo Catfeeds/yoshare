@@ -19,6 +19,14 @@
             'csrfToken' => csrf_token(),
         ]); ?>
     </script>
+    <style>
+        .layui-m-layercont{
+            line-height: 40px;
+        }
+        .layui-m-layerchild{
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-default navbar-static-top">

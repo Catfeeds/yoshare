@@ -1,5 +1,5 @@
 @extends('templates.master')
-@section('title', '我的钱包-北京优享科技有限公司')
+@section('title', '我的钱包-游享')
 @section('css')
     <link href="{{ url('css/user.css') }}" type="text/css" rel="stylesheet">
 @endsection

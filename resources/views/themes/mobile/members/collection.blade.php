@@ -1,5 +1,5 @@
 @extends('themes.mobile.layouts.master')
-@section('title', '收藏页--北京优享科技有限公司')
+@section('title', '收藏页--游享')
 @section('css')
     <link href="{{ url('css/order.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ url('css/cart.css') }}" rel="stylesheet" type="text/css">

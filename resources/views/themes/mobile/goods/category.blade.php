@@ -1,5 +1,5 @@
 @extends('themes.mobile.layouts.master')
-@section('title', '游戏分类--北京优享科技有限公司')
+@section('title', '游戏分类--游享')
 
 @section('css')
     <link href="{{ url('css/list.css') }}" rel="stylesheet" type="text/css">

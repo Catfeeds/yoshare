@@ -1,5 +1,5 @@
 @extends('themes.mobile.master')
-@section('title', '编辑收货地址-北京优享科技有限公司')
+@section('title', '编辑收货地址-游享')
 @section('css')
     <link href="{{ url('css/address.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
