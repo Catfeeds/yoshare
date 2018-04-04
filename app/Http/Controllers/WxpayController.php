@@ -67,7 +67,7 @@ class WxpayController extends Controller{
             return abort(501);
         }
         //todo
-        if($price < 1){
+        if($price > 100){
             $type = 'deposit';
         }else{
             $type = 'balance';

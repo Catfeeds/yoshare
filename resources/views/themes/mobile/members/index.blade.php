@@ -21,10 +21,30 @@
             <div class="content">
                 <div class="o-title clear">全部订单 <a href="/order/lists" alt="orders">查看全部订单 ></a></div>
                 <ul class="clear">
-                    <li onclick="jump('/order/lists/nopay')"><a href="/order/lists/nopay">待支付</a></li>
-                    <li onclick="jump('/order/lists/nosend')"><a href="/order/lists/nosend">待发货</a></li>
-                    <li onclick="jump('/order/lists/nosend')"><a href="/order/lists/sended">待收货</a></li>
-                    <li onclick="jump('/order/lists/nosend')"><a href="/order/lists/return">待归还</a></li>
+                    <li onclick="jump('/order/lists/nopay')">
+                        <a href="/order/lists/nopay">待支付</a>
+                        @if($system['state'] == \App\Models\Order::STATE_NOPAY)
+                            <i></i>
+                        @endif
+                    </li>
+                    <li onclick="jump('/order/lists/nosend')">
+                        <a href="/order/lists/nosend">待发货</a>
+                        @if($system['state'] == \App\Models\Order::STATE_PAID)
+                            <i></i>
+                        @endif
+                    </li>
+                    <li onclick="jump('/order/lists/nosend')">
+                        <a href="/order/lists/sended">待收货</a>
+                        @if($system['state'] == \App\Models\Order::STATE_SENDED)
+                            <i></i>
+                        @endif
+                    </li>
+                    <li onclick="jump('/order/lists/nosend')">
+                        <a href="/order/lists/return">待归还</a>
+                        @if($system['state'] == \App\Models\Order::STATE_RETURN)
+                            <i></i>
+                        @endif
+                    </li>
                 </ul>
             </div>
         </div>

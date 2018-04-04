@@ -7,6 +7,7 @@ use App\Models\DataSource;
 use App\Models\Domain;
 use App\Models\Member;
 use App\Models\Goods;
+use App\Models\Order;
 use Exception;
 use Gate;
 use Illuminate\Support\Facades\Hash;
@@ -223,9 +224,14 @@ class MemberController extends Controller
 
         $member = Member::getMember();
         $wallet = $member->wallet()->first();
+        //跟踪订单状态
+        $data = [Order::STATE_SUCCESS, Order::STATE_CLOSED];
+        $order = $member->orders()->whereNotIn('state', '<>', $data)->first();
 
         //菜单栏标记
         $system['mark'] = Domain::MARK_MEMBER;
+        //订单标记
+        $system['state'] = $order['state'];
         return view('themes.' . $domain->theme->name . '.members.index', ['site' => $domain->site, 'member' => $member, 'wallet' => $wallet, 'system' => $system]);
 
     }

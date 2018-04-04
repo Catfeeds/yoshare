@@ -40,7 +40,7 @@
             <div class="title">
                 <div class="img"><img src="{{ url('images/goods/detail_bg.png') }}" alt=""></div>
             </div>
-            <div class="text">{!! $goods->content !!}</div>
+            <div class="text" style="font-size: 35px;">{!! $goods->content !!}</div>
         </div>
         <div class="video" style="display: none">
             <video src="{{ $goods->video_url }}" controls="controls">
