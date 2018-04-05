@@ -30,7 +30,6 @@
             <li><span>用 户 名：</span>{!! Form::text('username', null, ['class' => 'a-form']) !!}</li>
             <li><span>性　　别：</span>{!! Form::select('sex', $member->sexOptions, isset($member) ? $member->sex: '', ['class' => 'a-form']) !!}</li>
             <li><span>邮　　箱：</span>{!! Form::text('email', null, ['class' => 'a-form']) !!}</li>
-            <li><span>手机号码：</span>{!! Form::text('mobile', null, ['class' => 'a-form']) !!}</li>
             <li style="background: #ffcc42"><button type="submit">保存</button></li>
         </ul>
         {!! Form::close() !!}

@@ -55,9 +55,13 @@ class PageController extends Controller
         if (empty($page)) {
             return abort(404);
         }
+
         $page->incrementClick();
 
-        return view('themes.' . $domain->theme->name . '.pages.detail', ['site' => $domain->site, 'page' => $page]);
+        $system['title'] = $page->title;
+        $system['back'] = '/index';
+
+        return view('themes.' . $domain->theme->name . '.pages.detail', ['site' => $domain->site, 'page' => $page, 'system' => $system]);
     }
 
     public function lists(Domain $domain)

@@ -26,7 +26,7 @@
             </li>
             <li onclick="jump('/member/verify')">修改密码</li>
             <li onclick="jump('/help')">帮助与反馈</li>
-            <li onclick="jump('/about/us')">关于我们</li>
+            <li onclick="jump('/pages/about.html')">关于我们</li>
             <li onclick="exit()">退出登录</li>
         </ul>
 

@@ -60,7 +60,13 @@ class WalletController extends Controller
         if (empty($domain->site)) {
             return abort(501);
         }
-        $level = Member::getMember()->type;
+
+        $member = Member::getMember();
+        if (empty($member)) {
+            return view('auth.login');
+        }
+
+        $level = $member->type;
 
         if($type == 'balance' || $level == Member::TYPE_ORDINARY ){
             $chooses = Wallet::VALUE[$type];
@@ -311,16 +317,10 @@ class WalletController extends Controller
 
     public function wallet($type)
     {
-        try {
-            $member = Member::getMember();
-
-            if (!$member) {
-                return $this->responseError('您还未登录,请登录后操作', 401);
-            }
-        } catch (Exception $e) {
-            return $this->responseError('您还未登录,请登录后操作', 401);
+        $member = Member::getMember();
+        if (empty($member)) {
+            return view('auth.login');
         }
-
 
         $wallet = $member->wallet()->first();
 

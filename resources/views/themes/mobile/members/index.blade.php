@@ -33,13 +33,13 @@
                             <i></i>
                         @endif
                     </li>
-                    <li onclick="jump('/order/lists/nosend')">
+                    <li onclick="jump('/order/lists/sended')">
                         <a href="/order/lists/sended">待收货</a>
                         @if($system['state'] == \App\Models\Order::STATE_SENDED)
                             <i></i>
                         @endif
                     </li>
-                    <li onclick="jump('/order/lists/nosend')">
+                    <li onclick="jump('/order/lists/return')">
                         <a href="/order/lists/return">待归还</a>
                         @if($system['state'] == \App\Models\Order::STATE_RETURN)
                             <i></i>

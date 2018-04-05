@@ -17,15 +17,17 @@
                     {{ $wallet[$system['type']] }}
                     @if($system['type'] == 'deposit')
                         元
-                    @else
+                    @elseif($system['type'] == 'balance')
                         U币
+                    @else
+                        元券
                     @endif
                 </p>
              </div>
         </div>
         @if($system['title'] == '我的押金')
             <ul class="refund">
-                @if($wallet['state'] == \App\Models\Wallet::STATE_NORMAL)
+                @if($wallet['state'] == \App\Models\Wallet::STATE_NORMAL && $wallet[$system['type']] !== 0)
                     <li id="refund">退押金</li>
                 @elseif($wallet['state'] == \App\Models\Wallet::STATE_REFUNDING)
                     <li style="color: red;">押金退还审核中...</li>
@@ -33,17 +35,16 @@
             </ul>
         @endif
         <div class="a-wrapper" style="padding-top: 170px">
-            @if($system['vip_level'] == \App\Models\Member::TYPE_ORDINARY && $system['title'] != '我的余额')
+            @if($system['title'] == '我的余额' )
+                <a href="/wallets/balance/price" class="a-default">立即充值</a>
+            @elseif($system['vip_level'] == \App\Models\Member::TYPE_ORDINARY && $system['title'] == '我的押金')
                 <a href="/wallets/recharge/{{ \App\Models\Member::DEPOSIT_MONEY }}" class="a-default">
                     立即成为VIP
                 </a>
-            @elseif($system['vip_level'] == \App\Models\Member::TYPE_GOLD && $system['title'] != '我的余额')
+            @elseif($system['vip_level'] == \App\Models\Member::TYPE_GOLD && $system['title'] == '我的押金')
                 <a href="#" class="a-default">
                     您已是VIP
                 </a>
-            @endif
-            @if($system['title'] == '我的余额' )
-                <a href="/wallets/balance/price" class="a-default">立即充值</a>
             @endif
         </div>
     </div>
@@ -53,7 +54,7 @@
 <script>
     $('#refund').click(function () {
         layer.open({
-            content: '您确定要申请退还押金吗？退还后您不再可以租赁光盘哦'
+            content: '您确定要申请退还押金吗？退还后您不再享有租赁光盘特权哦'
             ,btn: ['确定', '取消']
             ,yes: function(index){
                 $.ajax({

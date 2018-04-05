@@ -1,24 +1,25 @@
-@extends('themes.mobile.layouts.master')
-
-@section('title', $page->title . ' - ' . $site->title)
-
-@section('head')
-    <link href="{{ asset('themes/default/css/detail.css') }}" rel="stylesheet">
-    <script src="{{ asset('themes/default/js/detail.js') }}"></script>
+@extends('themes.mobile.master')
+@section('title', '活动中心-游享')
+@section('css')
+    <link href="{{ url('css/member.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url('css/order.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url('css/cart.css') }}" type="text/css" rel="stylesheet">
 @endsection
+@section('content')
 
-@section('body')
-    @include('themes.default.layouts.header')
+    @include('themes.mobile.layouts.header')
 
-    <h2>移动端</h2>
-    <h2>{{ $page->title }}</h2>
-    <div>
-        {!! $page->content !!}
+    <div class="u-wrapper">
+        <div class="vip-text">
+            <h3>{{ $page->subtitle }}</h3>
+            <div class="content" style="padding-top: 40px;">
+                {!! $page->content !!}
+            </div>
+        </div>
     </div>
-
-    @include('themes.default.layouts.footer')
 @endsection
-
 @section('js')
-    <script src="{{ asset('/js/access.js') }}"></script>
+    <script>
+
+    </script>
 @endsection

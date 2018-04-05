@@ -226,7 +226,7 @@ class MemberController extends Controller
         $wallet = $member->wallet()->first();
         //跟踪订单状态
         $data = [Order::STATE_SUCCESS, Order::STATE_CLOSED];
-        $order = $member->orders()->whereNotIn('state', '<>', $data)->first();
+        $order = $member->orders()->whereNotIn('state', $data)->first();
 
         //菜单栏标记
         $system['mark'] = Domain::MARK_MEMBER;
