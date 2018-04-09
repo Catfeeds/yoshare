@@ -43,6 +43,11 @@ class Order extends BaseModule
 
     protected $entities = ['member_id'];
 
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
     public function previous()
     {
         return static::where('site_id', $this->site_id)
@@ -130,10 +135,11 @@ class Order extends BaseModule
 
         $ds = new DataSource();
 
-        $orders = static::with('user')
+        $orders = static::with('member')
             ->filter($filters)
             ->skip($offset)
             ->limit($limit)
+            ->orderBy('id', 'desc')
             ->get();
 
         $ds->total = static::filter($filters)
@@ -149,11 +155,22 @@ class Order extends BaseModule
                 $attributes[$entity_map] = empty($order->$entity) ? '' : $order->$entity->name;
             }
 
+            $cart = $order->cart()->first();
+            if($cart){
+                $goods_id = $cart->goods_id;
+                $goods = Goods::find($goods_id);
+                $note = $goods->name;
+            }else{
+                $note = '';
+            }
+
             //日期类型
             foreach ($order->dates as $date) {
                 $attributes[$date] = empty($order->$date) ? '' : $order->$date->toDateTimeString();
             }
             $attributes['tags'] = implode(',', $order->tags()->pluck('name')->toArray());
+            $attributes['note'] = $note;
+            $attributes['member_name'] = $order->member->username;
             $attributes['state_name'] = $order->stateName();
             $attributes['created_at'] = empty($order->created_at) ? '' : $order->created_at->toDateTimeString();
             $attributes['updated_at'] = empty($order->updated_at) ? '' : $order->updated_at->toDateTimeString();

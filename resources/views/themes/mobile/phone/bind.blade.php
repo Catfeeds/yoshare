@@ -43,7 +43,7 @@ body{
         <div class="logo" style="padding-top: 145px;"><img src="{{url('images/logo.png')}}" alt="logo"></div>
         <div style="position: relative">
             @if(!empty($member['mobile']))
-                <input name="mobile" type="text" style="color: #333;" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form phone">
+                <input name="mobile" id="oldmobile" type="text" style="color: #333;" value="{{ $member['mobile'] }}" disabled="disabled" class="i-form phone">
             @endif
             <input name="mobile" id="mobile" type="text" value="" class="i-form phone" @if(!empty($member['mobile'])) placeholder="请输入您要换绑的手机号"  @else  placeholder="请输入您的手机号" @endif>
             <input name="code" id="code" type="text" value="" class="i-form code" placeholder="请输入您的验证码">
@@ -77,6 +77,7 @@ body{
 
     function getCode(obj) {
         var mobile = $("#mobile").val();
+        var oldmobile = $("#oldmobile").val();
         if(mobile == ''){
             layer.open({
                 content: '请输入手机号'
@@ -87,6 +88,13 @@ body{
         }else if(mobile.length !== 11){
             layer.open({
                 content: '请输入正确的手机号'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            return false;
+        }else if(mobile == oldmobile){
+            layer.open({
+                content: '请勿输入旧手机号'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
@@ -128,9 +136,11 @@ body{
                 msg = data.message;
                 if(msg == 'success'){
                     layer.open({
-                        content: '绑定成功！'
-                        ,skin: 'msg'
-                        ,time: 2 //2秒后自动关闭
+                        content: '您已成功绑定手机，获得二十元余额！',
+                        btn: ['确定', '取消'],
+                        yes: function(index, layero) {
+                            window.location.href='/member';
+                        }
                     });
                 } else {
                     layer.open({

@@ -94,6 +94,5 @@ class RegisterController extends Controller
 
         return $member;
 
-
     }
 }

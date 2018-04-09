@@ -29,7 +29,7 @@
                                     <th data-field="mobile" data-align="center" data-width="100">手机号</th>
                                     <th data-field="ip" data-width="100" data-align="center">IP</th>
                                     <th data-field="source" data-width="60" data-align="center">注册来源</th>
-                                    <th data-field="type_name" data-align="center" data-width="60">会员类型</th>
+                                    <th data-field="type_name" data-align="center" data-width="60"  data-formatter="typeFormatter">会员类型</th>
                                     <th data-field="state_name" data-width="60" data-align="center" data-formatter="stateFormatter">状态</th>
                                     <th data-field="created_at" data-width="120" data-align="center">注册时间</th>
                                     <th data-field="action" data-width="100" data-align="center" data-formatter="actionFormatter" data-events="actionEvents"> 操作</th>
@@ -156,6 +156,21 @@
                 });
             }
         };
+
+        function typeFormatter(value, row, index) {
+            var style = 'label-primary';
+            switch (row.type_name) {
+                case '黄金会员':
+                    style = 'label-warning';
+                    break;
+                case '普通会员':
+                    style = 'label-primary';
+                    break;
+            }
+            return [
+                '<span class="label ' + style + '">' + row.type_name + '</span>',
+            ].join('');
+        }
 
         function stateFormatter(value, row, index) {
             var style = 'label-primary';

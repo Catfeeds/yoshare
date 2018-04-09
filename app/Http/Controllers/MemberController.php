@@ -8,6 +8,7 @@ use App\Models\Domain;
 use App\Models\Member;
 use App\Models\Goods;
 use App\Models\Order;
+use App\Models\Wallet;
 use Exception;
 use Gate;
 use Illuminate\Support\Facades\Hash;
@@ -173,7 +174,7 @@ class MemberController extends Controller
                 'points' => empty($member->wallet) ? 0 : $member->wallet->points,
                 'mobile' => $member->mobile,
                 'avatar_url' => $member->avatar_url,
-                'points' => $member->points,
+                'points' => $member->wallet->points,
                 'ip' => $member->ip,
                 'type_name' => $member->typeName(),
                 'state_name' => $member->stateName(),
@@ -383,6 +384,12 @@ class MemberController extends Controller
             $count = Member::where('mobile', $mobile)->count();
             if ($count > 0) {
                 throw new Exception('此手机号已经被其他账号绑定', -1);
+            }
+
+            if(empty($member->mobile)){
+                $wallet = $member->wallet()->first();
+                $wallet->balance = Wallet::GIVE_MONEY;
+                $wallet->save();
             }
 
             $member->mobile = $mobile;

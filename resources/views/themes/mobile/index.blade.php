@@ -112,7 +112,7 @@
             });
         }
 
-        getBanners(3, 1);
+        getBanners(4, 1);
 
     </script>
 @endsection

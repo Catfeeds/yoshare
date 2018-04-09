@@ -15,7 +15,6 @@ use App\Models\Payment;
 use Auth;
 use Carbon\Carbon;
 use Gate;
-use Illuminate\Support\Facades\DB;
 use Request;
 use Response;
 
@@ -216,6 +215,7 @@ class WalletController extends Controller
                 $member->update($data);
                 //更新用户钱包
                 $input['deposit'] = $wallet['deposit']-$bill['money'];
+                $input['points'] = $wallet['points']-$bill['money'];
                 $input['state'] = Wallet::STATE_REFUNDED;
                 $wallet->update($input);
 
