@@ -268,16 +268,15 @@ class OrderController extends Controller
         $input['member_id'] = $member->id;
 
         $order = Order::stores($input);
-
-        if($order){
-            //修改购物车order_id
-            $order_id = $order->id;
-            $cart = Cart::find($input['id']);
-            $data['order_id'] = $order_id;
-            $cart->update($data);
-
+        //修改购物车order_id
+        $order_id = $order->id;
+        $cart = Cart::find($input['id']);
+        $data['order_id'] = $order_id;
+        $res = $cart->update($data);
+        if($order && $res){
             return $this->responseSuccess($order);
-
+        }else{
+            return $this->responseError('下单失败，请稍候再试！');
         }
     }
 
@@ -329,21 +328,6 @@ class OrderController extends Controller
         $order = Order::find($id);
         $order->top = !$order->top;
         $order->save();
-    }
-
-    public function tag($id)
-    {
-        $tag = request('tag');
-        $order = Order::find($id);
-        if ($order->tags()->where('name', $tag)->exists()) {
-            $order->tags()->where('name', $tag)->delete();
-        } else {
-            $order->tags()->create([
-                'site_id' => $order->site_id,
-                'name' => $tag,
-                'sort' => strtotime(Carbon::now()),
-            ]);
-        }
     }
 
     public function updates($id)

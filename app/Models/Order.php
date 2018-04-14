@@ -72,27 +72,6 @@ class Order extends BaseModule
 
         $order = static::create($input);
 
-        //保存图片集
-        if (isset($input['images'])) {
-            Item::sync(Item::TYPE_IMAGE, $order, $input['images']);
-
-        }
-
-        //保存音频集
-        if (isset($input['audios'])) {
-            Item::sync(Item::TYPE_AUDIO, $order, $input['audios']);
-        }
-
-        //保存视频集
-        if (isset($input['videos'])) {
-            Item::sync(Item::TYPE_VIDEO, $order, $input['videos']);
-        }
-
-        //保存标签
-        if (isset($input['tags'])) {
-            Tag::sync($order, $input['tags']);
-        }
-
         return $order;
     }
 
@@ -101,27 +80,6 @@ class Order extends BaseModule
         $order = static::find($id);
 
         $order->update($input);
-
-        //保存图片集
-        if (isset($input['images'])) {
-            Item::sync(Item::TYPE_IMAGE, $order, $input['images']);
-
-        }
-
-        //保存音频集
-        if (isset($input['audios'])) {
-            Item::sync(Item::TYPE_AUDIO, $order, $input['audios']);
-        }
-
-        //保存视频集
-        if (isset($input['videos'])) {
-            Item::sync(Item::TYPE_VIDEO, $order, $input['videos']);
-        }
-
-        //保存标签
-        if (isset($input['tags'])) {
-            Tag::sync($order, $input['tags']);
-        }
 
         return $order;
     }

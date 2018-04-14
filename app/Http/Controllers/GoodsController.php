@@ -256,10 +256,10 @@ class GoodsController extends Controller
     {
         $input = request()->all();
 
-        $res = Goods::where('name', 'like', '%'.$input['name'].'%')->first();
+        $res = Goods::where('name', 'like', '%'.$input['name'].'%')->get();
 
         if($res){
-            return $this->responseSuccess($res['id']);
+            return $this->responseSuccess($res);
         }else{
             return $this->responseError('此游戏暂未上架呦，敬请期待！');
         }

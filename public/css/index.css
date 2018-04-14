@@ -3,6 +3,7 @@
 	background: #ffcc42;
 	padding-top: 30px;
 	width: 1080px;
+	position: relative;
 }
 .header .search{
 	height: 90px;
@@ -18,6 +19,23 @@
 	font-size: 40px;
 	width: 630px;
 	height: 42px;
+}
+.header ul.results{
+	width: 810px;
+	background: #fff;
+	position: absolute;
+	top: 150px;
+	left: 136px;
+	z-index: 9999;
+	border-radius: 5px;
+	display: none;
+}
+.header ul li{
+	padding: 25px 0 25px 92px;
+	border-bottom: 2px dashed #e4e4e4;
+}
+.header ul li a{
+	display: inline-block;
 }
 .nav-wrapper{
 	width: 1080px;
