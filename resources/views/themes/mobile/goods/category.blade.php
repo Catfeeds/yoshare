@@ -32,9 +32,15 @@
                         @endif
                         <li>
                             <a href="/goods/detail-{{ $goods->id }}.html"><img src="{{ $goods->image_url }}" alt="{{ $goods->name }}"></a>
-                            <div class="summary">{{ $goods->subtitle }}</div>
+                            <div class="summary">
+                                <div>
+                                    <i class="view"></i><span>{{ $goods->view_num }}</span>
+                                    <i class="favorite"></i><span>{{ $goods->favorite_num }}</span>
+                                </div>
+                                <p class="price">￥{{ $goods->sale_price }}/月</p>
+                            </div>
                             <a href="/goods/detail-{{ $goods->id }}.html"><h4>{{ $goods->name }}</h4></a>
-                            <p class="price">￥{{ $goods->sale_price }}/月</p>
+
                         </li>
                         @if($loop->index%2 == 1)
                             <div class="clear"></div>

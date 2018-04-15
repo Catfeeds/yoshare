@@ -154,6 +154,7 @@ class Bill extends BaseModule
         $bills = static::with('member')
             ->filter($filters)
             ->skip($offset)
+            ->orderBy('id', 'desc')
             ->limit($limit)
             ->get();
 

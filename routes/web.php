@@ -39,7 +39,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/member/bind/phone', 'MemberController@bindMobile');
     Route::get('/member/vip/', 'MemberController@vip');
     Route::get('/member/detail', 'MemberController@detail');
-    Route::get('/member/collect', 'MemberController@collect');
     Route::get('/member/collections', 'MemberController@collections');
     Route::patch('/member/{id}', 'MemberController@save');
 
@@ -48,7 +47,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('password/reset', 'MemberController@showReset');
     Route::post('password/reset', 'MemberController@reset');
 
-    //取消收藏
+    //收藏
+    Route::get('/collect', 'MemberController@collect');
     Route::get('/collect/cancle', 'MemberController@collectDel');
 
     //会员地址

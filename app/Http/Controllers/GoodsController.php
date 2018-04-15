@@ -40,7 +40,8 @@ class GoodsController extends Controller
         if (empty($goods)) {
             return abort(404);
         }
-        $goods->incrementClick();
+
+        $goods->increment('view_num');
 
         $system['mark'] = Domain::MARK_DETAIL;
         return view('themes.' . $domain->theme->name . '.goods.detail', ['site' => $domain->site, 'goods' => $goods, 'system' => $system]);
@@ -256,7 +257,7 @@ class GoodsController extends Controller
     {
         $input = request()->all();
 
-        $res = Goods::where('name', 'like', '%'.$input['name'].'%')->get();
+        $res = Goods::where('name', 'like', '%'.$input['name'].'%')->select('id', 'name')->groupBy('name')->get();
 
         if($res){
             return $this->responseSuccess($res);

@@ -108,7 +108,7 @@
         var goods_id = $('#goods_id').val();
 
         $.ajax({
-            url  : '/member/collect/',
+            url  : '/collect',
             type : 'get',
             data : {
                 'goods_id' : goods_id,

@@ -77,6 +77,9 @@
     height: 72px;
     line-height: 72px;
     text-align: center;
+    border: 1px solid #ffcc42;
+    color: #ffcc42;
+    border-radius: 6px;
 }
 .c-goods ul li .g-desc .price{
     color: #ff0b0f;

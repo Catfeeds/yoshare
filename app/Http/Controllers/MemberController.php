@@ -439,15 +439,18 @@ class MemberController extends Controller
 
         if($favorite){
             return $this->responseError('您已收藏此盘');
-        }else{
-
-            $res = $goods->favorites()->create([
-                'site_id' => $member->site_id,
-                'member_id' => $member->id,
-            ]);
-
-            return $this->responseSuccess($res);
         }
+
+        $res = $goods->favorites()->create([
+            'site_id' => $member->site_id,
+            'member_id' => $member->id,
+        ]);
+
+        if($res){
+            $goods->increment('favorite_num');
+        }
+
+        return $this->responseSuccess($res);
     }
 
     public function collections(Domain $domain)
@@ -484,6 +487,7 @@ class MemberController extends Controller
 
         if($favorite){
             $res = $goods->favorites()->where('member_id', $member->id)->delete();
+            $goods->decrement('favorite_num');
             return $this->responseSuccess($res);
         }else{
             return $this->responseError('收藏的光盘不存在,请刷新重试');
