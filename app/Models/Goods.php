@@ -18,6 +18,9 @@ class Goods extends BaseModule
     const IS_TOP = 1;
     const TOP_NUM = 4;
 
+    const FAVORITE_NO = 0;
+    const FAVORITE_YES = 1;
+
     const TAG_GOODS = 'App\Models\Goods';
 
     const STATES = [

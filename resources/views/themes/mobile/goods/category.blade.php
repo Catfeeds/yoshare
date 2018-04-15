@@ -26,7 +26,7 @@
             @endforeach
         </div>
         <div class="products">
-            @foreach($category->goods()->where('state', \App\Models\Goods::STATE_PUBLISHED)->orderBy('sort', 'desc')->get() as $goods)
+            @foreach($goodses as $goods)
                 @if($loop->index%2 == 0)
                     <ul>
                         @endif
@@ -35,7 +35,12 @@
                             <div class="summary">
                                 <div>
                                     <i class="view"></i><span>{{ $goods->view_num }}</span>
-                                    <i class="favorite"></i><span>{{ $goods->favorite_num }}</span>
+                                    <i @if($goods->favorite == \App\Models\Goods::FAVORITE_YES)
+                                       class="active"
+                                       @else
+                                       class="favorite"
+                                            @endif
+                                    ></i><span>{{ $goods->favorite_num }}</span>
                                 </div>
                                 <p class="price">￥{{ $goods->sale_price }}/月</p>
                             </div>

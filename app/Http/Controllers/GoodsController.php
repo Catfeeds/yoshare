@@ -7,6 +7,7 @@ use App\Jobs\PublishPage;
 use App\Models\Goods;
 use App\Models\Category;
 use App\Models\Domain;
+use App\Models\Member;
 use App\Models\Module;
 use App\Models\UserLog;
 use Auth;
@@ -83,6 +84,8 @@ class GoodsController extends Controller
             return abort(501);
         }
 
+        $member = Member::getMember();
+
         $lists = Category::where('parent_id', Category::GOODS_ID)->pluck( 'name','id');
 
         $category = Category::find($category_id);
@@ -90,14 +93,26 @@ class GoodsController extends Controller
             return abort(404);
         }
 
-        $goods = Goods::where('category_id', $category_id)
+        $goodses = Goods::where('category_id', $category_id)
             ->where('state', Goods::STATE_PUBLISHED)
             ->orderBy('top', 'desc')
             ->orderBy('sort', 'desc')
             ->get();
+        if ($member) {
+            foreach ($goodses as $goods) {
+                $goods->favorite = in_array($goods->id, $goods->favorites()
+                    ->where('member_id', $member->id)
+                    ->pluck('refer_id')
+                    ->toArray()) ? Goods::FAVORITE_YES : Goods::FAVORITE_NO;
+            }
+        } else {
+            foreach ($goodses as $goods) {
+                $goods->favorite = Goods::FAVORITE_NO;
+            }
+        }
 
         $system['mark'] = Domain::MARK_GOODS;
-        return view('themes.' . $domain->theme->name . '.goods.category', ['lists' => $lists, 'category' => $category, 'goods' => $goods, 'system' => $system]);
+        return view('themes.' . $domain->theme->name . '.goods.category', ['lists' => $lists, 'category' => $category, 'goodses' => $goodses, 'system' => $system]);
     }
 
     public function index()

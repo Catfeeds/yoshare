@@ -79,16 +79,22 @@
 .c-wrapper .products ul li span{
     display: block;
     height: 72px;
-    width: 80px;
     line-height: 72px;
-    text-align: center;
+    text-align: left;
     float: left;
+    padding: 0 18px;
 }
 .c-wrapper .products ul li .view{
     background: url('../images/view_bg.png') no-repeat top left;
 }
 .c-wrapper .products ul li .favorite{
     background: url('../images/heart_normal.png') no-repeat top left;
+    margin-top: 12px;
+}
+
+.c-wrapper .products ul li .active {
+    background: url('../images/heart_active.png') no-repeat top left;
+    margin-top: 12px;
 }
 .c-wrapper .products ul li h4{
     font-size: 35px;
@@ -98,6 +104,7 @@
     position: absolute;
     bottom: 43px;
     right: 0;
+    color: red;
 }
 
 
