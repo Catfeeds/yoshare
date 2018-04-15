@@ -113,7 +113,9 @@ class Order extends BaseModule
                 $attributes[$entity_map] = empty($order->$entity) ? '' : $order->$entity->name;
             }
 
-            $cart = $order->cart()->first();
+            $cart = $order->cart()
+                ->where('state', '<>', Cart::STATE_DELETED)
+                ->first();
             if($cart){
                 $goods_id = $cart->goods_id;
                 $goods = Goods::find($goods_id);

@@ -247,6 +247,7 @@ class CartController extends Controller
         $member_id = Member::getMember()->id;
         $goods_ids = Cart::where('member_id', $member_id)
             ->where('order_id', Cart::ORDER_ID_NO)
+            ->where('state', '<>', Cart::STATE_DELETED)
             ->pluck('goods_id')
             ->toArray();
 
@@ -259,11 +260,13 @@ class CartController extends Controller
 
         $numbers = Cart::where('member_id', $member_id)
             ->where('order_id', Cart::ORDER_ID_NO)
+            ->where('state', '<>', Cart::STATE_DELETED)
             ->pluck('number', 'goods_id')
             ->toArray();
 
         $prices = Cart::where('member_id', $member_id)
                     ->where('order_id', Cart::ORDER_ID_NO)
+            ->where('state', '<>', Cart::STATE_DELETED)
                     ->get()
                     ->toArray();
 
@@ -361,9 +364,12 @@ class CartController extends Controller
                     ->where('member_id', $input['member_id'])
                     ->decrement('number');
             }else{
-                Cart::where('goods_id', $goods_id)
+                $cart = Cart::where('goods_id', $goods_id)
                     ->where('member_id', $input['member_id'])
-                    ->delete();
+                    ->first();
+                $cart->state = Cart::STATE_DELETED;
+                $cart->save();
+
             }
 
             return $this->responseSuccess();
@@ -375,7 +381,8 @@ class CartController extends Controller
     public function destroy($goods_id)
     {
         $cart = Cart::where('goods_id', $goods_id)->first();
-        $result = $cart->delete();
+        $cart->state = Cart::STATE_DELETED;
+        $result = $cart->save();
         if ($result) {
             return redirect('/cart');
         } else {

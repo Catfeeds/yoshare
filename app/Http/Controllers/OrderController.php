@@ -102,6 +102,7 @@ class OrderController extends Controller
         }
 
         $goods_id = Cart::where('id', $cart_id)
+            ->where('state', '<>', Cart::STATE_DELETED)
             ->pluck('goods_id')
             ->toArray();
 
@@ -109,10 +110,12 @@ class OrderController extends Controller
             ->get();
 
         $numbers = Cart::where('id', $cart_id)
+            ->where('state', '<>', Cart::STATE_DELETED)
             ->pluck('number', 'goods_id')
             ->toArray();
 
         $prices = Cart::where('id', $cart_id)
+            ->where('state', '<>', Cart::STATE_DELETED)
             ->get()
             ->toArray();
 
