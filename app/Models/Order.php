@@ -18,6 +18,8 @@ class Order extends BaseModule
     const STATE_SUCCESS = 6;
     const STATE_REFUND = 7;
 
+    const TENANCY = 3196800;//37天
+
     const STATES = [
         0 => '已删除',
         1 => '未付款',

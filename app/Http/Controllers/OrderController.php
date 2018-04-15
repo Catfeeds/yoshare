@@ -167,6 +167,13 @@ class OrderController extends Controller
             ->get();
 
         foreach($orders as $key => $order){
+            $order->tenancy = ceil(((strtotime($order->paid_at) + \App\Models\Order::TENANCY) - time()) / 86400);
+            //处理逾期业务
+            if ($order->tenancy < 0) {
+                $order->tenancy = abs($order->tenancy);
+                $order->fine = $order->total_price * (ceil(abs($order->tenancy) / 30));
+            }
+
             $goods_ids = Cart::where('order_id', $order->id)
                 ->pluck('goods_id')
                 ->toArray();
@@ -294,6 +301,7 @@ class OrderController extends Controller
 
         if(!empty($input['ship_num'])){
             $input['state'] = Order::STATE_SENDED;
+            $input['shipped_at'] = time();
         }
 
         $order = Order::updates($id, $input);

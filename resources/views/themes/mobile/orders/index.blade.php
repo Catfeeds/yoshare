@@ -22,6 +22,15 @@
                         </div>
                     </li>
                 @endforeach
+                @if($order['state'] == \App\Models\Order::STATE_RETURN && empty($order['unblocked_at']))
+                    @if(!isset($order->fine))
+                        <li class="return-time"><span>{{ $order->tenancy }}</span> 天后归还(未逾期)</li>
+                    @else
+                        <li class="return-time">已逾期 <span>{{ $order->tenancy }}</span> 天，需支付逾期费用 <span
+                                    class="fine">{{ $order->fine }}</span> 元
+                        </li>
+                    @endif
+                @endif
                 <li class="op">
                     @if($order['state'] == \App\Models\Order::STATE_NOPAY)
                         <div class="action">
@@ -33,6 +42,11 @@
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
+                        @if(empty($order->unblocked_at))
+                            <div class="action">
+                                <a class="c-button" href="/order/unblocked/{{ $order->id }}">逾期解冻</a>
+                            </div>
+                        @endif
                         @if(!empty($order->back_ship_num))
                             <div class="action">
                                 <a class="c-button" onclick="Return({{ $order->id }}, {{ $order->back_ship_num }})">已申请归还</a>
@@ -155,6 +169,17 @@
     }
 
     function Return(orderId, back_ship_num) {
+        var fine = $('.fine').text();
+        if (typeof fine !== 'undefined' && fine > 0) {
+            layer.open({
+                content: '请您支付逾期费用后再还盘，感谢您的支持~'
+                , btn: ['确定', '取消']
+                , yes: function (index) {
+                    window.location.href = '/order/unblocked/' + orderId;
+                    layer.close(index);
+                }
+            });
+        }
 
         if(typeof back_ship_num == 'undefined'){
             back_ship_num = '';

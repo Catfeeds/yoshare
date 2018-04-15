@@ -61,6 +61,54 @@ class WxpayController extends Controller{
         return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
+    public function unblocked(Domain $domain, $id)
+    {
+        if (empty($domain->site)) {
+            return abort(501);
+        }
+
+        $tools = new JsApiPay();
+        $openId = $tools->GetOpenid();
+
+        $result = Order::find($id);
+        $orderNum = $result['order_num'] . '1';
+        $tenancy = ceil(((strtotime($result->paid_at) + \App\Models\Order::TENANCY) - time()) / 86400);
+        //处理逾期业务
+        if ($tenancy < 0) {
+            $fine = $result->total_price * (ceil(abs($tenancy) / 30));
+        }
+
+        $payments = Payment::where('state', Payment::STATE_PUBLISHED)
+            ->orderBy('sort', 'desc')
+            ->get();
+
+        // 统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody("yoshare_unblocked");
+        $input->SetAttach("yoshare_unblocked");
+        $input->SetOut_trade_no($orderNum);
+        $input->SetTotal_fee($fine * 100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("order");
+        $input->SetNotify_url('http://' . $_SERVER['HTTP_HOST'] . '/wxpay/notify');
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        $editAddress = $tools->GetEditAddressParameters();
+
+        $data['jsApiParameters'] = $jsApiParameters;
+        $data['editAddress'] = $editAddress;
+
+        $system['title'] = '支付页';
+        $system['back'] = '/order/lists';
+        $system['mark'] = 'member';
+
+        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
+    }
+
     public function recharge(Domain $domain, $price)
     {
         if (empty($domain->site)) {
@@ -121,6 +169,7 @@ class WxpayController extends Controller{
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
     }
+
     public function handle($data)
     {
         $member = Member::where('open_id', $data['openid'])->first();
@@ -147,6 +196,11 @@ class WxpayController extends Controller{
         }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
             $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
             $wallet->update($data);
+        } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_unblocked') {
+            //增加订单解冻时间
+            $order = Order::where('order_num', $data["out_trade_no"])->first();
+            $input['unblocked_at'] = time();
+            $order->update($input);
         }
 
         //更新流水表

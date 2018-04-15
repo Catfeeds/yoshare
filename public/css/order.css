@@ -89,7 +89,21 @@ ul.list li .addr-detail{
     border: 2px solid #eee;
     padding: 2px 4px;
 }
-.c-goods ul li.op{
+
+.c-goods ul li.return-time {
+    height: 80px;
+    line-height: 80px;
+    border-top: 2px solid #eee;
+    margin-left: 0;
+    padding-left: 168px;
+    background: url('../images/finger.png') no-repeat 110px 12px;
+}
+
+.c-goods ul li.return-time span {
+    color: red;
+}
+
+.c-goods ul li.op {
     height: 150px;
     border-top: 2px solid #eee;
     margin-left: 0;
