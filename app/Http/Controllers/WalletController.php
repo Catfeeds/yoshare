@@ -331,10 +331,11 @@ class WalletController extends Controller
     {
         $input = Request::all();
         $type = $input['type'];
+        $source = $input['source'];
         $wallet = Member::getMember()->wallet()->first();
         $input[$type] = $wallet[$type]-$input['price'];
         $res = $wallet->update($input);
-        if($res){
+        if ($res && $source == 'order') {
             //处理订单
             $order = Order::find($input['order_id']);
             $input['total_pay'] = $input['price'];
@@ -344,6 +345,12 @@ class WalletController extends Controller
             $order->update($input);
 
             return $this->responseSuccess($res);
+        }
+        if ($res && $source == 'unblock') {
+            //处理订单,增加逾期解冻时间
+            $order = Order::find($input['order_id']);
+            $input['unblocked_at'] = time();
+            $order->update($input);
         }
     }
 }

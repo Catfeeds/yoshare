@@ -24,7 +24,7 @@
                 @endforeach
                 @if($order['state'] == \App\Models\Order::STATE_RETURN && empty($order['unblocked_at']))
                     @if(!isset($order->fine))
-                        <li class="return-time"><span>{{ $order->tenancy }}</span> 天后归还(未逾期)</li>
+                        <li class="return-time">剩余畅玩时间： <span>{{ $order->tenancy }}</span> 天</li>
                     @else
                         <li class="return-time">已逾期 <span>{{ $order->tenancy }}</span> 天，需支付逾期费用 <span
                                     class="fine">{{ $order->fine }}</span> 元
@@ -42,7 +42,7 @@
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
-                        @if(empty($order->unblocked_at))
+                        @if(!empty($order->fine))
                             <div class="action">
                                 <a class="c-button" href="/order/unblocked/{{ $order->id }}">逾期解冻</a>
                             </div>
@@ -179,6 +179,7 @@
                     layer.close(index);
                 }
             });
+            return false;
         }
 
         if(typeof back_ship_num == 'undefined'){

@@ -67,16 +67,15 @@ class WxpayController extends Controller{
             return abort(501);
         }
 
+        $result = Order::find($id);
+        //处理逾期业务
+        $tenancy = ceil(((strtotime($result->paid_at) + \App\Models\Order::TENANCY) - time()) / 86400);
+        $result['price'] = $fine = (int)($result->total_price * (ceil(abs($tenancy) / 30)));
+
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
-        $result = Order::find($id);
         $orderNum = $result['order_num'] . '1';
-        $tenancy = ceil(((strtotime($result->paid_at) + \App\Models\Order::TENANCY) - time()) / 86400);
-        //处理逾期业务
-        if ($tenancy < 0) {
-            $fine = $result->total_price * (ceil(abs($tenancy) / 30));
-        }
 
         $payments = Payment::where('state', Payment::STATE_PUBLISHED)
             ->orderBy('sort', 'desc')
@@ -198,7 +197,8 @@ class WxpayController extends Controller{
             $wallet->update($data);
         } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_unblocked') {
             //增加订单解冻时间
-            $order = Order::where('order_num', $data["out_trade_no"])->first();
+            $order_num = substr($data["out_trade_no"], 0, strlen($data["out_trade_no"]) - 1);
+            $order = Order::where('order_num', $order_num)->first();
             $input['unblocked_at'] = time();
             $order->update($input);
         }

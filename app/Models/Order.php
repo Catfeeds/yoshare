@@ -39,7 +39,7 @@ class Order extends BaseModule
 
     protected $table = 'orders';
 
-    protected $fillable = ['site_id', 'order_num', 'member_id', 'name', 'address', 'phone', 'ship_id', 'ship_num', 'back_ship_num', 'pay_id', 'total_pay', 'total_price', 'ship_price', 'state', 'note', 'paid_at', 'shipped_at', 'finished_at'];
+    protected $fillable = ['site_id', 'order_num', 'member_id', 'name', 'address', 'phone', 'ship_id', 'ship_num', 'back_ship_num', 'pay_id', 'total_pay', 'total_price', 'ship_price', 'state', 'note', 'paid_at', 'unblocked_at', 'finished_at'];
 
     protected $dates = ['paid_at', 'shipped_at', 'finished_at'];
 
