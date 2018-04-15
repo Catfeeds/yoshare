@@ -105,7 +105,7 @@ class WxpayController extends Controller{
         $system['back'] = '/order/lists';
         $system['mark'] = 'member';
 
-        return view('themes.' . $domain->theme->name . '.orders.pay', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
+        return view('themes.' . $domain->theme->name . '.orders.unblock', ['system' => $system, 'result' => $result, 'payments' => $payments, 'data' => $data]);
     }
 
     public function recharge(Domain $domain, $price)

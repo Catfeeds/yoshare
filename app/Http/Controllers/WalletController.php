@@ -344,13 +344,14 @@ class WalletController extends Controller
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
 
-            return $this->responseSuccess($res);
+            return $this->responseSuccess($res, '/order/lists/nosend');
         }
         if ($res && $source == 'unblock') {
             //处理订单,增加逾期解冻时间
             $order = Order::find($input['order_id']);
             $input['unblocked_at'] = time();
             $order->update($input);
+            return $this->responseSuccess($res, '/order/lists/return');
         }
     }
 }

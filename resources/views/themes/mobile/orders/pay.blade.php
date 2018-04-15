@@ -212,15 +212,16 @@
                 success:function(data){
                     msg = data.message;
                     statusCode = data.status_code;
+                    url = data.url;
 
                     if (statusCode == 200){
                         layer.open({
-                            content: '支付成功'
-                            ,skin: 'msg'
-                            ,time: 3 //2秒后自动关闭
+                            content: '支付成功',
+                            btn: ['确认', '取消'],
+                            yes: function (index, layero) {
+                                window.location.href = url;
+                            }
                         });
-
-                        location.href = '/order/lists/nosend';
                     }else{
                         layer.open({
                             content: msg

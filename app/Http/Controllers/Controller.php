@@ -29,12 +29,13 @@ class Controller extends BaseController
      * @param array $data
      * @return \Illuminate\Http\JsonResponse
      */
-    public function responseSuccess($data = [])
+    public function responseSuccess($data = [], $url = '')
     {
         return $this->response([
             'status_code' => 200,
             'message' => 'success',
             'data' => $data,
+            'url' => $url,
         ]);
     }
 

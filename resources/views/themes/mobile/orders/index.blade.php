@@ -42,7 +42,7 @@
                             <a class="c-button" onclick="orderDel({{ $order->id }})">删除订单</a>
                         </div>
                     @elseif($order['state'] == \App\Models\Order::STATE_RETURN)
-                        @if(!empty($order->fine))
+                        @if(!empty($order->fine) && empty($order->unblocked_at))
                             <div class="action">
                                 <a class="c-button" href="/order/unblocked/{{ $order->id }}">逾期解冻</a>
                             </div>
