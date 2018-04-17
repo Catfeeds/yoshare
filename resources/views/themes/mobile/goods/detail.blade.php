@@ -22,19 +22,21 @@
         <div class="summary">
             <p class="subtitle">{{ $goods->subtitle }}</p>
             <h3 class="title">{{ $goods->name }}</h3>
-            <p class="price">￥{{ $goods->sale_price }}/月<span class="time">无期限畅玩</span><span class="rent">原价{{ $goods->price }}元/月</span></p>
+            <p class="price">￥{{ $goods->sale_price }}/月 <span class="rent">原价{{ $goods->price }}元/月</span><span
+                        class="time" style="display: none"></span></p>
         </div>
         <div class="procedure">
             <h4>租赁流程</h4>
-            <img src="{{ url('images/goods/process.png') }}" alt="租赁流程">
         </div>
+        <div><img src="{{ url('images/goods/process.png') }}" alt="租赁流程"></div>
         <div>
             <input type="hidden" id="goods_id" value="{{ $goods->id }}">
             <input type="hidden" id="sale_price" value="{{ $goods->sale_price }}">
         </div>
-        <div class="tips" style="display: none">
+        <div class="tips">
             <h4>租期计算方式</h4>
-            <p>{{ $goods->summary }}</p>
+            <p>按月收费，周期最多为37天，从您付费后开始计算，一般游戏会在三天左右到您手中，平台额外给出您四天左右时间归还光盘；请您及时确认收货，查看归还时间；
+                如您超过此时间，我们将按超出时间的长短来收取逾期费用，超出1-30天收取该盘的每月单价，以此类推。</p>
         </div>
         <div class="detail" name="detail">
             <div class="title">

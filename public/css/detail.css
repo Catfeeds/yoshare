@@ -26,7 +26,6 @@
 }
 .action ul li a{
     height: 120px;
-    font-size: 28px;
     display: block;
     line-height: 120px;
     color: #fff;
@@ -64,10 +63,10 @@
 .summary .price span{
     font-size: 28px;
     display: inline-block;
-    width: 174px;
     line-height: 44px;
     text-align: center;
     height: 44px;
+    padding: 0 5px;
 }
 .summary .price span:first-child{
     border: 1px solid #ff5000;
