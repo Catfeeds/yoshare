@@ -67,8 +67,8 @@ class WalletController extends Controller
 
         $level = $member->type;
 
-        if($type == 'balance' || $level == Member::TYPE_ORDINARY ){
-            $chooses = Wallet::VALUE[$type];
+        if ($type == 'balance') {
+            $chooses = Wallet::GIVE_VALUE;
         }else{
             $chooses = Wallet::VALUE_UP[$level];
         }

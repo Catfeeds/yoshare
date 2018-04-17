@@ -224,9 +224,11 @@ class WxpayController extends Controller{
                 return redirect('/wallets/show/deposit');
             }
         }else if($data['attach'] == 'yoshare_balance'){
-            return redirect('/wallets/show/balance');
-        }else{
+            return redirect('/member');
+        } else if ($data['attach'] == 'yoshare_order') {
             return redirect('/order/lists/nosend');
+        } else {
+            return redirect('/order/lists/return');
         }
     }
 
