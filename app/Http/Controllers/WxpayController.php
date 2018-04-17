@@ -193,7 +193,7 @@ class WxpayController extends Controller{
             $member->save();
 
         } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance') {
-            $data['balance'] = $data["total_fee"] / 100 + array_search($data["total_fee"] / 100, Wallet::GIVE_VALUE);
+            $data['balance'] = $wallet['balance'] + $data["total_fee"] / 100 + array_search($data["total_fee"] / 100, Wallet::GIVE_VALUE);
             $wallet->update($data);
         } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_unblocked') {
             //增加订单解冻时间

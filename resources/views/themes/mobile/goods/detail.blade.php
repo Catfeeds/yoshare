@@ -28,7 +28,7 @@
         <div class="procedure">
             <h4>租赁流程</h4>
         </div>
-        <div><img src="{{ url('images/goods/process.png') }}" alt="租赁流程"></div>
+        <div><img src="{{ url('images/goods/process.png') }}" alt="租赁流程" width="980"></div>
         <div>
             <input type="hidden" id="goods_id" value="{{ $goods->id }}">
             <input type="hidden" id="sale_price" value="{{ $goods->sale_price }}">
