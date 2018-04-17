@@ -182,7 +182,7 @@ class WxpayController extends Controller{
             $input['pay_id'] = Payment::WeChatID;
             $input['state'] = Order::STATE_PAID;
             $order->update($input);
-        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit'){
+        } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_deposit') {
             $input['deposit'] = $data["total_fee"]/100;
             $input['state'] = Wallet::STATE_NORMAL;
             //更新钱包押金
@@ -192,8 +192,8 @@ class WxpayController extends Controller{
             $member->type = Member::TYPE_GOLD;
             $member->save();
 
-        }elseif($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance'){
-            $data['balance'] = $data["total_fee"]/100+array_search($data["total_fee"]/100, Wallet::VALUE['balance']);
+        } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_balance') {
+            $data['balance'] = $data["total_fee"] / 100 + array_search($data["total_fee"] / 100, Wallet::GIVE_VALUE);
             $wallet->update($data);
         } elseif ($data["return_code"] == "SUCCESS" && $data['attach'] == 'yoshare_unblocked') {
             //增加订单解冻时间

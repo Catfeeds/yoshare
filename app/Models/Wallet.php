@@ -34,18 +34,11 @@ class Wallet extends BaseModule
         4 => '已冻结',
     ];
 
-    const VALUE = [
-        'deposit' => [
-            '黄金会员' => 0.3,
-            '铂金会员' => 0.6,
-            '钻石会员' => 0.9,
-        ],
-        'balance' => [
-            10 => 30,
-            20 => 40,
-            40 => 60,
-            100 => 100,
-        ]
+    const GIVE_VALUE = [
+        10 => 30,
+        20 => 40,
+        40 => 60,
+        100 => 100,
     ];
 
     const VALUE_UP = [
