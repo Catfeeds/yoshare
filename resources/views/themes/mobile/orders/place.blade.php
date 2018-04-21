@@ -82,7 +82,12 @@
         </ul>
         <ul class="amount">
             <li>
-                <div class="l-left">商品金额</div>
+                <div class="l-left">
+                    商品金额
+                    @if(!empty($carts['first_order']))
+                        <span style="color:red">(首单半价)</span>
+                    @endif
+                </div>
                 <div class="l-right">共<span style="color: red;">({{ $carts['number'] }})</span>件商品    合计：￥<span style="color: red;" id="total_price">{{ $carts['total_price'] }}</span></div>
                 <div class="clear"></div>
             </li>

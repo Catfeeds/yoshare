@@ -123,6 +123,13 @@ class OrderController extends Controller
             $total_price += $v['number'] * $v['price'];
         }
 
+        //该用户没有订单，且绑定手机则享受首单半价；如未绑定手机，则不享受优惠
+        $order_count = $member->orders()->count();
+        if (!empty($member->mobile) && $order_count <= 0) {
+            $total_price = $total_price / 2;
+            $carts['first_order'] = true;
+        }
+
         //购物车总数量
         $number = !empty($numbers) ? array_sum($numbers) : 0;
 

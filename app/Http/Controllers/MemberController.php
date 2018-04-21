@@ -386,12 +386,6 @@ class MemberController extends Controller
                 throw new Exception('此手机号已经被其他账号绑定', -1);
             }
 
-            if(empty($member->mobile)){
-                $wallet = $member->wallet()->first();
-                $wallet->balance = Wallet::GIVE_MONEY;
-                $wallet->save();
-            }
-
             $member->mobile = $mobile;
             $member->save();
 
