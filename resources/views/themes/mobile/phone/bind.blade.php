@@ -136,7 +136,7 @@ body{
                 msg = data.message;
                 if(msg == 'success'){
                     layer.open({
-                        content: '您已成功绑定手机，获得二十元余额！',
+                        content: '您已成功绑定手机！',
                         btn: ['确定', '取消'],
                         yes: function(index, layero) {
                             window.location.href='/member';

@@ -380,13 +380,21 @@ class CartController extends Controller
 
     public function destroy($goods_id)
     {
-        $cart = Cart::where('goods_id', $goods_id)->first();
-        $cart->state = Cart::STATE_DELETED;
-        $result = $cart->save();
+        try {
+            $member = Auth::guard('web')->user();
+
+            if (!$member) {
+                return $this->responseError('您还未登录,请登录后操作', 401);
+            }
+        } catch (Exception $e) {
+            return $this->responseError('您还未登录,请登录后操作', 401);
+        }
+
+        $cart = $member->carts()->where('goods_id', $goods_id)->first();
+        $result = $cart->delete();
+
         if ($result) {
             return redirect('/cart');
-        } else {
-            //TODO
         }
     }
 }

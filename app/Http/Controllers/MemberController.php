@@ -148,6 +148,7 @@ class MemberController extends Controller
             'id' => Request::has('id') ? intval(Request::get('id')) : 0,
             'username' => Request::has('username') ? trim(Request::get('username')) : '',
             'mobile' => Request::has('mobile') ? trim(Request::get('mobile')) : '',
+            'type' => Request::has('type') ? Request::get('type') : '',
             'state' => Request::has('state') ? Request::get('state') : '',
         ];
 
@@ -254,6 +255,10 @@ class MemberController extends Controller
     {
         if (empty($domain->site)) {
             return abort(501);
+        }
+
+        if (empty(Member::checkLogin())) {
+            return view('auth.login');
         }
 
         $member = Member::getMember();

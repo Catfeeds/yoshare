@@ -115,6 +115,11 @@ class Member extends Authenticatable
         return $this->hasOne(Wallet::class);
     }
 
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     public function favorites(){
         return $this->hasMany(Favorite::class);
     }
